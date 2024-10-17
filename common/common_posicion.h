@@ -1,0 +1,14 @@
+#ifndef COMMON_POSICION_H
+#define COMMON_POSICION_H
+
+#include <cstdint>
+
+struct Posicion {
+    int x;
+    int y;
+
+    // Constructor
+    Posicion(int x, int y) : x(x), y(y) {}
+};
+
+#endif // COMMON_POSICION_H
