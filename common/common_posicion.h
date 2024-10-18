@@ -4,8 +4,8 @@
 #include <cstdint>
 
 struct Posicion {
-    int x;
-    int y;
+    float x;
+    float y;
 
     // Constructor
     Posicion(int x, int y) : x(x), y(y) {}
