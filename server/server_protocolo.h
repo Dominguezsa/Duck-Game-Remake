@@ -2,9 +2,11 @@
 #define SERVER_PROTOCOL_H
 
 #include <cstdint>
-#include <vector>
 #include <list>
+#include <vector>
+
 #include "../common/common_socket.h"
+
 #include "server_mensaje_gameloop.h"
 #include "server_pato.h"
 
@@ -17,7 +19,7 @@ public:
 
     MensajeGameloop recibirMensaje();
 
-    //std::vector<char> obtenerVectorDeCaracteresParaEnviarAlSocket(std::list<Pato> mensaje);
+    // std::vector<char> obtenerVectorDeCaracteresParaEnviarAlSocket(std::list<Pato> mensaje);
 
     void apagarSocket();
 };

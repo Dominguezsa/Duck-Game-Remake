@@ -1,14 +1,15 @@
 #include <cassert>
 #include <iostream>
+
 #include "../common/common_arma.h"
 #include "../common/common_posicion.h"
 #include "../server/server_pato.cpp"
 
 void test_pato() {
     Pato pato(1, 100, 1, Posicion(0, 0), Arma("ak47", 10));
-    
+
     pato.mover_hacia(0);
-    
+
     assert(pato.posicion.x == -1);
     assert(pato.posicion.y == 0);
     assert(pato.pato_id == 1);

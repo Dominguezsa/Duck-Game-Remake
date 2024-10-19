@@ -22,7 +22,7 @@ public:
     Arma arma;
 
 
-    explicit Pato(uint8_t id, uint8_t vida, bool mira_hacia, Posicion pos, Arma arma);
+    explicit Pato(uint8_t id, uint8_t vida, bool mira_hacia, Posicion pos, const Arma& arma);
     void mover_hacia(uint8_t direccion);  // 0: izquierda, 1: derecha (hacia arriba seria un salto y
                                           // hacia abajo se agacha)
 
@@ -35,7 +35,7 @@ public:
 
     void recibir_danio(uint8_t danio);
 
-    void agarrar_arma(Arma arma);
+    void agarrar_arma(const Arma& arma);
 
     void soltar_arma();
 };

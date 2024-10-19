@@ -8,7 +8,7 @@ struct Posicion {
     float y;
 
     // Constructor
-    Posicion(int x, int y) : x(x), y(y) {}
+    Posicion(int x, int y): x(x), y(y) {}
 };
 
-#endif // COMMON_POSICION_H
+#endif  // COMMON_POSICION_H
