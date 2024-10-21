@@ -17,8 +17,9 @@ int main() try {
     SDLTTF ttf;
 
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-    Window window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600,
+    Window window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1200, 700,
                   SDL_WINDOW_RESIZABLE);
+    // el eje x se divide en 12 celdas y el eje y en 14 celdas
 
     // Create accelerated video renderer with default driver
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -46,6 +47,7 @@ int main() try {
     bool looking_right = true;
     bool shift = false;
     bool agachado = false;
+    int vcenter = renderer.GetOutputHeight() / 2;  // Y coordinate of window center
 
     unsigned int prev_ticks = SDL_GetTicks();
 
@@ -119,7 +121,17 @@ int main() try {
             position = renderer.GetOutputWidth();
 
 
-        int vcenter = renderer.GetOutputHeight() / 2;  // Y coordinate of window center
+        bool esta_cayendo = false;
+        if (position > renderer.GetOutputWidth() / 2) {
+            esta_cayendo = true;
+        }
+        if (vcenter >= renderer.GetOutputHeight() / 2 + 150) {
+            esta_cayendo = false;
+        }
+        if (esta_cayendo) {
+            vcenter += 5;
+        }
+
 
         // Clear screen
         renderer.Clear();
@@ -131,12 +143,21 @@ int main() try {
         int tablas_height = renderer.GetOutputHeight() / 2;
         int tablas_width = renderer.GetOutputWidth() / 2;
 
-        // Render the first tabla on the left half
-        renderer.Copy(tablas, NullOpt, Rect(0, tablas_height, tablas_width, tablas_height / 4));
+        // Calculate the width and height of each cell
+        int cell_width = renderer.GetOutputWidth() / 12;
+        int cell_height = renderer.GetOutputHeight() / 14;
 
-        // Render the second tabla on the right half
-        renderer.Copy(tablas, NullOpt,
-                      Rect(tablas_width, tablas_height + 30, tablas_width, tablas_height / 4));
+        // Render tablas in each cell
+        for (int i = 0; i < 6; ++i) {
+            renderer.Copy(tablas, NullOpt,
+                          Rect(i * cell_width, tablas_height, cell_width, cell_height));
+        }
+
+        for (int i = 0; i < 6; ++i) {
+            renderer.Copy(tablas, NullOpt,
+                          Rect(i * cell_width + tablas_width, tablas_height + cell_height *3,
+                               cell_width, cell_height));
+        }
 
         // Pick sprite from sprite atlas based on running state
         int src_x = 0, src_y = 0;
@@ -161,7 +182,8 @@ int main() try {
 
         // Create text string to render
         std::string text = "Position: " + std::to_string((int)position) +
-                           ", running: " + (is_running ? "true" : "false");
+                           ", running: " + (is_running ? "true" : "false") +
+                           "vcenter: " + std::to_string(vcenter);
 
         // Render the text into new texture. Note that SDL_ttf render
         // text into Surface, which is converted into texture on the fly
