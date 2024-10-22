@@ -4,7 +4,14 @@
 #include <string>
 
 #include <SDL2/SDL.h>
+#include <SDL2pp/Chunk.hh>
 #include <SDL2pp/SDL2pp.hh>
+#include <SDL2pp/Font.hh>
+#include <SDL2pp/Renderer.hh>
+#include <SDL2pp/Texture.hh>
+#include <SDL2pp/Window.hh>
+#include <SDL2pp/Mixer.hh>
+#include <SDL2pp/Music.hh>
 
 
 using namespace SDL2pp;
@@ -20,6 +27,15 @@ int main() try {
     Window window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1200, 700,
                   SDL_WINDOW_RESIZABLE);
     // el eje x se divide en 12 celdas y el eje y en 14 celdas
+
+    // El mixer para testear el audio
+    Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 409600);
+    // Load music file (only .ogg is supported)
+    Music music("./data/audio/ost/back_music_space_mystery_out.ogg");
+    // Loading SFX files
+    Chunk boom1("./data/audio/sfx/boom1.wav");
+    Chunk boom2("./data/audio/sfx/boom2.wav");
+    Chunk boom3("./data/audio/sfx/boom3.wav");
 
     // Create accelerated video renderer with default driver
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -51,6 +67,13 @@ int main() try {
 
     unsigned int prev_ticks = SDL_GetTicks();
 
+    // Set the volume of the music to 30 (se manejan de forma distinta parece)
+    mixer.SetMusicVolume(30);
+    // Setting the volume of all channels to 20
+    mixer.SetVolume(-1, 20);
+    // Play background music
+    mixer.PlayMusic(music, -1);
+
     // Main loop
     while (1) {
         unsigned int frame_ticks = SDL_GetTicks();
@@ -81,6 +104,16 @@ int main() try {
                     case SDLK_LSHIFT:
                     case SDLK_RSHIFT:
                         shift = true;
+                        break;
+                    // To test sound effects
+                    case SDLK_1:
+                        mixer.PlayChannel(-1, boom1, 1);
+                        break;
+                    case SDLK_2:
+                        mixer.PlayChannel(-1, boom2, 0);
+                        break;
+                    case SDLK_3:
+                        mixer.PlayChannel(-1, boom3, 0);
                         break;
                 }
             } else if (event.type == SDL_KEYUP) {

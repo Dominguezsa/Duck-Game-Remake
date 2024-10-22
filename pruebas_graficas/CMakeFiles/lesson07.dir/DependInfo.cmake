@@ -8,12 +8,15 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/santiagodo/Facultad/2C2024/taller/TP_FINAL_TALLER_2C2024/pruebas_graficas/lesson07.cc" "CMakeFiles/lesson07.dir/lesson07.cc.o" "gcc" "CMakeFiles/lesson07.dir/lesson07.cc.o.d"
+  "/home/val/Desktop/Taller/tpFinal/pruebas_graficas/lesson07.cc" "CMakeFiles/lesson07.dir/lesson07.cc.o" "gcc" "CMakeFiles/lesson07.dir/lesson07.cc.o.d"
   )
 
-# Targets to which this target links.
-set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/santiagodo/Facultad/2C2024/taller/TP_FINAL_TALLER_2C2024/pruebas_graficas/SDL2pp/CMakeFiles/SDL2pp.dir/DependInfo.cmake"
+# Targets to which this target links which contain Fortran sources.
+set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
+  )
+
+# Targets to which this target links which contain Fortran sources.
+set(CMAKE_Fortran_TARGET_FORWARD_LINKED_INFO_FILES
   )
 
 # Fortran module output directory.

@@ -1,4 +1,4 @@
-# Install script for directory: /home/santiagodo/Facultad/2C2024/taller/TP_FINAL_TALLER_2C2024/pruebas_graficas
+# Install script for directory: /home/val/Desktop/Taller/tpFinal/pruebas_graficas
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,7 +44,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/santiagodo/Facultad/2C2024/taller/TP_FINAL_TALLER_2C2024/pruebas_graficas/SDL2pp/cmake_install.cmake")
+  include("/home/val/Desktop/Taller/tpFinal/pruebas_graficas/SDL2pp/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -55,5 +55,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/santiagodo/Facultad/2C2024/taller/TP_FINAL_TALLER_2C2024/pruebas_graficas/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/val/Desktop/Taller/tpFinal/pruebas_graficas/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
