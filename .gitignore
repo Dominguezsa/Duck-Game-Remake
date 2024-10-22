@@ -4,6 +4,7 @@ tags.*
 pruebas_graficas/lesson07
 pruebas_graficas/CMakeCache.txt
 pruebas_graficas/cmake_install.cmake
+pruebas_graficas/CMakeFiles/
 
 # Algunos ya se crearon antes y los está trackeando git, después veo de borrarlos del repo
 # Ignore build files
