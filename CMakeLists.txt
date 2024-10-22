@@ -57,6 +57,12 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
     FetchContent_MakeAvailable(libSDL2pp)
 endif()
 
+set(SDL2PP_WITH_IMAGE ON) # Para imagenes
+set(SDL2PP_WITH_MIXER ON) # Para sonido
+set(SDL2PP_WITH_TTF ON)   # Para fuentes de texto
+
+add_subdirectory(external/libSDL2pp)
+
 # Program section
 # ---------------
 if(TALLER_CLIENT)
