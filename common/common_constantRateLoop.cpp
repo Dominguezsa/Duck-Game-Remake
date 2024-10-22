@@ -7,9 +7,11 @@ void printIterNumber(int iteration) {
     std::this_thread::sleep_for(std::chrono::milliseconds(400));
 }
 
-// Recibe como primer parámetro el puntero a una función a ejecutar al ritmo constante brindado por el segundo parámetro en milisegundos
-void constantRateLoop(void (*func)(int), int64_t rate) {
+// Recibe como primer parámetro el puntero a una función a ejecutar al ritmo constante brindado por el segundo parámetro en iteraciones por segundo
+// Por ejemplo, constantRateLoop(printIterNumber, 500) ejecutará la función printIterNumber 60 veces por segundo
+void constantRateLoop(void (*func)(int), int64_t iterationsPerSecond) {
 
+    int64_t rate = 1000 / iterationsPerSecond;
     int iteration = 0;
 
     auto t1 = std::chrono::high_resolution_clock::now();
