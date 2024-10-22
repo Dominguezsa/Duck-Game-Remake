@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "common/foo.h"
+// #include "common/foo.h"
 
 using SDL2pp::Renderer;
 using SDL2pp::SDL;

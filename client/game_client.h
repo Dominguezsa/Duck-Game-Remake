@@ -1,0 +1,28 @@
+#ifndef GAME_CLIENT_H
+#define GAME_CLIENT_H
+
+#include <SDL2/SDL.h>
+#include <SDL2pp/Chunk.hh>
+#include <SDL2pp/Font.hh>
+#include <SDL2pp/Mixer.hh>
+#include <SDL2pp/Music.hh>
+#include <SDL2pp/Renderer.hh>
+#include <SDL2pp/SDL2pp.hh>
+#include <SDL2pp/Texture.hh>
+#include <SDL2pp/Window.hh>
+
+class GameClient {
+private:
+    SDL2pp::SDL sdl;
+    SDL2pp::SDLTTF ttf;
+    SDL2pp::Mixer mixer;
+    SDL2pp::Window window;
+    SDL2pp::Renderer renderer;
+
+public:
+    GameClient();
+    ~GameClient();
+    void run();
+};
+
+#endif
