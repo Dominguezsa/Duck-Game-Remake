@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/lesson07.dir/lesson07.cc.o -o lesson07  -Wl,-rpath,/home/val/Desktop/Taller/tpFinal/pruebas_graficas/SDL2pp SDL2pp/libSDL2pp.so.8.3.0 /usr/lib/x86_64-linux-gnu/libSDL2.so /usr/lib/x86_64-linux-gnu/libSDL2main.a /usr/lib/x86_64-linux-gnu/libSDL2_image.so /usr/lib/x86_64-linux-gnu/libSDL2_ttf.so /usr/lib/x86_64-linux-gnu/libSDL2_mixer.so 

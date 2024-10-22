@@ -1,6 +1,0 @@
-/home/val/Desktop/Taller/tpFinal/pruebas_graficas/CMakeFiles/lesson07.dir
-/home/val/Desktop/Taller/tpFinal/pruebas_graficas/CMakeFiles/edit_cache.dir
-/home/val/Desktop/Taller/tpFinal/pruebas_graficas/CMakeFiles/rebuild_cache.dir
-/home/val/Desktop/Taller/tpFinal/pruebas_graficas/SDL2pp/CMakeFiles/SDL2pp.dir
-/home/val/Desktop/Taller/tpFinal/pruebas_graficas/SDL2pp/CMakeFiles/edit_cache.dir
-/home/val/Desktop/Taller/tpFinal/pruebas_graficas/SDL2pp/CMakeFiles/rebuild_cache.dir
