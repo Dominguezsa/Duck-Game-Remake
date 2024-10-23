@@ -8,6 +8,7 @@
 #include <SDL2pp/Music.hh>
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/SDL2pp.hh>
+#include <SDL2pp/SDLTTF.hh>
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Window.hh>
 
