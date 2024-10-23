@@ -25,13 +25,14 @@ struct Platform {
 
 // Function to check if the duck collides with a platform
 bool checkPlatformCollision(float duck_x, float duck_y, float duck_width, float duck_height, const Platform& platform) {
-    // Check if duck's bottom edge is at or slightly above the platform's top edge
-    bool vertical_overlap = (duck_y + duck_height >= platform.y - 5) && 
-                          (duck_y + duck_height <= platform.y + 10); // Small tolerance for better gameplay
+    // Define duck's collision box (slightly smaller than sprite for better gameplay)
+    float duck_collision_x = duck_x + duck_width/4;
+    float duck_collision_width = duck_width/2;
     
-    // Check if duck is horizontally within the platform's bounds
-    bool horizontal_overlap = (duck_x + duck_width/4 >= platform.x) && 
-                            (duck_x + duck_width*3/4 <= platform.x + platform.width);
+    // Check for full collision box overlap
+    bool vertical_overlap = (duck_y + duck_height >= platform.y) && (duck_y <= platform.y + platform.height);
+    bool horizontal_overlap = (duck_collision_x + duck_collision_width >= platform.x) && 
+                            (duck_collision_x <= platform.x + platform.width);
     
     return vertical_overlap && horizontal_overlap;
 }
@@ -82,6 +83,7 @@ int main() try {
     const float gravity = 0.5f;
     const float jump_force = -12.0f;
     const float flutter_force = -0.3f;
+    const float max_fall_speed = 15.0f;
     float y_position = renderer.GetOutputHeight() / 2 - 64; // Initial y position
 
     // Calculate platform dimensions
@@ -206,15 +208,23 @@ int main() try {
         // Apply gravity and handle platform collision
         vertical_velocity += gravity;
         
+        // Clamp maximum fall speed
+        if (vertical_velocity > max_fall_speed) {
+            vertical_velocity = max_fall_speed;
+        }
+        
         // Apply flutter effect if space is held during jump
         if (space_pressed && is_jumping) {
             vertical_velocity += flutter_force;
             // Clamp maximum fall speed during flutter
-            if (vertical_velocity > 4.0f) {
-                vertical_velocity = 4.0f;
+            if (vertical_velocity > 3.0f) {
+                vertical_velocity = 3.0f;
             }
         }
 
+        // Store previous position for collision resolution
+        float previous_y = y_position;
+        
         // Update vertical position
         y_position += vertical_velocity;
 
@@ -223,18 +233,32 @@ int main() try {
         
         // Check collision with left platform
         if (checkPlatformCollision(position, y_position, 64, 64, left_platform)) {
-            y_position = left_platform.y - 64; // Position duck on top of platform
-            vertical_velocity = 0;
-            is_jumping = false;
-            on_platform = true;
+            if (vertical_velocity > 0 && previous_y + 64 <= left_platform.y) {
+                // Landing on top of platform
+                y_position = left_platform.y - 64;
+                vertical_velocity = 0;
+                is_jumping = false;
+                on_platform = true;
+            } else if (vertical_velocity < 0 && previous_y >= left_platform.y + left_platform.height) {
+                // Hitting platform from below
+                y_position = left_platform.y + left_platform.height;
+                vertical_velocity = 0;
+            }
         }
         
         // Check collision with right platform
         if (checkPlatformCollision(position, y_position, 64, 64, right_platform)) {
-            y_position = right_platform.y - 64; // Position duck on top of platform
-            vertical_velocity = 0;
-            is_jumping = false;
-            on_platform = true;
+            if (vertical_velocity > 0 && previous_y + 64 <= right_platform.y) {
+                // Landing on top of platform
+                y_position = right_platform.y - 64;
+                vertical_velocity = 0;
+                is_jumping = false;
+                on_platform = true;
+            } else if (vertical_velocity < 0 && previous_y >= right_platform.y + right_platform.height) {
+                // Hitting platform from below
+                y_position = right_platform.y + right_platform.height;
+                vertical_velocity = 0;
+            }
         }
 
         // Bottom screen boundary
