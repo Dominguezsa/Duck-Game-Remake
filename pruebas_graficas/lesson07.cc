@@ -81,10 +81,10 @@ int main() try {
     // Physics variables
     float vertical_velocity = 0.0f;
     const float gravity = 0.5f;
-    const float jump_force = -12.0f;
+    const float jump_force = -10.0f;
     const float flutter_force = -0.3f;
     const float max_fall_speed = 15.0f;
-    float y_position = renderer.GetOutputHeight() / 2 - 64; // Initial y position
+    float y_position = renderer.GetOutputHeight() / 2 - 64;
 
     // Calculate platform dimensions
     int cell_width = renderer.GetOutputWidth() / 12;
@@ -92,17 +92,17 @@ int main() try {
     
     // Define platforms
     Platform left_platform = {
-        0,                                    // x
-        (float)renderer.GetOutputHeight() / 2,  // y
-        (float)renderer.GetOutputWidth() / 2,   // width
-        (float)cell_height                      // height
+        0,                                    
+        (float)renderer.GetOutputHeight() / 2,  
+        (float)renderer.GetOutputWidth() / 2,   
+        (float)cell_height                      
     };
     
     Platform right_platform = {
-        (float)renderer.GetOutputWidth() / 2,                 // x
-        (float)renderer.GetOutputHeight() / 2 + cell_height * 3, // y
-        (float)renderer.GetOutputWidth() / 2,                 // width
-        (float)cell_height                                    // height
+        (float)renderer.GetOutputWidth() / 2,                 
+        (float)renderer.GetOutputHeight() / 2 + cell_height * 3, 
+        (float)renderer.GetOutputWidth() / 2,                 
+        (float)cell_height                                    
     };
 
     unsigned int prev_ticks = SDL_GetTicks();
@@ -186,6 +186,8 @@ int main() try {
             }
         }
 
+        float old_position = position;
+
         // Update horizontal position
         if (is_running && !agachado) {
             float move_speed = frame_delta * 0.2f * (shift ? 3 : 1);
@@ -243,6 +245,9 @@ int main() try {
                 // Hitting platform from below
                 y_position = left_platform.y + left_platform.height;
                 vertical_velocity = 0;
+            } else {
+                // Side collision
+                position = old_position;
             }
         }
         
@@ -258,6 +263,9 @@ int main() try {
                 // Hitting platform from below
                 y_position = right_platform.y + right_platform.height;
                 vertical_velocity = 0;
+            } else {
+                // Side collision
+                position = old_position;
             }
         }
 
