@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.13)
 
-if (POLICY CMP0135)
+
+if(POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif()
 
-if (NOT DEFINED CMAKE_CXX_STANDARD)
+
+if(NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 20)
 endif()
 
@@ -17,7 +19,7 @@ project(taller_tp
     VERSION 1.0
     HOMEPAGE_URL "https://github.com/URL-HERE"
     LANGUAGES CXX
-    )
+)
 
 option(TALLER_TESTS "Enable / disable tests." ON)
 option(TALLER_CLIENT "Enable / disable client program." ON)
@@ -25,7 +27,9 @@ option(TALLER_SERVER "Enable / disable server program." ON)
 option(TALLER_EDITOR "Enable / disable editor program." ON)
 option(TALLER_MAKE_WARNINGS_AS_ERRORS "Enable / disable warnings as errors." ON)
 
-message(CMAKE_CXX_COMPILER_ID="${CMAKE_CXX_COMPILER_ID}")
+
+message(CMAKE_CXX_COMPILER_ID= "${CMAKE_CXX_COMPILER_ID}")
+
 
 # Define target: lib common between client, server and editor programs
 # HEY TODO XXX: change the name to something that you like
@@ -54,14 +58,16 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
         URL https://github.com/libSDL2pp/libSDL2pp/archive/cc198c9a5657048bee67ece82de620b2d5661084.zip
     )
 
+
+    # set up SDL2pp library
+    set(SDL2PP_WITH_IMAGE YES)
+    set(SDL2PP_WITH_TTF YES)
+    set(SDL2PP_WITH_MIXER YES)
+
+
     FetchContent_MakeAvailable(libSDL2pp)
 endif()
 
-set(SDL2PP_WITH_IMAGE ON) # Para imagenes
-set(SDL2PP_WITH_MIXER ON) # Para sonido
-set(SDL2PP_WITH_TTF ON)   # Para fuentes de texto
-
-add_subdirectory(external/libSDL2pp)
 
 # Program section
 # ---------------
@@ -164,7 +170,7 @@ if(TALLER_TESTS)
         PUBLIC
         ${gtest_SOURCE_DIR}/include
         ${gmock_SOURCE_DIR}/include
-        )
+    )
 
     # HEY!! TODO XXX: I'm assuming that the code under testing is in taller_common
     # Change this if you have to.
