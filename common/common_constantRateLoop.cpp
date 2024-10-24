@@ -9,7 +9,7 @@
 
 // Recibe como primer parámetro el puntero a una función a ejecutar al ritmo constante brindado por
 // el segundo parámetro en iteraciones por segundo Por ejemplo, constantRateLoop(printIterNumber,
-// 500) ejecutará la función printIterNumber 60 veces por segundo
+// 60) ejecutará la función printIterNumber 60 veces por segundo
 void constantRateLoop(void (*func)(int), int64_t iterationsPerSecond) {
 
     int64_t rate = 1000 / iterationsPerSecond;
