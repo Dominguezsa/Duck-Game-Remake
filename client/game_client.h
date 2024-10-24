@@ -1,6 +1,8 @@
 #ifndef GAME_CLIENT_H
 #define GAME_CLIENT_H
 
+#include <string>
+
 #include <SDL2/SDL.h>
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Font.hh>
@@ -21,7 +23,8 @@ private:
     SDL2pp::Renderer renderer;
 
 public:
-    GameClient();
+    GameClient(const int window_width, const int window_height, const std::string& window_title,
+               const int max_chunk_size_audio);
     ~GameClient();
     void run();
 };
