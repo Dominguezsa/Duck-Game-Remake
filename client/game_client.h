@@ -14,6 +14,8 @@
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Window.hh>
 
+#include "ResourceManager.h"
+
 class GameClient {
 private:
     SDL2pp::SDL sdl;
@@ -21,12 +23,14 @@ private:
     SDL2pp::Mixer mixer;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
+    ResourceManager resourceManager;
 
 public:
     GameClient(const int window_width, const int window_height, const std::string& window_title,
                const int max_chunk_size_audio);
     ~GameClient();
     void run();
+    void mainLoop(const int it);
 };
 
 #endif
