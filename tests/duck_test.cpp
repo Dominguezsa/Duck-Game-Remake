@@ -1,8 +1,8 @@
 #include <cassert>
 #include <iostream>
 
-#include "../common/common_arma.h"
-#include "../common/common_posicion.h"
+#include "../common/common_weapon.h"
+#include "../common/common_position.h"
 #include "../common/duck.cpp"
 
 void test_pato() {

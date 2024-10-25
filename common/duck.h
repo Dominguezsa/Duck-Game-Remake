@@ -3,8 +3,8 @@
 
 #include <cstdint>
 
-#include "common_arma.h"
-#include "common_posicion.h"
+#include "common_weapon.h"
+#include "common_position.h"
 
 class Duck {
 public:
