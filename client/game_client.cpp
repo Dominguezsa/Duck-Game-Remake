@@ -13,7 +13,12 @@
 #include <thread>
 
 #define FPS 60
-
+struct Platform {
+    float x;
+    float y;
+    float width;
+    float height;
+};
 // Loads the game client with all of the necessary main resources (in the future maybe it will be
 // even more)
 GameClient::GameClient(const int window_width, const int window_height,
@@ -36,6 +41,26 @@ void GameClient::run() {
 
     int64_t rate = 1000 / FPS;
     int iteration = 0;
+    renderer.Copy(*resourceManager.getTexture("background"), SDL2pp::NullOpt, SDL2pp::NullOpt);
+    int cell_width = renderer.GetOutputWidth() / 12;
+    int cell_height = renderer.GetOutputHeight() / 14;
+    Platform left_platform = {0, (float)renderer.GetOutputHeight() / 2,
+                              (float)renderer.GetOutputWidth() / 2, (float)cell_height};
+
+    Platform right_platform = {(float)renderer.GetOutputWidth() / 2,
+                               (float)renderer.GetOutputHeight() / 2 + cell_height * 3,
+                               (float)renderer.GetOutputWidth() / 2, (float)cell_height};
+    for (int i = 0; i < 6; ++i) {
+        renderer.Copy(*resourceManager.getTexture("tablas"), SDL2pp::NullOpt,
+                      SDL2pp::Rect(i * cell_width, left_platform.y, cell_width, cell_height));
+    }
+
+    // Right platform
+    for (int i = 0; i < 6; ++i) {
+        renderer.Copy(
+                *resourceManager.getTexture("tablas"), SDL2pp::NullOpt,
+                SDL2pp::Rect(i * cell_width + right_platform.x, right_platform.y, cell_width, cell_height));
+    }
 
     auto t1 = std::chrono::high_resolution_clock::now();
     int64_t t1_ms =
@@ -49,6 +74,7 @@ void GameClient::run() {
     bool quit = false;
 
     // std::cout << "Starting, this should give me a loop of 1 iteration per " << rate << "ms\n";
+    renderer.Present();
     while (true) {
 
         mainLoop(iteration, quit);
