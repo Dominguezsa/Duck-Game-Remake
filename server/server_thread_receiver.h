@@ -10,7 +10,7 @@
 class ThreadReceiver: public Thread {
 private:
     ServerProtocolo& protocolo;
-    std::atomic<bool> esta_vivo;
+    std::atomic<bool> is_alive;
     Queue<MensajeGameloop>& gameloop_queue;
 
 public:

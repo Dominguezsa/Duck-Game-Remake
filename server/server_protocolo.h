@@ -19,7 +19,7 @@ public:
 
     MensajeGameloop recibirMensaje();
 
-    // std::vector<char> obtenerVectorDeCaracteresParaEnviarAlSocket(std::list<Pato> mensaje);
+    // std::vector<char> obtenerVectorDeCaracteresParaEnviarAlSocket(std::list<Duck> mensaje);
 
     void apagarSocket();
 };
