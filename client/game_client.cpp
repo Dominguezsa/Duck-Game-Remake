@@ -1,6 +1,7 @@
 #include "game_client.h"
 
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2pp/Chunk.hh>
@@ -45,10 +46,17 @@ void GameClient::run() {
     auto musicTrack = resourceManager.getMusicTrack("back_music");
     mixer.PlayMusic(*musicTrack, -1);
 
+    bool quit = false;
+
     // std::cout << "Starting, this should give me a loop of 1 iteration per " << rate << "ms\n";
     while (true) {
 
-        mainLoop(iteration);
+        mainLoop(iteration, quit);
+
+        if (quit) {
+            break;
+        }
+
 
         auto t2 = std::chrono::high_resolution_clock::now();
         int64_t t2_ms = std::chrono::duration_cast<std::chrono::milliseconds>(t2.time_since_epoch())
@@ -67,10 +75,35 @@ void GameClient::run() {
     }
 }
 
-void GameClient::mainLoop(const int it) {
+void GameClient::mainLoop(const int it, bool& quit) {
     // Now it should do everything that the game needs to do in one iteration, like play if it needs
     // to play music, render sprites, etc.
-    std::cout << it << std::endl;
+
+    // Now processing all of the events on this frame
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            quit = true;
+        } else if (event.type == SDL_KEYDOWN) {
+            std::cout << "Caught a keydown event on iteration: " << it << "\n";
+            switch (event.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    quit = true;
+                    break;
+                case SDLK_1:
+                    mixer.PlayChannel(-1, *resourceManager.getSFX("boom1"), 1);
+                    break;
+                case SDLK_2:
+                    mixer.PlayChannel(-1, *resourceManager.getSFX("boom2"), 0);
+                    break;
+                case SDLK_3:
+                    mixer.PlayChannel(-1, *resourceManager.getSFX("boom3"), 0);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 

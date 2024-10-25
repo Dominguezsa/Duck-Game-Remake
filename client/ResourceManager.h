@@ -22,7 +22,6 @@ private:
     std::map<std::string, std::shared_ptr<SDL2pp::Texture>> textures;
     SDL2pp::Renderer& renderer;
 
-
 public:
     explicit ResourceManager(SDL2pp::Renderer& renderer);
     ~ResourceManager();
@@ -32,7 +31,9 @@ public:
     void loadFonts();
     void loadSprites();
     std::shared_ptr<SDL2pp::Music> getMusicTrack(const std::string& key);
-    SDL2pp::Texture& getTexture(const std::string& key);
+    std::shared_ptr<SDL2pp::Font> getFont(const std::string& key);
+    std::shared_ptr<SDL2pp::Chunk> getSFX(const std::string& key);
+    std::shared_ptr<SDL2pp::Texture> getTexture(const std::string& key);
     void releaseResources();
 };
 

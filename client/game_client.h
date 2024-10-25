@@ -30,7 +30,7 @@ public:
                const int max_chunk_size_audio);
     ~GameClient();
     void run();
-    void mainLoop(const int it);
+    void mainLoop(const int it, bool& quit);
 };
 
 #endif
