@@ -51,3 +51,5 @@ void Protocol::send_string(const std::string &str_msg) {
     send_data(&len_msg, sizeof(uint16_t));
     send_data(str_msg.data(), str_msg.size());
 }
+
+Protocol::~Protocol() {}

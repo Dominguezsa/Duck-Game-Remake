@@ -5,17 +5,18 @@
 
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
+#include "../common/duck.h"
 
-#include "client_protocol.h"
+#include "protocol.h"
 
 class ThreadReceiver: public Thread {
 private:
-    ServerProtocolo& protocol;
+    ClientProtocol& protocol;
     std::atomic<bool> is_alive;
     Queue<std::vector<Duck>>& graphique_queue;
 
 public:
-    explicit ThreadReceiver(ClientProtocol& protocol);
+    explicit ThreadReceiver(ClientProtocol& protocol, Queue<std::vector<Duck>>& graphique_queue);
 
     void run() override;
 

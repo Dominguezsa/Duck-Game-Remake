@@ -4,7 +4,8 @@
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
 
-#include "client_protocol.h"
+
+#include "protocol.h"
 
 class ThreadSender: public Thread {
 private:

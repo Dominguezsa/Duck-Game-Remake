@@ -2,13 +2,14 @@
 
 #include <string>
 
-ThreadReceiver::ThreadReceiver(ClientProtocol& protocol): protocolo(protocol), is_alive(true) {}
+ThreadReceiver::ThreadReceiver(ClientProtocol& protocol, Queue<std::vector<Duck>>& graphique_queue):
+    protocol(protocol), is_alive(true), graphique_queue(graphique_queue) {}
 
 
 void ThreadReceiver::run() {
     try {
         while (is_alive) {
-            std::vector<Duck> ducks = this->protocolo.receiveMessage();
+            std::vector<Duck> ducks = this->protocol.receiveMessage();
             graphique_queue.push(ducks);
         }
     } catch (const std::exception& e) {
@@ -17,9 +18,9 @@ void ThreadReceiver::run() {
 }
 
 
-void ThreadReceiver::detener_thread() {
+void ThreadReceiver::stop_thread() {
     this->is_alive = false;
     this->join();
 }
 
-bool ThreadReceiver::esta_Vivo() const { return is_alive; }
+bool ThreadReceiver::is_still_alive() const { return is_alive; }
