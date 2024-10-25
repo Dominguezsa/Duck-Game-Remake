@@ -14,6 +14,13 @@
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Window.hh>
 
+#include "../common/common_queue.h"
+#include "../common/duck.h"
+#include "protocol.h"
+#include "thread_receiver.h"
+#include "thread_sender.h"
+#include "../common/common_socket.h"
+
 #include "ResourceManager.h"
 
 class GameClient {
@@ -24,6 +31,10 @@ private:
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
     ResourceManager resourceManager;
+    Socket socket;
+    ClientProtocol protocol;
+    Queue<uint8_t> messagesForServer;
+    Queue<std::vector<Duck>> graphique_queue;
 
 public:
     GameClient(const int window_width, const int window_height, const std::string& window_title,

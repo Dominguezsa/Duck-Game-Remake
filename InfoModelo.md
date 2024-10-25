@@ -13,11 +13,11 @@ cant   pos_x      pos_y    vivo  corr  salt agach  disp  casco  armad  arma     
 
 protocolo del cliente al server:
 
-0x01: mover_a_derecha_key_up
-0x02: mover_a_derecha_key_down
-0x03: mover_a_izquierda_key_up
-0x04: mover_a_izquierda_key_down
-0x05: saltar_key_up
-0x06: saltar_key_down
-0x07: disparar_key_up
-0x08: disparar_key_down
+0x01: mover_a_derecha_key_down
+0x02: mover_a_derecha_key_up
+0x03: mover_a_izquierda_key_down
+0x04: mover_a_izquierda_key_up
+0x05: saltar_key_down
+0x06: saltar_key_up
+0x07: disparar_key_down
+0x08: disparar_key_up

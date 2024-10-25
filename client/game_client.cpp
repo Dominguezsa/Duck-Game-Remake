@@ -30,11 +30,20 @@ GameClient::GameClient(const int window_width, const int window_height,
         window(window_title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width,
                window_height, SDL_WINDOW_RESIZABLE),
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
-        resourceManager(renderer) {}
+        resourceManager(renderer),
+        socket("localhost", "8080"),
+        protocol(socket),
+        messagesForServer(),
+        graphique_queue() {}
 
 // Moved the constantRateLoop implementation here because making it a separate file was causing a
 // lot of problems, but yeah its repeating the same code in both client and server
 void GameClient::run() {
+    ThreadReceiver threadReceiver(protocol, graphique_queue);
+    ThreadSender threadSender(protocol, messagesForServer);
+    threadReceiver.start();
+    threadSender.start();
+
 
     // Load resources
     resourceManager.loadResources();
@@ -57,9 +66,9 @@ void GameClient::run() {
 
     // Right platform
     for (int i = 0; i < 6; ++i) {
-        renderer.Copy(
-                *resourceManager.getTexture("tablas"), SDL2pp::NullOpt,
-                SDL2pp::Rect(i * cell_width + right_platform.x, right_platform.y, cell_width, cell_height));
+        renderer.Copy(*resourceManager.getTexture("tablas"), SDL2pp::NullOpt,
+                      SDL2pp::Rect(i * cell_width + right_platform.x, right_platform.y, cell_width,
+                                   cell_height));
     }
 
     auto t1 = std::chrono::high_resolution_clock::now();
@@ -124,6 +133,36 @@ void GameClient::mainLoop(const int it, bool& quit) {
                     break;
                 case SDLK_3:
                     mixer.PlayChannel(-1, *resourceManager.getSFX("boom3"), 0);
+                    break;
+                case SDLK_d:
+                    messagesForServer.push(0x01);
+                    break;
+                case SDLK_a:
+                    messagesForServer.push(0x03);
+                    break;
+                case SDLK_SPACE:
+                    messagesForServer.push(0x05);
+                    break;
+                case SDLK_f:
+                    messagesForServer.push(0x07);
+                    break;
+                default:
+                    break;
+            }
+        } else if (event.type == SDL_KEYUP) {
+            std::cout << "Caught a keyup event on iteration: " << it << "\n";
+            switch (event.key.keysym.sym) {
+                case SDLK_d:
+                    messagesForServer.push(0x02);
+                    break;
+                case SDLK_a:
+                    messagesForServer.push(0x04);
+                    break;
+                case SDLK_SPACE:
+                    messagesForServer.push(0x06);
+                    break;
+                case SDLK_f:
+                    messagesForServer.push(0x08);
                     break;
                 default:
                     break;

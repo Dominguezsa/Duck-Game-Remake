@@ -4,16 +4,16 @@
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
 
-
 #include "protocol.h"
 
 class ThreadSender: public Thread {
 private:
     ClientProtocol& protocol;
     std::atomic<bool> is_alive;
+    Queue<uint8_t>& messages_to_server;
 
 public:
-    explicit ThreadSender(ClientProtocol& protocol);
+    explicit ThreadSender(ClientProtocol& protocol, Queue<uint8_t>& messages_to_server);
 
     void run() override;
 
