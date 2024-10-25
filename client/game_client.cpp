@@ -75,7 +75,7 @@ void GameClient::run() {
     int64_t t1_ms =
             std::chrono::duration_cast<std::chrono::milliseconds>(t1.time_since_epoch()).count();
 
-    mixer.SetMusicVolume(30);
+    mixer.SetMusicVolume(0);
     mixer.SetVolume(-1, 20);
     auto musicTrack = resourceManager.getMusicTrack("back_music");
     mixer.PlayMusic(*musicTrack, -1);

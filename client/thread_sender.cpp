@@ -10,7 +10,6 @@ void ThreadSender::run() {
     try {
         while (is_alive) {
             uint8_t message = messages_to_server.pop();
-            std::cout << "Sending message: " << (int)message << "\n";
             this->protocol.send_msg(&message);
         }
     } catch (const std::exception& e) {

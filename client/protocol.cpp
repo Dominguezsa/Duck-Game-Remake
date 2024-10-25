@@ -15,5 +15,6 @@ void ClientProtocol::read_msg(void *msg) {
 }
 
 void ClientProtocol::send_msg(void *msg) {
-    std::cout << msg << std::endl;
+    int int_msg = *static_cast<int*>(msg);
+    std::cout << "Sending message: " << int_msg << std::endl;
 }
