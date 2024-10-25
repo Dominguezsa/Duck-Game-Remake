@@ -20,7 +20,7 @@ public:
 
     void detener_thread();
 
-    bool esta_Vivo() const;
+    bool is_still_alive() const;
 };
 
 #endif  // SERVER_THREAD_RECEIVER_H

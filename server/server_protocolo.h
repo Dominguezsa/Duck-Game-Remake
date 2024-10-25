@@ -8,7 +8,7 @@
 #include "../common/common_socket.h"
 
 #include "server_mensaje_gameloop.h"
-#include "server_pato.h"
+#include "../common/duck.h"
 
 class ServerProtocolo {
 public:

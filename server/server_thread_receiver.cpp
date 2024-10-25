@@ -24,4 +24,4 @@ void ThreadReceiver::detener_thread() {
     this->join();
 }
 
-bool ThreadReceiver::esta_Vivo() const { return is_alive; }
+bool ThreadReceiver::is_still_alive() const { return is_alive; }
