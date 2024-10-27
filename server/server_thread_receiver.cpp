@@ -3,15 +3,15 @@
 #include <string>
 #include <vector>
 
-ThreadReceiver::ThreadReceiver(ServerProtocolo& protocolo, Queue<MensajeGameloop>& gameloop_queue):
+ThreadReceiver::ThreadReceiver(ServerProtocol& protocolo, Queue<MensajeGameloop>& gameloop_queue):
         protocolo(protocolo), is_alive(true), gameloop_queue(gameloop_queue) {}
 
 
 void ThreadReceiver::run() {
     try {
         while (is_alive) {
-            MensajeGameloop msj = this->protocolo.recibirMensaje();
-            gameloop_queue.push(msj);
+            //MensajeGameloop msj = this->protocolo.recibirMensaje();
+            //gameloop_queue.push(msj);
         }
     } catch (const std::exception& e) {
         this->is_alive = false;

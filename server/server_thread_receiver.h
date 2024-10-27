@@ -4,17 +4,19 @@
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
 
-#include "server_mensaje_gameloop.h"
+#include "server_gameloop_message.h"
 #include "server_protocolo.h"
+
+struct MensajeGameloop {};
 
 class ThreadReceiver: public Thread {
 private:
-    ServerProtocolo& protocolo;
+    ServerProtocol& protocolo;
     std::atomic<bool> is_alive;
     Queue<MensajeGameloop>& gameloop_queue;
 
 public:
-    explicit ThreadReceiver(ServerProtocolo& protocolo, Queue<MensajeGameloop>& gameloop_queue);
+    explicit ThreadReceiver(ServerProtocol& protocolo, Queue<MensajeGameloop>& gameloop_queue);
 
     void run() override;
 
