@@ -23,8 +23,21 @@ public:
     Position position;
     Weapon weapon;
 
+    // ------------------- Constructores -------------------
 
     explicit Duck(uint8_t id, uint8_t vida, bool mira_hacia, Position pos, const Weapon& weapon);
+    
+    // Constructor sin parametros
+    Duck();
+
+    // Constructor de copia
+    Duck(const Duck& other);
+
+    // ------------------- Métodos -------------------
+
+    // Asignación por copia
+    Duck& operator=(const Duck& other);
+
     void move_to(uint8_t direccion);  // 0: izquierda, 1: derecha (hacia arriba seria un salto y
                                           // hacia abajo se agacha)
 

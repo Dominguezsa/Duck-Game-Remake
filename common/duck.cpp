@@ -1,5 +1,7 @@
 #include "duck.h"
 
+// ------------------- Constructores -------------------
+
 Duck::Duck(uint8_t id, uint8_t vida, bool looking, Position pos, const Weapon& weapon):
         duck_id(id),
         life_points(vida),
@@ -13,6 +15,55 @@ Duck::Duck(uint8_t id, uint8_t vida, bool looking, Position pos, const Weapon& w
         armor_on(false),
         position(pos),
         weapon(weapon) {}
+
+Duck::Duck(): duck_id(0),
+              life_points(0),
+              looking(0),
+              is_alive(false),
+              is_running(false),
+              is_jumping(false),
+              is_ducking(false),
+              is_shooting(false),
+              helmet_on(false),
+              armor_on(false),
+              position({0, 0}),
+              weapon(Weapon("", 0)) {}
+
+Duck::Duck(const Duck& other)
+    : duck_id(other.duck_id),
+      life_points(other.life_points),
+      looking(other.looking),
+      is_alive(other.is_alive),
+      is_running(other.is_running),
+      is_jumping(other.is_jumping),
+      is_ducking(other.is_ducking),
+      is_shooting(other.is_shooting),
+      helmet_on(other.helmet_on),
+      armor_on(other.armor_on),
+      position(other.position),
+      weapon(other.weapon) {
+}
+
+// ------------------- Métodos -------------------
+
+Duck& Duck::operator=(const Duck& other) {
+    if (this != &other) {
+        duck_id = other.duck_id;
+        life_points = other.life_points;
+        looking = other.looking;
+        is_alive = other.is_alive;
+        is_running = other.is_running;
+        is_jumping = other.is_jumping;
+        is_ducking = other.is_ducking;
+        is_shooting = other.is_shooting;
+        helmet_on = other.helmet_on;
+        armor_on = other.armor_on;
+
+        position = other.position;
+        weapon = other.weapon;
+    }
+    return *this;
+}
 
 void Duck::move_to(uint8_t direccion) {
     if (direccion == 0) {
@@ -88,5 +139,5 @@ void Duck::update_state(const DuckState& state) {
     helmet_on = state.helmet_on;
     armor_on = state.armor_on;
     // TO-DO: Ajustar el uso del tipo de weapon.
-    // weapon = Weapon("", 0);
+    weapon = Weapon("", 0);
 }
