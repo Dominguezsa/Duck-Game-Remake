@@ -1,4 +1,4 @@
-#ifndef SERVER_PROTOCOLO_H
+#ifndef SERVER_PROTOCOL_H
 #define SERVER_PROTOCOL_H
 
 #include <cstdint>
@@ -6,20 +6,21 @@
 #include <vector>
 
 #include "../common/common_socket.h"
+#include "../common/common_protocol.h"
+#include "server_gameloop_message.h"
+//#include "../common/duck.h"
+#include "../common/types/duck_state.h"
 
-#include "server_mensaje_gameloop.h"
-#include "../common/duck.h"
-
-class ServerProtocolo {
+class ServerProtocol : public Protocol {
 public:
-    Socket& socket;
-    uint8_t jugador_id;
+    //Socket& socket;
+    //uint8_t jugador_id; // Que el sender lo asigne.
 
-    explicit ServerProtocolo(Socket& socket, uint8_t id);
+    explicit ServerProtocol(Socket &skt):Protocol(skt) {}
 
-    MensajeGameloop recibirMensaje();
+    void recv_msg(GameloopMessage& msg);
 
-    // std::vector<char> obtenerVectorDeCaracteresParaEnviarAlSocket(std::list<Duck> mensaje);
+    void send_duck_states(std::vector<DuckState>& states);
 
     void apagarSocket();
 };
