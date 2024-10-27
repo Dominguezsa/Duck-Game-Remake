@@ -1,9 +1,7 @@
 #include "thread_sender.h"
 
 ThreadSender::ThreadSender(ClientProtocol& protocol, Queue<uint8_t>& messages_to_server):
-        protocol(protocol),
-        is_alive(true),
-        messages_to_server(messages_to_server) {}
+        protocol(protocol), is_alive(true), messages_to_server(messages_to_server) {}
 
 
 void ThreadSender::run() {
@@ -15,6 +13,7 @@ void ThreadSender::run() {
     } catch (const std::exception& e) {
         return;
     }
+    std::cout << "SENDER: run function ended\n";
 }
 
 
@@ -22,6 +21,7 @@ void ThreadSender::stop_thread() {
     this->is_alive = false;
     messages_to_server.close();
     this->join();
+    std::cout << "SENDER: stop_thread function ended\n";
 }
 
 

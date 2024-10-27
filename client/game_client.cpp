@@ -16,7 +16,9 @@
 struct Platform {
     float x;
     float y;
+    // cppcheck-suppress unusedStructMember
     float width;
+    // cppcheck-suppress unusedStructMember
     float height;
 };
 // Loads the game client with all of the necessary main resources (in the future maybe it will be
@@ -89,6 +91,7 @@ void GameClient::run() {
         mainLoop(iteration, quit);
 
         if (quit) {
+            std::cout << "Exiting the game\n";
             break;
         }
 
@@ -108,6 +111,18 @@ void GameClient::run() {
         t1_ms += rate;
         iteration += 1;
     }
+    std::cout << "CLIENT: Stopping the receiver thread\n";
+    threadReceiver.stop_thread();
+    std::cout << "CLIENT: Closing the graphic queue\n";
+    graphique_queue.close();
+    std::cout << "CLIENT: joining the receiver thread\n";
+    // threadReceiver.join();
+    std::cout << "CLIENT: Stopping the sender thread\n";
+    threadSender.stop_thread();
+    std::cout << "CLIENT: Closing the messages for server queue\n";
+    messagesForServer.close();
+    std::cout << "CLIENT: joining the sender thread\n";
+    // threadSender.join();
 }
 
 void GameClient::mainLoop(const int it, bool& quit) {
