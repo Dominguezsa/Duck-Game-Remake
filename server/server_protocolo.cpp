@@ -13,6 +13,7 @@ void ServerProtocol::send_duck_states(std::vector<DuckState>& states) {
     unsigned int state_count = states.size();
     send_data(&state_count, sizeof(uint8_t));
     for (uint16_t i = 0; i < state_count; i++) {
+        send_data(&states[i].duck_id, sizeof(uint8_t));
         send_data(&states[i].position.x, sizeof(uint32_t));
         send_data(&states[i].position.y, sizeof(uint32_t));
         send_data(&states[i].is_alive, sizeof(uint8_t));
