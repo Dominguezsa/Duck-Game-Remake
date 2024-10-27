@@ -10,6 +10,8 @@ void ThreadReceiver::run() {
     try {
         while (is_alive) {
             std::vector<Duck> ducks = this->protocol.receiveMessage();
+            // For now, for debugging it fires after five seconds to not fry the cpu
+            std::cout << "RECEIVER: I should only be unlocked after an event\n";
             graphique_queue.push(ducks);
         }
     } catch (const std::exception& e) {

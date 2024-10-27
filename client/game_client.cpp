@@ -3,6 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Music.hh>
@@ -85,7 +86,9 @@ void GameClient::run() {
     bool quit = false;
 
     // std::cout << "Starting, this should give me a loop of 1 iteration per " << rate << "ms\n";
+    std::cout << "Drawing the background and both platforms\n";
     renderer.Present();
+
     while (true) {
 
         mainLoop(iteration, quit);
@@ -107,22 +110,20 @@ void GameClient::run() {
             t1_ms += lost;
             iteration += lost / rate;
         }
+        // SDL_Delay(rest);
         std::this_thread::sleep_for(std::chrono::milliseconds(rest));
         t1_ms += rate;
         iteration += 1;
+        // std::cout << "Iteration: " << iteration << "\n";
     }
     std::cout << "CLIENT: Stopping the receiver thread\n";
     threadReceiver.stop_thread();
     std::cout << "CLIENT: Closing the graphic queue\n";
     graphique_queue.close();
-    std::cout << "CLIENT: joining the receiver thread\n";
-    // threadReceiver.join();
     std::cout << "CLIENT: Stopping the sender thread\n";
     threadSender.stop_thread();
     std::cout << "CLIENT: Closing the messages for server queue\n";
     messagesForServer.close();
-    std::cout << "CLIENT: joining the sender thread\n";
-    // threadSender.join();
 }
 
 void GameClient::mainLoop(const int it, bool& quit) {
