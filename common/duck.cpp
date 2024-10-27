@@ -114,30 +114,30 @@ void Duck::pick_up_weapon(const Weapon& weapon) { this->weapon = weapon; }
 void Duck::throw_weapon() { this->weapon = Weapon("", 0); }
 
 void Duck::get_state(DuckState& state) {
-    state.duck_id = duck_id;
+    state.duck_id = static_cast<uint8_t>(duck_id);
     state.position = position;
-    state.is_alive = is_alive;
-    state.is_running = is_running;
-    state.is_jumping = is_jumping;
-    state.is_ducking = is_ducking;
-    state.is_shooting = is_shooting;
-    state.helmet_on = helmet_on;
-    state.armor_on = armor_on;
+    state.is_alive = static_cast<uint8_t>(is_alive);
+    state.is_running = static_cast<uint8_t>(is_running);
+    state.is_jumping = static_cast<uint8_t>(is_jumping);
+    state.is_ducking = static_cast<uint8_t>(is_ducking);
+    state.is_shooting = static_cast<uint8_t>(is_shooting);
+    state.helmet_on = static_cast<uint8_t>(helmet_on);
+    state.armor_on = static_cast<uint8_t>(armor_on);
     // TO-DO: Ajustar el uso del tipo de weapon a la
     //        clase correspondiente.
     state.weapon = WeaponType::NoneType;
 }
 
 void Duck::update_state(const DuckState& state) {
-    duck_id = state.duck_id;
+    // duck_id = state.duck_id;
     position = state.position;
-    is_alive = state.is_alive;
-    is_running = state.is_running;
-    is_jumping = state.is_jumping;
-    is_ducking = state.is_ducking;
-    is_shooting = state.is_shooting;
-    helmet_on = state.helmet_on;
-    armor_on = state.armor_on;
+    is_alive = static_cast<bool>(state.is_alive);
+    is_running = static_cast<bool>(state.is_running);
+    is_jumping = static_cast<bool>(state.is_jumping);
+    is_ducking = static_cast<bool>(state.is_ducking);
+    is_shooting = static_cast<bool>(state.is_shooting);
+    helmet_on = static_cast<bool>(state.helmet_on);
+    armor_on = static_cast<bool>(state.armor_on);
     // TO-DO: Ajustar el uso del tipo de weapon.
-    weapon = Weapon("", 0);
+    // weapon = Weapon("", 0);
 }
