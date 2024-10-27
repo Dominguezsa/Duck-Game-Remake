@@ -5,6 +5,8 @@
 
 #include "common_weapon.h"
 #include "common_position.h"
+#include "types/weapon_type.h"
+#include "types/duck_state.h"
 
 class Duck {
 public:
@@ -38,6 +40,10 @@ public:
     void pick_up_weapon(const Weapon& weapon);
 
     void throw_weapon();
+
+    void get_state(DuckState& state);
+
+    void update_state(const DuckState& state);
 };
 
 #endif  // DUCK_H

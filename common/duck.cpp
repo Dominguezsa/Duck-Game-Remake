@@ -61,3 +61,32 @@ void Duck::receive_damage(uint8_t danio) {
 void Duck::pick_up_weapon(const Weapon& weapon) { this->weapon = weapon; }
 
 void Duck::throw_weapon() { this->weapon = Weapon("", 0); }
+
+void Duck::get_state(DuckState& state) {
+    state.duck_id = duck_id;
+    state.position = position;
+    state.is_alive = is_alive;
+    state.is_running = is_running;
+    state.is_jumping = is_jumping;
+    state.is_ducking = is_ducking;
+    state.is_shooting = is_shooting;
+    state.helmet_on = helmet_on;
+    state.armor_on = armor_on;
+    // TO-DO: Ajustar el uso del tipo de weapon a la
+    //        clase correspondiente.
+    state.weapon = WeaponType::NoneType;
+}
+
+void Duck::update_state(const DuckState& state) {
+    duck_id = state.duck_id;
+    position = state.position;
+    is_alive = state.is_alive;
+    is_running = state.is_running;
+    is_jumping = state.is_jumping;
+    is_ducking = state.is_ducking;
+    is_shooting = state.is_shooting;
+    helmet_on = state.helmet_on;
+    armor_on = state.armor_on;
+    // TO-DO: Ajustar el uso del tipo de weapon.
+    // weapon = Weapon("", 0);
+}
