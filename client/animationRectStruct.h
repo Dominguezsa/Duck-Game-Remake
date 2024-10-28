@@ -1,3 +1,6 @@
+#ifndef ANIMATION_RECT_STRUCT_H
+#define ANIMATION_RECT_STRUCT_H
+
 struct animFrame {
     // cppcheck-suppress unusedStructMember
     int x;
@@ -8,3 +11,4 @@ struct animFrame {
     // cppcheck-suppress unusedStructMember
     int h;
 };
+#endif
