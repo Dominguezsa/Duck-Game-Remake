@@ -20,6 +20,8 @@ public:
     bool is_shooting;
     bool helmet_on;
     bool armor_on;
+    float vertical_velocity = 0.0f;
+    bool in_air = false;
     Position position;
     Weapon weapon;
 

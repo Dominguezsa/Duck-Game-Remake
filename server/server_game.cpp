@@ -10,7 +10,12 @@ void Game::addPlayer(uint8_t player_id) {
     Position initial_pos{100 + (player_id * 100), 100}; // Example starting positions
     Weapon initial_weapon("NoneType", 0);
     ducks[player_id] = std::make_unique<Duck>(player_id, 100, 1, initial_pos, initial_weapon);
+    platforms = {
+        {0.0f, 350.0f, 600.0f, 32.0f},     // Left platform
+        {600.0f, 450.0f, 600.0f, 32.0f}    // Right platform
+    };
 }
+
 
 void Game::removePlayer(uint8_t player_id) {
     ducks.erase(player_id);
@@ -47,13 +52,114 @@ void Game::handlePlayerAction(const GameloopMessage& msg) {
     }
 }
 
+bool Game::checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height, const Platform& platform) {
+    // Define duck's collision box (slightly smaller than sprite for better gameplay)
+    float duck_collision_x = duck_pos.x + duck_width/4;
+    float duck_collision_width = duck_width/2;
+    
+    // Check for full collision box overlap
+    bool vertical_overlap = (duck_pos.y + duck_height >= platform.y) && 
+                          (duck_pos.y <= platform.y + platform.height);
+    bool horizontal_overlap = (duck_collision_x + duck_collision_width >= platform.x) && 
+                            (duck_collision_x <= platform.x + platform.width);
+    
+    return vertical_overlap && horizontal_overlap;
+}
+
 void Game::updateGameState() {
-    // Update physics, collisions, weapons, etc.
+    const float gravity = 0.5f;
+    const float jump_force = -10.0f;
+    const float flutter_force = -0.3f;
+    const float max_fall_speed = 15.0f;
+    const float duck_width = 64.0f;
+    const float duck_height = 64.0f;
+    const float ground_level = 700.0f - duck_height;  // Screen height - duck height
+    
     for (auto& duck_pair : ducks) {
         Duck* duck = duck_pair.second.get();
-        // Update duck physics
-        // Check collisions
-        // Handle weapon effects
+        
+        // Store previous position for collision resolution
+        float previous_y = duck->position.y;
+        float previous_x = duck->position.x;
+        
+        // Apply gravity if in air
+        duck->vertical_velocity += gravity;
+        
+        // Limit fall speed
+        if (duck->vertical_velocity > max_fall_speed) {
+            duck->vertical_velocity = max_fall_speed;
+        }
+        
+        // Update positions
+        if (duck->is_running) {
+            float move_speed = 5.0f;  
+            if (duck->looking) {
+                duck->position.x += move_speed;
+            } else {
+                duck->position.x -= move_speed;
+            }
+        }
+        
+        // Apply vertical velocity
+        duck->position.y += duck->vertical_velocity;
+        
+        // Check platform collisions
+        bool on_platform = false;
+        for (const auto& platform : platforms) {
+            if (checkPlatformCollision(duck->position, duck_width, duck_height, platform)) {
+                if (duck->vertical_velocity > 0 && previous_y + duck_height <= platform.y) {
+                    // Landing on platform
+                    duck->position.y = platform.y - duck_height;
+                    duck->vertical_velocity = 0;
+                    duck->in_air = false;
+                    on_platform = true;
+                } else if (duck->vertical_velocity < 0 && previous_y >= platform.y + platform.height) {
+                    // Hitting platform from below
+                    duck->position.y = platform.y + platform.height;
+                    duck->vertical_velocity = 0;
+                } else {
+                    // Side collision
+                    duck->position.x = previous_x;
+                }
+            }
+        }
+        
+        // Ground collision
+        if (duck->position.y > ground_level) {
+            duck->position.y = ground_level;
+            duck->vertical_velocity = 0;
+            duck->in_air = false;
+        }
+        
+        // Screen boundaries
+        if (duck->position.x < 0) {
+            duck->position.x = 0;
+        } else if (duck->position.x > 1200 - duck_width) {  // Screen width - duck width
+            duck->position.x = 1200 - duck_width;
+        }
+        
+        // Apply jumping
+        if (duck->is_jumping && !duck->in_air) {
+            duck->vertical_velocity = jump_force;
+            duck->in_air = true;
+            duck->is_jumping = false;  // Reset jump flag after initiating jump
+        }
+        
+        // Create and update duck state
+        DuckState state(
+            duck->duck_id,
+            duck->position,
+            duck->is_alive ? 1 : 0,
+            duck->is_running ? 1 : 0,
+            duck->is_jumping ? 1 : 0,
+            duck->is_ducking ? 1 : 0,
+            duck->is_shooting ? 1 : 0,
+            duck->helmet_on ? 1 : 0,
+            duck->armor_on ? 1 : 0,
+            duck->weapon.getType() // a implementear
+        );
+        
+        duck->update_state(state);
     }
 }
 
