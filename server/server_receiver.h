@@ -13,7 +13,6 @@
 class ReceiverThread: public Thread {
 private:
     Queue<GameloopMessage>& gameloop_queue;
-    std::atomic<bool> is_alive;
     ServerProtocol& protocol;
     uint8_t session_id; // (temporalmente)
 

@@ -1,9 +1,7 @@
 #include "server_protocol.h"
 
-#include <netinet/in.h>
-
-void ServerProtocol::recv_msg(GameloopMessage& msg) {
-    recv_uint_8(msg.action);
+void ServerProtocol::recv_msg(uint8_t &command) {
+    recv_uint_8(command);
 }
 
 void ServerProtocol::send_duck_states(std::vector<DuckState>& states) {
@@ -23,4 +21,13 @@ void ServerProtocol::send_duck_states(std::vector<DuckState>& states) {
         send_data(&states[i].armor_on, sizeof(uint8_t));
         send_data(&states[i].weapon, sizeof(uint8_t));
     }
+}
+
+// Solo para compilar, esto no se usa se tiene que ir:
+
+void ServerProtocol::read_msg(void* msg) { std::cout << msg << std::endl; }
+
+void ServerProtocol::send_msg(void* msg) {
+    int int_msg = *static_cast<int*>(msg);
+    std::cout << "Sending message: " << int_msg << std::endl;
 }
