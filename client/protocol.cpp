@@ -10,7 +10,7 @@ ClientProtocol::ClientProtocol(Socket& socket): Protocol(socket) {}
 std::vector<Duck> ClientProtocol::receiveMessage() {
     // Placeholder
     std::vector<Duck> ducks;
-    std::this_thread::sleep_for(std::chrono::seconds(5));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     return ducks;
 }
 

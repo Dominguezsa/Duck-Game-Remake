@@ -11,8 +11,6 @@
 #include <SDL2pp/Music.hh>
 #include <SDL2pp/Texture.hh>
 
-#include "animationRectStruct.h"
-
 class ResourceManager {
 private:
     // cppcheck-suppress unusedStructMember
@@ -26,7 +24,7 @@ private:
     // This could go in another class really, like one that store graphics related stuff, another
     // that stores audio related stuff and so on
     // cppcheck-suppress unusedStructMember
-    std::map<std::string, std::vector<animFrame>> animationFrames;
+    std::map<std::string, std::vector<SDL2pp::Rect>> animationFrames;
     SDL2pp::Renderer& renderer;
 
 public:
@@ -42,6 +40,7 @@ public:
     std::shared_ptr<SDL2pp::Font> getFont(const std::string& key);
     std::shared_ptr<SDL2pp::Chunk> getSFX(const std::string& key);
     std::shared_ptr<SDL2pp::Texture> getTexture(const std::string& key);
+    SDL2pp::Rect getAnimationFrame(const std::string& key, int frame);
     void releaseResources();
 };
 

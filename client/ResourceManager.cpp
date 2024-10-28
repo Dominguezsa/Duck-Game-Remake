@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 
+#include <SDL2pp/Rect.hh>
+
 #define DUCK_RECT_WIDTH 32
 #define DUCK_RECT_HEIGHT 32
 #define DUCK_RECT_X 1
@@ -54,15 +56,18 @@ void ResourceManager::loadSprites() {
 
 void ResourceManager::loadAnimationFrames() {
 
-    std::vector<animFrame> duckFrames;
+    std::vector<SDL2pp::Rect> duckFrames;
 
     for (int i = 0; i < 6; i++) {
-        animFrame frame;
-        frame.x = DUCK_RECT_X + i * DUCK_RECT_WIDTH;
-        frame.y = DUCK_RECT_Y;
-        frame.w = DUCK_RECT_WIDTH;
-        frame.h = DUCK_RECT_HEIGHT;
-        duckFrames.push_back(frame);
+        // animFrame frame;
+        // frame.x = DUCK_RECT_X + i * DUCK_RECT_WIDTH;
+        // frame.y = DUCK_RECT_Y;
+        // frame.w = DUCK_RECT_WIDTH;
+        // frame.h = DUCK_RECT_HEIGHT;
+        // duckFrames.push_back(frame);
+
+        duckFrames.emplace_back(SDL2pp::Rect(DUCK_RECT_X + i * DUCK_RECT_WIDTH, DUCK_RECT_Y,
+                                             DUCK_RECT_WIDTH, DUCK_RECT_HEIGHT));
     }
 
     animationFrames.emplace("white_duck_running", duckFrames);
@@ -101,5 +106,9 @@ std::shared_ptr<SDL2pp::Texture> ResourceManager::getTexture(const std::string& 
     return it->second;
 }
 
+SDL2pp::Rect ResourceManager::getAnimationFrame(const std::string& key, int frame) {
+
+    return animationFrames[key][frame];
+}
 
 ResourceManager::~ResourceManager() {}
