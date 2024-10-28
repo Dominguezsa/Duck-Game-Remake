@@ -1,15 +1,31 @@
 #ifndef COMMON_WEAPON_H
 #define COMMON_WEAPON_H
 
-#include <cstdint>
 #include <string>
+#include <cstdint>
+#include "types/weapon_type.h"
 
-struct Weapon {
+
+
+class Weapon {
+private:
     std::string name;
+    WeaponType type;
     uint8_t ammo;
 
-    // Constructor
-    Weapon(const std::string& name, uint8_t ammo): name(name), ammo(ammo) {}
+public:
+
+    Weapon(const std::string& name, uint8_t ammo)
+    : name(name), ammo(ammo) {}
+    
+    WeaponType getType() const {
+        return type;
+    }
+
+    Weapon(WeaponType _type, uint8_t _ammo)
+        : type(_type), ammo(_ammo) {}
+
+   
 };
 
-#endif  // COMMON_WEAPON_H
+#endif // COMMON_WEAPON_H

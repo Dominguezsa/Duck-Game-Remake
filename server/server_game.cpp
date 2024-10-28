@@ -8,7 +8,7 @@ Game::Game(Queue<GameloopMessage>& queue)
 
 void Game::addPlayer(uint8_t player_id) {
     Position initial_pos{100 + (player_id * 100), 100}; // Example starting positions
-    Weapon initial_weapon("NoneType", 0);
+    Weapon initial_weapon(WeaponType::NoneType, 0);
     ducks[player_id] = std::make_unique<Duck>(player_id, 100, 1, initial_pos, initial_weapon);
     platforms = {
         {0.0f, 350.0f, 600.0f, 32.0f},     // Left platform
@@ -156,7 +156,7 @@ void Game::updateGameState() {
             duck->is_shooting ? 1 : 0,
             duck->helmet_on ? 1 : 0,
             duck->armor_on ? 1 : 0,
-            duck->weapon.getType() // a implementear
+            duck->weapon.getType() 
         );
         
         duck->update_state(state);
@@ -188,7 +188,7 @@ void Game::startNewRound() {
     // Reset all ducks to initial positions
     for (auto& duck_pair : ducks) {
         Position initial_pos{100 + (duck_pair.first * 100), 100};
-        Weapon initial_weapon("NoneType", 0);
+        Weapon initial_weapon(WeaponType::NoneType, 0);
         duck_pair.second = std::make_unique<Duck>(
             duck_pair.first, 100, 1, initial_pos, initial_weapon
         );
