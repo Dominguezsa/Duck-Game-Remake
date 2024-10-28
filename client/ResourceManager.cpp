@@ -1,6 +1,12 @@
 #include "ResourceManager.h"
 
 #include <memory>
+#include <vector>
+
+#define DUCK_RECT_WIDTH 32
+#define DUCK_RECT_HEIGHT 32
+#define DUCK_RECT_X 1
+#define DUCK_RECT_Y 7
 
 ResourceManager::ResourceManager(SDL2pp::Renderer& renderer): renderer(renderer) {}
 
@@ -30,18 +36,37 @@ void ResourceManager::loadSprites() {
                     renderer,
                     SDL2pp::Surface("../client/data/imagenesDePatos.png").SetColorKey(true, 0)));
 
-    // textures.emplace("duck", SDL2pp::Texture(renderer,
-    // SDL2pp::Surface("data/imagenesDePatos.png").SetColorKey(true, 0)));
     textures["duck"]->SetBlendMode(SDL_BLENDMODE_BLEND);
 
     textures.emplace("background", std::make_shared<SDL2pp::Texture>(
                                            renderer, SDL2pp::Surface("../client/data/fondo.png")));
 
-    // textures.emplace("background", SDL2pp::Texture(renderer, SDL2pp::Surface("data/fondo.png")));
     textures.emplace("tablas", std::make_shared<SDL2pp::Texture>(
                                        renderer, SDL2pp::Surface("../client/data/tablon1.png")));
-    // textures.emplace("tablas", SDL2pp::Texture(renderer, SDL2pp::Surface("data/tablon1.png")));
+
+    // Loading white duck sprite_sheet
+    textures.emplace(
+            "white_duck",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("../client/data/sprites/ducks/white_duck.png")));
     std::cout << "All textures loaded correctly\n";
+}
+
+void ResourceManager::loadAnimationFrames() {
+
+    std::vector<animFrame> duckFrames;
+
+    for (int i = 0; i < 6; i++) {
+        animFrame frame;
+        frame.x = DUCK_RECT_X + i * DUCK_RECT_WIDTH;
+        frame.y = DUCK_RECT_Y;
+        frame.w = DUCK_RECT_WIDTH;
+        frame.h = DUCK_RECT_HEIGHT;
+        duckFrames.push_back(frame);
+    }
+
+    animationFrames.emplace("white_duck_running", duckFrames);
+    std::cout << "All animation frames loaded correctly\n";
 }
 
 void ResourceManager::loadResources() {
@@ -49,6 +74,7 @@ void ResourceManager::loadResources() {
     loadMusic();
     loadFonts();
     loadSprites();
+    loadAnimationFrames();
 }
 
 std::shared_ptr<SDL2pp::Music> ResourceManager::getMusicTrack(const std::string& key) {

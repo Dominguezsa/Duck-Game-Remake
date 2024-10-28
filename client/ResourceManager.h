@@ -4,11 +4,14 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Font.hh>
 #include <SDL2pp/Music.hh>
 #include <SDL2pp/Texture.hh>
+
+#include "animationRectStruct.h"
 
 class ResourceManager {
 private:
@@ -20,6 +23,10 @@ private:
     std::map<std::string, std::shared_ptr<SDL2pp::Font>> fonts;
     // cppcheck-suppress unusedStructMember
     std::map<std::string, std::shared_ptr<SDL2pp::Texture>> textures;
+    // This could go in another class really, like one that store graphics related stuff, another
+    // that stores audio related stuff and so on
+    // cppcheck-suppress unusedStructMember
+    std::map<std::string, std::vector<animFrame>> animationFrames;
     SDL2pp::Renderer& renderer;
 
 public:
@@ -30,6 +37,7 @@ public:
     void loadMusic();
     void loadFonts();
     void loadSprites();
+    void loadAnimationFrames();
     std::shared_ptr<SDL2pp::Music> getMusicTrack(const std::string& key);
     std::shared_ptr<SDL2pp::Font> getFont(const std::string& key);
     std::shared_ptr<SDL2pp::Chunk> getSFX(const std::string& key);
