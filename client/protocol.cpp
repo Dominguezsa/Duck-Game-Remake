@@ -17,6 +17,7 @@ std::vector<Duck> ClientProtocol::receiveMessage() {
 void ClientProtocol::read_msg(void* msg) { std::cout << msg << std::endl; }
 
 void ClientProtocol::send_msg(void* msg) {
-    int int_msg = *static_cast<int*>(msg);
-    std::cout << "Sending message: " << int_msg << std::endl;
+    uint8_t message = *static_cast<uint8_t*>(msg);
+    // int int_msg = *static_cast<int*>(msg);
+    std::cout << "Sending message: " << std::hex << +message << std::endl;
 }
