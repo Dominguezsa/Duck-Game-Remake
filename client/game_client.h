@@ -40,6 +40,7 @@ private:
     int startRunningItDuck1 = -1;
     bool isRunningDuck2 = false;
     int startRunningItDuck2 = -1;
+    bool duckFacing = false;  // false = right, true = left
 
 public:
     GameClient(const int window_width, const int window_height, const std::string& window_title,

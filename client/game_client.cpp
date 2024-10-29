@@ -3,6 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_render.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2pp/Chunk.hh>
@@ -137,9 +138,17 @@ void GameClient::mainLoop(const int it, bool& quit) {
                         isRunningDuck1 = true;
                         startRunningItDuck1 = it;
                     }
+                    duckFacing = false;
                     break;
                 case SDLK_a:
                     messagesForServer.push(0x03);
+                    if (startRunningItDuck1 != -1) {
+                        isRunningDuck1 = true;
+                    } else {
+                        isRunningDuck1 = true;
+                        startRunningItDuck1 = it;
+                    }
+                    duckFacing = true;
                     break;
                 case SDLK_SPACE:
                     messagesForServer.push(0x05);
@@ -160,6 +169,9 @@ void GameClient::mainLoop(const int it, bool& quit) {
                     break;
                 case SDLK_a:
                     messagesForServer.push(0x04);
+                    startRunningItDuck1 = -1;
+                    isRunningDuck1 = false;
+                    duckFacing = true;
                     break;
                 case SDLK_SPACE:
                     messagesForServer.push(0x06);
@@ -206,8 +218,13 @@ void GameClient::mainLoop(const int it, bool& quit) {
     } else {
         frame = resourceManager.getAnimationFrame("white_duck_running", 0);
     }
-
-    renderer.Copy(*resourceManager.getTexture("white_duck"), frame, SDL2pp::Rect(100, 20, 62, 62));
+    if (duckFacing) {
+        renderer.Copy(*resourceManager.getTexture("white_duck"), frame,
+                      SDL2pp::Rect(100, 20, 62, 62), 0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+    } else {
+        renderer.Copy(*resourceManager.getTexture("white_duck"), frame,
+                      SDL2pp::Rect(100, 20, 62, 62));
+    }
 
     renderer.Present();
 }
