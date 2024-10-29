@@ -5,7 +5,11 @@ UserClient::UserClient(Queue<GameloopMessage> &gameloop_queue, Socket &&skt, uin
             skt(std::move(skt)),
             protocol(this->skt),
             receiver(gameloop_queue, this->protocol, this->id),
-            sender(this->protocol) {}
+            sender(this->protocol) {
+                
+    this->receiver.start();
+    this->sender.start();
+}
 
 bool UserClient::is_alive() {
     return receiver.is_alive() && sender.is_alive();
