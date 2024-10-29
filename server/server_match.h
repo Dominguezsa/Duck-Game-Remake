@@ -25,6 +25,8 @@ class Match {
         void initialize_game();
         Queue<GameloopMessage>* get_gameloop_queue();
         bool can_accept_players() const;
+        bool is_finished();
+        void stop_game();
 };
 
 #endif // SERVER_MATCH_H

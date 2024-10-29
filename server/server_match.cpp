@@ -14,6 +14,10 @@ bool Match::delete_player(uint8_t id) {
     if (deleted) {
         player_count--;
         game.removePlayer(id);
+
+        if (status != MatchStatus::Finished && player_count == 0) {
+            status = MatchStatus::Finished;
+        }
     }
     return deleted;
 }
@@ -44,4 +48,17 @@ void Match::initialize_game() {
 
 Queue<GameloopMessage>* Match::get_gameloop_queue() {
     return &gameloop_queue;
+}
+
+bool Match::is_finished() {
+    return status == MatchStatus::Finished;
+}
+
+void Match::stop_game() {
+    game.stop();
+    // game.join(); // Falta implementar o heredad de Thread.
+    gameloop_queue.close();
+
+    this->status = MatchStatus::Finished;
+    this->accepting_players = false;
 }

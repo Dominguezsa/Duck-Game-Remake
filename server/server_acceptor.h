@@ -11,7 +11,7 @@ class AcceptorThread : public Thread {
     private:
         Socket acceptor_skt;
         std::list<UserClient*> clients;
-        std::list<std::unique_ptr<Match>> matches; // Podria ser un map con un id
+        std::list<Match*> matches; // Podria ser un map con un id
                                   // que las identifique (considerarlo).
         uint8_t connection_count;
     public:
