@@ -38,6 +38,13 @@ void Game::handlePlayerAction(const GameloopMessage& msg) {
             duck->move_to(0);
             break;
         case JUMP_KEY_DOWN:
+            if (!duck->in_air) {
+                duck->vertical_velocity = -10.0f; // Initial jump force
+                duck->in_air = true;
+            } else {
+                // Flutter effect
+                duck->vertical_velocity = std::max(duck->vertical_velocity, -3.0f);
+            }
             duck->jump(true);
             break;
         case JUMP_KEY_UP:
@@ -68,12 +75,12 @@ bool Game::checkPlatformCollision(const Position& duck_pos, float duck_width, fl
 
 void Game::updateGameState() {
     const float gravity = 0.5f;
-    const float jump_force = -10.0f;
     const float flutter_force = -0.3f;
     const float max_fall_speed = 15.0f;
     const float duck_width = 64.0f;
     const float duck_height = 64.0f;
-    const float ground_level = 700.0f - duck_height;  // Screen height - duck height
+    const float ground_level = 700.0f - duck_height;
+    const float move_speed = 5.0f;
     
     for (auto& duck_pair : ducks) {
         Duck* duck = duck_pair.second.get();
@@ -83,16 +90,25 @@ void Game::updateGameState() {
         float previous_x = duck->position.x;
         
         // Apply gravity if in air
-        duck->vertical_velocity += gravity;
+        if (duck->in_air) {
+            duck->vertical_velocity += gravity;
+            
+            // Apply flutter effect if jumping is held
+            if (duck->is_jumping) {
+                duck->vertical_velocity += flutter_force;
+                if (duck->vertical_velocity > 3.0f) {
+                    duck->vertical_velocity = 3.0f;
+                }
+            }
+        }
         
         // Limit fall speed
         if (duck->vertical_velocity > max_fall_speed) {
             duck->vertical_velocity = max_fall_speed;
         }
         
-        // Update positions
+        // Update horizontal position
         if (duck->is_running) {
-            float move_speed = 5.0f;  
             if (duck->looking) {
                 duck->position.x += move_speed;
             } else {
@@ -104,7 +120,6 @@ void Game::updateGameState() {
         duck->position.y += duck->vertical_velocity;
         
         // Check platform collisions
-        bool on_platform = false;
         for (const auto& platform : platforms) {
             if (checkPlatformCollision(duck->position, duck_width, duck_height, platform)) {
                 if (duck->vertical_velocity > 0 && previous_y + duck_height <= platform.y) {
@@ -112,7 +127,6 @@ void Game::updateGameState() {
                     duck->position.y = platform.y - duck_height;
                     duck->vertical_velocity = 0;
                     duck->in_air = false;
-                    on_platform = true;
                 } else if (duck->vertical_velocity < 0 && previous_y >= platform.y + platform.height) {
                     // Hitting platform from below
                     duck->position.y = platform.y + platform.height;
@@ -134,18 +148,11 @@ void Game::updateGameState() {
         // Screen boundaries
         if (duck->position.x < 0) {
             duck->position.x = 0;
-        } else if (duck->position.x > 1200 - duck_width) {  // Screen width - duck width
+        } else if (duck->position.x > 1200 - duck_width) {
             duck->position.x = 1200 - duck_width;
         }
         
-        // Apply jumping
-        if (duck->is_jumping && !duck->in_air) {
-            duck->vertical_velocity = jump_force;
-            duck->in_air = true;
-            duck->is_jumping = false;  // Reset jump flag after initiating jump
-        }
-        
-        // Create and update duck state
+        // Update duck state
         DuckState state(
             duck->duck_id,
             duck->position,
