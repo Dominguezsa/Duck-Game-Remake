@@ -2,6 +2,7 @@
 #define GAME_CLIENT_H
 
 #include <string>
+#include <vector>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Chunk.hh>
@@ -15,13 +16,13 @@
 #include <SDL2pp/Window.hh>
 
 #include "../common/common_queue.h"
+#include "../common/common_socket.h"
 #include "../common/duck.h"
+
+#include "ResourceManager.h"
 #include "protocol.h"
 #include "thread_receiver.h"
 #include "thread_sender.h"
-#include "../common/common_socket.h"
-
-#include "ResourceManager.h"
 
 class GameClient {
 private:
@@ -35,6 +36,10 @@ private:
     ClientProtocol protocol;
     Queue<uint8_t> messagesForServer;
     Queue<std::vector<Duck>> graphique_queue;
+    bool isRunningDuck1 = false;
+    int startRunningItDuck1 = -1;
+    bool isRunningDuck2 = false;
+    int startRunningItDuck2 = -1;
 
 public:
     GameClient(const int window_width, const int window_height, const std::string& window_title,
