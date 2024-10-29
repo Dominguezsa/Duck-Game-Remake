@@ -1,10 +1,11 @@
 #include "server_game.h"
 
-Game::Game(Queue<GameloopMessage>& queue) 
-    : message_queue(queue), 
-      is_running(false), 
+Game::Game(MatchQueuesMonitor& monitor, Queue<GameloopMessage>& queue)
+    : message_queue(queue),
+      is_running(false),
       next_player_id(0),
-      round_number(0) {}
+      round_number(0),
+      monitor(monitor) {}
 
 void Game::addPlayer(uint8_t player_id) {
     Position initial_pos{100 + (player_id * 100), 100}; // Example starting positions
@@ -15,7 +16,7 @@ void Game::addPlayer(uint8_t player_id) {
         {600.0f, 450.0f, 600.0f, 32.0f}    // Right platform
     };
 }
-
+ 
 
 void Game::removePlayer(uint8_t player_id) {
     ducks.erase(player_id);
@@ -167,6 +168,7 @@ void Game::updateGameState() {
         );
         
         duck->update_state(state);
+        monitor.push_to_all(state);
     }
 }
 
@@ -261,6 +263,7 @@ void Game::run() {
         
         updateGameState();
         checkRoundEnd();
+        
         
         double end_time = getCurrentTime();
         rateController(start_time, end_time);

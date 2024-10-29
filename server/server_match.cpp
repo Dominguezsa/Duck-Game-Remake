@@ -2,11 +2,11 @@
 
 Match::Match(unsigned int limit) : 
                                    gameloop_queue(),
-                                   game(gameloop_queue), 
+                                   game(monitor, gameloop_queue), 
                                    status(MatchStatus::Waiting),
                                    accepting_players(true),
                                    player_limit(limit),
-                                   player_count(0),
+                                   player_count(0), 
                                    monitor() {}
 
 bool Match::delete_player(uint8_t id) {
