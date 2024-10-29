@@ -41,3 +41,7 @@ void Match::initialize_game() {
         game.run();
     }
 }
+
+Queue<GameloopMessage>* Match::get_gameloop_queue() {
+    return &gameloop_queue;
+}
