@@ -6,13 +6,15 @@
 #include <memory>
 #include <atomic>
 #include <chrono>
-#include <thread>
 #include "../common/common_queue.h"
 #include "../common/duck.h"
-#include "server_gameloop_message.h"
 #include "../common/types/action_type.h"
+#include "../common/common_thread.h"
+#include "server_gameloop_message.h"
+#include "server_match_queues_monitor.h"
 
-class Game {
+
+class Game : public Thread {
 private:
    
     struct Platform {
@@ -29,12 +31,13 @@ private:
     uint16_t round_number;
     std::unordered_map<uint8_t, uint16_t> victories;
     std::vector<Platform> platforms;
+    MatchQueuesMonitor& monitor;
     
     static constexpr double TICK_RATE = 60.0;
     static constexpr double TICK_DURATION = 1.0 / TICK_RATE;
     static constexpr uint16_t ROUNDS_PER_SET = 5;
     static constexpr uint16_t VICTORIES_TO_WIN = 10;
-
+    
     
     void handlePlayerAction(const GameloopMessage& msg);
     void updateGameState();
@@ -45,11 +48,11 @@ private:
     double getCurrentTime();
     bool checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height, const Platform& platform);
 
-
+    
 
 
 public:
-    explicit Game(Queue<GameloopMessage>& queue);
+    explicit Game(MatchQueuesMonitor& monitor, Queue<GameloopMessage>& queue);
     
     void addPlayer(uint8_t player_id);
     void removePlayer(uint8_t player_id);

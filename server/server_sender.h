@@ -15,7 +15,6 @@
 class SenderThread : public Thread {
 private:
     Queue<DuckState> requester_queue;
-    std::atomic<bool> is_alive;
     ServerProtocol &protocol;
 public:
     explicit SenderThread(ServerProtocol &p);

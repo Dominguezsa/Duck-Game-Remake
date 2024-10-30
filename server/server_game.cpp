@@ -1,10 +1,11 @@
 #include "server_game.h"
 
-Game::Game(Queue<GameloopMessage>& queue) 
-    : message_queue(queue), 
-      is_running(false), 
+Game::Game(MatchQueuesMonitor& monitor, Queue<GameloopMessage>& queue)
+    : message_queue(queue),
+      is_running(false),
       next_player_id(0),
-      round_number(0) {}
+      round_number(0),
+      monitor(monitor) {}
 
 void Game::addPlayer(uint8_t player_id) {
     Position initial_pos{100 + (player_id * 100), 100}; // Example starting positions
@@ -15,7 +16,7 @@ void Game::addPlayer(uint8_t player_id) {
         {600.0f, 450.0f, 600.0f, 32.0f}    // Right platform
     };
 }
-
+ 
 
 void Game::removePlayer(uint8_t player_id) {
     ducks.erase(player_id);
@@ -38,13 +39,6 @@ void Game::handlePlayerAction(const GameloopMessage& msg) {
             duck->move_to(0);
             break;
         case JUMP_KEY_DOWN:
-            if (!duck->in_air) {
-                duck->vertical_velocity = -10.0f; // Initial jump force
-                duck->in_air = true;
-            } else {
-                // Flutter effect
-                duck->vertical_velocity = std::max(duck->vertical_velocity, -3.0f);
-            }
             duck->jump(true);
             break;
         case JUMP_KEY_UP:
@@ -167,6 +161,7 @@ void Game::updateGameState() {
         );
         
         duck->update_state(state);
+        monitor.push_to_all(state);
     }
 }
 
@@ -261,6 +256,7 @@ void Game::run() {
         
         updateGameState();
         checkRoundEnd();
+        
         
         double end_time = getCurrentTime();
         rateController(start_time, end_time);

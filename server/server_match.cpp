@@ -2,11 +2,11 @@
 
 Match::Match(unsigned int limit) : 
                                    gameloop_queue(),
-                                   game(gameloop_queue), 
+                                   game(monitor, gameloop_queue), 
                                    status(MatchStatus::Waiting),
                                    accepting_players(true),
                                    player_limit(limit),
-                                   player_count(0),
+                                   player_count(0), 
                                    monitor() {}
 
 bool Match::delete_player(uint8_t id) {
@@ -14,6 +14,10 @@ bool Match::delete_player(uint8_t id) {
     if (deleted) {
         player_count--;
         game.removePlayer(id);
+
+        if (status != MatchStatus::Finished && player_count == 0) {
+            status = MatchStatus::Finished;
+        }
     }
     return deleted;
 }
@@ -38,6 +42,24 @@ void Match::add_player(Queue<DuckState> *q, uint8_t id) {
 void Match::initialize_game() {
     if (player_count == player_limit) {
         status = MatchStatus::Playing;
+        // game.start(); // Falta implementar o heredad de Thread.
         game.run();
     }
+}
+
+Queue<GameloopMessage>* Match::get_gameloop_queue() {
+    return &gameloop_queue;
+}
+
+bool Match::is_finished() {
+    return status == MatchStatus::Finished;
+}
+
+void Match::stop_game() {
+    game.stop();
+    // game.join(); // Falta implementar o heredad de Thread.
+    gameloop_queue.close();
+
+    this->status = MatchStatus::Finished;
+    this->accepting_players = false;
 }
