@@ -1,10 +1,7 @@
 #include "server_acceptor.h"
 
-AcceptorThread::AcceptorThread(const char *servname) :
-                acceptor_skt(servname),
-                clients(),
-                matches(),             
-                connection_count(0) {
+AcceptorThread::AcceptorThread(const std::string& servname):
+        acceptor_skt(servname.c_str()), clients(), matches(), connection_count(0) {
     // Esta partida iniciada es solo a modo de prueba, sera removida en
     // un futuro commit. (Esto ademas, usa memoria dinamica!)
     this->matches.push_back(new Match(2));
@@ -23,8 +20,9 @@ void AcceptorThread::accept_connection() {
         return;
     }
     Match* match = matches.front();
-    
+
     if (match->can_accept_players()) {
+        std::cout << "Accepting connection\n";
         Socket peer = this->acceptor_skt.accept();
         uint8_t id = connection_count;
         connection_count++;
@@ -33,7 +31,7 @@ void AcceptorThread::accept_connection() {
         // al usuario al server, y mas tarde este nos indicaria a que partida
         // de las n activas (n = 1 por ahora) se quiere unir.
         Queue<GameloopMessage>* q = match->get_gameloop_queue();
-        UserClient *u = new UserClient(*q, std::move(peer), id);
+        UserClient* u = new UserClient(*q, std::move(peer), id);
         this->clients.push_back(u);
         match->add_player(u->get_queue(), id);
     }
@@ -41,7 +39,7 @@ void AcceptorThread::accept_connection() {
 
 void AcceptorThread::check_unused_resources() {
     for (auto it = clients.begin(); it != clients.end();) {
-        UserClient *client = *it;
+        UserClient* client = *it;
         if (!client->is_alive()) {
             client->end_communication();
 
@@ -66,10 +64,10 @@ void AcceptorThread::check_unused_resources() {
 }
 
 void AcceptorThread::free_client_resources() {
-    if (this->clients.empty()) 
+    if (this->clients.empty())
         return;
-    
-    for (UserClient* user : this->clients) {
+
+    for (UserClient* user: this->clients) {
         user->end_communication();
         // ------ Hardcodeado ------
 

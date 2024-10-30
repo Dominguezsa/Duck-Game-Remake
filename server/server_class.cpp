@@ -1,17 +1,20 @@
 #include "server_class.h"
 
-#include <utility>
 #include <iostream>
 #include <string>
+#include <utility>
 
 
 Server::Server(std::string port): port(std::move(port)) {}
 
 void Server::execute() {
-    AcceptorThread server(port);
-    server.start();
-    server.stop();
-    server.join();
+
+    AcceptorThread acceptorThread(port);
+
+    acceptorThread.start();
+    waitQuitInput();
+    acceptorThread.stop();
+    acceptorThread.join();
 }
 
 
