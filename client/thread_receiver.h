@@ -14,7 +14,7 @@ class ThreadReceiver: public Thread {
 private:
     ClientProtocol& protocol;
     std::atomic<bool> is_alive;
-    Queue<std::vector<DuckState>>& graphic_queue;
+    Queue<std::vector<DuckState>>& ducks_snapshots_queue;
 
 public:
     explicit ThreadReceiver(ClientProtocol& protocol,

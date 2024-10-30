@@ -4,7 +4,7 @@
 
 ThreadReceiver::ThreadReceiver(ClientProtocol& protocol,
                                Queue<std::vector<DuckState>>& graphique_queue):
-        protocol(protocol), is_alive(true), graphic_queue(graphique_queue) {}
+        protocol(protocol), is_alive(true), ducks_snapshots_queue(graphique_queue) {}
 
 
 void ThreadReceiver::run() {
@@ -13,7 +13,7 @@ void ThreadReceiver::run() {
             std::vector<DuckState> duck_states;
 
             this->protocol.read_msg(&duck_states);
-            graphic_queue.push(duck_states);
+            ducks_snapshots_queue.push(duck_states);
         }
     } catch (const std::exception& e) {
         this->is_alive = false;
