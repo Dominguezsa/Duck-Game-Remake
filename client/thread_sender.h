@@ -10,7 +10,7 @@ class ThreadSender: public Thread {
 private:
     ClientProtocol& protocol;
     std::atomic<bool> is_alive;
-    Queue<uint8_t>& messages_to_server;
+    Queue<uint8_t>& clientQueue;
 
 public:
     explicit ThreadSender(ClientProtocol& protocol, Queue<uint8_t>& messages_to_server);

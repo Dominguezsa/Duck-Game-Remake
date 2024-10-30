@@ -1,13 +1,13 @@
 #include "thread_sender.h"
 
 ThreadSender::ThreadSender(ClientProtocol& protocol, Queue<uint8_t>& messages_to_server):
-        protocol(protocol), is_alive(true), messages_to_server(messages_to_server) {}
+        protocol(protocol), is_alive(true), clientQueue(messages_to_server) {}
 
 
 void ThreadSender::run() {
     try {
         while (is_alive) {
-            uint8_t message = messages_to_server.pop();
+            uint8_t message = clientQueue.pop();
             // std::cout << "SENDER: I should only be unlocked after an event\n";
             this->protocol.send_msg(&message);
         }
@@ -20,7 +20,7 @@ void ThreadSender::run() {
 
 void ThreadSender::stop_thread() {
     this->is_alive = false;
-    messages_to_server.close();
+    clientQueue.close();
     this->join();
     std::cout << "SENDER: stop_thread function ended\n";
 }

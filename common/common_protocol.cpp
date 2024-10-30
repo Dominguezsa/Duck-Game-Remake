@@ -1,5 +1,7 @@
 #include "common_protocol.h"
 
+#include <iostream>
+
 Protocol::Protocol(Socket& skt): skt(skt) {}
 
 void Protocol::end_communication() { this->skt.close(); }
@@ -28,6 +30,7 @@ void Protocol::recv_uint_8(uint8_t& received) {
     if (was_closed) {
         throw SocketWasCLosedException(errno, "Socket was closed while receiving a uint8_t.\n");
     }
+    std::cout << "I received: " << std::hex << +received << std::endl;
 }
 
 void Protocol::recv_string(std::string& received) {
