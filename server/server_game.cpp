@@ -39,13 +39,6 @@ void Game::handlePlayerAction(const GameloopMessage& msg) {
             duck->move_to(0);
             break;
         case JUMP_KEY_DOWN:
-            if (!duck->in_air) {
-                duck->vertical_velocity = -10.0f; // Initial jump force
-                duck->in_air = true;
-            } else {
-                // Flutter effect
-                duck->vertical_velocity = std::max(duck->vertical_velocity, -3.0f);
-            }
             duck->jump(true);
             break;
         case JUMP_KEY_UP:

@@ -6,15 +6,15 @@
 #include <memory>
 #include <atomic>
 #include <chrono>
-#include <thread>
 #include "../common/common_queue.h"
 #include "../common/duck.h"
 #include "../common/types/action_type.h"
+#include "../common/common_thread.h"
 #include "server_gameloop_message.h"
 #include "server_match_queues_monitor.h"
 
 
-class Game {
+class Game : public Thread {
 private:
    
     struct Platform {
