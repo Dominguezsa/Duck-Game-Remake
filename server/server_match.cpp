@@ -42,7 +42,7 @@ void Match::add_player(Queue<DuckState> *q, uint8_t id) {
 void Match::initialize_game() {
     if (player_count == player_limit) {
         status = MatchStatus::Playing;
-        // game.start(); // Falta implementar o heredad de Thread.
+        game.start(); 
         game.run();
     }
 }
@@ -57,7 +57,7 @@ bool Match::is_finished() {
 
 void Match::stop_game() {
     game.stop();
-    // game.join(); // Falta implementar o heredad de Thread.
+    game.join(); 
     gameloop_queue.close();
 
     this->status = MatchStatus::Finished;

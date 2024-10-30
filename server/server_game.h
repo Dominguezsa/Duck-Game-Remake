@@ -56,8 +56,8 @@ public:
     
     void addPlayer(uint8_t player_id);
     void removePlayer(uint8_t player_id);
-    void run();
-    void stop();
+    void run() override;
+    void stop() override;
     bool isRunning() const;
     
     ~Game() = default;
