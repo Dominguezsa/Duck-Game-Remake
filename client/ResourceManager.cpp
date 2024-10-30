@@ -51,6 +51,12 @@ void ResourceManager::loadSprites() {
             "white_duck",
             std::make_shared<SDL2pp::Texture>(
                     renderer, SDL2pp::Surface("../client/data/sprites/ducks/white_duck.png")));
+    // Loading orange duck sprite_sheet
+    textures.emplace(
+            "orange_duck",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("../client/data/sprites/ducks/orange_duck.png")));
+
     std::cout << "All textures loaded correctly\n";
 }
 
@@ -59,13 +65,6 @@ void ResourceManager::loadAnimationFrames() {
     std::vector<SDL2pp::Rect> duckFrames;
 
     for (int i = 0; i < 6; i++) {
-        // animFrame frame;
-        // frame.x = DUCK_RECT_X + i * DUCK_RECT_WIDTH;
-        // frame.y = DUCK_RECT_Y;
-        // frame.w = DUCK_RECT_WIDTH;
-        // frame.h = DUCK_RECT_HEIGHT;
-        // duckFrames.push_back(frame);
-
         duckFrames.emplace_back(SDL2pp::Rect(DUCK_RECT_X + i * DUCK_RECT_WIDTH, DUCK_RECT_Y,
                                              DUCK_RECT_WIDTH, DUCK_RECT_HEIGHT));
     }
