@@ -9,6 +9,8 @@
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Music.hh>
 
+#include "../common/types/duck_state.h"
+
 // #include "../common/common_constantRateLoop.cpp"
 #include <chrono>
 #include <thread>
@@ -39,11 +41,17 @@ GameClient::GameClient(const int window_width, const int window_height,
         socket("localhost", "8080"),
         protocol(socket),
         messagesForServer(),
-        graphique_queue() {}
+        graphic_queue(),
+        duck1(),
+        duck2()
+// stateDuck1(0x00, Position(20, 40), 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, WeaponType(10)),
+// stateDuck2(0x00, Position(60, 40), 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, WeaponType(10))
+{}
+
 // Moved the constantRateLoop implementation here because making it a separate file was causing a
 // lot of problems, but yeah its repeating the same code in both client and server
 void GameClient::run() {
-    ThreadReceiver threadReceiver(protocol, graphique_queue);
+    ThreadReceiver threadReceiver(protocol, graphic_queue);
     ThreadSender threadSender(protocol, messagesForServer);
     threadReceiver.start();
     threadSender.start();
@@ -58,7 +66,7 @@ void GameClient::run() {
     int64_t t1_ms =
             std::chrono::duration_cast<std::chrono::milliseconds>(t1.time_since_epoch()).count();
 
-    mixer.SetMusicVolume(10);
+    mixer.SetMusicVolume(1);
     mixer.SetVolume(-1, 20);
     auto musicTrack = resourceManager.getMusicTrack("back_music");
     mixer.PlayMusic(*musicTrack, -1);
@@ -66,11 +74,11 @@ void GameClient::run() {
     bool quit = false;
 
     // std::cout << "Starting, this should give me a loop of 1 iteration per " << rate << "ms\n";
-    std::cout << "Drawing the background and both platforms\n";
+    // std::cout << "Drawing the background and both platforms\n";
     // renderer.Present();
 
     while (true) {
-
+        updateDuckStates();
         mainLoop(iteration, quit);
 
         if (quit) {
@@ -99,11 +107,27 @@ void GameClient::run() {
     std::cout << "CLIENT: Stopping the receiver thread\n";
     threadReceiver.stop_thread();
     std::cout << "CLIENT: Closing the graphic queue\n";
-    graphique_queue.close();
+    graphic_queue.close();
     std::cout << "CLIENT: Stopping the sender thread\n";
     threadSender.stop_thread();
     std::cout << "CLIENT: Closing the messages for server queue\n";
     messagesForServer.close();
+}
+
+void GameClient::updateDuckStates() {
+
+    std::vector<DuckState> duck_states;
+
+
+    while (graphic_queue.try_pop(duck_states)) {}
+
+    // ugly but placeholder
+    if (duck_states.size() == 1) {
+        duck1.update_state(duck_states[0]);
+    } else if (duck_states.size() == 2) {
+        duck1.update_state(duck_states[0]);
+        duck2.update_state(duck_states[1]);
+    }
 }
 
 void GameClient::mainLoop(const int it, bool& quit) {
