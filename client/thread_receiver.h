@@ -6,6 +6,7 @@
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
 #include "../common/duck.h"
+#include "../common/types/duck_state.h"
 
 #include "protocol.h"
 
@@ -13,10 +14,11 @@ class ThreadReceiver: public Thread {
 private:
     ClientProtocol& protocol;
     std::atomic<bool> is_alive;
-    Queue<std::vector<Duck>>& graphique_queue;
+    Queue<std::vector<DuckState>>& graphique_queue;
 
 public:
-    explicit ThreadReceiver(ClientProtocol& protocol, Queue<std::vector<Duck>>& graphique_queue);
+    explicit ThreadReceiver(ClientProtocol& protocol,
+                            Queue<std::vector<DuckState>>& graphique_queue);
 
     void run() override;
 

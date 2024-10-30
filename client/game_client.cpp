@@ -3,15 +3,19 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_render.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Music.hh>
 
-// #include "../common/common_constantRateLoop.cpp"
+#include "../common/types/duck_state.h"
 
+// #include "../common/common_constantRateLoop.cpp"
 #include <chrono>
 #include <thread>
+
+#include "../common/common_weapon.h"
 
 #define FPS 60
 struct Platform {
@@ -37,12 +41,17 @@ GameClient::GameClient(const int window_width, const int window_height,
         socket("localhost", "8080"),
         protocol(socket),
         messagesForServer(),
-        graphique_queue() {}
+        graphic_queue(),
+        duck1(),
+        duck2()
+// stateDuck1(0x00, Position(20, 40), 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, WeaponType(10)),
+// stateDuck2(0x00, Position(60, 40), 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, WeaponType(10))
+{}
 
 // Moved the constantRateLoop implementation here because making it a separate file was causing a
 // lot of problems, but yeah its repeating the same code in both client and server
 void GameClient::run() {
-    ThreadReceiver threadReceiver(protocol, graphique_queue);
+    ThreadReceiver threadReceiver(protocol, graphic_queue);
     ThreadSender threadSender(protocol, messagesForServer);
     threadReceiver.start();
     threadSender.start();
@@ -53,32 +62,11 @@ void GameClient::run() {
 
     int64_t rate = 1000 / FPS;
     int iteration = 0;
-    renderer.Copy(*resourceManager.getTexture("background"), SDL2pp::NullOpt, SDL2pp::NullOpt);
-    int cell_width = renderer.GetOutputWidth() / 12;
-    int cell_height = renderer.GetOutputHeight() / 14;
-    Platform left_platform = {0, (float)renderer.GetOutputHeight() / 2,
-                              (float)renderer.GetOutputWidth() / 2, (float)cell_height};
-
-    Platform right_platform = {(float)renderer.GetOutputWidth() / 2,
-                               (float)renderer.GetOutputHeight() / 2 + cell_height * 3,
-                               (float)renderer.GetOutputWidth() / 2, (float)cell_height};
-    for (int i = 0; i < 6; ++i) {
-        renderer.Copy(*resourceManager.getTexture("tablas"), SDL2pp::NullOpt,
-                      SDL2pp::Rect(i * cell_width, left_platform.y, cell_width, cell_height));
-    }
-
-    // Right platform
-    for (int i = 0; i < 6; ++i) {
-        renderer.Copy(*resourceManager.getTexture("tablas"), SDL2pp::NullOpt,
-                      SDL2pp::Rect(i * cell_width + right_platform.x, right_platform.y, cell_width,
-                                   cell_height));
-    }
-
     auto t1 = std::chrono::high_resolution_clock::now();
     int64_t t1_ms =
             std::chrono::duration_cast<std::chrono::milliseconds>(t1.time_since_epoch()).count();
 
-    mixer.SetMusicVolume(10);
+    mixer.SetMusicVolume(1);
     mixer.SetVolume(-1, 20);
     auto musicTrack = resourceManager.getMusicTrack("back_music");
     mixer.PlayMusic(*musicTrack, -1);
@@ -86,11 +74,11 @@ void GameClient::run() {
     bool quit = false;
 
     // std::cout << "Starting, this should give me a loop of 1 iteration per " << rate << "ms\n";
-    std::cout << "Drawing the background and both platforms\n";
-    renderer.Present();
+    // std::cout << "Drawing the background and both platforms\n";
+    // renderer.Present();
 
     while (true) {
-
+        updateDuckStates();
         mainLoop(iteration, quit);
 
         if (quit) {
@@ -119,11 +107,27 @@ void GameClient::run() {
     std::cout << "CLIENT: Stopping the receiver thread\n";
     threadReceiver.stop_thread();
     std::cout << "CLIENT: Closing the graphic queue\n";
-    graphique_queue.close();
+    graphic_queue.close();
     std::cout << "CLIENT: Stopping the sender thread\n";
     threadSender.stop_thread();
     std::cout << "CLIENT: Closing the messages for server queue\n";
     messagesForServer.close();
+}
+
+void GameClient::updateDuckStates() {
+
+    std::vector<DuckState> duck_states;
+
+
+    while (graphic_queue.try_pop(duck_states)) {}
+
+    // ugly but placeholder
+    if (duck_states.size() == 1) {
+        duck1.update_state(duck_states[0]);
+    } else if (duck_states.size() == 2) {
+        duck1.update_state(duck_states[0]);
+        duck2.update_state(duck_states[1]);
+    }
 }
 
 void GameClient::mainLoop(const int it, bool& quit) {
@@ -136,7 +140,7 @@ void GameClient::mainLoop(const int it, bool& quit) {
         if (event.type == SDL_QUIT) {
             quit = true;
         } else if (event.type == SDL_KEYDOWN) {
-            std::cout << "Caught a keydown event on iteration: " << it << "\n";
+            // std::cout << "Caught a keydown event on iteration: " << it << "\n";
             switch (event.key.keysym.sym) {
                 case SDLK_ESCAPE:
                     quit = true;
@@ -152,9 +156,23 @@ void GameClient::mainLoop(const int it, bool& quit) {
                     break;
                 case SDLK_d:
                     messagesForServer.push(0x01);
+                    if (startRunningItDuck1 != -1) {
+                        isRunningDuck1 = true;
+                    } else {
+                        isRunningDuck1 = true;
+                        startRunningItDuck1 = it;
+                    }
+                    duckFacing = false;
                     break;
                 case SDLK_a:
                     messagesForServer.push(0x03);
+                    if (startRunningItDuck1 != -1) {
+                        isRunningDuck1 = true;
+                    } else {
+                        isRunningDuck1 = true;
+                        startRunningItDuck1 = it;
+                    }
+                    duckFacing = true;
                     break;
                 case SDLK_SPACE:
                     messagesForServer.push(0x05);
@@ -166,13 +184,18 @@ void GameClient::mainLoop(const int it, bool& quit) {
                     break;
             }
         } else if (event.type == SDL_KEYUP) {
-            std::cout << "Caught a keyup event on iteration: " << it << "\n";
+            // std::cout << "Caught a keyup event on iteration: " << it << "\n";
             switch (event.key.keysym.sym) {
                 case SDLK_d:
                     messagesForServer.push(0x02);
+                    startRunningItDuck1 = -1;
+                    isRunningDuck1 = false;
                     break;
                 case SDLK_a:
                     messagesForServer.push(0x04);
+                    startRunningItDuck1 = -1;
+                    isRunningDuck1 = false;
+                    duckFacing = true;
                     break;
                 case SDLK_SPACE:
                     messagesForServer.push(0x06);
@@ -185,6 +208,49 @@ void GameClient::mainLoop(const int it, bool& quit) {
             }
         }
     }
+
+    renderer.Clear();
+
+    renderer.Copy(*resourceManager.getTexture("background"), SDL2pp::NullOpt, SDL2pp::NullOpt);
+    int cell_width = renderer.GetOutputWidth() / 12;
+    int cell_height = renderer.GetOutputHeight() / 14;
+    Platform left_platform = {0, (float)renderer.GetOutputHeight() / 2,
+                              (float)renderer.GetOutputWidth() / 2, (float)cell_height};
+
+    Platform right_platform = {(float)renderer.GetOutputWidth() / 2,
+                               (float)renderer.GetOutputHeight() / 2 + cell_height * 3,
+                               (float)renderer.GetOutputWidth() / 2, (float)cell_height};
+    for (int i = 0; i < 6; ++i) {
+        renderer.Copy(*resourceManager.getTexture("tablas"), SDL2pp::NullOpt,
+                      SDL2pp::Rect(i * cell_width, left_platform.y, cell_width, cell_height));
+    }
+
+    // Right platform
+    for (int i = 0; i < 6; ++i) {
+        renderer.Copy(*resourceManager.getTexture("tablas"), SDL2pp::NullOpt,
+                      SDL2pp::Rect(i * cell_width + right_platform.x, right_platform.y, cell_width,
+                                   cell_height));
+    }
+
+    // Now rendering the ducks
+    int animationPhase = ((it - startRunningItDuck1) / 6) % 6;
+    // std::cout << "Animation phase: " << animationPhase << std::endl;
+    SDL2pp::Rect frame;
+
+    if (isRunningDuck1) {
+        frame = resourceManager.getAnimationFrame("white_duck_running", animationPhase);
+    } else {
+        frame = resourceManager.getAnimationFrame("white_duck_running", 0);
+    }
+    if (duckFacing) {
+        renderer.Copy(*resourceManager.getTexture("white_duck"), frame,
+                      SDL2pp::Rect(100, 20, 62, 62), 0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+    } else {
+        renderer.Copy(*resourceManager.getTexture("white_duck"), frame,
+                      SDL2pp::Rect(100, 20, 62, 62));
+    }
+
+    renderer.Present();
 }
 
 
