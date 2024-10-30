@@ -2,9 +2,14 @@
 
 #include <iostream>
 
+#include <sys/socket.h>
+
 Protocol::Protocol(Socket& skt): skt(skt) {}
 
-void Protocol::end_communication() { this->skt.close(); }
+void Protocol::end_communication() {
+    this->skt.shutdown(SHUT_RDWR);
+    this->skt.close();
+}
 
 void Protocol::recv_uint_32(uint32_t& received) {
     bool was_closed = false;
