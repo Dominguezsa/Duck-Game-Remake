@@ -26,6 +26,7 @@ void ThreadReceiver::run() {
 
 void ThreadReceiver::stop_thread() {
     this->is_alive = false;
+    this->protocol.end_communication();
     this->join();
     std::cout << "RECEIVER: stop_thread function ended\n";
 }
