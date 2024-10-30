@@ -2,7 +2,7 @@
 
 compile-debug:
 	mkdir -p build/
-	cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug $(EXTRA_GENERATE)
+	cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug -DTALLER_SERVER=ON $(EXTRA_GENERATE)
 	cmake --build  build/ $(EXTRA_COMPILE)
 
 compile-client:
