@@ -135,6 +135,9 @@ void GameClient::mainLoop(const int it, bool& quit) {
     // to play music, render sprites, etc.
 
     // Now processing all of the events on this frame
+
+
+    // Esto debería ser algo tipo double dispatch de cabeza porque es un asco
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
@@ -209,6 +212,9 @@ void GameClient::mainLoop(const int it, bool& quit) {
         }
     }
 
+    // Todo esto debería mínimo en una función aparte, muy probablemente en una clase aparte que se
+    // encargue del renderizado
+
     renderer.Clear();
 
     renderer.Copy(*resourceManager.getTexture("background"), SDL2pp::NullOpt, SDL2pp::NullOpt);
@@ -237,6 +243,12 @@ void GameClient::mainLoop(const int it, bool& quit) {
     // std::cout << "Animation phase: " << animationPhase << std::endl;
     SDL2pp::Rect frame;
 
+    DuckState duck1_state;
+    DuckState duck2_state;
+
+    duck1.get_state(duck1_state);
+    duck2.get_state(duck2_state);
+
     if (isRunningDuck1) {
         frame = resourceManager.getAnimationFrame("duck_running", animationPhase);
     } else {
@@ -244,14 +256,16 @@ void GameClient::mainLoop(const int it, bool& quit) {
     }
     if (duckFacing) {
         renderer.Copy(*resourceManager.getTexture("white_duck"), frame,
-                      SDL2pp::Rect(100, 20, 62, 62), 0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+                      SDL2pp::Rect(duck1_state.position.x, duck1_state.position.y, 62, 62), 0.0,
+                      SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
         renderer.Copy(*resourceManager.getTexture("orange_duck"), frame,
-                      SDL2pp::Rect(100, 200, 62, 62), 0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+                      SDL2pp::Rect(duck2_state.position.x, duck2_state.position.y, 62, 62), 0.0,
+                      SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
     } else {
         renderer.Copy(*resourceManager.getTexture("white_duck"), frame,
-                      SDL2pp::Rect(100, 20, 62, 62));
+                      SDL2pp::Rect(duck1_state.position.x, duck1_state.position.y, 62, 62));
         renderer.Copy(*resourceManager.getTexture("orange_duck"), frame,
-                      SDL2pp::Rect(100, 200, 62, 62));
+                      SDL2pp::Rect(duck2_state.position.x, duck2_state.position.y, 62, 62));
     }
 
     renderer.Present();
