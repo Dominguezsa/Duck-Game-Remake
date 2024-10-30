@@ -69,7 +69,7 @@ void ResourceManager::loadAnimationFrames() {
                                              DUCK_RECT_WIDTH, DUCK_RECT_HEIGHT));
     }
 
-    animationFrames.emplace("white_duck_running", duckFrames);
+    animationFrames.emplace("duck_running", duckFrames);
     std::cout << "All animation frames loaded correctly\n";
 }
 

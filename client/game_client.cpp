@@ -238,16 +238,20 @@ void GameClient::mainLoop(const int it, bool& quit) {
     SDL2pp::Rect frame;
 
     if (isRunningDuck1) {
-        frame = resourceManager.getAnimationFrame("white_duck_running", animationPhase);
+        frame = resourceManager.getAnimationFrame("duck_running", animationPhase);
     } else {
-        frame = resourceManager.getAnimationFrame("white_duck_running", 0);
+        frame = resourceManager.getAnimationFrame("duck_running", 0);
     }
     if (duckFacing) {
         renderer.Copy(*resourceManager.getTexture("white_duck"), frame,
                       SDL2pp::Rect(100, 20, 62, 62), 0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+        renderer.Copy(*resourceManager.getTexture("orange_duck"), frame,
+                      SDL2pp::Rect(100, 200, 62, 62), 0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
     } else {
         renderer.Copy(*resourceManager.getTexture("white_duck"), frame,
                       SDL2pp::Rect(100, 20, 62, 62));
+        renderer.Copy(*resourceManager.getTexture("orange_duck"), frame,
+                      SDL2pp::Rect(100, 200, 62, 62));
     }
 
     renderer.Present();
