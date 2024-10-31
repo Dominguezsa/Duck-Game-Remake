@@ -45,9 +45,9 @@ void ClientProtocol::read_msg(void* msg) {
         recv_uint_8(duck_id);
         // std::cout << "For duck " << +duck_id << std::endl;
         recv_uint_32(x);
-        // std::cout << "x: " << x << std::endl;
+        // std::cout << "x: " << +x << std::endl;
         recv_uint_32(y);
-        // std::cout << "y: " << y << std::endl;
+        // std::cout << "y: " << +y << std::endl;
         recv_uint_8(is_alive);
         recv_uint_8(is_running);
         recv_uint_8(is_jumping);
@@ -71,5 +71,5 @@ void ClientProtocol::send_msg(void* msg) {
     uint8_t message = *static_cast<uint8_t*>(msg);
     // int int_msg = *static_cast<int*>(msg);
     send_data(&message, sizeof(uint8_t));
-    std::cout << "Sending message: " << std::hex << +message << std::endl;
+    // std::cout << "Sending message: " << std::hex << +message << std::endl;
 }
