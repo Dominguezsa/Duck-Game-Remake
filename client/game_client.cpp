@@ -21,6 +21,8 @@
 #define OST_VOLUME 0
 #define SFX_VOLUME 20
 
+#define GRAPHIC_QUEUE_SIZE 50
+
 struct Platform {
     float x;
     float y;
@@ -45,7 +47,7 @@ GameClient::GameClient(const int window_width, const int window_height,
         socket(server_ip.c_str(), port.c_str()),
         protocol(socket),
         messagesForServer(),
-        graphic_queue(),
+        graphic_queue(GRAPHIC_QUEUE_SIZE),
         duck1(),
         duck2()
 // stateDuck1(0x00, Position(20, 40), 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, WeaponType(10)),
@@ -156,9 +158,9 @@ void GameClient::processEvent(const SDL_Event& event, bool& quit, int it) {
             case SDLK_d:
                 messagesForServer.push(0x01);
                 if (startRunningItDuck1 != -1) {
-                    isRunningDuck1 = true;
+                    // isRunningDuck1 = true;
                 } else {
-                    isRunningDuck1 = true;
+                    // isRunningDuck1 = true;
                     startRunningItDuck1 = it;
                 }
                 duckFacing = false;
@@ -166,9 +168,9 @@ void GameClient::processEvent(const SDL_Event& event, bool& quit, int it) {
             case SDLK_a:
                 messagesForServer.push(0x03);
                 if (startRunningItDuck1 != -1) {
-                    isRunningDuck1 = true;
+                    // isRunningDuck1 = true;
                 } else {
-                    isRunningDuck1 = true;
+                    // isRunningDuck1 = true;
                     startRunningItDuck1 = it;
                 }
                 duckFacing = true;
@@ -188,13 +190,13 @@ void GameClient::processEvent(const SDL_Event& event, bool& quit, int it) {
             case SDLK_d:
                 messagesForServer.push(0x02);
                 startRunningItDuck1 = -1;
-                isRunningDuck1 = false;
+                // isRunningDuck1 = false;
                 break;
             case SDLK_a:
                 messagesForServer.push(0x04);
                 startRunningItDuck1 = -1;
-                isRunningDuck1 = false;
-                duckFacing = true;
+                // isRunningDuck1 = false;
+                // duckFacing = true;
                 break;
             case SDLK_SPACE:
                 messagesForServer.push(0x06);
@@ -248,7 +250,7 @@ void GameClient::mainLoop(const int it, bool& quit) {
     }
 
     // Now rendering the ducks
-    int animationPhase = ((it - startRunningItDuck1) / 6) % 6;
+    // int animationPhase = ((it - startRunningItDuck1) / 6) % 6;
     // std::cout << "Animation phase: " << animationPhase << std::endl;
     SDL2pp::Rect frame;
 
@@ -259,7 +261,7 @@ void GameClient::mainLoop(const int it, bool& quit) {
     duck2.get_state(duck2_state);
 
     if (isRunningDuck1) {
-        frame = resourceManager.getAnimationFrame("duck_running", animationPhase);
+        // frame = resourceManager.getAnimationFrame("duck_running", animationPhase);
     } else {
         frame = resourceManager.getAnimationFrame("duck_running", 0);
     }
@@ -283,12 +285,9 @@ void GameClient::mainLoop(const int it, bool& quit) {
             "Position of duck_1: " + std::to_string((int)duck1_state.position.x) + ", " +
             std::to_string((int)duck1_state.position.y) + " Position of duck_2 " +
             std::to_string((int)duck2_state.position.x) + ", " +
-            std::to_string((int)duck2_state.position.y);
-
-    // std::string text = "Position: " + std::to_string((int)position) +
-    //                     ", Y: " + std::to_string((int)y_position) +
-    //                     ", Velocity: " + std::to_string(vertical_velocity) +
-    //                     ", On Platform: " + (on_platform ? "true" : "false");
+            std::to_string((int)duck2_state.position.y) +
+            "Duck 1 is running: " + std::to_string(duck1_state.is_running) +
+            "Duck 2 is running: " + std::to_string(duck2_state.is_running);
 
     SDL2pp::Texture text_sprite(renderer,
                                 resourceManager.getFont("vera")->RenderText_Blended(
@@ -297,11 +296,6 @@ void GameClient::mainLoop(const int it, bool& quit) {
     renderer.Copy(text_sprite, SDL2pp::NullOpt,
                   SDL2pp::Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
 
-    // renderer.Copy(*resourceManager.getFont("vera"), SDL2pp::NullOpt, SDL2pp::Rect(0, 0, 0, 0));
-
-    // Texture text_sprite(renderer, font.RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
-    // renderer.Copy(text_sprite, NullOpt,
-    //                 Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
 
     renderer.Present();
 }

@@ -3,8 +3,10 @@
 #include <memory>
 #include <vector>
 
+#define MAX_SIZE_QUEUE 50
+
 Match::Match(unsigned int limit):
-        gameloop_queue(),
+        gameloop_queue(MAX_SIZE_QUEUE),
         game(monitor, gameloop_queue),
         status(MatchStatus::Waiting),
         accepting_players(true),

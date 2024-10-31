@@ -1,5 +1,7 @@
 #include "duck.h"
 
+#include <iostream>
+
 // ------------------- Constructores -------------------
 
 Duck::Duck(uint8_t id, uint8_t vida, bool looking, Position pos, const Weapon& weapon):
@@ -16,33 +18,33 @@ Duck::Duck(uint8_t id, uint8_t vida, bool looking, Position pos, const Weapon& w
         position(pos),
         weapon(weapon) {}
 
-Duck::Duck(): duck_id(0),
-              life_points(0),
-              looking(0),
-              is_alive(false),
-              is_running(false),
-              is_jumping(false),
-              is_ducking(false),
-              is_shooting(false),
-              helmet_on(false),
-              armor_on(false),
-              position({0, 0}),
-              weapon(Weapon("", 0)) {}
+Duck::Duck():
+        duck_id(0),
+        life_points(0),
+        looking(0),
+        is_alive(false),
+        is_running(false),
+        is_jumping(false),
+        is_ducking(false),
+        is_shooting(false),
+        helmet_on(false),
+        armor_on(false),
+        position({0, 0}),
+        weapon(Weapon("", 0)) {}
 
-Duck::Duck(const Duck& other)
-    : duck_id(other.duck_id),
-      life_points(other.life_points),
-      looking(other.looking),
-      is_alive(other.is_alive),
-      is_running(other.is_running),
-      is_jumping(other.is_jumping),
-      is_ducking(other.is_ducking),
-      is_shooting(other.is_shooting),
-      helmet_on(other.helmet_on),
-      armor_on(other.armor_on),
-      position(other.position),
-      weapon(other.weapon) {
-}
+Duck::Duck(const Duck& other):
+        duck_id(other.duck_id),
+        life_points(other.life_points),
+        looking(other.looking),
+        is_alive(other.is_alive),
+        is_running(other.is_running),
+        is_jumping(other.is_jumping),
+        is_ducking(other.is_ducking),
+        is_shooting(other.is_shooting),
+        helmet_on(other.helmet_on),
+        armor_on(other.armor_on),
+        position(other.position),
+        weapon(other.weapon) {}
 
 // ------------------- Métodos -------------------
 
@@ -58,7 +60,7 @@ Duck& Duck::operator=(const Duck& other) {
         is_shooting = other.is_shooting;
         helmet_on = other.helmet_on;
         armor_on = other.armor_on;
-
+        vertical_velocity = 0.0f;
         position = other.position;
         weapon = other.weapon;
     }
@@ -66,14 +68,16 @@ Duck& Duck::operator=(const Duck& other) {
 }
 
 void Duck::move_to(uint8_t direccion) {
+    is_running = true;
+
     if (direccion == 0) {
-        position.x -= 1;
         looking = 0;
     } else if (direccion == 1) {
-        position.x += 1;
         looking = 1;
     }
 }
+
+void Duck::stop_running() { is_running = false; }
 
 void Duck::jump(bool activar) {
     if (activar) {

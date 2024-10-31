@@ -58,6 +58,8 @@ public:
     void move_to(uint8_t direccion);  // 0: izquierda, 1: derecha (hacia arriba seria un salto y
                                       // hacia abajo se agacha)
 
+    void stop_running();
+
     void jump(bool activar);  // recibe activar para saber si se activa o desactiva el salto (y no
                               // implementar 2 mensajes)
 

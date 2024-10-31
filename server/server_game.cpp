@@ -38,8 +38,14 @@ void Game::handlePlayerAction(const GameloopMessage& msg) {
         case MOVE_RIGHT_KEY_DOWN:
             duck->move_to(1);
             break;
+        case MOVE_RIGHT_KEY_UP:
+            duck->stop_running();
+            break;
         case MOVE_LEFT_KEY_DOWN:
             duck->move_to(0);
+            break;
+        case MOVE_LEFT_KEY_UP:
+            duck->stop_running();
             break;
         case JUMP_KEY_DOWN:
             duck->jump(true);
@@ -110,10 +116,16 @@ void Game::updateGameState() {
 
         // Update horizontal position
         if (duck->is_running) {
+            // std::cout << "Duck be running\n";
             if (duck->looking) {
-                duck->position.x += move_speed;
+                // duck->position.x += move_speed;
+                double actual_pos = duck->position.x;
+                double new_pos = actual_pos + move_speed;
+                duck->position.x = new_pos;
+                // std::cout << "New position is: " << duck->position.x << std::endl;
             } else {
                 duck->position.x -= move_speed;
+                // std::cout << "New position is: " << duck->position.x << std::endl;
             }
         }
 
@@ -125,7 +137,8 @@ void Game::updateGameState() {
             if (checkPlatformCollision(duck->position, duck_width, duck_height, platform)) {
                 if (duck->vertical_velocity > 0 && previous_y + duck_height <= platform.y) {
                     // Landing on platform
-                    duck->position.y = platform.y - duck_height;
+                    // Small adjustment to avoid a horizontal collision with the platform
+                    duck->position.y = platform.y - duck_height - 2;
                     duck->vertical_velocity = 0;
                     duck->in_air = false;
                 } else if (duck->vertical_velocity < 0 &&
@@ -136,6 +149,7 @@ void Game::updateGameState() {
                 } else {
                     // Side collision
                     duck->position.x = previous_x;
+                    // std::cout << "Im detecting a collision\n";
                 }
             }
         }
@@ -255,7 +269,7 @@ void Game::run() {
         while (message_queue.try_pop(msg)) {
             handlePlayerAction(msg);
         }
-
+        // std::cout << "Updating state\n";
         updateGameState();
         checkRoundEnd();
 
