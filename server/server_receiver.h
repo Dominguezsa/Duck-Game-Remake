@@ -1,8 +1,9 @@
 #ifndef SERVER_THREAD_RECEIVER_H
 #define SERVER_THREAD_RECEIVER_H
 
-#include <syslog.h>
 #include <cstdint>
+
+#include <syslog.h>
 
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
@@ -14,11 +15,10 @@ class ReceiverThread: public Thread {
 private:
     Queue<GameloopMessage>& gameloop_queue;
     ServerProtocol& protocol;
-    uint8_t session_id; // (temporalmente)
+    uint8_t session_id;  // (temporalmente)
 
 public:
-    explicit ReceiverThread(Queue<GameloopMessage>& q, ServerProtocol& p,
-                            uint8_t id);
+    explicit ReceiverThread(Queue<GameloopMessage>& q, ServerProtocol& p, uint8_t id);
 
     void run() override;
 

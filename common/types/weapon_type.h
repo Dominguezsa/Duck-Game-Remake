@@ -15,4 +15,4 @@ enum WeaponType {
     NoneType
 };
 
-#endif //WEAPON_TYPE
+#endif  // WEAPON_TYPE

@@ -1,10 +1,7 @@
 #include "server_receiver.h"
 
-ReceiverThread::ReceiverThread(Queue<GameloopMessage>& q, ServerProtocol& p,
-                               uint8_t id) :
-                gameloop_queue(q),
-                protocol(p),
-                session_id(id) {}
+ReceiverThread::ReceiverThread(Queue<GameloopMessage>& q, ServerProtocol& p, uint8_t id):
+        gameloop_queue(q), protocol(p), session_id(id) {}
 
 void ReceiverThread::run() {
     try {
@@ -27,6 +24,4 @@ void ReceiverThread::run() {
     }
 }
 
-void ReceiverThread::stop() {
-    this->_is_alive = true;
-}
+void ReceiverThread::stop() { this->_is_alive = true; }

@@ -219,7 +219,6 @@ void Game::startNewRound() {
 
 bool Game::checkGameEnd() {
     // Por ahora tiro un suppress, en teoría debería usar un std::of_any() pero después vemos
-    // cppcheck-suppress useStlAlgorithm
     for (const auto& victory_pair: victories) {
         if (victory_pair.second >= VICTORIES_TO_WIN) {
             uint16_t max_victories = victory_pair.second;

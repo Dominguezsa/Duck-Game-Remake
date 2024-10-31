@@ -13,7 +13,6 @@
 
 class UserClient {
 private:
-    // cppcheck-suppress unusedStructMember
     uint8_t id;
     Socket skt;
     ServerProtocol protocol;

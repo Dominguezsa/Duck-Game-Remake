@@ -17,14 +17,11 @@ public:
 
     std::vector<Duck> receiveMessage();
 
-    void read_msg(void *msg) override;
+    void read_msg(void* msg) override;
 
-    void send_msg(void *msg) override;
+    void send_msg(void* msg) override;
 
     ~ClientProtocol() override = default;
-
-
-
 };
 
 #endif  // CLIENT_PROTOCOL_H

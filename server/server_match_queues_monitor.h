@@ -13,7 +13,6 @@
 class MatchQueuesMonitor {
 private:
     std::mutex queues_mtx;
-    // cppcheck-suppress unusedStructMember
     std::unordered_map<uint8_t, Queue<std::shared_ptr<std::vector<DuckState>>>*> requester_queues;
 
 public:

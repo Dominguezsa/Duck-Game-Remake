@@ -13,17 +13,12 @@
 
 class ResourceManager {
 private:
-    // cppcheck-suppress unusedStructMember
     std::map<std::string, std::shared_ptr<SDL2pp::Chunk>> sfx;
-    // cppcheck-suppress unusedStructMember
     std::map<std::string, std::shared_ptr<SDL2pp::Music>> music;
-    // cppcheck-suppress unusedStructMember
     std::map<std::string, std::shared_ptr<SDL2pp::Font>> fonts;
-    // cppcheck-suppress unusedStructMember
     std::map<std::string, std::shared_ptr<SDL2pp::Texture>> textures;
     // This could go in another class really, like one that store graphics related stuff, another
     // that stores audio related stuff and so on
-    // cppcheck-suppress unusedStructMember
     std::map<std::string, std::vector<SDL2pp::Rect>> animationFrames;
     SDL2pp::Renderer& renderer;
 

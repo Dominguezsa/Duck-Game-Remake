@@ -14,15 +14,10 @@ class Match {
 private:
     Queue<GameloopMessage> gameloop_queue;
     Game game;
-    // cppcheck-suppress unusedStructMember
     MatchStatus status;
-    // cppcheck-suppress unusedStructMember
     bool accepting_players;
-    // cppcheck-suppress unusedStructMember
     unsigned int player_limit;
-    // cppcheck-suppress unusedStructMember
     unsigned int player_count;
-    // cppcheck-suppress unusedStructMember
     MatchQueuesMonitor monitor;
     // Aún no formalizada la estructura del escenario.
     // Scenary scenary;

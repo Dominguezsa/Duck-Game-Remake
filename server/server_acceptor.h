@@ -14,12 +14,9 @@
 class AcceptorThread: public Thread {
 private:
     Socket acceptor_skt;
-    // cppcheck-suppress unusedStructMember
     std::list<UserClient*> clients;
-    // cppcheck-suppress unusedStructMember
     std::list<Match*> matches;  // Podria ser un map con un id
                                 // que las identifique (considerarlo).
-    // cppcheck-suppress unusedStructMember
     uint8_t connection_count;
 
 public:

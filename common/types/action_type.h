@@ -12,4 +12,4 @@ const uint8_t JUMP_KEY_UP = 0x06;
 const uint8_t SHOOT_KEY_DOWN = 0x07;
 const uint8_t SHOOT_KEY_UP = 0x08;
 
-#endif // ACTION_TYPE_H
+#endif  // ACTION_TYPE_H

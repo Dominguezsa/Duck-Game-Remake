@@ -12,7 +12,6 @@
 
 class Server {
 private:
-    // cppcheck-suppress unusedStructMember
     std::string port;
 
 public:
