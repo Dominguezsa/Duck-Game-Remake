@@ -130,6 +130,79 @@ void GameClient::updateDuckStates() {
     }
 }
 
+void GameClient::processEvent(const SDL_Event& event, bool& quit, int it) {
+    if (event.type == SDL_QUIT) {
+        quit = true;
+    } else if (event.type == SDL_KEYDOWN) {
+        // std::cout << "Caught a keydown event on iteration: " << it << "\n";
+        switch (event.key.keysym.sym) {
+            case SDLK_ESCAPE:
+                quit = true;
+                break;
+            case SDLK_1:
+                mixer.PlayChannel(-1, *resourceManager.getSFX("boom1"), 1);
+                break;
+            case SDLK_2:
+                mixer.PlayChannel(-1, *resourceManager.getSFX("boom2"), 0);
+                break;
+            case SDLK_3:
+                mixer.PlayChannel(-1, *resourceManager.getSFX("boom3"), 0);
+                break;
+            case SDLK_d:
+                messagesForServer.push(0x01);
+                if (startRunningItDuck1 != -1) {
+                    isRunningDuck1 = true;
+                } else {
+                    isRunningDuck1 = true;
+                    startRunningItDuck1 = it;
+                }
+                duckFacing = false;
+                break;
+            case SDLK_a:
+                messagesForServer.push(0x03);
+                if (startRunningItDuck1 != -1) {
+                    isRunningDuck1 = true;
+                } else {
+                    isRunningDuck1 = true;
+                    startRunningItDuck1 = it;
+                }
+                duckFacing = true;
+                break;
+            case SDLK_SPACE:
+                messagesForServer.push(0x05);
+                break;
+            case SDLK_f:
+                messagesForServer.push(0x07);
+                break;
+            default:
+                break;
+        }
+    } else if (event.type == SDL_KEYUP) {
+        // std::cout << "Caught a keyup event on iteration: " << it << "\n";
+        switch (event.key.keysym.sym) {
+            case SDLK_d:
+                messagesForServer.push(0x02);
+                startRunningItDuck1 = -1;
+                isRunningDuck1 = false;
+                break;
+            case SDLK_a:
+                messagesForServer.push(0x04);
+                startRunningItDuck1 = -1;
+                isRunningDuck1 = false;
+                duckFacing = true;
+                break;
+            case SDLK_SPACE:
+                messagesForServer.push(0x06);
+                break;
+            case SDLK_f:
+                messagesForServer.push(0x08);
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 void GameClient::mainLoop(const int it, bool& quit) {
     // Now it should do everything that the game needs to do in one iteration, like play if it needs
     // to play music, render sprites, etc.
@@ -140,76 +213,7 @@ void GameClient::mainLoop(const int it, bool& quit) {
     // Esto debería ser algo tipo double dispatch de cabeza porque es un asco
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
-            quit = true;
-        } else if (event.type == SDL_KEYDOWN) {
-            // std::cout << "Caught a keydown event on iteration: " << it << "\n";
-            switch (event.key.keysym.sym) {
-                case SDLK_ESCAPE:
-                    quit = true;
-                    break;
-                case SDLK_1:
-                    mixer.PlayChannel(-1, *resourceManager.getSFX("boom1"), 1);
-                    break;
-                case SDLK_2:
-                    mixer.PlayChannel(-1, *resourceManager.getSFX("boom2"), 0);
-                    break;
-                case SDLK_3:
-                    mixer.PlayChannel(-1, *resourceManager.getSFX("boom3"), 0);
-                    break;
-                case SDLK_d:
-                    messagesForServer.push(0x01);
-                    if (startRunningItDuck1 != -1) {
-                        isRunningDuck1 = true;
-                    } else {
-                        isRunningDuck1 = true;
-                        startRunningItDuck1 = it;
-                    }
-                    duckFacing = false;
-                    break;
-                case SDLK_a:
-                    messagesForServer.push(0x03);
-                    if (startRunningItDuck1 != -1) {
-                        isRunningDuck1 = true;
-                    } else {
-                        isRunningDuck1 = true;
-                        startRunningItDuck1 = it;
-                    }
-                    duckFacing = true;
-                    break;
-                case SDLK_SPACE:
-                    messagesForServer.push(0x05);
-                    break;
-                case SDLK_f:
-                    messagesForServer.push(0x07);
-                    break;
-                default:
-                    break;
-            }
-        } else if (event.type == SDL_KEYUP) {
-            // std::cout << "Caught a keyup event on iteration: " << it << "\n";
-            switch (event.key.keysym.sym) {
-                case SDLK_d:
-                    messagesForServer.push(0x02);
-                    startRunningItDuck1 = -1;
-                    isRunningDuck1 = false;
-                    break;
-                case SDLK_a:
-                    messagesForServer.push(0x04);
-                    startRunningItDuck1 = -1;
-                    isRunningDuck1 = false;
-                    duckFacing = true;
-                    break;
-                case SDLK_SPACE:
-                    messagesForServer.push(0x06);
-                    break;
-                case SDLK_f:
-                    messagesForServer.push(0x08);
-                    break;
-                default:
-                    break;
-            }
-        }
+        processEvent(event, quit, it);
     }
 
     // Todo esto debería mínimo en una función aparte, muy probablemente en una clase aparte que se

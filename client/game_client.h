@@ -54,6 +54,7 @@ public:
     ~GameClient();
     void run();
     void updateDuckStates();
+    void processEvent(const SDL_Event& event, bool& quit, int it);
     void mainLoop(const int it, bool& quit);
 };
 
