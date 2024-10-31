@@ -252,8 +252,6 @@ void GameClient::mainLoop(const int it, bool& quit) {
     // Now rendering the ducks
     // int animationPhase = ((it - startRunningItDuck1) / 6) % 6;
     // For now so it doesn't complain
-    // cppcheck-suppress unreadVariable
-    int animationPhase = -1;
 
     // Esto es la definición de código repetido, es un asco pero por ahora todo pelota
 
@@ -267,29 +265,32 @@ void GameClient::mainLoop(const int it, bool& quit) {
     duck1.get_state(duck1_state);
     duck2.get_state(duck2_state);
 
-
     // To check what iteration the duck started running to sync the animation from the start
     if (duck1_state.is_running && startRunningItDuck1 == -1) {
+        // std::cout << "Setting startRunningItDuck1 to " << it << std::endl;
         startRunningItDuck1 = it;
-    } else {
+    } else if (!duck1_state.is_running && startRunningItDuck1 != -1) {
+        // std::cout << "Setting startRunningItDuck1 to -1 on it: " << it << std::endl;
         startRunningItDuck1 = -1;
     }
 
     if (duck2_state.is_running && startRunningItDuck2 == -1) {
+        // std::cout << "Setting startRunningItDuck2 to " << it << std::endl;
         startRunningItDuck2 = it;
-    } else {
+    } else if (!duck2_state.is_running && startRunningItDuck2 != -1) {
         startRunningItDuck2 = -1;
     }
 
+
     if (duck1_state.is_running) {
-        animationPhase = ((it - startRunningItDuck1) / 6) % 6;
-        frameDuck1 = resourceManager.getAnimationFrame("duck_running", animationPhase);
+        int animationPhaseDuck1 = ((it - startRunningItDuck1) / 6) % 6;
+        frameDuck1 = resourceManager.getAnimationFrame("duck_running", animationPhaseDuck1);
     } else {
         frameDuck1 = resourceManager.getAnimationFrame("duck_running", 0);
     }
     if (duck2_state.is_running) {
-        animationPhase = ((it - startRunningItDuck2) / 6) % 6;
-        frameDuck2 = resourceManager.getAnimationFrame("duck_running", animationPhase);
+        int animationPhaseDuck2 = ((it - startRunningItDuck2) / 6) % 6;
+        frameDuck2 = resourceManager.getAnimationFrame("duck_running", animationPhaseDuck2);
     } else {
         frameDuck2 = resourceManager.getAnimationFrame("duck_running", 0);
     }
