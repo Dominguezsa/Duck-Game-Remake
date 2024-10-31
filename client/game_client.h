@@ -50,7 +50,7 @@ private:
 
 public:
     GameClient(const int window_width, const int window_height, const std::string& window_title,
-               const int max_chunk_size_audio);
+               const int max_chunk_size_audio, const std::string& server_ip, const std::string& port);
     ~GameClient();
     void run();
     void updateDuckStates();

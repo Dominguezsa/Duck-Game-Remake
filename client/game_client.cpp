@@ -32,7 +32,8 @@ struct Platform {
 // Loads the game client with all of the necessary main resources (in the future maybe it will be
 // even more)
 GameClient::GameClient(const int window_width, const int window_height,
-                       const std::string& window_title, const int max_chunk_size_audio):
+                       const std::string& window_title, const int max_chunk_size_audio,
+                       const std::string& server_ip, const std::string& port):
         sdl(SDL_INIT_VIDEO),
         ttf(),
         mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS,
@@ -41,7 +42,7 @@ GameClient::GameClient(const int window_width, const int window_height,
                window_height, SDL_WINDOW_RESIZABLE),
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
         resourceManager(renderer),
-        socket("localhost", "8080"),
+        socket(server_ip.c_str(), port.c_str()),
         protocol(socket),
         messagesForServer(),
         graphic_queue(),

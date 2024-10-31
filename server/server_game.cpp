@@ -1,4 +1,5 @@
 #include "server_game.h"
+#include <iostream>
 
 Game::Game(MatchQueuesMonitor& monitor, Queue<GameloopMessage>& queue):
         message_queue(queue),
@@ -35,6 +36,7 @@ void Game::handlePlayerAction(const GameloopMessage& msg) {
     switch (msg.action) {
         case MOVE_RIGHT_KEY_DOWN:
             duck->move_to(1);
+            std::cout << "Duck " << duck->position.x << std::endl;
             break;
         case MOVE_LEFT_KEY_DOWN:
             duck->move_to(0);
