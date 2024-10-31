@@ -43,8 +43,11 @@ void ClientProtocol::read_msg(void* msg) {
 
     for (int i = 0; i < duck_amount; i++) {
         recv_uint_8(duck_id);
+        // std::cout << "For duck " << +duck_id << std::endl;
         recv_uint_32(x);
+        // std::cout << "x: " << x << std::endl;
         recv_uint_32(y);
+        // std::cout << "y: " << y << std::endl;
         recv_uint_8(is_alive);
         recv_uint_8(is_running);
         recv_uint_8(is_jumping);

@@ -131,7 +131,7 @@ void GameClient::updateDuckStates() {
         duck1.update_state(duck_states[0]);
         duck2.update_state(duck_states[1]);
     }
-    std::cout << "Duck state updated\n";
+    // std::cout << "Duck state updated\n";
 }
 
 void GameClient::processEvent(const SDL_Event& event, bool& quit, int it) {

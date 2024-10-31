@@ -11,7 +11,9 @@ void ServerProtocol::send_duck_states(std::shared_ptr<std::vector<DuckState>> st
     for (uint16_t i = 0; i < state_count; i++) {
         send_data(&state_vector[i].duck_id, sizeof(uint8_t));
         send_data(&state_vector[i].position.x, sizeof(uint32_t));
+        // std::cout << "state_vector[i].position.x: " << state_vector[i].position.x << std::endl;
         send_data(&state_vector[i].position.y, sizeof(uint32_t));
+        // std::cout << "state_vector[i].position.y: " << state_vector[i].position.y << std::endl;
         send_data(&state_vector[i].is_alive, sizeof(uint8_t));
         send_data(&state_vector[i].is_running, sizeof(uint8_t));
         send_data(&state_vector[i].is_jumping, sizeof(u_int8_t));
