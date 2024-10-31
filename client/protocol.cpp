@@ -25,7 +25,7 @@ void ClientProtocol::read_msg(void* msg) {
     uint8_t duck_amount;
     recv_uint_8(duck_amount);
 
-    std::cout << "I received this many ducks: " << std::hex << +duck_amount << std::endl;
+    // std::cout << "I received this many ducks: " << std::hex << +duck_amount << std::endl;
 
     std::vector<DuckState>* ducks = static_cast<std::vector<DuckState>*>(msg);
 
@@ -59,7 +59,7 @@ void ClientProtocol::read_msg(void* msg) {
         ducks->push_back(duck_state);
     }
 
-    std::cout << "I received everything in theory\n";
+    // std::cout << "I received everything in theory\n";
 
     // std::cout << msg << std::endl;
 }

@@ -18,6 +18,9 @@
 #include "../common/common_weapon.h"
 
 #define FPS 60
+#define OST_VOLUME 0
+#define SFX_VOLUME 20
+
 struct Platform {
     float x;
     float y;
@@ -66,8 +69,8 @@ void GameClient::run() {
     int64_t t1_ms =
             std::chrono::duration_cast<std::chrono::milliseconds>(t1.time_since_epoch()).count();
 
-    mixer.SetMusicVolume(1);
-    mixer.SetVolume(-1, 20);
+    mixer.SetMusicVolume(OST_VOLUME);
+    mixer.SetVolume(-1, SFX_VOLUME);
     auto musicTrack = resourceManager.getMusicTrack("back_music");
     mixer.PlayMusic(*musicTrack, -1);
 
@@ -128,6 +131,7 @@ void GameClient::updateDuckStates() {
         duck1.update_state(duck_states[0]);
         duck2.update_state(duck_states[1]);
     }
+    std::cout << "Duck state updated\n";
 }
 
 void GameClient::processEvent(const SDL_Event& event, bool& quit, int it) {
@@ -271,6 +275,32 @@ void GameClient::mainLoop(const int it, bool& quit) {
         renderer.Copy(*resourceManager.getTexture("orange_duck"), frame,
                       SDL2pp::Rect(duck2_state.position.x, duck2_state.position.y, 62, 62));
     }
+
+    // Debug text
+
+    std::string duck_position_text =
+            "Position of duck_1: " + std::to_string((int)duck1_state.position.x) + ", " +
+            std::to_string((int)duck1_state.position.y) + " Position of duck_2 " +
+            std::to_string((int)duck2_state.position.x) + ", " +
+            std::to_string((int)duck2_state.position.y);
+
+    // std::string text = "Position: " + std::to_string((int)position) +
+    //                     ", Y: " + std::to_string((int)y_position) +
+    //                     ", Velocity: " + std::to_string(vertical_velocity) +
+    //                     ", On Platform: " + (on_platform ? "true" : "false");
+
+    SDL2pp::Texture text_sprite(renderer,
+                                resourceManager.getFont("vera")->RenderText_Blended(
+                                        duck_position_text, SDL_Color{255, 255, 255, 255}));
+
+    renderer.Copy(text_sprite, SDL2pp::NullOpt,
+                  SDL2pp::Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
+
+    // renderer.Copy(*resourceManager.getFont("vera"), SDL2pp::NullOpt, SDL2pp::Rect(0, 0, 0, 0));
+
+    // Texture text_sprite(renderer, font.RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
+    // renderer.Copy(text_sprite, NullOpt,
+    //                 Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
 
     renderer.Present();
 }

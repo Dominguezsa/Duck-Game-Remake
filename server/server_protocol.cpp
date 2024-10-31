@@ -4,7 +4,7 @@ void ServerProtocol::recv_msg(uint8_t& command) { recv_uint_8(command); }
 
 void ServerProtocol::send_duck_states(std::shared_ptr<std::vector<DuckState>> states) {
     // Refactorizable!
-    std::cout << "I entered the send_duck_states method\n";
+    // std::cout << "I entered the send_duck_states method\n";
     unsigned int state_count = states->size();
     send_data(&state_count, sizeof(uint8_t));
     std::vector<DuckState> state_vector = *states;
@@ -21,7 +21,7 @@ void ServerProtocol::send_duck_states(std::shared_ptr<std::vector<DuckState>> st
         send_data(&state_vector[i].armor_on, sizeof(uint8_t));
         send_data(&state_vector[i].weapon, sizeof(uint8_t));
 
-        std::cout << "Sended the data regarding duck " << +state_vector[i].duck_id << std::endl;
+        // std::cout << "Sended the data regarding duck " << +state_vector[i].duck_id << std::endl;
     }
 }
 

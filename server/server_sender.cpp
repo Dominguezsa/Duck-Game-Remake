@@ -19,7 +19,7 @@ void SenderThread::run() {
         while (this->_is_alive) {
             std::shared_ptr<std::vector<DuckState>> snapshot = duck_states_queue.pop();
             protocol.send_duck_states(snapshot);
-            std::cout << "SERVER: sended the duckstate\n";
+            // std::cout << "SERVER: sended the duckstate\n";
         }
     } catch (const SocketWasCLosedException& e) {
         if (this->_is_alive) {
