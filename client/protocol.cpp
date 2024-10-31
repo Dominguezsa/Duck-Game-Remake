@@ -30,6 +30,8 @@ void ClientProtocol::read_msg(void* msg) {
     std::vector<DuckState>* ducks = static_cast<std::vector<DuckState>*>(msg);
 
     uint8_t duck_id;
+    uint8_t life_points;
+    uint8_t looking;
     uint32_t x;
     uint32_t y;
     uint8_t is_alive;
@@ -43,6 +45,8 @@ void ClientProtocol::read_msg(void* msg) {
 
     for (int i = 0; i < duck_amount; i++) {
         recv_uint_8(duck_id);
+        recv_uint_8(life_points);
+        recv_uint_8(looking);
         // std::cout << "For duck " << +duck_id << std::endl;
         recv_uint_32(x);
         // std::cout << "x: " << +x << std::endl;
@@ -57,8 +61,9 @@ void ClientProtocol::read_msg(void* msg) {
         recv_uint_8(armor_on);
         recv_uint_8(weapon);
 
-        DuckState duck_state(duck_id, Position(x, y), is_alive, is_running, is_jumping, is_ducking,
-                             is_shooting, helmet_on, armor_on, WeaponType(weapon));
+        DuckState duck_state(duck_id, life_points, looking, Position(x, y), is_alive, is_running,
+                             is_jumping, is_ducking, is_shooting, helmet_on, armor_on,
+                             WeaponType(weapon));
         ducks->push_back(duck_state);
     }
 

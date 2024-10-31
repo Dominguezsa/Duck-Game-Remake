@@ -137,7 +137,7 @@ void GameClient::updateDuckStates() {
     // std::cout << "Duck state updated\n";
 }
 
-void GameClient::processEvent(const SDL_Event& event, bool& quit, int it) {
+void GameClient::processEvent(const SDL_Event& event, bool& quit) {
     if (event.type == SDL_QUIT) {
         quit = true;
     } else if (event.type == SDL_KEYDOWN) {
@@ -157,23 +157,23 @@ void GameClient::processEvent(const SDL_Event& event, bool& quit, int it) {
                 break;
             case SDLK_d:
                 messagesForServer.push(0x01);
-                if (startRunningItDuck1 != -1) {
-                    // isRunningDuck1 = true;
-                } else {
-                    // isRunningDuck1 = true;
-                    startRunningItDuck1 = it;
-                }
-                duckFacing = false;
+                // if (startRunningItDuck1 != -1) {
+                //     // isRunningDuck1 = true;
+                // } else {
+                //     // isRunningDuck1 = true;
+                //     startRunningItDuck1 = it;
+                // }
+                // duckFacing = false;
                 break;
             case SDLK_a:
                 messagesForServer.push(0x03);
-                if (startRunningItDuck1 != -1) {
-                    // isRunningDuck1 = true;
-                } else {
-                    // isRunningDuck1 = true;
-                    startRunningItDuck1 = it;
-                }
-                duckFacing = true;
+                // if (startRunningItDuck1 != -1) {
+                //     // isRunningDuck1 = true;
+                // } else {
+                //     // isRunningDuck1 = true;
+                //     // startRunningItDuck1 = it;
+                // }
+                // duckFacing = true;
                 break;
             case SDLK_SPACE:
                 messagesForServer.push(0x05);
@@ -189,12 +189,12 @@ void GameClient::processEvent(const SDL_Event& event, bool& quit, int it) {
         switch (event.key.keysym.sym) {
             case SDLK_d:
                 messagesForServer.push(0x02);
-                startRunningItDuck1 = -1;
+                // startRunningItDuck1 = -1;
                 // isRunningDuck1 = false;
                 break;
             case SDLK_a:
                 messagesForServer.push(0x04);
-                startRunningItDuck1 = -1;
+                // startRunningItDuck1 = -1;
                 // isRunningDuck1 = false;
                 // duckFacing = true;
                 break;
@@ -220,7 +220,7 @@ void GameClient::mainLoop(const int it, bool& quit) {
     // Esto debería ser algo tipo double dispatch de cabeza porque es un asco
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-        processEvent(event, quit, it);
+        processEvent(event, quit);
     }
 
     // Todo esto debería mínimo en una función aparte, muy probablemente en una clase aparte que se
@@ -251,8 +251,15 @@ void GameClient::mainLoop(const int it, bool& quit) {
 
     // Now rendering the ducks
     // int animationPhase = ((it - startRunningItDuck1) / 6) % 6;
+    // For now so it doesn't complain
+    // cppcheck-suppress unreadVariable
+    int animationPhase = -1;
+
+    // Esto es la definición de código repetido, es un asco pero por ahora todo pelota
+
     // std::cout << "Animation phase: " << animationPhase << std::endl;
-    SDL2pp::Rect frame;
+    SDL2pp::Rect frameDuck1;
+    SDL2pp::Rect frameDuck2;
 
     DuckState duck1_state;
     DuckState duck2_state;
@@ -260,22 +267,49 @@ void GameClient::mainLoop(const int it, bool& quit) {
     duck1.get_state(duck1_state);
     duck2.get_state(duck2_state);
 
-    if (isRunningDuck1) {
-        // frame = resourceManager.getAnimationFrame("duck_running", animationPhase);
+
+    // To check what iteration the duck started running to sync the animation from the start
+    if (duck1_state.is_running && startRunningItDuck1 == -1) {
+        startRunningItDuck1 = it;
     } else {
-        frame = resourceManager.getAnimationFrame("duck_running", 0);
+        startRunningItDuck1 = -1;
     }
-    if (duckFacing) {
-        renderer.Copy(*resourceManager.getTexture("white_duck"), frame,
+
+    if (duck2_state.is_running && startRunningItDuck2 == -1) {
+        startRunningItDuck2 = it;
+    } else {
+        startRunningItDuck2 = -1;
+    }
+
+    if (duck1_state.is_running) {
+        animationPhase = ((it - startRunningItDuck1) / 6) % 6;
+        frameDuck1 = resourceManager.getAnimationFrame("duck_running", animationPhase);
+    } else {
+        frameDuck1 = resourceManager.getAnimationFrame("duck_running", 0);
+    }
+    if (duck2_state.is_running) {
+        animationPhase = ((it - startRunningItDuck2) / 6) % 6;
+        frameDuck2 = resourceManager.getAnimationFrame("duck_running", animationPhase);
+    } else {
+        frameDuck2 = resourceManager.getAnimationFrame("duck_running", 0);
+    }
+
+    // Now lets render the ducks, taking into account the direction they are facing
+    if (duck1_state.looking == 0) {
+        renderer.Copy(*resourceManager.getTexture("white_duck"), frameDuck1,
                       SDL2pp::Rect(duck1_state.position.x, duck1_state.position.y, 62, 62), 0.0,
                       SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
-        renderer.Copy(*resourceManager.getTexture("orange_duck"), frame,
+    } else {
+        renderer.Copy(*resourceManager.getTexture("white_duck"), frameDuck1,
+                      SDL2pp::Rect(duck1_state.position.x, duck1_state.position.y, 62, 62));
+    }
+
+    if (duck2_state.looking == 0) {
+        renderer.Copy(*resourceManager.getTexture("orange_duck"), frameDuck2,
                       SDL2pp::Rect(duck2_state.position.x, duck2_state.position.y, 62, 62), 0.0,
                       SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
     } else {
-        renderer.Copy(*resourceManager.getTexture("white_duck"), frame,
-                      SDL2pp::Rect(duck1_state.position.x, duck1_state.position.y, 62, 62));
-        renderer.Copy(*resourceManager.getTexture("orange_duck"), frame,
+        renderer.Copy(*resourceManager.getTexture("orange_duck"), frameDuck2,
                       SDL2pp::Rect(duck2_state.position.x, duck2_state.position.y, 62, 62));
     }
 
@@ -286,8 +320,10 @@ void GameClient::mainLoop(const int it, bool& quit) {
             std::to_string((int)duck1_state.position.y) + " Position of duck_2 " +
             std::to_string((int)duck2_state.position.x) + ", " +
             std::to_string((int)duck2_state.position.y) +
-            "Duck 1 is running: " + std::to_string(duck1_state.is_running) +
-            "Duck 2 is running: " + std::to_string(duck2_state.is_running);
+            " Duck 1 is running: " + std::to_string(duck1_state.is_running) +
+            " Duck 2 is running: " + std::to_string(duck2_state.is_running) +
+            " Duck 1 is facing: " + std::to_string(duck1_state.looking) +
+            " Duck 2 is facing: " + std::to_string(duck2_state.looking);
 
     SDL2pp::Texture text_sprite(renderer,
                                 resourceManager.getFont("vera")->RenderText_Blended(

@@ -9,6 +9,8 @@
 
 struct DuckState {
     uint8_t duck_id;  // protocol class is who assigns the id
+    uint8_t life_points;
+    uint8_t looking;  // 0 -> left, 1 -> right, 2 -> up, 3 -> down
     Position position;
     uint8_t is_alive;  // 1: true, 0: false
     uint8_t is_running;
@@ -20,10 +22,12 @@ struct DuckState {
     WeaponType weapon;
 
     // Constructor
-    DuckState(uint8_t _id, Position _position, uint8_t _is_alive, uint8_t _is_running,
-              uint8_t _is_jumping, uint8_t _is_ducking, uint8_t _is_shooting, uint8_t _helmet_on,
-              uint8_t _armor_on, WeaponType _weapon):
+    DuckState(uint8_t _id, uint8_t starting_life_points, uint8_t looking, Position _position,
+              uint8_t _is_alive, uint8_t _is_running, uint8_t _is_jumping, uint8_t _is_ducking,
+              uint8_t _is_shooting, uint8_t _helmet_on, uint8_t _armor_on, WeaponType _weapon):
             duck_id(_id),
+            life_points(starting_life_points),
+            looking(looking),
             position(_position),
             is_alive(_is_alive),
             is_running(_is_running),
@@ -37,6 +41,8 @@ struct DuckState {
     // Generic empty constructor
     DuckState():
             duck_id(0),
+            life_points(100),
+            looking(0),
             position(Position(0, 0)),
             is_alive(0),
             is_running(0),

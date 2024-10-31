@@ -37,11 +37,11 @@ private:
     ClientProtocol protocol;
     Queue<uint8_t> messagesForServer;
     Queue<std::vector<DuckState>> graphic_queue;
-    bool isRunningDuck1 = false;
+    // bool isRunningDuck1 = false;
     int startRunningItDuck1 = -1;
-    bool isRunningDuck2 = false;
+    // bool isRunningDuck2 = false;
     int startRunningItDuck2 = -1;
-    bool duckFacing = false;  // false = right, true = left
+    // bool duckFacing = false;  // false = right, true = left
     Duck duck1;
     Duck duck2;
     // DuckState stateDuck1;
@@ -50,11 +50,12 @@ private:
 
 public:
     GameClient(const int window_width, const int window_height, const std::string& window_title,
-               const int max_chunk_size_audio, const std::string& server_ip, const std::string& port);
+               const int max_chunk_size_audio, const std::string& server_ip,
+               const std::string& port);
     ~GameClient();
     void run();
     void updateDuckStates();
-    void processEvent(const SDL_Event& event, bool& quit, int it);
+    void processEvent(const SDL_Event& event, bool& quit);
     void mainLoop(const int it, bool& quit);
 };
 

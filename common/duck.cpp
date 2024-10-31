@@ -68,13 +68,20 @@ Duck& Duck::operator=(const Duck& other) {
 }
 
 void Duck::move_to(uint8_t direccion) {
+
+    if (direccion > 1) {
+        return;
+    }
+
     is_running = true;
 
-    if (direccion == 0) {
-        looking = 0;
-    } else if (direccion == 1) {
-        looking = 1;
-    }
+    looking = direccion;
+
+    // if (direccion == 0) {
+    //     looking = 0;
+    // } else if (direccion == 1) {
+    //     looking = 1;
+    // }
 }
 
 void Duck::stop_running() { is_running = false; }
@@ -119,6 +126,8 @@ void Duck::throw_weapon() { this->weapon = Weapon("", 0); }
 
 void Duck::get_state(DuckState& state) {
     state.duck_id = static_cast<uint8_t>(duck_id);
+    state.life_points = life_points;
+    state.looking = looking;
     state.position = position;
     state.is_alive = static_cast<uint8_t>(is_alive);
     state.is_running = static_cast<uint8_t>(is_running);
@@ -134,6 +143,8 @@ void Duck::get_state(DuckState& state) {
 
 void Duck::update_state(const DuckState& state) {
     // duck_id = state.duck_id;
+    life_points = state.life_points;
+    looking = state.looking;
     position = state.position;
     is_alive = static_cast<bool>(state.is_alive);
     is_running = static_cast<bool>(state.is_running);

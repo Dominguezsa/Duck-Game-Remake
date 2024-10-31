@@ -117,13 +117,13 @@ void Game::updateGameState() {
         // Update horizontal position
         if (duck->is_running) {
             // std::cout << "Duck be running\n";
-            if (duck->looking) {
+            if (duck->looking == 1) {
                 // duck->position.x += move_speed;
                 double actual_pos = duck->position.x;
                 double new_pos = actual_pos + move_speed;
                 duck->position.x = new_pos;
                 // std::cout << "New position is: " << duck->position.x << std::endl;
-            } else {
+            } else if (duck->looking == 0) {
                 duck->position.x -= move_speed;
                 // std::cout << "New position is: " << duck->position.x << std::endl;
             }
@@ -169,8 +169,8 @@ void Game::updateGameState() {
         }
 
         // Update duck state
-        DuckState state(duck->duck_id, duck->position, duck->is_alive ? 1 : 0,
-                        duck->is_running ? 1 : 0, duck->is_jumping ? 1 : 0,
+        DuckState state(duck->duck_id, duck->life_points, duck->looking, duck->position,
+                        duck->is_alive ? 1 : 0, duck->is_running ? 1 : 0, duck->is_jumping ? 1 : 0,
                         duck->is_ducking ? 1 : 0, duck->is_shooting ? 1 : 0,
                         duck->helmet_on ? 1 : 0, duck->armor_on ? 1 : 0, duck->weapon.getType());
 
