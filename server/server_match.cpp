@@ -1,13 +1,16 @@
 #include "server_match.h"
 
-Match::Match(unsigned int limit) : 
-                                   gameloop_queue(),
-                                   game(monitor, gameloop_queue), 
-                                   status(MatchStatus::Waiting),
-                                   accepting_players(true),
-                                   player_limit(limit),
-                                   player_count(0), 
-                                   monitor() {}
+#include <memory>
+#include <vector>
+
+Match::Match(unsigned int limit):
+        gameloop_queue(),
+        game(monitor, gameloop_queue),
+        status(MatchStatus::Waiting),
+        accepting_players(true),
+        player_limit(limit),
+        player_count(0),
+        monitor() {}
 
 bool Match::delete_player(uint8_t id) {
     bool deleted = monitor.delete_player(id);
@@ -22,17 +25,14 @@ bool Match::delete_player(uint8_t id) {
     return deleted;
 }
 
-bool Match::can_accept_players() const {
-    return accepting_players;
-}
+bool Match::can_accept_players() const { return accepting_players; }
 
-void Match::add_player(Queue<DuckState> *q, uint8_t id) {
+void Match::add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, uint8_t id) {
     if (accepting_players) {
         monitor.add_player(q, id);
         game.addPlayer(id);
         player_count++;
-        this->accepting_players = status == MatchStatus::Waiting &&
-                                  player_count < player_limit;
+        this->accepting_players = status == MatchStatus::Waiting && player_count < player_limit;
         if (!accepting_players) {
             initialize_game();
         }
@@ -42,22 +42,18 @@ void Match::add_player(Queue<DuckState> *q, uint8_t id) {
 void Match::initialize_game() {
     if (player_count == player_limit) {
         status = MatchStatus::Playing;
-        game.start(); 
+        game.start();
         game.run();
     }
 }
 
-Queue<GameloopMessage>* Match::get_gameloop_queue() {
-    return &gameloop_queue;
-}
+Queue<GameloopMessage>* Match::get_gameloop_queue() { return &gameloop_queue; }
 
-bool Match::is_finished() {
-    return status == MatchStatus::Finished;
-}
+bool Match::is_finished() { return status == MatchStatus::Finished; }
 
 void Match::stop_game() {
     game.stop();
-    game.join(); 
+    game.join();
     gameloop_queue.close();
 
     this->status = MatchStatus::Finished;

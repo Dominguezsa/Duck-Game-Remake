@@ -2,6 +2,8 @@
 #define SERVER_MATCH_H
 
 #include <cstdint>
+#include <memory>
+#include <vector>
 
 #include "types/match_status.h"
 
@@ -28,7 +30,7 @@ private:
 public:
     explicit Match(unsigned int limit);
     bool delete_player(uint8_t id);
-    void add_player(Queue<DuckState>* q, uint8_t id);
+    void add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, uint8_t id);
     void initialize_game();
     Queue<GameloopMessage>* get_gameloop_queue();
     bool can_accept_players() const;

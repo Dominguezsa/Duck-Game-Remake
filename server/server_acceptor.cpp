@@ -12,6 +12,10 @@ void AcceptorThread::stop() {
     _is_alive = false;
     this->acceptor_skt.shutdown(2);
     this->acceptor_skt.close();
+
+    for (auto& client: this->clients) {
+        client->end_communication();
+    }
 }
 
 void AcceptorThread::accept_connection() {

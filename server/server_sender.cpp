@@ -1,5 +1,8 @@
 #include "server_sender.h"
 
+#include <memory>
+#include <vector>
+
 SenderThread::SenderThread(ServerProtocol& p): requester_queue(SENDER_QUEUE_SIZE), protocol(p) {}
 
 void SenderThread::stop() {
@@ -7,13 +10,15 @@ void SenderThread::stop() {
     requester_queue.close();
 }
 
-Queue<DuckState>* SenderThread::get_queue() { return &this->requester_queue; }
+Queue<std::shared_ptr<std::vector<DuckState>>>* SenderThread::get_queue() {
+    return &this->duck_states_queue;
+}
 
 void SenderThread::run() {
     try {
         while (this->_is_alive) {
-            DuckState cmd = requester_queue.pop();
-            protocol.send_msg(&cmd);
+            std::shared_ptr<std::vector<DuckState>> snapshot = duck_states_queue.pop();
+            protocol.send_duck_states(snapshot);
             std::cout << "SERVER: sended the duckstate\n";
         }
     } catch (const SocketWasCLosedException& e) {

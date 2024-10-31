@@ -1,8 +1,11 @@
 #include "server_match_queues_monitor.h"
 
-MatchQueuesMonitor::MatchQueuesMonitor() : queues_mtx(), requester_queues() {}
+#include <memory>
+#include <vector>
 
-void MatchQueuesMonitor::add_player(Queue<DuckState> *q, uint8_t id) {
+MatchQueuesMonitor::MatchQueuesMonitor(): queues_mtx(), requester_queues() {}
+
+void MatchQueuesMonitor::add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, uint8_t id) {
     std::lock_guard<std::mutex> lock(queues_mtx);
     requester_queues[id] = q;
 }
@@ -13,9 +16,9 @@ bool MatchQueuesMonitor::delete_player(uint8_t id) {
     return deleted;
 }
 
-void MatchQueuesMonitor::push_to_all(DuckState &duck_snapshot) {
+void MatchQueuesMonitor::push_to_all(std::shared_ptr<std::vector<DuckState>> duck_snapshot) {
     std::lock_guard<std::mutex> lock(queues_mtx);
-    for (auto &pair : requester_queues) {
+    for (auto& pair: requester_queues) {
         pair.second->push(duck_snapshot);
     }
 }
