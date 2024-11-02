@@ -1,6 +1,7 @@
 #ifndef GAME_CLIENT_H
 #define GAME_CLIENT_H
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -43,6 +44,8 @@ private:
     Duck duck2;
     AnimationHelper animationHelper;
     ScreenRenderer screenRenderer;
+    // Algo específico de SDL, no creo que está en la librería SDL2pp
+    std::unique_ptr<const uint8_t*> keyboardState;
 
     // DuckState stateDuck1;
     // DuckState stateDuck2;

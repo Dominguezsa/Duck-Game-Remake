@@ -1,9 +1,11 @@
 #include "game_client.h"
 
 #include <chrono>
+#include <memory>
 #include <thread>
 
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_render.h>
@@ -43,7 +45,8 @@ GameClient::GameClient(const int window_width, const int window_height,
         duck1(),
         duck2(),
         animationHelper(duck1, duck2),
-        screenRenderer(renderer, resourceManager, animationHelper) {}
+        screenRenderer(renderer, resourceManager, animationHelper),
+        keyboardState(std::make_unique<const uint8_t*>(SDL_GetKeyboardState(nullptr))) {}
 
 // Moved the constantRateLoop implementation here because making it a separate file was causing a
 // lot of problems, but yeah its repeating the same code in both client and server
@@ -158,9 +161,19 @@ void GameClient::processEvent(const SDL_Event& event, bool& quit) {
     } else if (event.type == SDL_KEYUP) {
         switch (event.key.keysym.sym) {
             case SDLK_d:
+                // Para ver si soluciona el tema del cambio de dirección, si veo que si está
+                // apretada la tecla de moverse a la izquierda, no debería mandar el mensaje para
+                // parar de correr Parece que scancode es mejor porque no tiene en cuenta el layout
+                // del teclado, pero En los eventos no funcionaba, así que nose
+                if ((*keyboardState)[SDL_SCANCODE_A]) {
+                    break;
+                }
                 messagesForServer.push(MOVE_RIGHT_KEY_UP);
                 break;
             case SDLK_a:
+                if ((*keyboardState)[SDL_SCANCODE_D]) {
+                    break;
+                }
                 messagesForServer.push(MOVE_LEFT_KEY_UP);
                 break;
             case SDLK_SPACE:
