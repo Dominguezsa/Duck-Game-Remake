@@ -20,7 +20,9 @@
 #include "../common/duck.h"
 #include "../common/types/duck_state.h"
 
+#include "AnimationHelper.h"
 #include "ResourceManager.h"
+#include "ScreenRenderer.h"
 #include "protocol.h"
 #include "thread_receiver.h"
 #include "thread_sender.h"
@@ -37,13 +39,11 @@ private:
     ClientProtocol protocol;
     Queue<uint8_t> messagesForServer;
     Queue<std::vector<DuckState>> graphic_queue;
-    // bool isRunningDuck1 = false;
-    int startRunningItDuck1 = -1;
-    // bool isRunningDuck2 = false;
-    int startRunningItDuck2 = -1;
-    // bool duckFacing = false;  // false = right, true = left
     Duck duck1;
     Duck duck2;
+    AnimationHelper animationHelper;
+    ScreenRenderer screenRenderer;
+
     // DuckState stateDuck1;
     // DuckState stateDuck2;
 
