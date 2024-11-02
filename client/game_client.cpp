@@ -13,6 +13,7 @@
 #include <SDL2pp/Music.hh>
 
 #include "../common/common_weapon.h"
+#include "../common/types/action_type.h"
 #include "../common/types/duck_state.h"
 
 #define FPS 60
@@ -20,6 +21,7 @@
 #define SFX_VOLUME 20
 
 #define GRAPHIC_QUEUE_SIZE 50
+
 
 // Loads the game client with all of the necessary main resources (in the future maybe it will be
 // even more)
@@ -139,16 +141,16 @@ void GameClient::processEvent(const SDL_Event& event, bool& quit) {
                 mixer.PlayChannel(-1, *resourceManager.getSFX("boom3"), 0);
                 break;
             case SDLK_d:
-                messagesForServer.push(0x01);
+                messagesForServer.push(MOVE_RIGHT_KEY_DOWN);
                 break;
             case SDLK_a:
-                messagesForServer.push(0x03);
+                messagesForServer.push(MOVE_LEFT_KEY_DOWN);
                 break;
             case SDLK_SPACE:
-                messagesForServer.push(0x05);
+                messagesForServer.push(JUMP_KEY_DOWN);
                 break;
             case SDLK_f:
-                messagesForServer.push(0x07);
+                messagesForServer.push(SHOOT_KEY_DOWN);
                 break;
             default:
                 break;
@@ -156,16 +158,16 @@ void GameClient::processEvent(const SDL_Event& event, bool& quit) {
     } else if (event.type == SDL_KEYUP) {
         switch (event.key.keysym.sym) {
             case SDLK_d:
-                messagesForServer.push(0x02);
+                messagesForServer.push(MOVE_RIGHT_KEY_UP);
                 break;
             case SDLK_a:
-                messagesForServer.push(0x04);
+                messagesForServer.push(MOVE_LEFT_KEY_UP);
                 break;
             case SDLK_SPACE:
-                messagesForServer.push(0x06);
+                messagesForServer.push(JUMP_KEY_UP);
                 break;
             case SDLK_f:
-                messagesForServer.push(0x08);
+                messagesForServer.push(SHOOT_KEY_UP);
                 break;
             default:
                 break;
