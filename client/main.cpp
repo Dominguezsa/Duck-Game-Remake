@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
         const std::string WINDOW_NAME = "DuckGame";
         const int WINDOW_WIDTH = 1200;
         const int WINDOW_HEIGHT = 700;
-        const int CHUNK_SIZE_AUDIO = 409600;
+        const int CHUNK_SIZE_AUDIO = 1024;
         std::string hostname = std::string(argv[1]);
         std::string servname = std::string(argv[2]);
 
