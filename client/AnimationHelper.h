@@ -19,6 +19,12 @@ private:
     int run_anim_phase_duck1 = -1;
     int run_anim_phase_duck2 = -1;
 
+    int jump_anim_phase_duck1 = -1;
+    int jump_anim_phase_duck2 = -1;
+
+    int jump_anim_start_duck1 = -1;
+    int jump_anim_start_duck2 = -1;
+
 public:
     AnimationHelper(Duck& duck1, Duck& duck2);
     void update_run_anim_start_duck1(int it);

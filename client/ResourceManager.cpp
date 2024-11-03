@@ -10,6 +10,12 @@
 #define DUCK_RECT_X 1
 #define DUCK_RECT_Y 7
 
+#define DUCK_RUNNING_FRAMES 6
+#define DUCK_JUMPING_FRAMES 6
+
+#define DUCK_JUMPING_ANIM_X 1
+#define DUCK_JUMPING_ANIM_Y 39
+
 ResourceManager::ResourceManager(SDL2pp::Renderer& renderer): renderer(renderer) {}
 
 void ResourceManager::loadSFX() {
@@ -62,14 +68,27 @@ void ResourceManager::loadSprites() {
 
 void ResourceManager::loadAnimationFrames() {
 
+    // This is for the running animation
     std::vector<SDL2pp::Rect> duckFrames;
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < DUCK_RUNNING_FRAMES; i++) {
         duckFrames.emplace_back(SDL2pp::Rect(DUCK_RECT_X + i * DUCK_RECT_WIDTH, DUCK_RECT_Y,
                                              DUCK_RECT_WIDTH, DUCK_RECT_HEIGHT));
     }
 
     animationFrames.emplace("duck_running", duckFrames);
+
+    duckFrames.clear();
+
+    for (int i = 0; i < DUCK_JUMPING_FRAMES; i++) {
+        duckFrames.emplace_back(SDL2pp::Rect(DUCK_JUMPING_ANIM_X + i * DUCK_RECT_WIDTH,
+                                             DUCK_JUMPING_ANIM_Y + DUCK_RECT_HEIGHT,
+                                             DUCK_RECT_WIDTH, DUCK_RECT_HEIGHT));
+    }
+
+    animationFrames.emplace("duck_jumping", duckFrames);
+
+
     std::cout << "All animation frames loaded correctly\n";
 }
 
