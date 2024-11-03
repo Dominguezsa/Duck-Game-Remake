@@ -71,22 +71,41 @@ void ScreenRenderer::copyBackground() {
 void ScreenRenderer::copyDebugText(const DuckState& duck1_state, const DuckState& duck2_state) {
     // Debug text
 
-    std::string duck_position_text =
+    std::string duck1_position_text =
             "Position of duck_1: " + std::to_string((int)duck1_state.position.x) + ", " +
-            std::to_string((int)duck1_state.position.y) + " Position of duck_2 " +
-            std::to_string((int)duck2_state.position.x) + ", " +
-            std::to_string((int)duck2_state.position.y) +
+            std::to_string((int)duck1_state.position.y) +
             " Duck 1 is running: " + std::to_string(duck1_state.is_running) +
-            " Duck 2 is running: " + std::to_string(duck2_state.is_running) +
             " Duck 1 is facing: " + std::to_string(duck1_state.looking) +
-            " Duck 2 is facing: " + std::to_string(duck2_state.looking);
+            " Duck 1 is jumping: " + std::to_string(duck1_state.is_jumping) +
+            " Duck 1 is falling: " + std::to_string(duck1_state.is_falling) +
+            " Duck 1 is gliding: " + std::to_string(duck1_state.is_gliding) +
+            " Duck 1 is on air: " + std::to_string(duck1_state.in_air) +
+            " Duck 1 vertical velocity: " + std::to_string(duck1_state.vertical_velocity);
 
-    SDL2pp::Texture text_sprite(renderer,
-                                resourceManager.getFont("vera")->RenderText_Blended(
-                                        duck_position_text, SDL_Color{255, 255, 255, 255}));
+    std::string duck2_position_text =
+            "Position of duck_2: " + std::to_string((int)duck2_state.position.x) + ", " +
+            std::to_string((int)duck2_state.position.y) +
+            " Duck 2 is running: " + std::to_string(duck2_state.is_running) +
+            " Duck 2 is facing: " + std::to_string(duck2_state.looking) +
+            " Duck 2 is jumping: " + std::to_string(duck2_state.is_jumping) +
+            " Duck 2 is falling: " + std::to_string(duck2_state.is_falling) +
+            " Duck 2 is gliding: " + std::to_string(duck2_state.is_gliding) +
+            " Duck 2 is on air: " + std::to_string(duck2_state.in_air) +
+            " Duck 2 vertical velocity: " + std::to_string(duck2_state.vertical_velocity);
 
-    renderer.Copy(text_sprite, SDL2pp::NullOpt,
-                  SDL2pp::Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
+    SDL2pp::Texture text_sprite_1(renderer,
+                                  resourceManager.getFont("vera")->RenderText_Blended(
+                                          duck1_position_text, SDL_Color{255, 255, 255, 255}));
+
+    SDL2pp::Texture text_sprite_2(renderer,
+                                  resourceManager.getFont("vera")->RenderText_Blended(
+                                          duck2_position_text, SDL_Color{255, 255, 255, 255}));
+
+    renderer.Copy(text_sprite_1, SDL2pp::NullOpt,
+                  SDL2pp::Rect(0, 0, text_sprite_1.GetWidth(), text_sprite_1.GetHeight()));
+
+    renderer.Copy(text_sprite_2, SDL2pp::NullOpt,
+                  SDL2pp::Rect(0, 20, text_sprite_1.GetWidth(), text_sprite_1.GetHeight()));
 }
 // Por ahora que reciba los dos patos por parámetro, probablemente en un futuro sean o una clase o
 // directamente un vector de patos para la partida

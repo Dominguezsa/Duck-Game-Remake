@@ -25,10 +25,14 @@ void ServerProtocol::send_duck_states(std::shared_ptr<std::vector<DuckState>> st
         send_data(&state_vector[i].is_alive, sizeof(uint8_t));
         send_data(&state_vector[i].is_running, sizeof(uint8_t));
         send_data(&state_vector[i].is_jumping, sizeof(u_int8_t));
+        send_data(&state_vector[i].is_gliding, sizeof(uint8_t));
+        send_data(&state_vector[i].is_falling, sizeof(uint8_t));
         send_data(&state_vector[i].is_ducking, sizeof(uint8_t));
         send_data(&state_vector[i].is_shooting, sizeof(uint8_t));
         send_data(&state_vector[i].helmet_on, sizeof(uint8_t));
         send_data(&state_vector[i].armor_on, sizeof(uint8_t));
+        send_data(&state_vector[i].in_air, sizeof(uint8_t));
+        send_data(&state_vector[i].vertical_velocity, sizeof(float));
         send_data(&state_vector[i].weapon, sizeof(uint8_t));
 
         // std::cout << "Sended the data regarding duck " << +state_vector[i].duck_id << std::endl;

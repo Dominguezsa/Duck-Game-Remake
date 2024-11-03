@@ -37,10 +37,14 @@ void ClientProtocol::read_msg(void* msg) {
     uint8_t is_alive;
     uint8_t is_running;
     uint8_t is_jumping;
+    uint8_t is_gliding;
+    uint8_t is_falling;
     uint8_t is_ducking;
     uint8_t is_shooting;
     uint8_t helmet_on;
     uint8_t armor_on;
+    uint8_t in_air;
+    float vertical_velocity;
     uint8_t weapon;
 
     for (int i = 0; i < duck_amount; i++) {
@@ -55,15 +59,19 @@ void ClientProtocol::read_msg(void* msg) {
         recv_uint_8(is_alive);
         recv_uint_8(is_running);
         recv_uint_8(is_jumping);
+        recv_uint_8(is_gliding);
+        recv_uint_8(is_falling);
         recv_uint_8(is_ducking);
         recv_uint_8(is_shooting);
         recv_uint_8(helmet_on);
         recv_uint_8(armor_on);
+        recv_uint_8(in_air);
+        recv_float(vertical_velocity);
         recv_uint_8(weapon);
 
         DuckState duck_state(duck_id, life_points, looking, Position(x, y), is_alive, is_running,
-                             is_jumping, is_ducking, is_shooting, helmet_on, armor_on,
-                             WeaponType(weapon));
+                             is_jumping, is_gliding, is_falling, is_ducking, is_shooting, helmet_on,
+                             armor_on, in_air, vertical_velocity, WeaponType(weapon));
         ducks->push_back(duck_state);
     }
 

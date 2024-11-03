@@ -11,6 +11,17 @@ void Protocol::end_communication() {
     this->skt.close();
 }
 
+void Protocol::recv_float(float& received) {
+    bool was_closed = false;
+    uint32_t received_int;
+    this->skt.recvall(&received_int, sizeof(uint32_t), &was_closed);
+    if (was_closed) {
+        throw SocketWasCLosedException(errno, "Socket was closed while receiving a float.\n");
+    }
+    received_int = ntohl(received_int);
+    received = (float)received_int;
+}
+
 void Protocol::recv_uint_32(uint32_t& received) {
     bool was_closed = false;
     this->skt.recvall(&received, sizeof(uint32_t), &was_closed);

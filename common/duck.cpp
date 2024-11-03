@@ -14,6 +14,7 @@ Duck::Duck(uint8_t id, uint8_t vida, bool looking, Position pos, const Weapon& w
         is_running(false),
         is_jumping(false),
         is_gliding(false),
+        is_falling(false),
         is_ducking(false),
         is_shooting(false),
         helmet_on(false),
@@ -29,6 +30,7 @@ Duck::Duck():
         is_running(false),
         is_jumping(false),
         is_gliding(false),
+        is_falling(false),
         is_ducking(false),
         is_shooting(false),
         helmet_on(false),
@@ -44,6 +46,7 @@ Duck::Duck(const Duck& other):
         is_running(other.is_running),
         is_jumping(other.is_jumping),
         is_gliding(other.is_gliding),
+        is_falling(other.is_falling),
         is_ducking(other.is_ducking),
         is_shooting(other.is_shooting),
         helmet_on(other.helmet_on),
@@ -62,6 +65,7 @@ Duck& Duck::operator=(const Duck& other) {
         is_running = other.is_running;
         is_jumping = other.is_jumping;
         is_gliding = other.is_gliding;
+        is_falling = other.is_falling;
         is_ducking = other.is_ducking;
         is_shooting = other.is_shooting;
         helmet_on = other.helmet_on;
@@ -157,6 +161,10 @@ void Duck::get_state(DuckState& state) {
     state.is_shooting = static_cast<uint8_t>(is_shooting);
     state.helmet_on = static_cast<uint8_t>(helmet_on);
     state.armor_on = static_cast<uint8_t>(armor_on);
+    state.is_gliding = static_cast<uint8_t>(is_gliding);
+    state.is_falling = static_cast<uint8_t>(is_falling);
+    state.in_air = static_cast<uint8_t>(in_air);
+    state.vertical_velocity = vertical_velocity;
     // TO-DO: Ajustar el uso del tipo de weapon a la
     //        clase correspondiente.
     state.weapon = WeaponType::NoneType;
@@ -170,6 +178,10 @@ void Duck::update_state(const DuckState& state) {
     is_alive = static_cast<bool>(state.is_alive);
     is_running = static_cast<bool>(state.is_running);
     is_jumping = static_cast<bool>(state.is_jumping);
+    is_gliding = static_cast<bool>(state.is_gliding);
+    is_falling = static_cast<bool>(state.is_falling);
+    in_air = static_cast<bool>(state.in_air);
+    vertical_velocity = state.vertical_velocity;
     is_ducking = static_cast<bool>(state.is_ducking);
     is_shooting = static_cast<bool>(state.is_shooting);
     helmet_on = static_cast<bool>(state.helmet_on);

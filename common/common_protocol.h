@@ -26,6 +26,8 @@ protected:
             que se recibira a continuacion.
     */
 
+    void recv_float(float& received);
+
     void recv_uint_32(uint32_t& received);
 
     void recv_uint_16(uint16_t& received);
