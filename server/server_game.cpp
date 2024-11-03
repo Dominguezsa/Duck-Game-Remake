@@ -1,6 +1,9 @@
 #include "server_game.h"
 
+#include <cstdint>
 #include <iostream>
+
+enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
 
 Game::Game(MatchQueuesMonitor& monitor, Queue<GameloopMessage>& queue):
         message_queue(queue),
@@ -33,16 +36,17 @@ void Game::handlePlayerAction(const GameloopMessage& msg) {
         return;
 
     Duck* duck = it->second.get();
-
+    // Ya esto se está haciendo medio inmanejable, deberiamos ya ver de hacer un double dispatch
+    // (lo mismo en el cliente)
     switch (msg.action) {
         case MOVE_RIGHT_KEY_DOWN:
-            duck->move_to(1);
+            duck->move_to(RIGHT);
             break;
         case MOVE_RIGHT_KEY_UP:
             duck->stop_running();
             break;
         case MOVE_LEFT_KEY_DOWN:
-            duck->move_to(0);
+            duck->move_to(LEFT);
             break;
         case MOVE_LEFT_KEY_UP:
             duck->stop_running();
@@ -58,6 +62,18 @@ void Game::handlePlayerAction(const GameloopMessage& msg) {
             break;
         case SHOOT_KEY_UP:
             duck->shoot(false);
+            break;
+        case LOOKING_RIGHT_KEY_DOWN:
+            duck->look_to(RIGHT);
+            break;
+        case LOOKING_LEFT_KEY_DOWN:
+            duck->look_to(LEFT);
+            break;
+        case LOOKING_UP_KEY_DOWN:
+            duck->look_to(UP);
+            break;
+        case LOOKING_DOWN_KEY_DOWN:
+            duck->look_to(DOWN);
             break;
     }
 }
@@ -219,6 +235,7 @@ void Game::startNewRound() {
 
 bool Game::checkGameEnd() {
     // Por ahora tiro un suppress, en teoría debería usar un std::of_any() pero después vemos
+    // cppcheck-suppress useStlAlgorithm
     for (const auto& victory_pair: victories) {
         if (victory_pair.second >= VICTORIES_TO_WIN) {
             uint16_t max_victories = victory_pair.second;

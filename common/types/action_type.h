@@ -11,16 +11,15 @@ enum ActionType : const uint8_t {
     JUMP_KEY_DOWN,
     JUMP_KEY_UP,
     SHOOT_KEY_DOWN,
-    SHOOT_KEY_UP
+    SHOOT_KEY_UP,
+    LOOKING_RIGHT_KEY_DOWN,
+    LOOKING_RIGHT_KEY_UP,
+    LOOKING_LEFT_KEY_DOWN,
+    LOOKING_LEFT_KEY_UP,
+    LOOKING_UP_KEY_DOWN,
+    LOOKING_UP_KEY_UP,
+    LOOKING_DOWN_KEY_DOWN,
+    LOOKING_DOWN_KEY_UP
 };
-
-// const uint8_t MOVE_RIGHT_KEY_DOWN = 0x01;
-// const uint8_t MOVE_RIGHT_KEY_UP = 0x02;
-// const uint8_t MOVE_LEFT_KEY_DOWN = 0x03;
-// const uint8_t MOVE_LEFT_KEY_UP = 0x04;
-// const uint8_t JUMP_KEY_DOWN = 0x05;
-// const uint8_t JUMP_KEY_UP = 0x06;
-// const uint8_t SHOOT_KEY_DOWN = 0x07;
-// const uint8_t SHOOT_KEY_UP = 0x08;
 
 #endif  // ACTION_TYPE_H

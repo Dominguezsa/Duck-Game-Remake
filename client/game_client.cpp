@@ -161,20 +161,24 @@ void GameClient::processEvent(const SDL_Event& event, bool& quit) {
     } else if (event.type == SDL_KEYUP) {
         switch (event.key.keysym.sym) {
             case SDLK_d:
-                // Para ver si soluciona el tema del cambio de dirección, si veo que si está
-                // apretada la tecla de moverse a la izquierda, no debería mandar el mensaje para
-                // parar de correr Parece que scancode es mejor porque no tiene en cuenta el layout
-                // del teclado, pero En los eventos no funcionaba, así que nose
                 if ((*keyboardState)[SDL_SCANCODE_A]) {
+                    messagesForServer.push(LOOKING_LEFT_KEY_DOWN);
                     break;
                 }
                 messagesForServer.push(MOVE_RIGHT_KEY_UP);
                 break;
             case SDLK_a:
                 if ((*keyboardState)[SDL_SCANCODE_D]) {
+                    messagesForServer.push(LOOKING_RIGHT_KEY_DOWN);
                     break;
                 }
                 messagesForServer.push(MOVE_LEFT_KEY_UP);
+                break;
+            case SDLK_w:
+                messagesForServer.push(LOOKING_UP_KEY_UP);
+                break;
+            case SDLK_s:
+                messagesForServer.push(LOOKING_DOWN_KEY_UP);
                 break;
             case SDLK_SPACE:
                 messagesForServer.push(JUMP_KEY_UP);

@@ -84,6 +84,14 @@ void Duck::move_to(uint8_t direccion) {
     // }
 }
 
+void Duck::look_to(uint8_t direccion) {
+    if (direccion > 3) {
+        return;
+    }
+
+    looking = direccion;
+}
+
 void Duck::stop_running() { is_running = false; }
 
 void Duck::jump(bool activar) {
