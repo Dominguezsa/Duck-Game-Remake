@@ -149,6 +149,12 @@ void GameClient::processEvent(const SDL_Event& event, bool& quit) {
             case SDLK_a:
                 messagesForServer.push(MOVE_LEFT_KEY_DOWN);
                 break;
+            case SDLK_w:
+                messagesForServer.push(LOOKING_UP_KEY_DOWN);
+                break;
+            case SDLK_s:
+                messagesForServer.push(LOOKING_DOWN_KEY_DOWN);
+                break;
             case SDLK_SPACE:
                 messagesForServer.push(JUMP_KEY_DOWN);
                 break;

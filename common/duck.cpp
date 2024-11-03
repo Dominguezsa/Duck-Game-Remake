@@ -4,6 +4,8 @@
 
 // ------------------- Constructores -------------------
 
+#define JUMP_SPEED 15.0f
+
 Duck::Duck(uint8_t id, uint8_t vida, bool looking, Position pos, const Weapon& weapon):
         duck_id(id),
         life_points(vida),
@@ -11,6 +13,7 @@ Duck::Duck(uint8_t id, uint8_t vida, bool looking, Position pos, const Weapon& w
         is_alive(true),
         is_running(false),
         is_jumping(false),
+        is_gliding(false),
         is_ducking(false),
         is_shooting(false),
         helmet_on(false),
@@ -25,6 +28,7 @@ Duck::Duck():
         is_alive(false),
         is_running(false),
         is_jumping(false),
+        is_gliding(false),
         is_ducking(false),
         is_shooting(false),
         helmet_on(false),
@@ -39,6 +43,7 @@ Duck::Duck(const Duck& other):
         is_alive(other.is_alive),
         is_running(other.is_running),
         is_jumping(other.is_jumping),
+        is_gliding(other.is_gliding),
         is_ducking(other.is_ducking),
         is_shooting(other.is_shooting),
         helmet_on(other.helmet_on),
@@ -56,6 +61,7 @@ Duck& Duck::operator=(const Duck& other) {
         is_alive = other.is_alive;
         is_running = other.is_running;
         is_jumping = other.is_jumping;
+        is_gliding = other.is_gliding;
         is_ducking = other.is_ducking;
         is_shooting = other.is_shooting;
         helmet_on = other.helmet_on;
@@ -95,10 +101,17 @@ void Duck::look_to(uint8_t direccion) {
 void Duck::stop_running() { is_running = false; }
 
 void Duck::jump(bool activar) {
+    // if true, spacebar down; if false, spacebar up
+    if (activar && is_jumping) {
+        is_gliding = true;
+        return;
+    }
     if (activar) {
         is_jumping = true;
+        vertical_velocity = -JUMP_SPEED;
+        in_air = true;
     } else {
-        is_jumping = false;
+        is_gliding = false;
     }
 }
 

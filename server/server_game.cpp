@@ -112,12 +112,16 @@ void Game::updateGameState() {
         float previous_y = duck->position.y;
         float previous_x = duck->position.x;
 
+        // if (duck->duck_id == 1) {
+        //     std::cout << "Duck 1 vertical velocity: " << duck->vertical_velocity << std::endl;
+        // }
+
         // Apply gravity if in air
         if (duck->in_air) {
             duck->vertical_velocity += gravity;
 
             // Apply flutter effect if jumping is held
-            if (duck->is_jumping) {
+            if (duck->is_gliding) {
                 duck->vertical_velocity += flutter_force;
                 if (duck->vertical_velocity > 3.0f) {
                     duck->vertical_velocity = 3.0f;
@@ -157,6 +161,7 @@ void Game::updateGameState() {
                     duck->position.y = platform.y - duck_height - 2;
                     duck->vertical_velocity = 0;
                     duck->in_air = false;
+                    duck->is_jumping = false;
                 } else if (duck->vertical_velocity < 0 &&
                            previous_y >= platform.y + platform.height) {
                     // Hitting platform from below

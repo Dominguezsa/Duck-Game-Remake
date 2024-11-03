@@ -24,6 +24,8 @@ public:
     // cppcheck-suppress unusedStructMember
     bool is_jumping;
     // cppcheck-suppress unusedStructMember
+    bool is_gliding;
+    // cppcheck-suppress unusedStructMember
     bool is_ducking;
     // cppcheck-suppress unusedStructMember
     bool is_shooting;
