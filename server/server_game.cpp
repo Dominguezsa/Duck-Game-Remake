@@ -5,7 +5,7 @@
 
 enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
 
-Game::Game(MatchQueuesMonitor& monitor, Queue<GameloopMessage>& queue):
+Game::Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue):
         message_queue(queue),
         is_running(false),
         next_player_id(0),

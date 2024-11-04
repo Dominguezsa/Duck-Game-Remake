@@ -13,7 +13,7 @@
 #include "../common/types/action_type.h"
 
 #include "server_gameloop_message.h"
-#include "server_match_queues_monitor.h"
+#include "server_match_state_monitor.h"
 
 
 class Game: public Thread {
@@ -35,7 +35,7 @@ private:
     uint16_t round_number;
     std::unordered_map<uint8_t, uint16_t> victories;
     std::vector<Platform> platforms;
-    MatchQueuesMonitor& monitor;
+    MatchStateMonitor& monitor;
 
     static constexpr double TICK_RATE = 60.0;
     static constexpr double TICK_DURATION = 1.0 / TICK_RATE;
@@ -55,7 +55,7 @@ private:
 
 
 public:
-    explicit Game(MatchQueuesMonitor& monitor, Queue<GameloopMessage>& queue);
+    explicit Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue);
 
     void addPlayer(uint8_t player_id);
     void removePlayer(uint8_t player_id);
