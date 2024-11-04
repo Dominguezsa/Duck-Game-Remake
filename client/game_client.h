@@ -40,8 +40,7 @@ private:
     ClientProtocol protocol;
     Queue<uint8_t> messagesForServer;
     Queue<std::vector<DuckState>> graphic_queue;
-    Duck duck1;
-    Duck duck2;
+    std::vector<Duck> ducks;
     AnimationHelper animationHelper;
     ScreenRenderer screenRenderer;
     // Algo específico de SDL, no creo que está en la librería SDL2pp

@@ -1,6 +1,8 @@
 #ifndef ANIMATION_HELPER_H
 #define ANIMATION_HELPER_H
 
+#include <vector>
+
 #include "../common/duck.h"
 
 class AnimationHelper {
@@ -10,28 +12,18 @@ private:
     // animaciones deberían estar en un map asociado a la id del pato específico y queseyo, después
     // ver
 
-    Duck& duck1;
-    Duck& duck2;
+    std::vector<Duck>& ducks;
 
-    int run_anim_start_duck1 = -1;
-    int run_anim_start_duck2 = -1;
-
-    int run_anim_phase_duck1 = -1;
-    int run_anim_phase_duck2 = -1;
-
-    int jump_anim_phase_duck1 = -1;
-    int jump_anim_phase_duck2 = -1;
-
-    int jump_anim_start_duck1 = -1;
-    int jump_anim_start_duck2 = -1;
+    std::vector<int> run_anim_phase_ducks;
+    std::vector<int> run_anim_start_ducks;
+    std::vector<int> jump_anim_phase_ducks;
+    std::vector<int> jump_anim_start_ducks;
 
 public:
-    AnimationHelper(Duck& duck1, Duck& duck2);
+    explicit AnimationHelper(std::vector<Duck>& ducks);
     void update_run_anim_start_duck1(int it);
-    void update_run_anim_start_duck2(int it);
 
-    int get_run_anim_phase_duck1(int it);
-    int get_run_anim_phase_duck2(int it);
+    std::vector<int> get_run_anim_phase_duck1(int it);
     ~AnimationHelper() = default;
 };
 

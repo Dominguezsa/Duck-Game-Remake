@@ -35,7 +35,7 @@ public:
     std::shared_ptr<SDL2pp::Font> getFont(const std::string& key);
     std::shared_ptr<SDL2pp::Chunk> getSFX(const std::string& key);
     std::shared_ptr<SDL2pp::Texture> getTexture(const std::string& key);
-    SDL2pp::Rect getAnimationFrame(const std::string& key, int frame);
+    std::vector<SDL2pp::Rect> getAnimationFrame(const std::string& key, std::vector<int> frame);
     void releaseResources();
 };
 

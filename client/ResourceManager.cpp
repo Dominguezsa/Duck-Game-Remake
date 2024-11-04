@@ -124,9 +124,13 @@ std::shared_ptr<SDL2pp::Texture> ResourceManager::getTexture(const std::string& 
     return it->second;
 }
 
-SDL2pp::Rect ResourceManager::getAnimationFrame(const std::string& key, int frame) {
-
-    return animationFrames[key][frame];
+std::vector<SDL2pp::Rect> ResourceManager::getAnimationFrame(const std::string& key,
+                                                             std::vector<int> frame) {
+    std::vector<SDL2pp::Rect> animation;
+    for (int i = 0; i < (int)frame.size(); i++) {
+        animation.emplace_back(animationFrames[key][frame[i]]);
+    }
+    return animation;
 }
 
 ResourceManager::~ResourceManager() {}

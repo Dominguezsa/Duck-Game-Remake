@@ -42,9 +42,8 @@ GameClient::GameClient(const int window_width, const int window_height,
         protocol(socket),
         messagesForServer(),
         graphic_queue(GRAPHIC_QUEUE_SIZE),
-        duck1(),
-        duck2(),
-        animationHelper(duck1, duck2),
+        ducks({Duck(), Duck()}),
+        animationHelper(ducks),
         screenRenderer(renderer, resourceManager, animationHelper),
         keyboardState(std::make_unique<const uint8_t*>(SDL_GetKeyboardState(nullptr))) {}
 
@@ -115,14 +114,9 @@ void GameClient::updateDuckStates() {
 
     while (graphic_queue.try_pop(duck_states)) {}
 
-    // ugly but for now it works
-    if (duck_states.size() == 1) {
-        duck1.update_state(duck_states[0]);
-    } else if (duck_states.size() == 2) {
-        duck1.update_state(duck_states[0]);
-        duck2.update_state(duck_states[1]);
+    for (int i = 0; i < (int)duck_states.size(); i++) {
+        ducks[i].update_state(duck_states[i]);
     }
-    // std::cout << "Duck state updated\n";
 }
 
 void GameClient::processEvent(const SDL_Event& event, bool& quit) {
@@ -211,7 +205,7 @@ void GameClient::mainLoop(const int it, bool& quit) {
     // Todo esto debería mínimo en una función aparte, muy probablemente en una clase aparte que se
     // encargue del renderizado
 
-    screenRenderer.updateScreen(duck1, duck2, it);
+    screenRenderer.updateScreen(ducks, it);
 }
 
 
