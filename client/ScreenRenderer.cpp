@@ -12,9 +12,9 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
 
     std::vector<SDL2pp::Rect> frameDucks;
 
-    animationHelper.update_run_anim_start_duck1(it);
+    animationHelper.update_run_anim_start(it);
 
-    std::vector<int> anim_phase_ducks = animationHelper.get_run_anim_phase_duck1(it);
+    std::vector<int> anim_phase_ducks = animationHelper.get_run_anim_phase(it);
 
     frameDucks = resourceManager.getAnimationFrame("duck_running", anim_phase_ducks);
 

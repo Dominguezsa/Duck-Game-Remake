@@ -11,19 +11,22 @@ private:
     // animations o algo así que recorra el vector y actualice las animaciones, y los datos de esas
     // animaciones deberían estar en un map asociado a la id del pato específico y queseyo, después
     // ver
-
+    // cppcheck-suppress unusedStructMember
     std::vector<Duck>& ducks;
-
+    // cppcheck-suppress unusedStructMember
     std::vector<int> run_anim_phase_ducks;
+    // cppcheck-suppress unusedStructMember
     std::vector<int> run_anim_start_ducks;
+    // cppcheck-suppress unusedStructMember
     std::vector<int> jump_anim_phase_ducks;
+    // cppcheck-suppress unusedStructMember
     std::vector<int> jump_anim_start_ducks;
 
 public:
     explicit AnimationHelper(std::vector<Duck>& ducks);
-    void update_run_anim_start_duck1(int it);
+    void update_run_anim_start(int it);
 
-    std::vector<int> get_run_anim_phase_duck1(int it);
+    std::vector<int> get_run_anim_phase(int it);
     ~AnimationHelper() = default;
 };
 

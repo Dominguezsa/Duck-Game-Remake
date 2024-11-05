@@ -115,6 +115,7 @@ void GameClient::updateDuckStates() {
     while (graphic_queue.try_pop(duck_states)) {}
 
     for (int i = 0; i < (int)duck_states.size(); i++) {
+        // std::cout << "updated ducks\n";
         ducks[i].update_state(duck_states[i]);
     }
 }
