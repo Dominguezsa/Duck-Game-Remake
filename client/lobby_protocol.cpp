@@ -1,5 +1,4 @@
 #include "lobby_protocol.h"
-#include "duck_game_error.h"
 #include <memory>
 #include <cstdint>
 
@@ -29,7 +28,7 @@ GameMatchInfo LobbyProtocol::receive_game() {
     } catch (const LibError& skt_err) {
         std::string errorMessage = 
             "Some error occurred while trying to receive a message from the server.";
-        throw DuckGameError(errorMessage, __LINE__, __FILE__);
+        throw std::runtime_error(errorMessage);
     }
 }
 
@@ -104,6 +103,6 @@ void LobbyProtocol::skt_was_closed() {
     if (was_closed) {
         std::string errorMessage = 
             "Some error occurred while trying to receive a message from the server.";
-        throw DuckGameError(errorMessage, __LINE__, __FILE__);
+        throw std::runtime_error(errorMessage);
     }
 }
