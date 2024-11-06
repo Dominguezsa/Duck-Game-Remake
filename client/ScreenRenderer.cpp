@@ -14,13 +14,9 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
 
 
     // Now lets render the ducks, taking into account the direction they are facing
-    // std::cout << "The frames i have to draw\n";
-    // for (auto& frame : frameDucks) {
-    //     std::cout << "x: " << frame.x << " y: " << frame.y << " w: " << frame.w << " h: " <<
-    //     frame.h
-    //               << std::endl;
-    // }
     for (int i = 0; i < (int)ducks.size(); i++) {
+        std::cout << "Color for this duck id: " << +ducks[i].duck_id
+                  << " is: " << colors_per_id[ducks[i].duck_id] << std::endl;
         if (ducks[i].looking == 0) {
             renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
                           frameDucks[i],
