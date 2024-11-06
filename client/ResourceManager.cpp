@@ -82,8 +82,8 @@ void ResourceManager::loadAnimationFrames() {
 
     for (int i = 0; i < DUCK_JUMPING_FRAMES; i++) {
         duckFrames.emplace_back(SDL2pp::Rect(DUCK_JUMPING_ANIM_X + i * DUCK_RECT_WIDTH,
-                                             DUCK_JUMPING_ANIM_Y + DUCK_RECT_HEIGHT,
-                                             DUCK_RECT_WIDTH, DUCK_RECT_HEIGHT));
+                                             DUCK_JUMPING_ANIM_Y, DUCK_RECT_WIDTH,
+                                             DUCK_RECT_HEIGHT));
     }
 
     animationFrames.emplace("duck_jumping", duckFrames);
@@ -124,13 +124,8 @@ std::shared_ptr<SDL2pp::Texture> ResourceManager::getTexture(const std::string& 
     return it->second;
 }
 
-std::vector<SDL2pp::Rect> ResourceManager::getAnimationFrame(const std::string& key,
-                                                             std::vector<int> frame) {
-    std::vector<SDL2pp::Rect> animation;
-    for (int i = 0; i < (int)frame.size(); i++) {
-        animation.emplace_back(animationFrames[key][frame[i]]);
-    }
-    return animation;
+SDL2pp::Rect ResourceManager::getAnimationFrame(const std::string& key, const int frame) {
+    return animationFrames[key][frame];
 }
 
 ResourceManager::~ResourceManager() {}

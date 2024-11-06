@@ -1,9 +1,14 @@
 #ifndef ANIMATION_HELPER_H
 #define ANIMATION_HELPER_H
 
+#include <algorithm>
+#include <map>
 #include <vector>
 
 #include "../common/duck.h"
+
+#include "DuckGraphicData.h"
+#include "ResourceManager.h"
 
 class AnimationHelper {
 private:
@@ -11,22 +16,21 @@ private:
     // animations o algo así que recorra el vector y actualice las animaciones, y los datos de esas
     // animaciones deberían estar en un map asociado a la id del pato específico y queseyo, después
     // ver
+    // Debería tener alguna estructura que tenga todos los datos de la animación de cada pato,
+    // Tipo un struct animationData
     // cppcheck-suppress unusedStructMember
-    std::vector<Duck>& ducks;
+    std::vector<DuckGraphicData> ducks_animation_data;
     // cppcheck-suppress unusedStructMember
-    std::vector<int> run_anim_phase_ducks;
+    std::vector<int> current_frames_per_duck;
     // cppcheck-suppress unusedStructMember
-    std::vector<int> run_anim_start_ducks;
-    // cppcheck-suppress unusedStructMember
-    std::vector<int> jump_anim_phase_ducks;
-    // cppcheck-suppress unusedStructMember
-    std::vector<int> jump_anim_start_ducks;
+    ResourceManager& resourceManager;
+    // std::map<uint8_t, AnimationData> duckAnimData;
 
 public:
-    explicit AnimationHelper(std::vector<Duck>& ducks);
-    void update_run_anim_start(int it);
-
-    std::vector<int> get_run_anim_phase(int it);
+    explicit AnimationHelper(std::vector<Duck>& ducks, ResourceManager& resourceManager);
+    void set_run_anim_start(int it);
+    void update_animation_frame(int it);
+    std::vector<SDL2pp::Rect> get_animation_frames(int it);
     ~AnimationHelper() = default;
 };
 

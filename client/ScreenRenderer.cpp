@@ -10,30 +10,25 @@ ScreenRenderer::ScreenRenderer(SDL2pp::Renderer& renderer, ResourceManager& reso
 void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
     // Esto es código repetido pero un toque más maquillado, osea es pasable pero no
 
-    std::vector<SDL2pp::Rect> frameDucks;
-
-    animationHelper.update_run_anim_start(it);
-
-    std::vector<int> anim_phase_ducks = animationHelper.get_run_anim_phase(it);
-
-    frameDucks = resourceManager.getAnimationFrame("duck_running", anim_phase_ducks);
+    std::vector<SDL2pp::Rect> frameDucks = animationHelper.get_animation_frames(it);
 
 
     // Now lets render the ducks, taking into account the direction they are facing
-
+    // std::cout << "The frames i have to draw\n";
+    // for (auto& frame : frameDucks) {
+    //     std::cout << "x: " << frame.x << " y: " << frame.y << " w: " << frame.w << " h: " <<
+    //     frame.h
+    //               << std::endl;
+    // }
     for (int i = 0; i < (int)ducks.size(); i++) {
-        std::string color;
-        if (i % 2 == 0) {
-            color = "white_duck";
-        } else {
-            color = "orange_duck";
-        }
         if (ducks[i].looking == 0) {
-            renderer.Copy(*resourceManager.getTexture(color), frameDucks[i],
+            renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
+                          frameDucks[i],
                           SDL2pp::Rect(ducks[i].position.x, ducks[i].position.y, 62, 62), 0.0,
                           SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
         } else {
-            renderer.Copy(*resourceManager.getTexture(color), frameDucks[i],
+            renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
+                          frameDucks[i],
                           SDL2pp::Rect(ducks[i].position.x, ducks[i].position.y, 62, 62));
         }
     }

@@ -43,7 +43,7 @@ GameClient::GameClient(const int window_width, const int window_height,
         messagesForServer(),
         graphic_queue(GRAPHIC_QUEUE_SIZE),
         ducks({Duck(), Duck()}),
-        animationHelper(ducks),
+        animationHelper(ducks, resourceManager),
         screenRenderer(renderer, resourceManager, animationHelper),
         keyboardState(std::make_unique<const uint8_t*>(SDL_GetKeyboardState(nullptr))) {}
 
@@ -202,9 +202,6 @@ void GameClient::mainLoop(const int it, bool& quit) {
     while (SDL_PollEvent(&event)) {
         processEvent(event, quit);
     }
-
-    // Todo esto debería mínimo en una función aparte, muy probablemente en una clase aparte que se
-    // encargue del renderizado
 
     screenRenderer.updateScreen(ducks, it);
 }
