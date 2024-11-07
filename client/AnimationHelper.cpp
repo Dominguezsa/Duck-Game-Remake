@@ -36,11 +36,5 @@ std::vector<SDL2pp::Rect> AnimationHelper::get_animation_frames(int it) {
                                                                 duck.current_frame);
                    });
 
-    // for (auto& duck: ducks_animation_data) {
-    //     frames.push_back(
-    //             resourceManager.getAnimationFrame(duck.current_animation, duck.current_frame));
-    // }
-
-
     return frames;
 }

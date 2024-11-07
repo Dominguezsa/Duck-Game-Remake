@@ -108,6 +108,7 @@ void Duck::jump(bool activar) {
     // if true, spacebar down; if false, spacebar up
     if (activar && is_jumping) {
         is_gliding = true;
+        vertical_velocity = 0.0f;
         return;
     }
     if (activar) {

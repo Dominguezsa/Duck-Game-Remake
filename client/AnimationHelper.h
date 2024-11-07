@@ -12,12 +12,6 @@
 
 class AnimationHelper {
 private:
-    // Esto debería ser un vector de patos, y probablemente tenga un método que sea update
-    // animations o algo así que recorra el vector y actualice las animaciones, y los datos de esas
-    // animaciones deberían estar en un map asociado a la id del pato específico y queseyo, después
-    // ver
-    // Debería tener alguna estructura que tenga todos los datos de la animación de cada pato,
-    // Tipo un struct animationData
     // cppcheck-suppress unusedStructMember
     std::vector<DuckGraphicData> ducks_animation_data;
     // cppcheck-suppress unusedStructMember

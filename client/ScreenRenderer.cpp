@@ -8,15 +8,12 @@ ScreenRenderer::ScreenRenderer(SDL2pp::Renderer& renderer, ResourceManager& reso
         renderer(renderer), resourceManager(resourceManager), animationHelper(animHelp) {}
 
 void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
-    // Esto es código repetido pero un toque más maquillado, osea es pasable pero no
 
     std::vector<SDL2pp::Rect> frameDucks = animationHelper.get_animation_frames(it);
 
 
     // Now lets render the ducks, taking into account the direction they are facing
     for (int i = 0; i < (int)ducks.size(); i++) {
-        std::cout << "Color for this duck id: " << +ducks[i].duck_id
-                  << " is: " << colors_per_id[ducks[i].duck_id] << std::endl;
         if (ducks[i].looking == 0) {
             renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
                           frameDucks[i],
