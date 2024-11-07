@@ -36,7 +36,7 @@ void DuckGraphicData::update_current_animation() {
     // std::cout << "The duck is jumping: " << my_duck.is_jumping << std::endl;
     if (my_duck.is_jumping) {
         current_animation = "duck_jumping";
-        // current_arm_animation = "duck_jumping_arms";
+        current_arm_animation = "duck_jumping_arms";
     } else {
         current_animation = "duck_running";
         current_arm_animation = "duck_running_arms";

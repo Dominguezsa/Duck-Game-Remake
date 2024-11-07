@@ -19,8 +19,11 @@
 
 #define DUCK_RUNNING_ARMS_X 1
 #define DUCK_RUNNING_ARMS_Y 518
-#define DUCK_RUNNING_WIDTH 16
-#define DUCK_RUNNING_HEIGHT 16
+#define DUCK_ARMS_WIDTH 16
+#define DUCK_ARMS_HEIGHT 16
+
+#define DUCK_JUMPING_ARMS_X 1
+#define DUCK_JUMPING_ARMS_Y 534
 
 ResourceManager::ResourceManager(SDL2pp::Renderer& renderer): renderer(renderer) {}
 
@@ -88,9 +91,9 @@ void ResourceManager::loadAnimationFrames() {
 
     // This is for the running arms animation
     for (int i = 0; i < DUCK_RUNNING_ARMS_FRAMES; i++) {
-        duckFrames.emplace_back(SDL2pp::Rect(DUCK_RUNNING_ARMS_X + i * DUCK_RUNNING_WIDTH,
-                                             DUCK_RUNNING_ARMS_Y, DUCK_RUNNING_WIDTH,
-                                             DUCK_RUNNING_HEIGHT));
+        duckFrames.emplace_back(SDL2pp::Rect(DUCK_RUNNING_ARMS_X + i * DUCK_ARMS_WIDTH,
+                                             DUCK_RUNNING_ARMS_Y, DUCK_ARMS_WIDTH,
+                                             DUCK_ARMS_HEIGHT));
     }
 
     animationFrames.emplace("duck_running_arms", duckFrames);
@@ -104,6 +107,17 @@ void ResourceManager::loadAnimationFrames() {
     }
 
     animationFrames.emplace("duck_jumping", duckFrames);
+
+    duckFrames.clear();
+
+    // This is for the running arms animation
+    for (int i = 0; i < DUCK_RUNNING_ARMS_FRAMES; i++) {
+        duckFrames.emplace_back(SDL2pp::Rect(DUCK_JUMPING_ARMS_X + i * DUCK_ARMS_WIDTH,
+                                             DUCK_JUMPING_ARMS_Y, DUCK_ARMS_WIDTH,
+                                             DUCK_ARMS_HEIGHT));
+    }
+
+    animationFrames.emplace("duck_jumping_arms", duckFrames);
 
 
     std::cout << "All animation frames loaded correctly\n";
