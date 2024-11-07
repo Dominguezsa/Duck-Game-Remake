@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <map>
+#include <utility>
 #include <vector>
 
 #include "../common/duck.h"
@@ -30,7 +31,8 @@ public:
     explicit AnimationHelper(std::vector<Duck>& ducks, ResourceManager& resourceManager);
     void set_run_anim_start(int it);
     void update_animation_frame(int it);
-    std::vector<SDL2pp::Rect> get_animation_frames(int it);
+    std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> get_animation_frames(int it);
+    // std::vector<SDL2pp::Rect> get_animation_arms(int it);
     ~AnimationHelper() = default;
 };
 

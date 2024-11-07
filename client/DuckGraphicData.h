@@ -18,6 +18,8 @@ public:
     int current_frame;
     // cppcheck-suppress unusedStructMember
     int animation_start;
+    // cppcheck-suppress unusedStructMember
+    std::string current_arm_animation;
 
 
     explicit DuckGraphicData(Duck& my_duck);

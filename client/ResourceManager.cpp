@@ -12,9 +12,15 @@
 
 #define DUCK_RUNNING_FRAMES 6
 #define DUCK_JUMPING_FRAMES 6
+#define DUCK_RUNNING_ARMS_FRAMES 6
 
 #define DUCK_JUMPING_ANIM_X 1
 #define DUCK_JUMPING_ANIM_Y 39
+
+#define DUCK_RUNNING_ARMS_X 1
+#define DUCK_RUNNING_ARMS_Y 518
+#define DUCK_RUNNING_WIDTH 16
+#define DUCK_RUNNING_HEIGHT 16
 
 ResourceManager::ResourceManager(SDL2pp::Renderer& renderer): renderer(renderer) {}
 
@@ -77,6 +83,17 @@ void ResourceManager::loadAnimationFrames() {
     }
 
     animationFrames.emplace("duck_running", duckFrames);
+
+    duckFrames.clear();
+
+    // This is for the running arms animation
+    for (int i = 0; i < DUCK_RUNNING_ARMS_FRAMES; i++) {
+        duckFrames.emplace_back(SDL2pp::Rect(DUCK_RUNNING_ARMS_X + i * DUCK_RUNNING_WIDTH,
+                                             DUCK_RUNNING_ARMS_Y, DUCK_RUNNING_WIDTH,
+                                             DUCK_RUNNING_HEIGHT));
+    }
+
+    animationFrames.emplace("duck_running_arms", duckFrames);
 
     duckFrames.clear();
 

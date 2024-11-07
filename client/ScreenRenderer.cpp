@@ -1,7 +1,15 @@
 #include "ScreenRenderer.h"
 
 #include <string>
+#include <utility>
 #include <vector>
+
+#define DUCK_WIDTH 32
+#define DUCK_HEIGTH 32
+#define DUCK_SCALE 3
+
+#define DUCK_ARM_WIDTH 16
+#define DUCK_ARM_HEIGTH 16
 
 ScreenRenderer::ScreenRenderer(SDL2pp::Renderer& renderer, ResourceManager& resourceManager,
                                AnimationHelper& animHelp):
@@ -10,22 +18,50 @@ ScreenRenderer::ScreenRenderer(SDL2pp::Renderer& renderer, ResourceManager& reso
 void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
     // Esto es código repetido pero un toque más maquillado, osea es pasable pero no
 
-    std::vector<SDL2pp::Rect> frameDucks = animationHelper.get_animation_frames(it);
+    std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> frameDucks =
+            animationHelper.get_animation_frames(it);
+    // std::vector<SDL2pp::Rect> frameDucksArms = animationHelper.get_animation_frames(it);
 
+    int arm_position_x;
+    int arm_position_y;
 
     // Now lets render the ducks, taking into account the direction they are facing
     for (int i = 0; i < (int)ducks.size(); i++) {
-        std::cout << "Color for this duck id: " << +ducks[i].duck_id
-                  << " is: " << colors_per_id[ducks[i].duck_id] << std::endl;
+        // std::cout << "Color for this duck id: " << +ducks[i].duck_id
+        //           << " is: " << colors_per_id[ducks[i].duck_id] << std::endl;
+
+
         if (ducks[i].looking == 0) {
+
+            arm_position_x = ducks[i].position.x + ((DUCK_WIDTH * DUCK_SCALE) / DUCK_SCALE) / 0.9;
+            arm_position_y = ducks[i].position.y + ((DUCK_HEIGTH * DUCK_SCALE) / DUCK_SCALE);
+
             renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
-                          frameDucks[i],
-                          SDL2pp::Rect(ducks[i].position.x, ducks[i].position.y, 62, 62), 0.0,
-                          SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+                          frameDucks[i].first,
+                          SDL2pp::Rect(ducks[i].position.x, ducks[i].position.y,
+                                       DUCK_WIDTH * DUCK_SCALE, DUCK_HEIGTH * DUCK_SCALE),
+                          0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+            // drawing the arms
+            renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
+                          frameDucks[i].second,
+                          SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
+                                       DUCK_ARM_HEIGTH * DUCK_SCALE),
+                          0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+
         } else {
+
+            arm_position_x =
+                    ducks[i].position.x + ((DUCK_ARM_WIDTH * DUCK_SCALE) / DUCK_SCALE) / 1.8;
+            arm_position_y = ducks[i].position.y + ((DUCK_HEIGTH * DUCK_SCALE) / DUCK_SCALE);
+
             renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
-                          frameDucks[i],
-                          SDL2pp::Rect(ducks[i].position.x, ducks[i].position.y, 62, 62));
+                          frameDucks[i].first,
+                          SDL2pp::Rect(ducks[i].position.x, ducks[i].position.y,
+                                       DUCK_WIDTH * DUCK_SCALE, DUCK_HEIGTH * DUCK_SCALE));
+            renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
+                          frameDucks[i].second,
+                          SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
+                                       DUCK_ARM_HEIGTH * DUCK_SCALE));
         }
     }
 }

@@ -6,7 +6,8 @@ DuckGraphicData::DuckGraphicData(Duck& my_duck):
         my_duck(my_duck),
         current_animation("duck_running"),
         current_frame(-1),
-        animation_start(-1) {}
+        animation_start(-1),
+        current_arm_animation("duck_running_arms") {}
 
 
 void DuckGraphicData::update_current_frame(int it) {
@@ -35,8 +36,10 @@ void DuckGraphicData::update_current_animation() {
     // std::cout << "The duck is jumping: " << my_duck.is_jumping << std::endl;
     if (my_duck.is_jumping) {
         current_animation = "duck_jumping";
+        // current_arm_animation = "duck_jumping_arms";
     } else {
         current_animation = "duck_running";
+        current_arm_animation = "duck_running_arms";
     }
     // std::cout << "The current animation is: " << current_animation << std::endl;
 }
