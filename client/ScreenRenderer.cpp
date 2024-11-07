@@ -6,7 +6,7 @@
 
 #define DUCK_WIDTH 32
 #define DUCK_HEIGTH 32
-#define DUCK_SCALE 3
+#define DUCK_SCALE 2
 
 #define DUCK_ARM_WIDTH 16
 #define DUCK_ARM_HEIGTH 16
@@ -32,9 +32,8 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
 
 
         if (ducks[i].looking == 0) {
-
-            arm_position_x = ducks[i].position.x + ((DUCK_WIDTH * DUCK_SCALE) / DUCK_SCALE) / 0.9;
-            arm_position_y = ducks[i].position.y + ((DUCK_HEIGTH * DUCK_SCALE) / DUCK_SCALE);
+            arm_position_x = ducks[i].position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9;
+            arm_position_y = ducks[i].position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2;
 
             renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
                           frameDucks[i].first,
@@ -50,9 +49,8 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
 
         } else {
 
-            arm_position_x =
-                    ducks[i].position.x + ((DUCK_ARM_WIDTH * DUCK_SCALE) / DUCK_SCALE) / 1.8;
-            arm_position_y = ducks[i].position.y + ((DUCK_HEIGTH * DUCK_SCALE) / DUCK_SCALE);
+            arm_position_x = ducks[i].position.x + (DUCK_ARM_WIDTH * DUCK_SCALE) / 3.5;
+            arm_position_y = ducks[i].position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2;
 
             renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
                           frameDucks[i].first,
