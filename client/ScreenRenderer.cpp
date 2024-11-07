@@ -6,7 +6,7 @@
 
 #define DUCK_WIDTH 32
 #define DUCK_HEIGTH 32
-#define DUCK_SCALE 2
+#define DUCK_SCALE 3
 
 #define DUCK_ARM_WIDTH 16
 #define DUCK_ARM_HEIGTH 16

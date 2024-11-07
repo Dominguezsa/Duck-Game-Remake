@@ -4,6 +4,7 @@
 #include <memory>
 #include <thread>
 
+#include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_keycode.h>
@@ -45,7 +46,8 @@ GameClient::GameClient(const int window_width, const int window_height,
         ducks({Duck(), Duck()}),
         animationHelper(ducks, resourceManager),
         screenRenderer(renderer, resourceManager, animationHelper),
-        keyboardState(std::make_unique<const uint8_t*>(SDL_GetKeyboardState(nullptr))) {}
+        keyboardState(std::make_unique<const uint8_t*>(SDL_GetKeyboardState(nullptr))),
+        current_event() {}
 
 // Moved the constantRateLoop implementation here because making it a separate file was causing a
 // lot of problems, but yeah its repeating the same code in both client and server
@@ -200,6 +202,9 @@ void GameClient::mainLoop(const int it, bool& quit) {
     // Now processing all of the events on this frame
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_KEYDOWN && event.key.repeat) {
+            continue;
+        }
         processEvent(event, quit);
     }
 
