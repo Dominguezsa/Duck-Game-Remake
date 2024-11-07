@@ -38,3 +38,80 @@ protocolo del cliente al server:
 0x06: saltar_key_up
 0x07: disparar_key_down
 0x08: disparar_key_up
+
+------------------------------------------------
+
+# Protocolos para los mensajes del lobby:
+
+Los siguientes mensajes son descriptos en orden.
+
+- Si se quiere crear una partida:
+
+(1) client -> server
+
+   'C'    len_player_name        player_name
+(1 byte)     (2 bytes)     (len_player_name bytes)
+
+El caracter 'C' haciendo referencia a la acción CREATE.
+
+
+(2) server -> client
+
+cant_de_mapas_existentes  len_map_1_name  map1_name  
+       (2 bytes)            (2 bytes)    (n1 bytes)
+
+... len_map_m_name     map_m_name
+       (2 bytes)      (n_m bytes)
+
+Los mapas de los mensajes pueden ser o bien los que existen por default, o bien los que fueron creados por otras personas. El cliente tras recibir la info de todos los que existen va a elegir en cual crear su partida (indicandolo como en el proximo tipo de msg)
+
+
+(3) client -> server
+
+  'C'     number_of_players  len_match_name  match_name
+(1 byte)      (1 byte)         (2 bytes)     (n bytes)
+
+
+(4) server -> client
+
+byte_de_confirmacion (1 byte)
+
+0x01 si la partida de creó con éxito.
+
+0x00 si no se creó la partida. Un motivo podria ser por ej que se le envió un nombre que coincide con el de otra partida existente.
+Si recibimos 0x00 deberiamos volver a enviar un msg de tipo (3) es podria estar en un while, (while not partida_creada)
+
+
+- Para unirse a una partida:
+
+(1) client -> server
+
+Similar al msg (1) de CREATE, pero en lugar de 'C' enviar una 'J', que hace referencia a la accion JOIN.
+
+
+(2) server -> client
+
+cant_de_partidas_disponibles  len_match1_name
+         (n bytes)               (2 bytes)
+
+match1_name ... len_match_m_name  match_m_name 
+(n1 bytes)         (2 bytes)       (n_m bytes)
+
+Las partidas disponibles son todas aquellas activas en ese momento y que admitan recibir jugadores.
+
+
+(3) client -> server
+
+len_selected_match_name  selected_match_name
+     (2 bytes)                (n bytes)
+
+
+(4) server -> client
+
+byte_de_confirmacion (1 byte)
+
+0x01 si nos unimos con éxito.
+
+0x00 si no. Un motivo podria ser por ej que durante el tiempo que se tardo en intentar unirnos ya se unio alguien mas y la partida indicada antes ya esta llena.
+
+Si recibimos 0x00 deberiamos volver a enviar un msg de tipo (2) con las partidas disponibles al momento actual. Esta logica tambien posiblemente vaya a estar en un while.
