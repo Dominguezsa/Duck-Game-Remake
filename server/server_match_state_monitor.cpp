@@ -36,16 +36,21 @@ void MatchStateMonitor::stop_match() {
     accepting_players = false;
 }
 
-void MatchStateMonitor::delete_player(uint8_t id) {
+bool MatchStateMonitor::remove_player_if_present(uint8_t id) {
     std::lock_guard<std::mutex> lock(data_mtx);
     
-    requester_queues.erase(id);
+    auto it = requester_queues.find(id);
+    if (it == requester_queues.end()) {
+        return false;
+    }
+    requester_queues.erase(it);
     player_count--;
-    // If who creates the match leaves, and there are no players
-    // left, the match is finished.
+    
+    // If last player leaves, match is finished.
     if (status != MatchStatus::Finished && player_count == 0) {
         status = MatchStatus::Finished;
     }
+    return true;
 }
 
 void MatchStateMonitor::push_to_all(std::shared_ptr<std::vector<DuckState>> duck_snapshot) {

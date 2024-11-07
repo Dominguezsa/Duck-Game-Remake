@@ -20,7 +20,7 @@ private:
 
 public:
     explicit Match(uint8_t limit);
-    void delete_player(uint8_t id);
+    bool remove_player_if_in_match(uint8_t id);
     void add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, uint8_t id);
     Queue<GameloopMessage>* get_gameloop_queue();
     bool can_accept_players();

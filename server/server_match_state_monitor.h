@@ -30,7 +30,7 @@ public:
     void add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, uint8_t id);
 
     // Pos: Removes the player from the queue and decrements the player count.
-    void delete_player(uint8_t id);
+    bool remove_player_if_present(uint8_t id);
 
     // Pos: Broadcasts the current state of the duck to all players.
     void push_to_all(std::shared_ptr<std::vector<DuckState>> duck_snapshot);
