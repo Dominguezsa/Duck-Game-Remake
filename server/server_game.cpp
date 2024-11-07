@@ -170,6 +170,7 @@ void Game::updateGameState() {
                     duck->vertical_velocity = 0;
                     duck->in_air = false;
                     duck->is_jumping = false;
+                    duck->is_gliding = false;
                 } else if (duck->vertical_velocity < 0 &&
                            previous_y >= platform.y + platform.height) {
                     // Hitting platform from below
