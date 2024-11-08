@@ -1,36 +1,39 @@
 #ifndef SERVER_MATCHES_MONITOR
 #define SERVER_MATCHES_MONITOR
 
+#include <memory>
 #include <mutex>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
+#include <vector>
 
 #include "../common/common_queue.h"
+
 #include "server_match.h"
 
 class MatchesMonitor {
-    private:
-        std::unordered_map<std::string, std::shared_ptr<Match>> matches;
-        std::mutex matches_mtx;
+private:
+    std::unordered_map<std::string, std::shared_ptr<Match>> matches;
+    std::mutex matches_mtx;
 
-    public:
-        MatchesMonitor();
+public:
+    MatchesMonitor();
 
-        bool create_match(std::string match_name, uint8_t player_limit, uint8_t player_id,
-                          Queue<std::shared_ptr<std::vector<DuckState>>>* q);
-        
-        bool join_match(std::string match_name, uint8_t player_id,
-                        Queue<std::shared_ptr<std::vector<DuckState>>>* q);
+    bool create_match(std::string match_name, uint8_t player_limit, uint8_t player_id,
+                      Queue<std::shared_ptr<std::vector<DuckState>>>* q);
 
-        Queue<GameloopMessage>* get_match_queue(std::string match_name);
+    bool join_match(std::string match_name, uint8_t player_id,
+                    Queue<std::shared_ptr<std::vector<DuckState>>>* q);
 
-        std::vector<std::string> get_available_match_names();
+    Queue<GameloopMessage>* get_match_queue(std::string match_name);
 
-        void remove_finished_matches();
+    std::vector<std::string> get_available_match_names();
 
-        void remove_all_matches();
+    void remove_finished_matches();
 
-        void disconnect_player(uint8_t player_id);
+    void remove_all_matches();
+
+    void disconnect_player(uint8_t player_id);
 };
 
 #endif

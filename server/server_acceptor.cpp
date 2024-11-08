@@ -1,8 +1,7 @@
 #include "server_acceptor.h"
 
 AcceptorThread::AcceptorThread(const std::string& servname):
-                acceptor_skt(servname.c_str()), clients(),
-                matches(), connection_count(0) {}
+        acceptor_skt(servname.c_str()), clients(), matches(), connection_count(0) {}
 
 void AcceptorThread::stop() {
     _keep_running = false;
@@ -21,7 +20,7 @@ void AcceptorThread::accept_connection() {
     uint8_t id = connection_count;
     ClientSession* client = new ClientSession(std::move(peer), id, this->matches);
     this->clients.push_back(client);
-    
+
     client->start();
     client->run();
     connection_count++;

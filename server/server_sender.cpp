@@ -5,9 +5,7 @@
 
 SenderThread::SenderThread(ServerProtocol& p): requester_queue(SENDER_QUEUE_SIZE), protocol(p) {}
 
-void SenderThread::stop() {
-    _is_alive = false;
-}
+void SenderThread::stop() { _is_alive = false; }
 
 void SenderThread::join() {
     requester_queue.close();

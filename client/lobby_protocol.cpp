@@ -1,41 +1,44 @@
 #include "lobby_protocol.h"
-#include <memory>
-#include <cstdint>
 
-#define MAX_LEN 256 
-#include <netinet/in.h>
+#include <cstdint>
+#include <memory>
+
+#define MAX_LEN 256
 #include <iostream>
+
+#include <netinet/in.h>
+
 #include "../common/common_liberror.h"
 
-LobbyProtocol::LobbyProtocol(Socket& a_skt) : was_closed(false), skt(a_skt) {}
+LobbyProtocol::LobbyProtocol(Socket& a_skt): Protocol(a_skt) {}
 
 uint16_t LobbyProtocol::receive_header() {
     uint16_t header = 0;
-    this->skt.recvall(&header, sizeof(uint16_t), &was_closed);
+    recv_uint_16(header);
     header = ntohs(header);
-    this->skt_was_closed();
     return header;
 }
 
 GameMatchInfo LobbyProtocol::receive_game() {
     try {
+        bool was_closed = false;
         GameMatchInfo single_game_info;
         skt.recvall(&single_game_info, sizeof(single_game_info), &was_closed);
-        this->skt_was_closed();
         single_game_info.str_len = ntohs(single_game_info.str_len);
         single_game_info.player_count = ntohs(single_game_info.player_count);
         return single_game_info;
     } catch (const LibError& skt_err) {
-        std::string errorMessage = 
-            "Some error occurred while trying to receive a message from the server.";
+        std::string errorMessage =
+                "Some error occurred while trying to receive a message from the server.";
         throw std::runtime_error(errorMessage);
     }
 }
 
 uint8_t LobbyProtocol::send_selected_game(const std::vector<char>& gamenameToSend,
-                                         char user_character,
-                                         const std::vector<char>& usernameToSend) {
+                                          char user_character,
+                                          const std::vector<char>& usernameToSend) {
     try {
+        bool was_closed = false;
         uint8_t game_option = NEW_GAME;
         skt.sendall(&game_option, sizeof(uint8_t), &was_closed);
         PlayerInfo player_info;
@@ -66,7 +69,6 @@ uint8_t LobbyProtocol::send_selected_game(const std::vector<char>& gamenameToSen
         }
 
         skt.sendall(&player_info, sizeof(player_info), &was_closed);
-        this->skt_was_closed();
         return this->receive_player_id();
     } catch (const LibError& skt_err) {
         std::cout << "Some error occurred while trying to send a message to the server."
@@ -77,9 +79,9 @@ uint8_t LobbyProtocol::send_selected_game(const std::vector<char>& gamenameToSen
 
 void LobbyProtocol::send_refresh() {
     try {
+        bool was_closed = false;
         uint8_t refresh = REFRESH;
         skt.sendall(&refresh, sizeof(uint8_t), &was_closed);
-        this->skt_was_closed();
     } catch (const LibError& skt_err) {
         std::cout << "Some error occurred while trying to send a message to the server."
                   << std::endl;
@@ -89,20 +91,12 @@ void LobbyProtocol::send_refresh() {
 uint8_t LobbyProtocol::receive_player_id() {
     try {
         uint8_t player_id = 0;
+        bool was_closed = false;
         skt.recvall(&player_id, sizeof(uint8_t), &was_closed);
-        this->skt_was_closed();
         return player_id;
     } catch (const LibError& skt_err) {
         std::cout << "Some error occurred while trying to receive a message from the server."
                   << std::endl;
         return ERROR;
-    }
-}
-
-void LobbyProtocol::skt_was_closed() {
-    if (was_closed) {
-        std::string errorMessage = 
-            "Some error occurred while trying to receive a message from the server.";
-        throw std::runtime_error(errorMessage);
     }
 }

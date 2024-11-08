@@ -107,6 +107,22 @@ void GameClient::run() {
     std::cout << "CLIENT: Closing the messages for server queue\n";
     messagesForServer.close();
 }
+#include "lobby.h"
+void run_lobby() {
+    // Lobby lobby(socket);
+    // lobby.run();
+}
+/*
+    std::cout << "What is your name?\n";
+    std::string username;
+    std::cin >> username;
+    std::cout << "Do you wanna create ('c') or join a match ('j')?\n";
+    char option;
+    std::cin >> option;
+    std::cout << "Enter the id\n";
+    std::string id;
+    std::cin >> id;*/
+
 
 void GameClient::updateDuckStates() {
 

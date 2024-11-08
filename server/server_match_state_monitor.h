@@ -1,10 +1,10 @@
 #ifndef MATCH_QUEUE_MONITOR_H
 #define MATCH_QUEUE_MONITOR_H
 
+#include <atomic>
 #include <cstdint>
 #include <memory>
 #include <mutex>
-#include <atomic>
 #include <unordered_map>
 #include <vector>
 
@@ -20,7 +20,7 @@ private:
     std::atomic<bool> accepting_players;
     std::atomic<uint8_t> player_count;
     std::atomic<MatchStatus> status;
-    
+
 public:
     explicit MatchStateMonitor(uint8_t limit);
 

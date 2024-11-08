@@ -57,6 +57,7 @@ public:
                const std::string& port);
     ~GameClient();
     void run();
+    void run_lobby();
     void updateDuckStates();
     void processEvent(const SDL_Event& event, bool& quit);
     void mainLoop(const int it, bool& quit);

@@ -1,10 +1,12 @@
 #ifndef LOBBY_PROTOCOL_H
 #define LOBBY_PROTOCOL_H
 
-#include "../common/common_socket.h"
-#include <vector>
 #include <cstdint>
 #include <string>
+#include <vector>
+
+#include "../common/common_protocol.h"
+#include "../common/common_socket.h"
 #include "../common/types/duck_state.h"
 
 // Protocol commands
@@ -16,30 +18,36 @@
 
 // Matching server-side structs
 struct GameMatchInfo {
+    // cppcheck-suppress unusedStructMember
     uint16_t str_len;
+    // cppcheck-suppress unusedStructMember
     uint16_t player_count;
+    // cppcheck-suppress unusedStructMember
     char game_name[256];  // MAX_LEN needs to match server
 };
 
 struct PlayerInfo {
+    // cppcheck-suppress unusedStructMember
     uint16_t str_len;
+    // cppcheck-suppress unusedStructMember
     char character_code;
-    char player_name[256]; 
-    char game_name[256];   
+    // cppcheck-suppress unusedStructMember
+    char player_name[256];
+    // cppcheck-suppress unusedStructMember
+    char game_name[256];
 };
 
-class LobbyProtocol {
-private:
-    bool was_closed;
-    Socket& skt;
-
-    void skt_was_closed();
+class LobbyProtocol: public Protocol {
 
 public:
-    explicit LobbyProtocol(Socket& a_skt);
+    explicit LobbyProtocol(Socket& skt);
 
     // Receives number of available games
     uint16_t receive_header();
+
+    void read_msg(void* msg) override;
+
+    void send_msg(void* msg) override;
 
     // Receives info about a single game
     GameMatchInfo receive_game();
@@ -48,9 +56,8 @@ public:
     void send_refresh();
 
     // Sends selected game info and returns player ID
-    uint8_t send_selected_game(const std::vector<char>& gamenameToSend,
-                             char user_character,
-                             const std::vector<char>& usernameToSend);
+    uint8_t send_selected_game(const std::vector<char>& gamenameToSend, char user_character,
+                               const std::vector<char>& usernameToSend);
 
     // Receives player ID from server
     uint8_t receive_player_id();
@@ -59,4 +66,4 @@ public:
     DuckState wait_game_start(bool& game_started);
 };
 
-#endif // LOBBY_PROTOCOL_H
+#endif  // LOBBY_PROTOCOL_H

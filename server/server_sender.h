@@ -28,6 +28,7 @@ public:
     void join() override;
     void stop() override;
     void run() override;
+
 private:
     void clear_queue();
 };

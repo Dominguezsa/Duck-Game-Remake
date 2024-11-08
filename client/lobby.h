@@ -1,10 +1,12 @@
 #ifndef LOBBY_H
 #define LOBBY_H
 
-#include "lobby_protocol.h"
-#include "../common/common_socket.h"
 #include <string>
 #include <vector>
+
+#include "../common/common_socket.h"
+
+#include "lobby_protocol.h"
 
 class Lobby {
 private:
@@ -16,7 +18,7 @@ private:
 
 public:
     // Constructor that initializes the socket connection with server
-    Lobby(const char* hostname, const char* port);
+    explicit Lobby(Socket s);
 
     /*
      * Returns all available games from the server
@@ -34,9 +36,8 @@ public:
      * - user_character: selected duck color/character
      * - username: player's username
      */
-    void send_selected_game(const std::string& gamename, 
-                          char user_character,
-                          const std::string& username);
+    void send_selected_game(const std::string& gamename, char user_character,
+                            const std::string& username);
 
     /*
      * Returns this player's assigned ID
@@ -68,6 +69,8 @@ public:
      * Destructor - closes socket if ownership hasn't been transferred
      */
     ~Lobby();
+
+    void run();
 };
 
 #endif  // LOBBY_H
