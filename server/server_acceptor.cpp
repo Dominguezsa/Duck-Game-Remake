@@ -1,11 +1,8 @@
 #include "server_acceptor.h"
 
 AcceptorThread::AcceptorThread(const std::string& servname):
-        acceptor_skt(servname.c_str()), clients(), matches(), connection_count(0) {
-    // Esta partida iniciada es solo a modo de prueba, sera removida en
-    // un futuro commit. (Esto ademas, usa memoria dinamica!)
-    this->matches.push_back(new Match(2));
-}
+                acceptor_skt(servname.c_str()), clients(),
+                matches(), connection_count(0) {}
 
 void AcceptorThread::stop() {
     _keep_running = false;
@@ -13,78 +10,47 @@ void AcceptorThread::stop() {
     this->acceptor_skt.shutdown(2);
     this->acceptor_skt.close();
 
-    for (auto& client: this->clients) {
-        client->end_communication();
-    }
+    free_all_resources();
 }
 
 void AcceptorThread::accept_connection() {
-    // A modo de prueba.
-    if (this->matches.empty()) {
-        return;
-    }
-    Match* match = matches.front();
+    // Debug message
+    std::cout << "Accepting connection\n";
 
-    if (match->can_accept_players()) {
-        std::cout << "Accepting connection\n";
-        Socket peer = this->acceptor_skt.accept();
-        uint8_t id = connection_count;
-        connection_count++;
-
-        // Esto tambien esta a modo de prueba, primero deberiamos conectar
-        // al usuario al server, y mas tarde este nos indicaria a que partida
-        // de las n activas (n = 1 por ahora) se quiere unir.
-        Queue<GameloopMessage>* q = match->get_gameloop_queue();
-        UserClient* u = new UserClient(*q, std::move(peer), id);
-        this->clients.push_back(u);
-        match->add_player(u->get_queue(), id);
-    }
+    Socket peer = this->acceptor_skt.accept();
+    uint8_t id = connection_count;
+    ClientSession* client = new ClientSession(std::move(peer), id, this->matches);
+    this->clients.push_back(client);
+    
+    client->start();
+    client->run();
+    connection_count++;
 }
 
 void AcceptorThread::check_unused_resources() {
     for (auto it = clients.begin(); it != clients.end();) {
-        UserClient* client = *it;
+        ClientSession* client = *it;
         if (!client->is_alive()) {
             client->end_communication();
-
-            // ------ Hardcodeado ------
-
-            // Lo correcto seria identificar a cual partida
-            // pertenece el cliente y eliminarlo de ahi.
-            Match* match = matches.front();
-            match->delete_player(client->get_id());
-            if (match->is_finished()) {
-                matches.pop_front();
-                delete match;
-            }
-            // -------------------------
-
             delete (*it);
             it = clients.erase(it);
         } else {
             it++;
         }
     }
+    matches.remove_finished_matches();
 }
 
-void AcceptorThread::free_client_resources() {
+void AcceptorThread::free_all_resources() {
     if (this->clients.empty())
         return;
 
-    for (UserClient* user: this->clients) {
-        user->end_communication();
-        // ------ Hardcodeado ------
-
-        // Lo correcto seria identificar a cual partida
-        // pertenece el cliente y eliminarlo de ahi.
-        Match* match = matches.front();
-        match->delete_player(user->get_id());
-        delete (user);
+    for (ClientSession* client: this->clients) {
+        client->end_communication();
+        delete (client);
     }
     this->clients.clear();
-    matches.front()->stop_game();
-    delete matches.front();
-    matches.clear();
+    matches.remove_all_matches();
 }
 
 void AcceptorThread::run() {
@@ -97,7 +63,7 @@ void AcceptorThread::run() {
         if (this->_is_alive) {
             syslog(LOG_ERR, "%s", "Unexpected exception: \n");
         }
-        free_client_resources();
+        free_all_resources();
         this->_is_alive = false;
     }
 }

@@ -54,3 +54,24 @@ void MatchesMonitor::disconnect_player(uint8_t player_id) {
         }
     }
 }
+
+void MatchesMonitor::remove_finished_matches() {
+    std::lock_guard<std::mutex> lock(matches_mtx);
+    for (auto it = matches.begin(); it != matches.end();) {
+        Match *match = it->second.get();
+        if (match->is_finished()) {
+            match->stop_game();
+            matches.erase(it);
+        } else {
+            it++;
+        }
+    }
+}
+
+void MatchesMonitor::remove_all_matches() {
+    std::lock_guard<std::mutex> lock(matches_mtx);
+    for (auto& match : matches) {
+        match.second->stop_game();
+    }
+    matches.clear();
+}

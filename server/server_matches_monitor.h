@@ -26,6 +26,10 @@ class MatchesMonitor {
 
         std::vector<std::string> get_available_match_names();
 
+        void remove_finished_matches();
+
+        void remove_all_matches();
+
         void disconnect_player(uint8_t player_id);
 };
 
