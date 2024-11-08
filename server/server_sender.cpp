@@ -7,11 +7,29 @@ SenderThread::SenderThread(ServerProtocol& p): requester_queue(SENDER_QUEUE_SIZE
 
 void SenderThread::stop() {
     _is_alive = false;
+}
+
+void SenderThread::join() {
     requester_queue.close();
+    Thread::join();
+}
+
+void SenderThread::restart() {
+    start();
+    clear_queue();
+    run();
 }
 
 Queue<std::shared_ptr<std::vector<DuckState>>>* SenderThread::get_queue() {
     return &this->duck_states_queue;
+}
+
+void SenderThread::clear_queue() {
+    bool is_empty = false;
+    do {
+        std::shared_ptr<std::vector<DuckState>> element;
+        is_empty = !duck_states_queue.try_pop(element);
+    } while (!is_empty);
 }
 
 void SenderThread::run() {
