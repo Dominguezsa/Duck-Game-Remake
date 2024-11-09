@@ -68,13 +68,14 @@ Los mapas de los mensajes pueden ser o bien los que existen por default, o bien 
 
 (3) client -> server
 
-  'C'     number_of_players  len_match_name  match_name
-(1 byte)      (1 byte)         (2 bytes)     (n bytes)
+  'C'     number_of_players  len_match_name  match_name  len_selected_map_name  map_name
+(1 byte)      (1 byte)         (2 bytes)     (n bytes)    (2 bytes)   (len_map_name bytes)
 
 
 (4) server -> client
 
-byte_de_confirmacion (1 byte)
+byte_de_confirmacion  DuckIdentity (struct)
+       (1 byte)         (len_struct bytes)
 
 0x01 si la partida de creó con éxito.
 
