@@ -1,55 +1,86 @@
 #include "lobby.h"
+#include <stdexcept>
 
-#include <cstdint>
-#include <functional>
-#include <utility>
+Lobby::Lobby(Socket s) : 
+    skt(std::move(s)), 
+    protocol(skt), 
+    skt_ownership(true),
+    is_connected(true) {}
 
-#include <sys/socket.h>
-
-Lobby::Lobby(Socket s):
-        skt(std::move(s)), protocol(skt), skt_ownership(true), game_started(false), player_id(0) {}
-
-std::vector<GameMatchInfo> Lobby::get_games() {
-    std::vector<GameMatchInfo> vect;
-    uint16_t number_of_games = protocol.receive_header();
-    for (int i = 0; i < number_of_games; ++i) {
-        GameMatchInfo game = protocol.receive_game();
-        vect.push_back(game);
+bool Lobby::createGame(const std::string& playerName, uint8_t numPlayers, const std::string& matchName) {
+    if (!is_connected) return false;
+    
+    try {
+        // Send create command and player name
+        protocol.sendCreateCommand(playerName);
+        
+        // Get available maps
+        auto maps = protocol.receiveMapList();
+        if (maps.empty()) return false;
+        
+        // Create match
+        return protocol.sendMatchCreation(numPlayers, matchName);
+    } catch (const std::exception& e) {
+        is_connected = false;
+        return false;
     }
-    return vect;
 }
 
-std::vector<GameMatchInfo> Lobby::refresh_games() {
-    protocol.send_refresh();
-    return get_games();
+bool Lobby::joinGame(const std::string& playerName, const std::string& matchName) {
+    if (!is_connected) return false;
+    
+    try {
+        // Send join command and player name
+        protocol.sendJoinCommand(playerName);
+        
+        // Get available matches
+        auto matches = protocol.receiveMatchList();
+        if (matches.empty()) return false;
+        
+        // Select match
+        return protocol.sendMatchSelection(matchName);
+    } catch (const std::exception& e) {
+        is_connected = false;
+        return false;
+    }
 }
 
-void Lobby::send_selected_game(const std::string& gamename, char user_character,
-                               const std::string& username) {
-    std::vector<char> gamename_vect(gamename.begin(), gamename.end());
-    std::vector<char> username_vect(username.begin(), username.end());
-    this->player_id = protocol.send_selected_game(gamename_vect, user_character, username_vect);
+std::vector<std::string> Lobby::getAvailableMaps(const std::string& playerName) {
+    if (!is_connected) return std::vector<std::string>();
+    
+    try {
+        protocol.sendCreateCommand(playerName);
+        return protocol.receiveMapList();
+    } catch (const std::exception& e) {
+        is_connected = false;
+        return std::vector<std::string>();
+    }
 }
 
-uint8_t Lobby::get_player_id() { return this->player_id; }
+std::vector<std::string> Lobby::getAvailableMatches(const std::string& playerName) {
+    if (!is_connected) return std::vector<std::string>();
+    
+    try {
+        protocol.sendJoinCommand(playerName);
+        return protocol.receiveMatchList();
+    } catch (const std::exception& e) {
+        is_connected = false;
+        return std::vector<std::string>();
+    }
+}
 
-DuckState Lobby::wait_game_start() { return protocol.wait_game_start(this->game_started); }
-
-Socket Lobby::transfer_socket() {
-    this->skt_ownership = false;
+Socket Lobby::transferSocket() {
+    skt_ownership = false;
     return std::move(skt);
 }
 
-void Lobby::quit_game() {
-    skt.shutdown(SHUT_RDWR);
-    skt.close();
+void Lobby::quit() {
+    if (skt_ownership) {
+        protocol.end_communication();
+    }
+    is_connected = false;
 }
 
-bool Lobby::did_game_start() const { return this->game_started; }
-
 Lobby::~Lobby() {
-    if (this->skt_ownership) {
-        skt.shutdown(SHUT_RDWR);
-        skt.close();
-    }
+    quit();
 }
