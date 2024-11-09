@@ -6,6 +6,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <list>
 
 #include "../common/common_queue.h"
 
@@ -27,7 +28,7 @@ public:
 
     Queue<GameloopMessage>* get_match_queue(std::string match_name);
 
-    std::vector<std::string> get_available_match_names();
+    std::list<std::string> get_available_match_names();
 
     void remove_finished_matches();
 

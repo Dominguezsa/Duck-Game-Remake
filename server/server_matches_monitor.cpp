@@ -34,9 +34,9 @@ Queue<GameloopMessage>* MatchesMonitor::get_match_queue(std::string match_name) 
     return matches[match_name]->get_gameloop_queue();
 }
 
-std::vector<std::string> MatchesMonitor::get_available_match_names() {
+std::list<std::string> MatchesMonitor::get_available_match_names() {
     std::lock_guard<std::mutex> lock(matches_mtx);
-    std::vector<std::string> available_matches;
+    std::list<std::string> available_matches;
     for (auto& match: matches) {
         if (match.second->can_accept_players()) {
             available_matches.push_back(match.first);

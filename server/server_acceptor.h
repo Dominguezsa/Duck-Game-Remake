@@ -12,7 +12,6 @@
 
 #include "server_client_session.h"
 #include "server_match.h"
-//#include "server_user_client.h"
 
 class AcceptorThread: public Thread {
 private:
