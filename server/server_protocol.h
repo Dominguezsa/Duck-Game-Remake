@@ -25,6 +25,32 @@ public:
     void read_msg(void* msg) override;
 
     void send_msg(void* msg) override;
+
+    // --------- Pre-match messages (lobby) -------
+    
+    // Pos: Sends the names of the existing game maps to the client.
+    void send_game_map_list(std::list<std::string>& map_names);
+
+    /* Pos: Receives necessary information to create a match:
+            
+            - A name of a map (selected by the client)
+            - A match name
+            - The number of players that will participate in the match.
+    */
+    void recv_match_info(std::string& map_name, std::string& match_name,
+                         uint8_t& number_of_players);
+
+    // Pos: Sends true if a client action was successful, false otherwise.
+    void send_confirmation(bool success);
+
+    // Pos: Sends the names of the active matches that the client can join.
+    void send_match_list(std::list<std::string>& match_names);
+
+    void recv_action(char& action);
+
+    void recv_match_name(std::string& match_name);
+
+    void recv_player_name(std::string& player_name);
 };
 
 #endif  // SERVER_PROTOCOLO_H
