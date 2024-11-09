@@ -72,10 +72,13 @@ Los mapas de los mensajes pueden ser o bien los que existen por default, o bien 
 (1 byte)      (1 byte)         (2 bytes)     (n bytes)    (2 bytes)   (len_map_name bytes)
 
 
-(4) server -> client
+(4) server -> client (Dos tipos de mensajes, dependiendo del byte de)
 
-byte_de_confirmacion  DuckIdentity (struct)
-       (1 byte)         (len_struct bytes)
+  0x00
+(1 byte)
+
+  0x01          DuckIdentity (struct)
+(1 byte)         (len_struct bytes)
 
 0x01 si la partida de creó con éxito.
 
@@ -107,9 +110,9 @@ len_selected_match_name  selected_match_name
      (2 bytes)                (n bytes)
 
 
-(4) server -> client
+(4) server -> client (Dos tipos de mensajes dependiendo del byte de confirmacion)
 
-byte_de_confirmacion (1 byte)
+(Idem al mensaje de tipo (4) para crear una partida.)
 
 0x01 si nos unimos con éxito.
 
