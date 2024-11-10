@@ -20,10 +20,23 @@ private:
 public:
     MatchesMonitor();
 
-    bool create_match(std::string match_name, uint8_t player_limit, uint8_t player_id,
+    /* Pos: Returns true if the match was successfully created.
+            If that occurs, the player is added to the match and the created
+            duck information is set to the duck_info struct.
+
+            If the match could not be created, the function returns false.
+    
+    */
+    bool create_match(std::string match_name, uint8_t player_limit, DuckIdentity& duck_info,
                       Queue<std::shared_ptr<std::vector<DuckState>>>* q);
 
-    bool join_match(std::string match_name, uint8_t player_id,
+    /* Pos: Returns true if the player was successfully added to the match.
+            If that occurs, the player is added to the match and the created
+            duck information is set to the duck_info struct.
+
+            If the player could not be added, the function returns false.
+    */
+    bool join_match(std::string match_name, DuckIdentity& duck_info,
                     Queue<std::shared_ptr<std::vector<DuckState>>>* q);
 
     Queue<GameloopMessage>* get_match_queue(std::string match_name);
@@ -34,7 +47,7 @@ public:
 
     void remove_all_matches();
 
-    void disconnect_player(uint8_t player_id);
+    void disconnect_player(const std::string &match_name, const uint8_t &player_id);
 };
 
 #endif

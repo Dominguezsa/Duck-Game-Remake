@@ -2,7 +2,7 @@
 
 MatchesMonitor::MatchesMonitor(): matches(), matches_mtx() {}
 
-bool MatchesMonitor::create_match(std::string match_name, uint8_t player_limit, uint8_t player_id,
+bool MatchesMonitor::create_match(std::string match_name, uint8_t player_limit, DuckIdentity& duck_info,
                                   Queue<std::shared_ptr<std::vector<DuckState>>>* q) {
     std::lock_guard<std::mutex> lock(matches_mtx);
 
@@ -12,11 +12,11 @@ bool MatchesMonitor::create_match(std::string match_name, uint8_t player_limit, 
         return false;
     }
     matches[match_name] = std::make_shared<Match>(player_limit);
-    matches[match_name]->add_player(q, player_id);
+    matches[match_name]->add_player(q, duck_info);
     return true;
 }
 
-bool MatchesMonitor::join_match(std::string match_name, uint8_t player_id,
+bool MatchesMonitor::join_match(std::string match_name, DuckIdentity& duck_info,
                                 Queue<std::shared_ptr<std::vector<DuckState>>>* q) {
     std::lock_guard<std::mutex> lock(matches_mtx);
 
@@ -25,7 +25,7 @@ bool MatchesMonitor::join_match(std::string match_name, uint8_t player_id,
     if (!match_exists || player_limit_reached) {
         return false;
     }
-    matches[match_name]->add_player(q, player_id);
+    matches[match_name]->add_player(q, duck_info);
     return true;
 }
 
@@ -45,13 +45,9 @@ std::list<std::string> MatchesMonitor::get_available_match_names() {
     return available_matches;
 }
 
-void MatchesMonitor::disconnect_player(uint8_t player_id) {
+void MatchesMonitor::disconnect_player(const std::string& match_name, const uint8_t& player_id) {
     std::lock_guard<std::mutex> lock(matches_mtx);
-    for (auto& match: matches) {
-        if (match.second->remove_player_if_in_match(player_id)) {
-            return;
-        }
-    }
+    matches[match_name]->remove_player_if_in_match(player_id);
 }
 
 void MatchesMonitor::remove_finished_matches() {

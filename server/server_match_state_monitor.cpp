@@ -8,10 +8,11 @@ MatchStateMonitor::MatchStateMonitor(uint8_t limit):
         player_count(0),
         status(MatchStatus::Waiting) {}
 
-void MatchStateMonitor::add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, uint8_t id) {
+void MatchStateMonitor::add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, uint8_t& id) {
     std::lock_guard<std::mutex> lock(data_mtx);
 
     if (accepting_players) {
+        id = ++assigned_ids;
         requester_queues[id] = q;
         player_count++;
         this->accepting_players = status == MatchStatus::Waiting && player_count < player_limit;
@@ -32,7 +33,7 @@ void MatchStateMonitor::stop_match() {
     accepting_players = false;
 }
 
-bool MatchStateMonitor::remove_player_if_present(uint8_t id) {
+bool MatchStateMonitor::remove_player_if_present(const uint8_t& id) {
     std::lock_guard<std::mutex> lock(data_mtx);
 
     auto it = requester_queues.find(id);

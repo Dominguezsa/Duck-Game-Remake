@@ -8,7 +8,7 @@
 Match::Match(uint8_t limit):
         gameloop_queue(MAX_SIZE_QUEUE), game(state_monitor, gameloop_queue), state_monitor(limit) {}
 
-bool Match::remove_player_if_in_match(uint8_t id) {
+bool Match::remove_player_if_in_match(const uint8_t& id) {
     bool removed = state_monitor.remove_player_if_present(id);
     if (removed) {
         game.removePlayer(id);
@@ -18,9 +18,9 @@ bool Match::remove_player_if_in_match(uint8_t id) {
 
 bool Match::can_accept_players() { return !state_monitor.playing_status(); }
 
-void Match::add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, uint8_t id) {
-    state_monitor.add_player(q, id);
-    game.addPlayer(id);
+void Match::add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, DuckIdentity& duck_info) {
+    state_monitor.add_player(q, duck_info.id);
+    game.addPlayer(duck_info);
     if (state_monitor.playing_status()) {
         initialize_game();
     }

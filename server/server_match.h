@@ -9,6 +9,7 @@
 
 #include "server_game.h"
 #include "server_match_state_monitor.h"
+#include "../common/types/match_state.h"
 
 class Match {
 private:
@@ -20,8 +21,8 @@ private:
 
 public:
     explicit Match(uint8_t limit);
-    bool remove_player_if_in_match(uint8_t id);
-    void add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, uint8_t id);
+    bool remove_player_if_in_match(const uint8_t& id);
+    void add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, DuckIdentity& duck_info);
     Queue<GameloopMessage>* get_gameloop_queue();
     bool can_accept_players();
     bool is_finished();

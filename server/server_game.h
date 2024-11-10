@@ -14,6 +14,7 @@
 
 #include "server_gameloop_message.h"
 #include "server_match_state_monitor.h"
+#include "../common/types/match_state.h"
 
 
 class Game: public Thread {
@@ -57,7 +58,12 @@ private:
 public:
     explicit Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue);
 
-    void addPlayer(uint8_t player_id);
+    /* Pos: Adds a player to the game and initializes its duck.
+            The duck's initial position is set to the initial_pos_x and initial_pos_y
+            fields of the duck_info struct.
+    */
+    void addPlayer(DuckIdentity& duck_info);
+    
     void removePlayer(uint8_t player_id);
     void run() override;
     void stop() override;
