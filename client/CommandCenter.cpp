@@ -16,27 +16,15 @@ CommandCenter::CommandCenter(Queue<uint8_t>& messagesForServer,
 
 
 void CommandCenter::init_handlers() {
-    // Ugly, but it works
 
-    add_handler(SDL_QUIT, SDLK_UNKNOWN, &CommandCenter::handle_quit);
-    add_handler(SDL_KEYDOWN, SDLK_ESCAPE, &CommandCenter::handle_key_down_escape);
-    add_handler(SDL_KEYDOWN, SDLK_d, &CommandCenter::handle_key_down_d);
-    add_handler(SDL_KEYDOWN, SDLK_a, &CommandCenter::handle_key_down_a);
-    add_handler(SDL_KEYDOWN, SDLK_w, &CommandCenter::handle_key_down_w);
-    add_handler(SDL_KEYDOWN, SDLK_s, &CommandCenter::handle_key_down_s);
-    add_handler(SDL_KEYDOWN, SDLK_SPACE, &CommandCenter::handle_key_down_space);
-    add_handler(SDL_KEYDOWN, SDLK_f, &CommandCenter::handle_key_down_f);
-    add_handler(SDL_KEYUP, SDLK_d, &CommandCenter::handle_key_up_d);
-    add_handler(SDL_KEYUP, SDLK_a, &CommandCenter::handle_key_up_a);
-    add_handler(SDL_KEYUP, SDLK_w, &CommandCenter::handle_key_up_w);
-    add_handler(SDL_KEYUP, SDLK_s, &CommandCenter::handle_key_up_s);
-    add_handler(SDL_KEYUP, SDLK_SPACE, &CommandCenter::handle_key_up_space);
-    add_handler(SDL_KEYUP, SDLK_f, &CommandCenter::handle_key_up_f);
+    for (const auto& event: event_to_handlers) {
+        add_handler(event.first, event.second);
+    }
 }
 
-void CommandCenter::add_handler(SDL_EventType event_type, SDL_Keycode key,
+void CommandCenter::add_handler(std::pair<SDL_EventType, SDL_Keycode> key,
                                 void (CommandCenter::*handler)()) {
-    event_handlers.emplace(std::make_pair(event_type, key), std::bind(handler, this));
+    event_handlers.emplace(key, std::bind(handler, this));
 }
 
 void CommandCenter::processEvent(const SDL_Event& event) {
