@@ -13,15 +13,10 @@
 
 class ResourceManager {
 private:
-    // cppcheck-suppress unusedStructMember
     std::map<std::string, std::shared_ptr<SDL2pp::Chunk>> sfx;
-    // cppcheck-suppress unusedStructMember
     std::map<std::string, std::shared_ptr<SDL2pp::Music>> music;
-    // cppcheck-suppress unusedStructMember
     std::map<std::string, std::shared_ptr<SDL2pp::Font>> fonts;
-    // cppcheck-suppress unusedStructMember
     std::map<std::string, std::shared_ptr<SDL2pp::Texture>> textures;
-    // cppcheck-suppress unusedStructMember
     std::map<std::string, std::vector<SDL2pp::Rect>> animationFrames;
     SDL2pp::Renderer& renderer;
 

@@ -81,9 +81,9 @@ void Lobby::run() {
         std::cin >> playerName;
     }
     bool invalid_option = true;
+    char option = ' ';
     while (invalid_option) {
         std::cout << "Do you wanna create ('c') or join a match ('j')?\n";
-        char option;
         std::cin >> option;
         if (option != 'c' && option != 'j') {
             std::cout << "Invalid option\n";
@@ -92,9 +92,36 @@ void Lobby::run() {
             invalid_option = false;
         }
     }
-    std::cout << "Enter the party id\n";
-    std::string id;
-    std::cin >> id;
+    if (option == 'c') {
+        handle_create_party();
+    } else if (option == 'j') {
+        handle_join_party();
+    }
+}
+
+void Lobby::handle_create_party() {
+    // enviar C LEN_NAME NAME
+    // recibir mapas
+    // mostrar mapas
+    uint8_t numPlayers;
+    std::string matchName;
+    std::cout << "Enter the match name\n";
+    std::cin >> matchName;
+    std::cout << "Enter the number of players\n";
+    std::cin >> numPlayers;
+    // createGame(numPlayers, matchName))
+    // imprimir si se creo la partida correctamente o no
+}
+
+void Lobby::handle_join_party() {
+    // enviar J LEN_NAME NAME
+    // recibir partidas
+    // mostrar partidas
+    std::string matchName;
+    std::cout << "Enter the party you wanna join (select the numbre f.e: 1,2,3,...)\n";
+    std::cin >> matchName;
+    // joinGame(matchName)
+    // imprimir si se unio a la partida correctamente o no
 }
 
 

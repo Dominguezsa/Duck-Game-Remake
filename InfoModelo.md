@@ -1,4 +1,4 @@
-## ProtocoloDelServidor: El protocolo del servidor se crea con un socket y un id (que corresopnde con un cliente) asi este no se lo tiene que enviar continuamente.
+### ProtocoloDelServidor: El protocolo del servidor se crea con un socket y un id (que corresopnde con un cliente) asi este no se lo tiene que enviar continuamente.
 
 Cada accion del cliente, saltar, moverse a la izquierda, moverse a la derecha, disparar, etc, se envia al servidor con un unico caracter en forma de uint8. El protocolo recibe esta accion, y esta listo para enviarlo a la unica gameloopQueue a través del mensaje_gameloop que tiene como atributos el id del jugador y la accion a realizar.
 
@@ -41,7 +41,7 @@ protocolo del cliente al server:
 
 ------------------------------------------------
 
-# Protocolos para los mensajes del lobby:
+### Protocolos para los mensajes del lobby:
 
 Los siguientes mensajes son descriptos en orden.
 

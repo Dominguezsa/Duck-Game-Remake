@@ -40,6 +40,10 @@ public:
     // Clean up resources
     void quit();
 
+    void handle_create_party();
+
+    void handle_join_party();
+
     ~Lobby();
 };
 
