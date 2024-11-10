@@ -1,15 +1,16 @@
 #include "lobby_protocol.h"
+
 #include <stdexcept>
 
-LobbyProtocol::LobbyProtocol(Socket& socket) : Protocol(socket) {}
+LobbyProtocol::LobbyProtocol(Socket& socket): Protocol(socket) {}
 
 void LobbyProtocol::read_msg(void* msg) {
-    (void)msg; // Silence unused parameter warning
+    (void)msg;  // Silence unused parameter warning
     // Implementation here if needed
 }
 
 void LobbyProtocol::send_msg(void* msg) {
-    (void)msg; // Silence unused parameter warning
+    (void)msg;  // Silence unused parameter warning
     // Implementation here if needed
 }
 
@@ -28,10 +29,10 @@ void LobbyProtocol::sendJoinCommand(const std::string& playerName) {
 std::vector<std::string> LobbyProtocol::receiveMapList() {
     std::vector<std::string> maps;
     uint16_t count;
-    recv_uint_16(count); // Using inherited method
+    recv_uint_16(count);  // Using inherited method
     for (uint16_t i = 0; i < count; i++) {
         std::string mapName;
-        recv_string(mapName); // Using inherited method
+        recv_string(mapName);  // Using inherited method
         maps.push_back(mapName);
     }
     return maps;

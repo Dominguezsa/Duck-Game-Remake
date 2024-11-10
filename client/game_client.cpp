@@ -19,6 +19,8 @@
 #include "../common/types/action_type.h"
 #include "../common/types/duck_state.h"
 
+#include "lobby.h"
+
 #define FPS 60
 #define OST_VOLUME 0
 #define SFX_VOLUME 20
@@ -41,6 +43,7 @@ GameClient::GameClient(const int window_width, const int window_height,
         resourceManager(renderer),
         socket(server_ip.c_str(), port.c_str()),
         protocol(socket),
+        lobby(socket),
         messagesForServer(),
         graphic_queue(GRAPHIC_QUEUE_SIZE),
         ducks({Duck(), Duck()}),
@@ -108,21 +111,8 @@ void GameClient::run() {
     std::cout << "CLIENT: Closing the messages for server queue\n";
     messagesForServer.close();
 }
-#include "lobby.h"
-void run_lobby() {
-    // Lobby lobby(socket);
-    // lobby.run();
-}
-/*
-    std::cout << "What is your name?\n";
-    std::string username;
-    std::cin >> username;
-    std::cout << "Do you wanna create ('c') or join a match ('j')?\n";
-    char option;
-    std::cin >> option;
-    std::cout << "Enter the id\n";
-    std::string id;
-    std::cin >> id;*/
+
+void GameClient::run_lobby() { lobby.run(); }
 
 
 void GameClient::updateDuckStates() {

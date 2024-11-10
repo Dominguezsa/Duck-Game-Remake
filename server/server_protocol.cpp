@@ -50,7 +50,7 @@ void ServerProtocol::send_msg(void* msg) {
 
 // --------- Pre-match messages (lobby) -------
 
-void ServerProtocol::send_game_map_list(std::list<std::string>& map_names) {
+void ServerProtocol::send_game_map_list(const std::list<std::string>& map_names) {
     uint16_t map_count = map_names.size();
     map_count = htons(map_count);
     send_data(&map_count, sizeof(uint16_t));
@@ -69,7 +69,7 @@ void ServerProtocol::recv_match_info(std::string& map_name, std::string& match_n
 
 void ServerProtocol::send_confirmation(bool success) { send_data(&success, sizeof(uint8_t)); }
 
-void ServerProtocol::send_match_list(std::list<std::string>& match_names) {
+void ServerProtocol::send_match_list(const std::list<std::string>& match_names) {
     uint16_t match_count = match_names.size();
     match_count = htons(match_count);
     send_data(&match_count, sizeof(uint16_t));

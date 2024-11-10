@@ -6,22 +6,26 @@
 
 #include "game_client.h"
 
+#define WINDOW_NAME "DuckGame"
+#define WINDOW_WIDTH 1200
+#define WINDOW_HEIGHT 700
+#define CHUNK_SIZE_AUDIO 1024
+
+
 int main(int argc, char* argv[]) {
     try {
         if (argc != 3) {
             std::cout << "Usage: ./client <hostname> <servname>" << std::endl;
             return EXIT_FAILURE;
         }
-        const std::string WINDOW_NAME = "DuckGame";
-        const int WINDOW_WIDTH = 1200;
-        const int WINDOW_HEIGHT = 700;
-        const int CHUNK_SIZE_AUDIO = 1024;
         std::string hostname = std::string(argv[1]);
         std::string servname = std::string(argv[2]);
-
         GameClient gameClient(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME, CHUNK_SIZE_AUDIO, hostname,
                               servname);
-        gameClient.run();
+        while (true) {
+            gameClient.run_lobby();
+            gameClient.run();
+        }
         return EXIT_SUCCESS;
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;

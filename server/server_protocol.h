@@ -31,7 +31,7 @@ public:
     // --------- Pre-match messages (lobby) -------
 
     // Pos: Sends the names of the existing game maps to the client.
-    void send_game_map_list(std::list<std::string>& map_names);
+    void send_game_map_list(const std::list<std::string>& map_names);
 
     /* Pos: Receives necessary information to create a match:
 
@@ -46,7 +46,7 @@ public:
     void send_confirmation(bool success);
 
     // Pos: Sends the names of the active matches that the client can join.
-    void send_match_list(std::list<std::string>& match_names);
+    void send_match_list(const std::list<std::string>& match_names);
 
     void recv_action(char& action);
 
