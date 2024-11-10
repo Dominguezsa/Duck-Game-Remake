@@ -10,6 +10,7 @@
 #include "../common/common_protocol.h"
 #include "../common/common_socket.h"
 #include "../common/types/duck_state.h"
+#include "../common/types/match_state.h"
 
 #include "server_gameloop_message.h"
 
@@ -51,6 +52,8 @@ public:
     void recv_match_name(std::string& match_name);
 
     void recv_player_name(std::string& player_name);
+
+    void send_duck_unique_attributes(DuckIdentity& attributes);
 };
 
 #endif  // SERVER_PROTOCOLO_H
