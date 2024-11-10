@@ -34,13 +34,12 @@ class ClientSession: public Thread {
 private:
     Identity identity;
     Socket skt;
-    ServerProtocol protocol;  // Used to receive messages only.
-    // SenderThread* sender;
+    ServerProtocol protocol;
     MatchesMonitor& matches_monitor;
     Queue<std::shared_ptr<std::vector<DuckState>>> client_queue;
 
 public:
-    ClientSession(Socket _skt, uint8_t _id, MatchesMonitor& monitor);
+    ClientSession(Socket _skt, MatchesMonitor& monitor);
 
     uint8_t get_id() const;
 
@@ -51,10 +50,12 @@ public:
 
     void run_lobby_loop();
 
-    void run_game_sender_loop();
+    void run_receiver_loop();
+
+    Queue<GameloopMessage>* get_match_queue();
 
     // Pos: Returns true if the action was executed successfully.
-    bool exec_lobby_action(char action);
+    void exec_lobby_action(char action, bool &success);
 };
 
 #endif  // SERVER_CLIENT_SESSION

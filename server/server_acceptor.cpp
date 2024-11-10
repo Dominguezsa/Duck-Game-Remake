@@ -1,15 +1,13 @@
 #include "server_acceptor.h"
 
 AcceptorThread::AcceptorThread(const std::string& servname):
-        acceptor_skt(servname.c_str()), clients(), matches(), connection_count(0) {}
+        acceptor_skt(servname.c_str()), clients() {}
 
 void AcceptorThread::stop() {
-    _keep_running = false;
+    free_all_resources();
     _is_alive = false;
     this->acceptor_skt.shutdown(2);
     this->acceptor_skt.close();
-
-    free_all_resources();
 }
 
 void AcceptorThread::accept_connection() {
@@ -17,20 +15,18 @@ void AcceptorThread::accept_connection() {
     std::cout << "Accepting connection\n";
 
     Socket peer = this->acceptor_skt.accept();
-    uint8_t id = connection_count;
-    ClientSession* client = new ClientSession(std::move(peer), id, this->matches);
+    ClientSession* client = new ClientSession(std::move(peer), this->matches);
     this->clients.push_back(client);
-
     client->start();
     client->run();
-    connection_count++;
 }
 
 void AcceptorThread::check_unused_resources() {
     for (auto it = clients.begin(); it != clients.end();) {
         ClientSession* client = *it;
         if (!client->is_alive()) {
-            client->end_communication();
+            client->stop();
+            client->join();
             delete (*it);
             it = clients.erase(it);
         } else {
@@ -45,7 +41,8 @@ void AcceptorThread::free_all_resources() {
         return;
 
     for (ClientSession* client: this->clients) {
-        client->end_communication();
+        client->stop();
+        client->join();
         delete (client);
     }
     this->clients.clear();

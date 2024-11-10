@@ -18,7 +18,6 @@ private:
     Socket acceptor_skt;
     std::list<ClientSession*> clients;
     MatchesMonitor matches;
-    uint8_t connection_count;
 
 public:
     explicit AcceptorThread(const std::string& port);

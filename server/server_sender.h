@@ -17,16 +17,12 @@
 
 class SenderThread: public Thread {
 private:
-    Queue<DuckState> requester_queue;
     ServerProtocol& protocol;
-    Queue<std::shared_ptr<std::vector<DuckState>>> duck_states_queue;
+    Queue<std::shared_ptr<std::vector<DuckState>>>& client_queue;
 
 public:
-    explicit SenderThread(ServerProtocol& p);
-    Queue<std::shared_ptr<std::vector<DuckState>>>* get_queue();
-    void restart();
+    explicit SenderThread(ServerProtocol& p, Queue<std::shared_ptr<std::vector<DuckState>>>& q);
     void join() override;
-    void stop() override;
     void run() override;
 
 private:

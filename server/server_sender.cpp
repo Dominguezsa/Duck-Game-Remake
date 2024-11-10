@@ -3,37 +3,26 @@
 #include <memory>
 #include <vector>
 
-SenderThread::SenderThread(ServerProtocol& p): requester_queue(SENDER_QUEUE_SIZE), protocol(p) {}
-
-void SenderThread::stop() { _is_alive = false; }
+SenderThread::SenderThread(ServerProtocol& p, Queue<std::shared_ptr<std::vector<DuckState>>>& q):
+              protocol(p), client_queue(q) {}
 
 void SenderThread::join() {
-    requester_queue.close();
-    Thread::join();
-}
-
-void SenderThread::restart() {
-    start();
     clear_queue();
-    run();
-}
-
-Queue<std::shared_ptr<std::vector<DuckState>>>* SenderThread::get_queue() {
-    return &this->duck_states_queue;
+    Thread::join();
 }
 
 void SenderThread::clear_queue() {
     bool is_empty = false;
     do {
-        std::shared_ptr<std::vector<DuckState>> element;
-        is_empty = !duck_states_queue.try_pop(element);
+        std::shared_ptr<std::vector<DuckState>> e;
+        is_empty = client_queue.try_pop(e) == false;
     } while (!is_empty);
 }
 
 void SenderThread::run() {
     try {
         while (this->_is_alive) {
-            std::shared_ptr<std::vector<DuckState>> snapshot = duck_states_queue.pop();
+            std::shared_ptr<std::vector<DuckState>> snapshot = client_queue.pop();
             protocol.send_duck_states(snapshot);
             // std::cout << "SERVER: sended the duckstate\n";
         }

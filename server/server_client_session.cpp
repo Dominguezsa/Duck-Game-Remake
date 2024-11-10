@@ -1,7 +1,7 @@
 #include "server_client_session.h"
 
 #include <utility>
-ClientSession::ClientSession(Socket _skt, uint8_t _id, MatchesMonitor& monitor):
+ClientSession::ClientSession(Socket _skt, MatchesMonitor& monitor):
         identity(),
         skt(std::move(_skt)),
         protocol(this->skt),
@@ -18,6 +18,46 @@ void ClientSession::end_communication() {
     protocol.end_communication();
 }
 
+Queue<GameloopMessage>* ClientSession::get_match_queue() {
+    return matches_monitor.get_match_queue(identity.joined_match_name);
+}
+
+void ClientSession::run_receiver_loop() { 
+    GameloopMessage msg;
+    msg.player_id = this->identity.id;
+    Queue<GameloopMessage>* gameloop_queue = get_match_queue();
+    try {
+        while (this->_is_alive) {
+            protocol.recv_msg(msg.action);
+            gameloop_queue->push(msg);
+        }
+    } catch (const ClosedQueue& e) {
+        this->matches_monitor.disconnect_player(identity.joined_match_name, identity.id);
+    }
+}
+
+void ClientSession::run() {
+    try {
+        while (this->_is_alive) {
+            run_lobby_loop();
+            if (!this->_is_alive) { break; }
+
+            // At this point, the client is in a match.
+            SenderThread sender(protocol, client_queue);
+            sender.start();
+            run_receiver_loop();
+            sender.stop();
+            sender.join();
+        }
+    } catch (const SocketWasCLosedException& e) {
+        this->_is_alive = false;
+        end_communication();
+    } catch (const std::exception& err) {
+        this->_is_alive = false;
+        end_communication();
+    }
+}
+
 // --------------- Lobby logic ---------------
 
 // Estas constantes hay que pasarlas a algun .h en
@@ -29,26 +69,28 @@ static constexpr uint8_t SUCCESS = 0x01;
 static constexpr uint8_t FAILURE = 0x00;
 
 void ClientSession::run_lobby_loop() {
+    bool success = false;
     try {
         while (true) {
             char lobby_action;
             this->protocol.recv_action(lobby_action);
 
             if (lobby_action == EXIT) {
-                // Finalizar comunicacion con el cliente.
+                this->_is_alive = false;
                 break;
             }
-            bool executed = exec_lobby_action(lobby_action);
-            if (executed) { break; }
+            exec_lobby_action(lobby_action, success);
+            if (success) { break; }
         }
     } catch (SocketWasCLosedException& e) {
-        // El cliente se desconecto.
+        if (success) {
+            end_communication();
+        }
+        this->_is_alive = false;
     }
 }
 
-bool ClientSession::exec_lobby_action(char action) {
-    bool success = false;
-
+void ClientSession::exec_lobby_action(char action, bool &success) {
     std::string player_name, match_name;
     this->protocol.recv_player_name(player_name);
     DuckIdentity duck_info;
@@ -75,7 +117,7 @@ bool ClientSession::exec_lobby_action(char action) {
             
             // (4)
             protocol.send_confirmation(success);
-            // ---
+            break;
         }
         case CMD_JOIN: {
             // (2)
@@ -85,13 +127,13 @@ bool ClientSession::exec_lobby_action(char action) {
             protocol.send_match_list(available_matches);
             
             // (3)
-            std::string match_name;
             this->protocol.recv_match_name(match_name);
 
             // (4)
             success = matches_monitor.join_match(match_name, duck_info,
                                                      &client_queue);
             protocol.send_confirmation(success);
+            break;
         }
     }
     if (success) {
@@ -106,5 +148,4 @@ bool ClientSession::exec_lobby_action(char action) {
         identity.joined_match_name = match_name;
         identity.id = duck_info.id;
     }
-    return success;
 }
