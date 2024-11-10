@@ -3,11 +3,11 @@
 MatchStateMonitor::MatchStateMonitor(uint8_t limit):
         data_mtx(),
         player_limit(limit),
+        assigned_ids(0),
         requester_queues(),
         accepting_players(true),
         player_count(0),
-        status(MatchStatus::Waiting),
-        assigned_ids(0) {}
+        status(MatchStatus::Waiting) {}
 
 void MatchStateMonitor::add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, uint8_t& id) {
     std::lock_guard<std::mutex> lock(data_mtx);

@@ -24,6 +24,7 @@
 #include "AnimationHelper.h"
 #include "ResourceManager.h"
 #include "ScreenRenderer.h"
+#include "lobby.h"
 #include "protocol.h"
 #include "thread_receiver.h"
 #include "thread_sender.h"
@@ -47,7 +48,6 @@ private:
     ScreenRenderer screenRenderer;
     // Algo específico de SDL, no creo que está en la librería SDL2pp
     std::unique_ptr<const uint8_t*> keyboardState;
-    SDL_Event current_event;
 
     // DuckState stateDuck1;
     // DuckState stateDuck2;
