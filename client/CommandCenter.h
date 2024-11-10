@@ -19,15 +19,18 @@ private:
             event_handlers;
     Queue<uint8_t>& messagesForServer;
     std::shared_ptr<const uint8_t*> keyboardState;
+    // cppcheck-suppress unusedStructMember
+    bool& quit;
 
 public:
-    CommandCenter(Queue<uint8_t>& messagesForServer, std::shared_ptr<const uint8_t*> keyboardState);
+    CommandCenter(Queue<uint8_t>& messagesForServer, std::shared_ptr<const uint8_t*> keyboardState,
+                  bool& quit);
     void add_handler(SDL_EventType event_type, SDL_Keycode key, void (CommandCenter::*handler)());
     void init_handlers();
     // Estos dos son medio especiales porque reciben algo, y los demás handlers no, así que ver
     // después que hacer con esto
-    // void handle_quit(bool& quit);
-    // void handle_key_down_escape(bool& quit);
+    void handle_quit();
+    void handle_key_down_escape();
     void handle_key_down_d();
     void handle_key_down_a();
     void handle_key_down_w();

@@ -15,8 +15,8 @@
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Music.hh>
 
-#include "../common/common_weapon.h"
-#include "../common/types/action_type.h"
+// #include "../common/common_weapon.h"
+// #include "../common/types/action_type.h"
 #include "../common/types/duck_state.h"
 
 #define FPS 60
@@ -31,6 +31,7 @@
 GameClient::GameClient(const int window_width, const int window_height,
                        const std::string& window_title, const int max_chunk_size_audio,
                        const std::string& server_ip, const std::string& port):
+        quit(false),
         sdl(SDL_INIT_VIDEO),
         ttf(),
         mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS,
@@ -47,10 +48,8 @@ GameClient::GameClient(const int window_width, const int window_height,
         animationHelper(ducks, resourceManager),
         screenRenderer(renderer, resourceManager, animationHelper),
         keyboardState(std::make_shared<const uint8_t*>(SDL_GetKeyboardState(nullptr))),
-        commandCenter(messagesForServer, keyboardState) {}
+        commandCenter(messagesForServer, keyboardState, quit) {}
 
-// Moved the constantRateLoop implementation here because making it a separate file was causing a
-// lot of problems, but yeah its repeating the same code in both client and server
 void GameClient::run() {
     ThreadReceiver threadReceiver(protocol, graphic_queue);
     ThreadSender threadSender(protocol, messagesForServer);
@@ -72,11 +71,11 @@ void GameClient::run() {
     auto musicTrack = resourceManager.getMusicTrack("back_music");
     mixer.PlayMusic(*musicTrack, -1);
 
-    bool quit = false;
+    // bool quit = false;
 
     while (true) {
         updateDuckStates();
-        mainLoop(iteration, quit);
+        mainLoop(iteration);
 
         if (quit) {
             std::cout << "Exiting the game\n";
@@ -122,7 +121,7 @@ void GameClient::updateDuckStates() {
     }
 }
 
-void GameClient::mainLoop(const int it, bool& quit) {
+void GameClient::mainLoop(const int it) {
     // Now it should do everything that the game needs to do in one iteration, like play if it needs
     // to play music, render sprites, etc.
 
@@ -130,6 +129,8 @@ void GameClient::mainLoop(const int it, bool& quit) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN && event.key.repeat) {
+            // std::cout << "This is a repeated keydown" << std::endl;
+            // std::cout << "Key: " << event.key.keysym.sym << std::endl;
             continue;
         }
         if (event.type == SDL_KEYDOWN) {
@@ -137,10 +138,10 @@ void GameClient::mainLoop(const int it, bool& quit) {
         }
         // Por ahora, como estos son los únicos eventos que reciben algo
         // los trato de forma separada
-        if (event.type == SDL_QUIT ||
-            (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
-            quit = true;
-        }
+        // if (event.type == SDL_QUIT ||
+        //     (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
+        //     quit = true;
+        // }
         commandCenter.processEvent(event);
     }
 

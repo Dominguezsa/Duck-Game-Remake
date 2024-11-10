@@ -31,6 +31,8 @@
 
 class GameClient {
 private:
+    // cppcheck-suppress unusedStructMember
+    bool quit;
     SDL2pp::SDL sdl;
     SDL2pp::SDLTTF ttf;
     SDL2pp::Mixer mixer;
@@ -57,7 +59,7 @@ public:
     ~GameClient();
     void run();
     void updateDuckStates();
-    void mainLoop(const int it, bool& quit);
+    void mainLoop(const int it);
 };
 
 #endif

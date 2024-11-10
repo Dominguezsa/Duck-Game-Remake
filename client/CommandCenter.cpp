@@ -8,8 +8,8 @@
 #include "../common/types/action_type.h"
 
 CommandCenter::CommandCenter(Queue<uint8_t>& messagesForServer,
-                             std::shared_ptr<const uint8_t*> keyboardState):
-        messagesForServer(messagesForServer), keyboardState(keyboardState) {
+                             std::shared_ptr<const uint8_t*> keyboardState, bool& quit):
+        messagesForServer(messagesForServer), keyboardState(keyboardState), quit(quit) {
 
     init_handlers();
 }
@@ -18,6 +18,8 @@ CommandCenter::CommandCenter(Queue<uint8_t>& messagesForServer,
 void CommandCenter::init_handlers() {
     // Ugly, but it works
 
+    add_handler(SDL_QUIT, SDLK_UNKNOWN, &CommandCenter::handle_quit);
+    add_handler(SDL_KEYDOWN, SDLK_ESCAPE, &CommandCenter::handle_key_down_escape);
     add_handler(SDL_KEYDOWN, SDLK_d, &CommandCenter::handle_key_down_d);
     add_handler(SDL_KEYDOWN, SDLK_a, &CommandCenter::handle_key_down_a);
     add_handler(SDL_KEYDOWN, SDLK_w, &CommandCenter::handle_key_down_w);
@@ -38,28 +40,26 @@ void CommandCenter::add_handler(SDL_EventType event_type, SDL_Keycode key,
 }
 
 void CommandCenter::processEvent(const SDL_Event& event) {
+
+    auto key = std::make_pair(static_cast<SDL_EventType>(event.type), event.key.keysym.sym);
     try {
-        // std::pair<SDL_EventType, SDL_Keycode> key(event.type, event.key.keysym.sym);
-        // auto key = std::make_pair(event.type, event.key.keysym.sym);
-        // event_handlers.at(key);
-        // event_handlers[std::make_pair(event.type, event.key.keysym.sym)];
-        // event_handlers.at(std::make_pair(event.type, event.key.keysym.sym));
+        event_handlers.at(key)(*this);
+        // No se si hacerlo así para evitar las excepciones
+        // auto it = event_handlers.find(key);
+        // if (it != event_handlers.end()) {
+        //     auto handler = it->second;
+        //     handler(*this);
+        // }
 
-        auto key = std::make_pair(static_cast<SDL_EventType>(event.type), event.key.keysym.sym);
-
-
-        auto it = event_handlers.find(key);
-        if (it != event_handlers.end()) {
-            auto handler = it->second;
-            handler(*this);
-        }
-
-        // event_handlers.at(std::pair{event.type, event.key.keysym.sym});
     } catch (const std::out_of_range& e) {
         // Do nothing
-        std::cout << "Trying to handle an event thats not in the map" << std::endl;
+        // std::cout << "Trying to handle an event thats not in the map" << std::endl;
     }
 }
+
+void CommandCenter::handle_quit() { quit = true; }
+
+void CommandCenter::handle_key_down_escape() { quit = true; }
 
 void CommandCenter::handle_key_down_d() { messagesForServer.push(MOVE_RIGHT_KEY_DOWN); }
 
