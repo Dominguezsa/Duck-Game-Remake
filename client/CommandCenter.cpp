@@ -42,18 +42,12 @@ void CommandCenter::add_handler(SDL_EventType event_type, SDL_Keycode key,
 void CommandCenter::processEvent(const SDL_Event& event) {
 
     auto key = std::make_pair(static_cast<SDL_EventType>(event.type), event.key.keysym.sym);
-    try {
-        event_handlers.at(key)(*this);
-        // No se si hacerlo así para evitar las excepciones
-        // auto it = event_handlers.find(key);
-        // if (it != event_handlers.end()) {
-        //     auto handler = it->second;
-        //     handler(*this);
-        // }
-
-    } catch (const std::out_of_range& e) {
-        // Do nothing
-        // std::cout << "Trying to handle an event thats not in the map" << std::endl;
+    // event_handlers.at(key)(*this);
+    // No se si hacerlo así para evitar las excepciones
+    auto it = event_handlers.find(key);
+    if (it != event_handlers.end()) {
+        auto handler = it->second;
+        handler(*this);
     }
 }
 
