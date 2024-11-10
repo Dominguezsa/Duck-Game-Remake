@@ -7,6 +7,7 @@
 #include "server_matches_monitor.h"
 #include "server_protocol.h"
 #include "server_sender.h"
+#include "types/client_identity.h"
 
 /*
     This thread listens for and processes messages from clients, which
@@ -31,7 +32,7 @@
 
 class ClientSession: public Thread {
 private:
-    uint8_t id;
+    Identity identity;
     Socket skt;
     ServerProtocol protocol;  // Used to receive messages only.
     // SenderThread* sender;

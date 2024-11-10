@@ -2,17 +2,17 @@
 
 #include <utility>
 ClientSession::ClientSession(Socket _skt, uint8_t _id, MatchesMonitor& monitor):
-        id(_id),
+        identity(),
         skt(std::move(_skt)),
         protocol(this->skt),
         matches_monitor(monitor),
         client_queue(CLIENT_QUEUE_SIZE) { }
 
-uint8_t ClientSession::get_id() const { return id; }
+uint8_t ClientSession::get_id() const { return identity.id; }
 
 void ClientSession::end_communication() {
     // We disconnect the player from the any match it was in.
-    matches_monitor.disconnect_player(id);
+    matches_monitor.disconnect_player(identity.joined_match_name, identity.id);
 
     // We close the communication channel.
     protocol.end_communication();
@@ -47,11 +47,13 @@ void ClientSession::run_lobby_loop() {
 }
 
 bool ClientSession::exec_lobby_action(char action) {
-    bool executed = false;
+    bool success = false;
 
-    std::string player_name;
+    std::string player_name, match_name;
     this->protocol.recv_player_name(player_name);
-
+    DuckIdentity duck_info;
+    duck_info.name = player_name;
+    
     switch (action) {
         case CMD_CREATE: {
             // (2)
@@ -64,22 +66,16 @@ bool ClientSession::exec_lobby_action(char action) {
             
             // (3)
             uint8_t number_of_players;
-            std::string map_name; // dato no utilizado aun.
-            std::string match_name;
+            std::string map_name;
             this->protocol.recv_match_info(map_name, match_name,
                                            number_of_players);
-            
-            bool success = matches_monitor.create_match(match_name,
-                           number_of_players, id, &client_queue);
+
+            success = matches_monitor.create_match(match_name,
+         number_of_players, duck_info, &client_queue);
             
             // (4)
             protocol.send_confirmation(success);
             // ---
-            if (success) {
-                // Generar un DuckIdentity y enviar.
-                // ....
-            }
-            return success;
         }
         case CMD_JOIN: {
             // (2)
@@ -93,15 +89,22 @@ bool ClientSession::exec_lobby_action(char action) {
             this->protocol.recv_match_name(match_name);
 
             // (4)
-            bool joined = matches_monitor.join_match(match_name, id,
+            success = matches_monitor.join_match(match_name, duck_info,
                                                      &client_queue);
-            protocol.send_confirmation(joined);
-
-            if (joined) {
-                // Generar un DuckIdentity y enviar.
-                // ....
-            }
-            return joined;
+            protocol.send_confirmation(success);
         }
     }
+    if (success) {
+        // El atributo color podria no estar, y que se le asocie
+        // un color del lado del cliente en base al id (que siempre
+        // va a ser unico).
+        duck_info.color = static_cast<char>(duck_info.id);
+        
+        protocol.send_duck_unique_attributes(duck_info);
+
+        identity.name = player_name;
+        identity.joined_match_name = match_name;
+        identity.id = duck_info.id;
+    }
+    return success;
 }
