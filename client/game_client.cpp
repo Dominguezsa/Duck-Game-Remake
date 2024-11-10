@@ -46,8 +46,7 @@ GameClient::GameClient(const int window_width, const int window_height,
         ducks({Duck(), Duck()}),
         animationHelper(ducks, resourceManager),
         screenRenderer(renderer, resourceManager, animationHelper),
-        keyboardState(std::make_unique<const uint8_t*>(SDL_GetKeyboardState(nullptr))),
-        current_event() {}
+        keyboardState(std::make_unique<const uint8_t*>(SDL_GetKeyboardState(nullptr))) {}
 
 // Moved the constantRateLoop implementation here because making it a separate file was causing a
 // lot of problems, but yeah its repeating the same code in both client and server
