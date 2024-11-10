@@ -18,7 +18,8 @@ Game::Game(MatchQueuesMonitor& monitor, Queue<GameloopMessage>& queue):
         is_running(false),
         next_player_id(0),
         round_number(0),
-        monitor(monitor) {}
+        monitor(monitor),
+        action_handler(ducks) {}
 
 void Game::addPlayer(uint8_t player_id) {
     Position initial_pos{100 + (player_id * 100), 100};  // Example starting positions
@@ -38,53 +39,6 @@ void Game::removePlayer(uint8_t player_id) {
     }
 }
 
-void Game::handlePlayerAction(const GameloopMessage& msg) {
-    auto it = ducks.find(msg.player_id);
-    if (it == ducks.end())
-        return;
-
-    Duck* duck = it->second.get();
-    // Ya esto se está haciendo medio inmanejable, deberiamos ya ver de hacer un double dispatch
-    // (lo mismo en el cliente)
-    switch (msg.action) {
-        case MOVE_RIGHT_KEY_DOWN:
-            duck->move_to(RIGHT);
-            break;
-        case MOVE_RIGHT_KEY_UP:
-            duck->stop_running();
-            break;
-        case MOVE_LEFT_KEY_DOWN:
-            duck->move_to(LEFT);
-            break;
-        case MOVE_LEFT_KEY_UP:
-            duck->stop_running();
-            break;
-        case JUMP_KEY_DOWN:
-            duck->jump(true);
-            break;
-        case JUMP_KEY_UP:
-            duck->jump(false);
-            break;
-        case SHOOT_KEY_DOWN:
-            duck->shoot(true);
-            break;
-        case SHOOT_KEY_UP:
-            duck->shoot(false);
-            break;
-        case LOOKING_RIGHT_KEY_DOWN:
-            duck->look_to(RIGHT);
-            break;
-        case LOOKING_LEFT_KEY_DOWN:
-            duck->look_to(LEFT);
-            break;
-        case LOOKING_UP_KEY_DOWN:
-            duck->look_to(UP);
-            break;
-        case LOOKING_DOWN_KEY_DOWN:
-            duck->look_to(DOWN);
-            break;
-    }
-}
 
 bool Game::checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height,
                                   const Platform& platform) {
@@ -301,7 +255,8 @@ void Game::run() {
         // Process all pending messages
         GameloopMessage msg(0, 0);
         while (message_queue.try_pop(msg)) {
-            handlePlayerAction(msg);
+            action_handler.process_player_action(msg);
+            // handlePlayerAction(msg);
         }
         // std::cout << "Updating state\n";
         updateGameState();
