@@ -2,15 +2,19 @@
 #define MATCH_STATE_H
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
 struct DuckIdentity {
     std::string name;
+    // cppcheck-suppress unusedStructMember
     uint8_t id;
+    // cppcheck-suppress unusedStructMember
     char color;
+    // cppcheck-suppress unusedStructMember
     float initial_pos_x;
+    // cppcheck-suppress unusedStructMember
     float initial_pos_y;
 };
 
@@ -21,4 +25,4 @@ struct MatchInitialState {
     // de la partida, como ubicacion de plataformas, etc.
 };
 
-#endif // MATCH_STATE_H
+#endif  // MATCH_STATE_H

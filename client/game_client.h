@@ -37,6 +37,7 @@ private:
     SDL2pp::Renderer renderer;
     ResourceManager resourceManager;
     Socket socket;
+    Lobby lobby;
     ClientProtocol protocol;
     Queue<uint8_t> messagesForServer;
     Queue<std::vector<DuckState>> graphic_queue;
