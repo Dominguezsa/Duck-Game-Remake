@@ -4,7 +4,7 @@
 #include <vector>
 
 SenderThread::SenderThread(ServerProtocol& p, Queue<std::shared_ptr<std::vector<DuckState>>>& q):
-              protocol(p), client_queue(q) {}
+        protocol(p), client_queue(q) {}
 
 void SenderThread::join() {
     clear_queue();

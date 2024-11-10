@@ -5,11 +5,11 @@
 #include <memory>
 #include <vector>
 
+#include "../common/types/match_state.h"
 #include "types/match_status.h"
 
 #include "server_game.h"
 #include "server_match_state_monitor.h"
-#include "../common/types/match_state.h"
 
 class Match {
 private:

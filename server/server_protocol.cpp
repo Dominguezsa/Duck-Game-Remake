@@ -54,8 +54,8 @@ void ServerProtocol::send_game_map_list(std::list<std::string>& map_names) {
     uint16_t map_count = map_names.size();
     map_count = htons(map_count);
     send_data(&map_count, sizeof(uint16_t));
-    
-    for (std::string map_name : map_names) {
+
+    for (std::string map_name: map_names) {
         send_string(map_name);
     }
 }
@@ -67,33 +67,27 @@ void ServerProtocol::recv_match_info(std::string& map_name, std::string& match_n
     recv_uint_8(number_of_players);
 }
 
-void ServerProtocol::send_confirmation(bool success) {
-    send_data(&success, sizeof(uint8_t));
-}
+void ServerProtocol::send_confirmation(bool success) { send_data(&success, sizeof(uint8_t)); }
 
 void ServerProtocol::send_match_list(std::list<std::string>& match_names) {
     uint16_t match_count = match_names.size();
     match_count = htons(match_count);
     send_data(&match_count, sizeof(uint16_t));
-    
-    for (std::string match_name : match_names) {
+
+    for (std::string match_name: match_names) {
         send_string(match_name);
     }
 }
 
-void ServerProtocol::recv_action(char& action) { 
+void ServerProtocol::recv_action(char& action) {
     uint8_t buf;
     recv_uint_8(buf);
-    action = static_cast<char>(buf); 
+    action = static_cast<char>(buf);
 }
 
-void ServerProtocol::recv_match_name(std::string& match_name) {
-    recv_string(match_name);
-}
+void ServerProtocol::recv_match_name(std::string& match_name) { recv_string(match_name); }
 
-void ServerProtocol::recv_player_name(std::string& player_name) {
-    recv_string(player_name);
-}
+void ServerProtocol::recv_player_name(std::string& player_name) { recv_string(player_name); }
 
 void ServerProtocol::send_duck_unique_attributes(DuckIdentity& attributes) {
     send_string(attributes.name);

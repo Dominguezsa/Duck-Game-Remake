@@ -11,10 +11,10 @@
 #include "../common/common_thread.h"
 #include "../common/duck.h"
 #include "../common/types/action_type.h"
+#include "../common/types/match_state.h"
 
 #include "server_gameloop_message.h"
 #include "server_match_state_monitor.h"
-#include "../common/types/match_state.h"
 
 
 class Game: public Thread {
@@ -63,7 +63,7 @@ public:
             fields of the duck_info struct.
     */
     void addPlayer(DuckIdentity& duck_info);
-    
+
     void removePlayer(uint8_t player_id);
     void run() override;
     void stop() override;

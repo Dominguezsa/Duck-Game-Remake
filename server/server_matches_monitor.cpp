@@ -2,7 +2,8 @@
 
 MatchesMonitor::MatchesMonitor(): matches(), matches_mtx() {}
 
-bool MatchesMonitor::create_match(std::string match_name, uint8_t player_limit, DuckIdentity& duck_info,
+bool MatchesMonitor::create_match(std::string match_name, uint8_t player_limit,
+                                  DuckIdentity& duck_info,
                                   Queue<std::shared_ptr<std::vector<DuckState>>>* q) {
     std::lock_guard<std::mutex> lock(matches_mtx);
 
@@ -29,7 +30,7 @@ bool MatchesMonitor::join_match(std::string match_name, DuckIdentity& duck_info,
     return true;
 }
 
-Queue<GameloopMessage>* MatchesMonitor::get_match_queue(std::string match_name) {
+Queue<GameloopMessage>* MatchesMonitor::get_match_queue(const std::string& match_name) {
     std::lock_guard<std::mutex> lock(matches_mtx);
     return matches[match_name]->get_gameloop_queue();
 }

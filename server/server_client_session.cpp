@@ -6,7 +6,7 @@ ClientSession::ClientSession(Socket _skt, MatchesMonitor& monitor):
         skt(std::move(_skt)),
         protocol(this->skt),
         matches_monitor(monitor),
-        client_queue(CLIENT_QUEUE_SIZE) { }
+        client_queue(CLIENT_QUEUE_SIZE) {}
 
 uint8_t ClientSession::get_id() const { return identity.id; }
 
@@ -22,7 +22,7 @@ Queue<GameloopMessage>* ClientSession::get_match_queue() {
     return matches_monitor.get_match_queue(identity.joined_match_name);
 }
 
-void ClientSession::run_receiver_loop() { 
+void ClientSession::run_receiver_loop() {
     GameloopMessage msg;
     msg.player_id = this->identity.id;
     Queue<GameloopMessage>* gameloop_queue = get_match_queue();
@@ -40,7 +40,9 @@ void ClientSession::run() {
     try {
         while (this->_is_alive) {
             run_lobby_loop();
-            if (!this->_is_alive) { break; }
+            if (!this->_is_alive) {
+                break;
+            }
 
             // At this point, the client is in a match.
             SenderThread sender(protocol, client_queue);
@@ -80,7 +82,9 @@ void ClientSession::run_lobby_loop() {
                 break;
             }
             exec_lobby_action(lobby_action, success);
-            if (success) { break; }
+            if (success) {
+                break;
+            }
         }
     } catch (SocketWasCLosedException& e) {
         if (success) {
@@ -90,12 +94,12 @@ void ClientSession::run_lobby_loop() {
     }
 }
 
-void ClientSession::exec_lobby_action(char action, bool &success) {
+void ClientSession::exec_lobby_action(char action, bool& success) {
     std::string player_name, match_name;
     this->protocol.recv_player_name(player_name);
     DuckIdentity duck_info;
     duck_info.name = player_name;
-    
+
     switch (action) {
         case CMD_CREATE: {
             // (2)
@@ -103,35 +107,32 @@ void ClientSession::exec_lobby_action(char action, bool &success) {
             // sean provistos por alguna otra entidad.
             std::list<std::string> map_list;
             map_list.push_back("Golden Grove Clash");
-            
+
             protocol.send_game_map_list(map_list);
-            
+
             // (3)
             uint8_t number_of_players;
             std::string map_name;
-            this->protocol.recv_match_info(map_name, match_name,
-                                           number_of_players);
+            this->protocol.recv_match_info(map_name, match_name, number_of_players);
 
-            success = matches_monitor.create_match(match_name,
-         number_of_players, duck_info, &client_queue);
-            
+            success = matches_monitor.create_match(match_name, number_of_players, duck_info,
+                                                   &client_queue);
+
             // (4)
             protocol.send_confirmation(success);
             break;
         }
         case CMD_JOIN: {
             // (2)
-            std::list<std::string> available_matches =
-                 matches_monitor.get_available_match_names();
+            std::list<std::string> available_matches = matches_monitor.get_available_match_names();
 
             protocol.send_match_list(available_matches);
-            
+
             // (3)
             this->protocol.recv_match_name(match_name);
 
             // (4)
-            success = matches_monitor.join_match(match_name, duck_info,
-                                                     &client_queue);
+            success = matches_monitor.join_match(match_name, duck_info, &client_queue);
             protocol.send_confirmation(success);
             break;
         }
@@ -141,7 +142,7 @@ void ClientSession::exec_lobby_action(char action, bool &success) {
         // un color del lado del cliente en base al id (que siempre
         // va a ser unico).
         duck_info.color = static_cast<char>(duck_info.id);
-        
+
         protocol.send_duck_unique_attributes(duck_info);
 
         identity.name = player_name;

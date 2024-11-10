@@ -16,11 +16,11 @@ void Game::addPlayer(DuckIdentity& duck_info) {
     Position initial_pos{100 + (duck_info.id * 100), 100};  // Example starting positions
     Weapon initial_weapon(WeaponType::NoneType, 0);
     ducks[duck_info.id] = std::make_unique<Duck>(duck_info.id, 100, 1, initial_pos, initial_weapon);
-    
+
     // TO-DO: Asignarle al Duck creado su nombre (i.e. el valor de duck_info.name)
     //        En el commit de este comentario aun no se implentó un metodo set_name()
     //        en la clase Duck.
-    
+
     platforms = {
             {0.0f, 350.0f, 600.0f, 32.0f},   // Left platform
             {600.0f, 450.0f, 600.0f, 32.0f}  // Right platform

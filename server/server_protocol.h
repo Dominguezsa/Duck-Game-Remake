@@ -5,6 +5,7 @@
 #include <iostream>
 #include <list>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "../common/common_protocol.h"
@@ -28,12 +29,12 @@ public:
     void send_msg(void* msg) override;
 
     // --------- Pre-match messages (lobby) -------
-    
+
     // Pos: Sends the names of the existing game maps to the client.
     void send_game_map_list(std::list<std::string>& map_names);
 
     /* Pos: Receives necessary information to create a match:
-            
+
             - A name of a map (selected by the client)
             - A match name
             - The number of players that will participate in the match.
