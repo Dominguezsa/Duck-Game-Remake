@@ -26,7 +26,7 @@ void AnimationHelper::update_animation_frame(int it) {
 
 std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> AnimationHelper::get_animation_frames(int it) {
 
-    set_run_anim_start(it);
+    // set_run_anim_start(it);
     update_animation_frame(it);
 
     std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> frames;
@@ -40,30 +40,5 @@ std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> AnimationHelper::get_animatio
                 resourceManager.getAnimationFrame(duck.current_arm_animation, duck.current_frame)));
     }
 
-    // std::transform(ducks_animation_data.begin(), ducks_animation_data.end(),
-    //                std::back_inserter(frames), [this](const DuckGraphicData& duck) {
-    //                    return resourceManager.getAnimationFrame(duck.current_animation,
-    //                                                             duck.current_frame);
-    //                });
-
     return frames;
 }
-
-// std::vector<SDL2pp::Rect> AnimationHelper::get_animation_arms(int it) {
-
-//     std::vector<SDL2pp::Rect> frames;
-
-//     std::transform(ducks_animation_data.begin(), ducks_animation_data.end(),
-//                    std::back_inserter(frames), [this](const DuckGraphicData& duck) {
-//                        return resourceManager.getAnimationFrame(duck.current_arm_animation,
-//                                                                 duck.current_frame);
-//                    });
-
-//     // for (auto& duck: ducks_animation_data) {
-//     //     frames.push_back(
-//     //             resourceManager.getAnimationFrame(duck.current_arm_animation,
-//     duck.current_frame));
-//     // }
-
-//     return frames;
-// }

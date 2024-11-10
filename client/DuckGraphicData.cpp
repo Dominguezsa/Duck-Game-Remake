@@ -45,10 +45,5 @@ void DuckGraphicData::update_current_animation() {
 }
 
 void DuckGraphicData::set_animation_start(int it) {
-    if (my_duck.is_running && animation_start == -1) {
-        animation_start = it;
-    } else if (!my_duck.is_running && animation_start != -1) {
-        animation_start = -1;
-    }
-    // std::cout << "The animation start is: " << animation_start << std::endl;
+    animation_start = (animation_start == -1) ? it : -1;
 }

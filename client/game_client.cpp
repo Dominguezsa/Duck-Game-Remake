@@ -122,11 +122,13 @@ void GameClient::updateDuckStates() {
     }
 }
 
-void GameClient::processEvent(const SDL_Event& event, bool& quit) {
+void GameClient::processEvent(const SDL_Event& event, bool& quit, int it) {
     // Esto debería ser algo tipo double dispatch porque es un asco así
     if (event.type == SDL_QUIT) {
         quit = true;
     } else if (event.type == SDL_KEYDOWN) {
+        animationHelper.set_run_anim_start(it);
+
         switch (event.key.keysym.sym) {
             case SDLK_ESCAPE:
                 quit = true;
@@ -205,7 +207,7 @@ void GameClient::mainLoop(const int it, bool& quit) {
         if (event.type == SDL_KEYDOWN && event.key.repeat) {
             continue;
         }
-        processEvent(event, quit);
+        processEvent(event, quit, it);
     }
 
     screenRenderer.updateScreen(ducks, it);
