@@ -4,6 +4,7 @@
 #include <memory>
 #include <thread>
 
+#include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_keycode.h>
@@ -42,11 +43,11 @@ GameClient::GameClient(const int window_width, const int window_height,
         protocol(socket),
         messagesForServer(),
         graphic_queue(GRAPHIC_QUEUE_SIZE),
-        duck1(),
-        duck2(),
-        animationHelper(duck1, duck2),
+        ducks({Duck(), Duck()}),
+        animationHelper(ducks, resourceManager),
         screenRenderer(renderer, resourceManager, animationHelper),
-        keyboardState(std::make_unique<const uint8_t*>(SDL_GetKeyboardState(nullptr))) {}
+        keyboardState(std::make_unique<const uint8_t*>(SDL_GetKeyboardState(nullptr))),
+        current_event() {}
 
 // Moved the constantRateLoop implementation here because making it a separate file was causing a
 // lot of problems, but yeah its repeating the same code in both client and server
@@ -131,21 +132,19 @@ void GameClient::updateDuckStates() {
 
     while (graphic_queue.try_pop(duck_states)) {}
 
-    // ugly but for now it works
-    if (duck_states.size() == 1) {
-        duck1.update_state(duck_states[0]);
-    } else if (duck_states.size() == 2) {
-        duck1.update_state(duck_states[0]);
-        duck2.update_state(duck_states[1]);
+    for (int i = 0; i < (int)duck_states.size(); i++) {
+        // std::cout << "updated ducks\n";
+        ducks[i].update_state(duck_states[i]);
     }
-    // std::cout << "Duck state updated\n";
 }
 
-void GameClient::processEvent(const SDL_Event& event, bool& quit) {
+void GameClient::processEvent(const SDL_Event& event, bool& quit, int it) {
     // Esto debería ser algo tipo double dispatch porque es un asco así
     if (event.type == SDL_QUIT) {
         quit = true;
     } else if (event.type == SDL_KEYDOWN) {
+        animationHelper.set_run_anim_start(it);
+
         switch (event.key.keysym.sym) {
             case SDLK_ESCAPE:
                 quit = true;
@@ -221,13 +220,13 @@ void GameClient::mainLoop(const int it, bool& quit) {
     // Now processing all of the events on this frame
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-        processEvent(event, quit);
+        if (event.type == SDL_KEYDOWN && event.key.repeat) {
+            continue;
+        }
+        processEvent(event, quit, it);
     }
 
-    // Todo esto debería mínimo en una función aparte, muy probablemente en una clase aparte que se
-    // encargue del renderizado
-
-    screenRenderer.updateScreen(duck1, duck2, it);
+    screenRenderer.updateScreen(ducks, it);
 }
 
 

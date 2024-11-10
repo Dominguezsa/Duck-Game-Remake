@@ -108,6 +108,7 @@ void Duck::jump(bool activar) {
     // if true, spacebar down; if false, spacebar up
     if (activar && is_jumping) {
         is_gliding = true;
+        vertical_velocity = 0.0f;
         return;
     }
     if (activar) {
@@ -171,7 +172,7 @@ void Duck::get_state(DuckState& state) {
 }
 
 void Duck::update_state(const DuckState& state) {
-    // duck_id = state.duck_id;
+    duck_id = state.duck_id;
     life_points = state.life_points;
     looking = state.looking;
     position = state.position;

@@ -1,6 +1,9 @@
 #ifndef SCREEN_RENDERER_H
 #define SCREEN_RENDERER_H
 
+#include <string>
+#include <vector>
+
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/SDL2pp.hh>
 
@@ -25,16 +28,18 @@ private:
     SDL2pp::Renderer& renderer;
     ResourceManager& resourceManager;
     AnimationHelper& animationHelper;
+    std::vector<std::string> colors_per_id = {"white_duck", "orange_duck", "grey_duck",
+                                              "yellow_duck"};
 
     void copyBackground();
     void copyPlatforms();
-    void copyDucks(const DuckState& duck1, const DuckState& duck2, const int it);
-    void copyDebugText(const DuckState& duck1, const DuckState& duck2);
+    void copyDucks(const std::vector<Duck>& ducks, const int it);
+    void copyDebugText(const std::vector<Duck>& ducks);
 
 public:
     ScreenRenderer(SDL2pp::Renderer& renderer, ResourceManager& resourceManager,
                    AnimationHelper& animHelp);
-    void updateScreen(Duck& duck1, Duck& duck2, const int it);
+    void updateScreen(const std::vector<Duck>& ducks, const int it);
 };
 
 

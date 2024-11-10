@@ -1,44 +1,65 @@
 #include "ScreenRenderer.h"
 
 #include <string>
+#include <utility>
+#include <vector>
+
+#define DUCK_WIDTH 32
+#define DUCK_HEIGTH 32
+#define DUCK_SCALE 3
+
+#define DUCK_ARM_WIDTH 16
+#define DUCK_ARM_HEIGTH 16
 
 ScreenRenderer::ScreenRenderer(SDL2pp::Renderer& renderer, ResourceManager& resourceManager,
                                AnimationHelper& animHelp):
         renderer(renderer), resourceManager(resourceManager), animationHelper(animHelp) {}
 
-void ScreenRenderer::copyDucks(const DuckState& duck1_state, const DuckState& duck2_state,
-                               const int it) {
-    // Esto es código repetido pero un toque más maquillado, osea es pasable pero no
+void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
 
-    SDL2pp::Rect frameDuck1;
-    SDL2pp::Rect frameDuck2;
+    std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> frameDucks =
+            animationHelper.get_animation_frames(it);
+    // std::vector<SDL2pp::Rect> frameDucksArms = animationHelper.get_animation_frames(it);
 
-    animationHelper.update_run_anim_start_duck1(it);
-    animationHelper.update_run_anim_start_duck2(it);
-
-    int anim_phase_duck1 = animationHelper.get_run_anim_phase_duck1(it);
-    int anim_phase_duck2 = animationHelper.get_run_anim_phase_duck2(it);
-
-    frameDuck1 = resourceManager.getAnimationFrame("duck_running", anim_phase_duck1);
-    frameDuck2 = resourceManager.getAnimationFrame("duck_running", anim_phase_duck2);
+    int arm_position_x;
+    int arm_position_y;
 
     // Now lets render the ducks, taking into account the direction they are facing
-    if (duck1_state.looking == 0) {
-        renderer.Copy(*resourceManager.getTexture("white_duck"), frameDuck1,
-                      SDL2pp::Rect(duck1_state.position.x, duck1_state.position.y, 62, 62), 0.0,
-                      SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
-    } else {
-        renderer.Copy(*resourceManager.getTexture("white_duck"), frameDuck1,
-                      SDL2pp::Rect(duck1_state.position.x, duck1_state.position.y, 62, 62));
-    }
+    for (int i = 0; i < (int)ducks.size(); i++) {
+        // std::cout << "Color for this duck id: " << +ducks[i].duck_id
+        //           << " is: " << colors_per_id[ducks[i].duck_id] << std::endl;
 
-    if (duck2_state.looking == 0) {
-        renderer.Copy(*resourceManager.getTexture("orange_duck"), frameDuck2,
-                      SDL2pp::Rect(duck2_state.position.x, duck2_state.position.y, 62, 62), 0.0,
-                      SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
-    } else {
-        renderer.Copy(*resourceManager.getTexture("orange_duck"), frameDuck2,
-                      SDL2pp::Rect(duck2_state.position.x, duck2_state.position.y, 62, 62));
+
+        if (ducks[i].looking == 0) {
+            arm_position_x = ducks[i].position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9;
+            arm_position_y = ducks[i].position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2;
+
+            renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
+                          frameDucks[i].first,
+                          SDL2pp::Rect(ducks[i].position.x, ducks[i].position.y,
+                                       DUCK_WIDTH * DUCK_SCALE, DUCK_HEIGTH * DUCK_SCALE),
+                          0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+            // drawing the arms
+            renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
+                          frameDucks[i].second,
+                          SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
+                                       DUCK_ARM_HEIGTH * DUCK_SCALE),
+                          0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+
+        } else {
+
+            arm_position_x = ducks[i].position.x + (DUCK_ARM_WIDTH * DUCK_SCALE) / 3.5;
+            arm_position_y = ducks[i].position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2;
+
+            renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
+                          frameDucks[i].first,
+                          SDL2pp::Rect(ducks[i].position.x, ducks[i].position.y,
+                                       DUCK_WIDTH * DUCK_SCALE, DUCK_HEIGTH * DUCK_SCALE));
+            renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
+                          frameDucks[i].second,
+                          SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
+                                       DUCK_ARM_HEIGTH * DUCK_SCALE));
+        }
     }
 }
 
@@ -68,61 +89,40 @@ void ScreenRenderer::copyBackground() {
     renderer.Copy(*resourceManager.getTexture("background"), SDL2pp::NullOpt, SDL2pp::NullOpt);
 }
 
-void ScreenRenderer::copyDebugText(const DuckState& duck1_state, const DuckState& duck2_state) {
+void ScreenRenderer::copyDebugText(const std::vector<Duck>& ducks) {
     // Debug text
+    for (int i = 0; i < (int)ducks.size(); ++i) {
+        std::string duck_position_text =
+                "Position of duck_" + std::to_string(i + 1) + ": " +
+                std::to_string((int)ducks[i].position.x) + ", " +
+                std::to_string((int)ducks[i].position.y) + " Duck " + std::to_string(i + 1) +
+                " is running: " + std::to_string(ducks[i].is_running) + " Duck " +
+                std::to_string(i + 1) + " is facing: " + std::to_string(ducks[i].looking) +
+                " Duck " + std::to_string(i + 1) +
+                " is jumping: " + std::to_string(ducks[i].is_jumping) + " Duck " +
+                std::to_string(i + 1) + " is falling: " + std::to_string(ducks[i].is_falling) +
+                " Duck " + std::to_string(i + 1) +
+                " is gliding: " + std::to_string(ducks[i].is_gliding) + " Duck " +
+                std::to_string(i + 1) + " is on air: " + std::to_string(ducks[i].in_air) +
+                " Duck " + std::to_string(i + 1) +
+                " vertical velocity: " + std::to_string(ducks[i].vertical_velocity);
 
-    std::string duck1_position_text =
-            "Position of duck_1: " + std::to_string((int)duck1_state.position.x) + ", " +
-            std::to_string((int)duck1_state.position.y) +
-            " Duck 1 is running: " + std::to_string(duck1_state.is_running) +
-            " Duck 1 is facing: " + std::to_string(duck1_state.looking) +
-            " Duck 1 is jumping: " + std::to_string(duck1_state.is_jumping) +
-            " Duck 1 is falling: " + std::to_string(duck1_state.is_falling) +
-            " Duck 1 is gliding: " + std::to_string(duck1_state.is_gliding) +
-            " Duck 1 is on air: " + std::to_string(duck1_state.in_air) +
-            " Duck 1 vertical velocity: " + std::to_string(duck1_state.vertical_velocity);
+        SDL2pp::Texture text_sprite(renderer,
+                                    resourceManager.getFont("vera")->RenderText_Blended(
+                                            duck_position_text, SDL_Color{255, 255, 255, 255}));
 
-    std::string duck2_position_text =
-            "Position of duck_2: " + std::to_string((int)duck2_state.position.x) + ", " +
-            std::to_string((int)duck2_state.position.y) +
-            " Duck 2 is running: " + std::to_string(duck2_state.is_running) +
-            " Duck 2 is facing: " + std::to_string(duck2_state.looking) +
-            " Duck 2 is jumping: " + std::to_string(duck2_state.is_jumping) +
-            " Duck 2 is falling: " + std::to_string(duck2_state.is_falling) +
-            " Duck 2 is gliding: " + std::to_string(duck2_state.is_gliding) +
-            " Duck 2 is on air: " + std::to_string(duck2_state.in_air) +
-            " Duck 2 vertical velocity: " + std::to_string(duck2_state.vertical_velocity);
-
-    SDL2pp::Texture text_sprite_1(renderer,
-                                  resourceManager.getFont("vera")->RenderText_Blended(
-                                          duck1_position_text, SDL_Color{255, 255, 255, 255}));
-
-    SDL2pp::Texture text_sprite_2(renderer,
-                                  resourceManager.getFont("vera")->RenderText_Blended(
-                                          duck2_position_text, SDL_Color{255, 255, 255, 255}));
-
-    renderer.Copy(text_sprite_1, SDL2pp::NullOpt,
-                  SDL2pp::Rect(0, 0, text_sprite_1.GetWidth(), text_sprite_1.GetHeight()));
-
-    renderer.Copy(text_sprite_2, SDL2pp::NullOpt,
-                  SDL2pp::Rect(0, 20, text_sprite_1.GetWidth(), text_sprite_1.GetHeight()));
+        renderer.Copy(text_sprite, SDL2pp::NullOpt,
+                      SDL2pp::Rect(0, i * 20, text_sprite.GetWidth(), text_sprite.GetHeight()));
+    }
 }
 // Por ahora que reciba los dos patos por parámetro, probablemente en un futuro sean o una clase o
 // directamente un vector de patos para la partida
-void ScreenRenderer::updateScreen(Duck& duck1, Duck& duck2, const int it) {
-
-    DuckState duck1_state;
-    DuckState duck2_state;
-
-    duck1.get_state(duck1_state);
-    duck2.get_state(duck2_state);
-
+void ScreenRenderer::updateScreen(const std::vector<Duck>& ducks, const int it) {
     renderer.Clear();
-
     copyBackground();
     copyPlatforms();
-    copyDucks(duck1_state, duck2_state, it);
-    copyDebugText(duck1_state, duck2_state);
+    copyDucks(ducks, it);
+    copyDebugText(ducks);
 
     renderer.Present();
 }

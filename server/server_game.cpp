@@ -5,6 +5,22 @@
 
 enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
 
+#define GRAVITY 0.5f
+#define FLUTTER_FORCE -0.3f
+#define MAX_FALL_SPEED 13.0f
+#define MAX_FLUTTER_SPEED 3.0f
+#define DUCK_WIDTH 64.0f
+#define DUCK_HEIGHT 64.0f
+#define MOVE_SPEED 5.0f
+
+#define GRAVITY 0.5f
+#define FLUTTER_FORCE -0.3f
+#define MAX_FALL_SPEED 13.0f
+#define MAX_FLUTTER_SPEED 3.0f
+#define DUCK_WIDTH 64.0f
+#define DUCK_HEIGHT 64.0f
+#define MOVE_SPEED 5.0f
+
 Game::Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue):
         message_queue(queue),
         is_running(false),
@@ -101,13 +117,13 @@ bool Game::checkPlatformCollision(const Position& duck_pos, float duck_width, fl
 }
 
 void Game::updateGameState() {
-    const float gravity = 0.5f;
-    const float flutter_force = -0.3f;
-    const float max_fall_speed = 15.0f;
-    const float duck_width = 64.0f;
-    const float duck_height = 64.0f;
-    const float ground_level = 700.0f - duck_height;
-    const float move_speed = 5.0f;
+    // const float gravity = 0.5f;
+    // const float FLUTTER_FORCE = -0.3f;
+    // const float max_fall_speed = 15.0f;
+    // const float duck_width = 64.0f;
+    // const float duck_height = 64.0f;
+    const float ground_level = 700.0f - DUCK_HEIGHT;
+    // const float move_speed = 5.0f;
 
     std::shared_ptr<std::vector<DuckState>> duck_states =
             std::make_shared<std::vector<DuckState>>();
@@ -125,20 +141,20 @@ void Game::updateGameState() {
 
         // Apply gravity if in air
         if (duck->in_air) {
-            duck->vertical_velocity += gravity;
+            duck->vertical_velocity += GRAVITY;
 
             // Apply flutter effect if jumping is held
             if (duck->is_gliding) {
-                duck->vertical_velocity += flutter_force;
-                if (duck->vertical_velocity > 3.0f) {
-                    duck->vertical_velocity = 3.0f;
+                duck->vertical_velocity += FLUTTER_FORCE;
+                if (duck->vertical_velocity > MAX_FLUTTER_SPEED) {
+                    duck->vertical_velocity = MAX_FLUTTER_SPEED;
                 }
             }
         }
 
         // Limit fall speed
-        if (duck->vertical_velocity > max_fall_speed) {
-            duck->vertical_velocity = max_fall_speed;
+        if (duck->vertical_velocity > MAX_FALL_SPEED) {
+            duck->vertical_velocity = MAX_FALL_SPEED;
         }
 
         // Update horizontal position
@@ -147,11 +163,11 @@ void Game::updateGameState() {
             if (duck->looking == 1) {
                 // duck->position.x += move_speed;
                 double actual_pos = duck->position.x;
-                double new_pos = actual_pos + move_speed;
+                double new_pos = actual_pos + MOVE_SPEED;
                 duck->position.x = new_pos;
                 // std::cout << "New position is: " << duck->position.x << std::endl;
             } else if (duck->looking == 0) {
-                duck->position.x -= move_speed;
+                duck->position.x -= MOVE_SPEED;
                 // std::cout << "New position is: " << duck->position.x << std::endl;
             }
         }
@@ -161,14 +177,15 @@ void Game::updateGameState() {
 
         // Check platform collisions
         for (const auto& platform: platforms) {
-            if (checkPlatformCollision(duck->position, duck_width, duck_height, platform)) {
-                if (duck->vertical_velocity > 0 && previous_y + duck_height <= platform.y) {
+            if (checkPlatformCollision(duck->position, DUCK_WIDTH, DUCK_HEIGHT, platform)) {
+                if (duck->vertical_velocity > 0 && previous_y + DUCK_HEIGHT <= platform.y) {
                     // Landing on platform
                     // Small adjustment to avoid a horizontal collision with the platform
-                    duck->position.y = platform.y - duck_height - 2;
+                    duck->position.y = platform.y - DUCK_HEIGHT - 2;
                     duck->vertical_velocity = 0;
                     duck->in_air = false;
                     duck->is_jumping = false;
+                    duck->is_gliding = false;
                 } else if (duck->vertical_velocity < 0 &&
                            previous_y >= platform.y + platform.height) {
                     // Hitting platform from below
@@ -192,9 +209,11 @@ void Game::updateGameState() {
         // Screen boundaries
         if (duck->position.x < 0) {
             duck->position.x = 0;
-        } else if (duck->position.x > 1200 - duck_width) {
-            duck->position.x = 1200 - duck_width;
+        } else if (duck->position.x > 1200 - DUCK_WIDTH) {
+            duck->position.x = 1200 - DUCK_WIDTH;
         }
+
+        duck->is_falling = duck->vertical_velocity > 0;
 
         // Update duck state
         DuckState state(duck->duck_id, duck->life_points, duck->looking, duck->position,
@@ -249,6 +268,7 @@ void Game::startNewRound() {
 
 bool Game::checkGameEnd() {
     // Por ahora tiro un suppress, en teoría debería usar un std::of_any() pero después vemos
+    // cppcheck-suppress useStlAlgorithm
     for (const auto& victory_pair: victories) {
         if (victory_pair.second >= VICTORIES_TO_WIN) {
             uint16_t max_victories = victory_pair.second;

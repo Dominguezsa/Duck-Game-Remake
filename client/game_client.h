@@ -40,12 +40,13 @@ private:
     ClientProtocol protocol;
     Queue<uint8_t> messagesForServer;
     Queue<std::vector<DuckState>> graphic_queue;
-    Duck duck1;
-    Duck duck2;
+    // cppcheck-suppress unusedStructMember
+    std::vector<Duck> ducks;
     AnimationHelper animationHelper;
     ScreenRenderer screenRenderer;
     // Algo específico de SDL, no creo que está en la librería SDL2pp
     std::unique_ptr<const uint8_t*> keyboardState;
+    SDL_Event current_event;
 
     // DuckState stateDuck1;
     // DuckState stateDuck2;
@@ -59,7 +60,7 @@ public:
     void run();
     void run_lobby();
     void updateDuckStates();
-    void processEvent(const SDL_Event& event, bool& quit);
+    void processEvent(const SDL_Event& event, bool& quit, int it);
     void mainLoop(const int it, bool& quit);
 };
 

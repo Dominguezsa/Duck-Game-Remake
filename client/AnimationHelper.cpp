@@ -1,37 +1,44 @@
 #include "AnimationHelper.h"
 
-AnimationHelper::AnimationHelper(Duck& duck1, Duck& duck2): duck1(duck1), duck2(duck2) {}
+#include <utility>
 
-void AnimationHelper::update_run_anim_start_duck1(int it) {
-    if (duck1.is_running && run_anim_phase_duck1 == -1) {
-        run_anim_start_duck1 = it;
-    } else if (!duck1.is_running && run_anim_start_duck1 != -1) {
-        run_anim_start_duck1 = -1;
+#include "ResourceManager.h"
+
+AnimationHelper::AnimationHelper(std::vector<Duck>& ducks, ResourceManager& resourceManager):
+        ducks_animation_data(), resourceManager(resourceManager) {
+
+    std::transform(ducks.begin(), ducks.end(), std::back_inserter(ducks_animation_data),
+                   [](Duck& duck) { return DuckGraphicData(duck); });
+}
+
+void AnimationHelper::set_run_anim_start(int it) {
+    for (auto& duck: ducks_animation_data) {
+        duck.set_animation_start(it);
     }
 }
 
-void AnimationHelper::update_run_anim_start_duck2(int it) {
-    if (duck2.is_running && run_anim_phase_duck2 == -1) {
-        run_anim_start_duck2 = it;
-    } else if (!duck2.is_running && run_anim_start_duck2 != -1) {
-        run_anim_start_duck2 = -1;
+void AnimationHelper::update_animation_frame(int it) {
+    for (auto& duck: ducks_animation_data) {
+        duck.update_current_animation();
+        duck.update_current_frame(it);
     }
-}
-// Again, repeating code but in a different place this time
-int AnimationHelper::get_run_anim_phase_duck1(int it) {
-    if (duck1.is_running) {
-        run_anim_phase_duck1 = ((it - run_anim_start_duck1) / 6) % 6;
-    } else {
-        run_anim_phase_duck1 = 0;
-    }
-    return run_anim_phase_duck1;
 }
 
-int AnimationHelper::get_run_anim_phase_duck2(int it) {
-    if (duck2.is_running) {
-        run_anim_phase_duck2 = ((it - run_anim_start_duck2) / 6) % 6;
-    } else {
-        run_anim_phase_duck2 = 0;
+std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> AnimationHelper::get_animation_frames(int it) {
+
+    // set_run_anim_start(it);
+    update_animation_frame(it);
+
+    std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> frames;
+
+    // I prefer a normal for loop but cppcheck doesn't like it so whatever
+
+    for (const auto& duck: ducks_animation_data) {
+        // cppcheck-suppress useStlAlgorithm
+        frames.push_back(std::make_pair(
+                resourceManager.getAnimationFrame(duck.current_animation, duck.current_frame),
+                resourceManager.getAnimationFrame(duck.current_arm_animation, duck.current_frame)));
     }
-    return run_anim_phase_duck2;
+
+    return frames;
 }
