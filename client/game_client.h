@@ -22,6 +22,7 @@
 #include "../common/types/duck_state.h"
 
 #include "AnimationHelper.h"
+#include "CommandCenter.h"
 #include "ResourceManager.h"
 #include "ScreenRenderer.h"
 #include "protocol.h"
@@ -45,7 +46,8 @@ private:
     AnimationHelper animationHelper;
     ScreenRenderer screenRenderer;
     // Algo específico de SDL, no creo que está en la librería SDL2pp
-    std::unique_ptr<const uint8_t*> keyboardState;
+    std::shared_ptr<const uint8_t*> keyboardState;
+    CommandCenter commandCenter;
 
 
 public:
@@ -55,7 +57,6 @@ public:
     ~GameClient();
     void run();
     void updateDuckStates();
-    void processEvent(const SDL_Event& event, bool& quit, int it);
     void mainLoop(const int it, bool& quit);
 };
 

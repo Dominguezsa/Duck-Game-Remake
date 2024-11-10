@@ -46,7 +46,8 @@ GameClient::GameClient(const int window_width, const int window_height,
         ducks({Duck(), Duck()}),
         animationHelper(ducks, resourceManager),
         screenRenderer(renderer, resourceManager, animationHelper),
-        keyboardState(std::make_unique<const uint8_t*>(SDL_GetKeyboardState(nullptr))) {}
+        keyboardState(std::make_shared<const uint8_t*>(SDL_GetKeyboardState(nullptr))),
+        commandCenter(messagesForServer, keyboardState) {}
 
 // Moved the constantRateLoop implementation here because making it a separate file was causing a
 // lot of problems, but yeah its repeating the same code in both client and server
@@ -121,81 +122,6 @@ void GameClient::updateDuckStates() {
     }
 }
 
-void GameClient::processEvent(const SDL_Event& event, bool& quit, int it) {
-    // Esto debería ser algo tipo double dispatch porque es un asco así
-    if (event.type == SDL_QUIT) {
-        quit = true;
-    } else if (event.type == SDL_KEYDOWN) {
-        animationHelper.set_run_anim_start(it);
-
-        switch (event.key.keysym.sym) {
-            case SDLK_ESCAPE:
-                quit = true;
-                break;
-            case SDLK_1:
-                mixer.PlayChannel(-1, *resourceManager.getSFX("boom1"), 1);
-                break;
-            case SDLK_2:
-                mixer.PlayChannel(-1, *resourceManager.getSFX("boom2"), 0);
-                break;
-            case SDLK_3:
-                mixer.PlayChannel(-1, *resourceManager.getSFX("boom3"), 0);
-                break;
-            case SDLK_d:
-                messagesForServer.push(MOVE_RIGHT_KEY_DOWN);
-                break;
-            case SDLK_a:
-                messagesForServer.push(MOVE_LEFT_KEY_DOWN);
-                break;
-            case SDLK_w:
-                messagesForServer.push(LOOKING_UP_KEY_DOWN);
-                break;
-            case SDLK_s:
-                messagesForServer.push(LOOKING_DOWN_KEY_DOWN);
-                break;
-            case SDLK_SPACE:
-                messagesForServer.push(JUMP_KEY_DOWN);
-                break;
-            case SDLK_f:
-                messagesForServer.push(SHOOT_KEY_DOWN);
-                break;
-            default:
-                break;
-        }
-    } else if (event.type == SDL_KEYUP) {
-        switch (event.key.keysym.sym) {
-            case SDLK_d:
-                if ((*keyboardState)[SDL_SCANCODE_A]) {
-                    messagesForServer.push(LOOKING_LEFT_KEY_DOWN);
-                    break;
-                }
-                messagesForServer.push(MOVE_RIGHT_KEY_UP);
-                break;
-            case SDLK_a:
-                if ((*keyboardState)[SDL_SCANCODE_D]) {
-                    messagesForServer.push(LOOKING_RIGHT_KEY_DOWN);
-                    break;
-                }
-                messagesForServer.push(MOVE_LEFT_KEY_UP);
-                break;
-            case SDLK_w:
-                messagesForServer.push(LOOKING_UP_KEY_UP);
-                break;
-            case SDLK_s:
-                messagesForServer.push(LOOKING_DOWN_KEY_UP);
-                break;
-            case SDLK_SPACE:
-                messagesForServer.push(JUMP_KEY_UP);
-                break;
-            case SDLK_f:
-                messagesForServer.push(SHOOT_KEY_UP);
-                break;
-            default:
-                break;
-        }
-    }
-}
-
 void GameClient::mainLoop(const int it, bool& quit) {
     // Now it should do everything that the game needs to do in one iteration, like play if it needs
     // to play music, render sprites, etc.
@@ -206,7 +132,16 @@ void GameClient::mainLoop(const int it, bool& quit) {
         if (event.type == SDL_KEYDOWN && event.key.repeat) {
             continue;
         }
-        processEvent(event, quit, it);
+        if (event.type == SDL_KEYDOWN) {
+            animationHelper.set_run_anim_start(it);
+        }
+        // Por ahora, como estos son los únicos eventos que reciben algo
+        // los trato de forma separada
+        if (event.type == SDL_QUIT ||
+            (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
+            quit = true;
+        }
+        commandCenter.processEvent(event);
     }
 
     screenRenderer.updateScreen(ducks, it);
