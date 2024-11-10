@@ -15,19 +15,10 @@ PlayerActionHandler::PlayerActionHandler(std::unordered_map<uint8_t, std::unique
 
 
 void PlayerActionHandler::init_handlers() {
-    // Ugly, but it works
-    add_handler(MOVE_RIGHT_KEY_DOWN, &PlayerActionHandler::handle_move_right_key_down);
-    add_handler(MOVE_RIGHT_KEY_UP, &PlayerActionHandler::handle_move_right_key_up);
-    add_handler(MOVE_LEFT_KEY_DOWN, &PlayerActionHandler::handle_move_left_key_down);
-    add_handler(MOVE_LEFT_KEY_UP, &PlayerActionHandler::handle_move_left_key_up);
-    add_handler(JUMP_KEY_DOWN, &PlayerActionHandler::handle_jump_key_down);
-    add_handler(JUMP_KEY_UP, &PlayerActionHandler::handle_jump_key_up);
-    add_handler(SHOOT_KEY_DOWN, &PlayerActionHandler::handle_shoot_key_down);
-    add_handler(SHOOT_KEY_UP, &PlayerActionHandler::handle_shoot_key_up);
-    add_handler(LOOKING_RIGHT_KEY_DOWN, &PlayerActionHandler::handle_looking_right_key_down);
-    add_handler(LOOKING_LEFT_KEY_DOWN, &PlayerActionHandler::handle_looking_left_key_down);
-    add_handler(LOOKING_UP_KEY_DOWN, &PlayerActionHandler::handle_looking_up_key_down);
-    add_handler(LOOKING_DOWN_KEY_DOWN, &PlayerActionHandler::handle_looking_down_key_down);
+
+    for (const auto& action: action_to_handlers) {
+        add_handler(action.first, action.second);
+    }
 }
 
 void PlayerActionHandler::add_handler(std::uint8_t player_action,
