@@ -109,7 +109,7 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
             map_list.push_back("Golden Grove Clash");
             std::cout << "Sending map list\n";
             protocol.send_game_map_list(map_list);
-
+            std::cout << "map list SENT\n";
             // (3)
             uint8_t number_of_players;
             std::string map_name;
