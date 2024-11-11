@@ -31,19 +31,29 @@ std::vector<std::string> LobbyProtocol::receiveMapList() {
     }
     return maps;
 }
+#include <iostream>
 
 int LobbyProtocol::sendMatchCreation(uint8_t numPlayers, const std::string& matchName,
                                      const std::string& mapName) {
-    uint8_t cmd = CMD_CREATE;
-    std::vector<uint8_t> buffer;
-    buffer.push_back(cmd);
-    buffer.push_back(numPlayers);
-    buffer.insert(buffer.end(), matchName.begin(), matchName.end());
-    buffer.push_back('\0');
-    buffer.insert(buffer.end(), mapName.begin(), mapName.end());
-    buffer.push_back('\0');
+    std::vector<char> vectorForSocket;
+    vectorForSocket.push_back('C');
+    vectorForSocket.push_back(numPlayers);
+    uint16_t matchNameSize = matchName.size();
+    vectorForSocket.push_back(matchNameSize >> 8);
+    vectorForSocket.push_back(matchNameSize & 0xFF);
+    vectorForSocket.insert(vectorForSocket.end(), matchName.begin(), matchName.end());
+    uint16_t mapNameSize = mapName.size();
+    vectorForSocket.push_back(mapNameSize >> 8);
+    vectorForSocket.push_back(mapNameSize & 0xFF);
 
-    send_data(buffer.data(), buffer.size());
+    vectorForSocket.insert(vectorForSocket.end(), mapName.begin(), mapName.end());
+    std::cout << "Sending match creation\n";
+    for (char c: vectorForSocket) {
+        std::cout << static_cast<int>(c) << " ";
+    }
+    std::cout << std::endl;
+
+    send_data(vectorForSocket.data(), vectorForSocket.size());
 
     // Receive confirmation byte
     uint8_t confirmation;

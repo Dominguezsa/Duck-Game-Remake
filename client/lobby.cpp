@@ -127,8 +127,9 @@ void Lobby::handle_create_party() {
             break;
         }
     }
+    uint8_t numPlayersUint8 = static_cast<uint8_t>(numPlayers);
     std::cout << "CHECKPOINT 3:\n";
-    int confirmation = protocol.sendMatchCreation(numPlayers, matchName, maps[mapIndex]);
+    int confirmation = protocol.sendMatchCreation(numPlayersUint8, matchName, maps[mapIndex]);
     std::cout << "CHECKPOINT 4:\n";
     if (confirmation == 1) {
         std::cout << "Match created successfully\n";
