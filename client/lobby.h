@@ -1,6 +1,7 @@
 #ifndef LOBBY_H
 #define LOBBY_H
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -20,11 +21,13 @@ public:
     explicit Lobby(Socket& s);
 
     // Create a new game
-    std::shared_ptr<MatchInitialState> createGame(const std::string& playerName, uint8_t numPlayers, 
-                                                const std::string& matchName, const std::string& mapName);
-    
+    std::shared_ptr<MatchInitialState> createGame(const std::string& playerName, uint8_t numPlayers,
+                                                  const std::string& matchName,
+                                                  const std::string& mapName);
+
     // Join an existing game
-    std::shared_ptr<MatchInitialState> joinGame(const std::string& playerName, const std::string& matchName);
+    std::shared_ptr<MatchInitialState> joinGame(const std::string& playerName,
+                                                const std::string& matchName);
 
     // Get available maps (for game creation)
     std::vector<std::string> getAvailableMaps(const std::string& playerName);

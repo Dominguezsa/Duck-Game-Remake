@@ -1,15 +1,12 @@
 #include "lobby_protocol.h"
+
 #include <stdexcept>
 
-LobbyProtocol::LobbyProtocol(Socket& socket) : Protocol(socket) {}
+LobbyProtocol::LobbyProtocol(Socket& socket): Protocol(socket) {}
 
-void LobbyProtocol::read_msg(void* msg) {
-    (void)msg;
-}
+void LobbyProtocol::read_msg(void* msg) { (void)msg; }
 
-void LobbyProtocol::send_msg(void* msg) {
-    (void)msg;
-}
+void LobbyProtocol::send_msg(void* msg) { (void)msg; }
 
 void LobbyProtocol::sendCreateCommand(const std::string& playerName) {
     uint8_t cmd = CMD_CREATE;
@@ -35,17 +32,19 @@ std::vector<std::string> LobbyProtocol::receiveMapList() {
     return maps;
 }
 
-std::shared_ptr<MatchInitialState> LobbyProtocol::sendMatchCreation(uint8_t numPlayers, const std::string& matchName, const std::string& mapName) {
+std::shared_ptr<MatchInitialState> LobbyProtocol::sendMatchCreation(uint8_t numPlayers,
+                                                                    const std::string& matchName,
+                                                                    const std::string& mapName) {
     uint8_t cmd = CMD_CREATE;
     send_data(&cmd, sizeof(cmd));
     send_data(&numPlayers, sizeof(numPlayers));
     send_string(matchName);
     send_string(mapName);
-    
+
     // Receive confirmation byte
     uint8_t confirmation;
     recv_uint_8(confirmation);
-    
+
     if (confirmation == SUCCESS) {
         auto initialState = std::make_shared<MatchInitialState>();
         initialState->duck_identities = std::make_shared<std::vector<DuckIdentity>>();
@@ -69,11 +68,11 @@ std::vector<std::string> LobbyProtocol::receiveMatchList() {
 
 std::shared_ptr<MatchInitialState> LobbyProtocol::sendMatchSelection(const std::string& matchName) {
     send_string(matchName);
-    
+
     // Receive confirmation byte
     uint8_t confirmation;
     recv_uint_8(confirmation);
-    
+
     if (confirmation == SUCCESS) {
         auto initialState = std::make_shared<MatchInitialState>();
         initialState->duck_identities = std::make_shared<std::vector<DuckIdentity>>();

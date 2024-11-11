@@ -1,14 +1,15 @@
 #ifndef LOBBY_PROTOCOL_H
 #define LOBBY_PROTOCOL_H
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "../common/common_protocol.h"
 #include "../common/common_socket.h"
 #include "../common/types/match_state.h"
-#include <cstdint>
-#include <string>
-#include <vector>
-#include <memory>
 
-class LobbyProtocol : public Protocol {
+class LobbyProtocol: public Protocol {
 public:
     explicit LobbyProtocol(Socket& socket);
 
@@ -17,14 +18,16 @@ public:
 
     void sendCreateCommand(const std::string& playerName);
     std::vector<std::string> receiveMapList();
-    std::shared_ptr<MatchInitialState> sendMatchCreation(uint8_t numPlayers, const std::string& matchName, const std::string& mapName);
+    std::shared_ptr<MatchInitialState> sendMatchCreation(uint8_t numPlayers,
+                                                         const std::string& matchName,
+                                                         const std::string& mapName);
     void sendJoinCommand(const std::string& playerName);
     std::vector<std::string> receiveMatchList();
     std::shared_ptr<MatchInitialState> sendMatchSelection(const std::string& matchName);
 
 private:
     DuckIdentity receiveDuckIdentity();
-    bool receiveConfirmation();
+    bool receiveConfirmation();  // cppcheck-suppress unusedPrivateFunction
 
     static constexpr char CMD_CREATE = 'C';
     static constexpr char CMD_JOIN = 'J';
