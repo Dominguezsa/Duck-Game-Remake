@@ -18,7 +18,7 @@ void AcceptorThread::accept_connection() {
     ClientSession* client = new ClientSession(std::move(peer), this->matches);
     this->clients.push_back(client);
     client->start();
-    client->run();
+    // client->run();
 }
 
 void AcceptorThread::check_unused_resources() {
