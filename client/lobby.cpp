@@ -104,7 +104,7 @@ void Lobby::handle_create_party() {
     while (true) {
         std::cout << "Select the map you wanna play\n";
         std::cin >> mapIndex;
-        if (mapIndex < 1 || mapIndex > maps.size()) {
+        if (mapIndex < 1 || mapIndex > (int)maps.size()) {
             std::cout << "Invalid map\n";
         } else {
             break;
@@ -143,7 +143,7 @@ void Lobby::handle_join_party() {
     std::cout << "Enter the party you wanna join (select the numbre f.e: 1,2,3,...)\n";
     while (true) {
         std::cin >> matchName;
-        if (std::stoi(matchName) < 1 || std::stoi(matchName) > matches.size()) {
+        if (std::stoi(matchName) < 1 || std::stoi(matchName) > (int)matches.size()) {
             std::cout << "Invalid party\n";
         } else {
             break;
