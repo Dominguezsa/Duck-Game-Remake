@@ -62,9 +62,15 @@ void ServerProtocol::send_game_map_list(const std::list<std::string>& map_names)
 
 void ServerProtocol::recv_match_info(std::string& map_name, std::string& match_name,
                                      uint8_t& number_of_players) {
-    recv_string(map_name);
+    uint8_t buf;
+    std::cout << "createcomm";
+    recv_uint_8(buf);  // aca recibe el 'C' no se si sirve guardarlo/enviarlo
+    std::cout << "createcomm";
+    recv_uint_8(number_of_players);  // aca recibe el 'M' no se si sirve guardarlo/enviarlo
+    std::cout << "createcomm";
     recv_string(match_name);
-    recv_uint_8(number_of_players);
+    std::cout << "createcomm";
+    recv_string(map_name);
 }
 
 void ServerProtocol::send_confirmation(bool success) { send_data(&success, sizeof(uint8_t)); }
