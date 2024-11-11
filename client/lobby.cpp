@@ -114,7 +114,7 @@ void Lobby::handle_create_party() {
         }
     }
     mapIndex--;
-    uint8_t numPlayers;
+    unsigned int numPlayers;
     std::string matchName;
     std::cout << "Enter the match name\n";
     std::cin >> matchName;
@@ -127,7 +127,9 @@ void Lobby::handle_create_party() {
             break;
         }
     }
+    std::cout << "CHECKPOINT 3:\n";
     int confirmation = protocol.sendMatchCreation(numPlayers, matchName, maps[mapIndex]);
+    std::cout << "CHECKPOINT 4:\n";
     if (confirmation == 1) {
         std::cout << "Match created successfully\n";
     } else {
