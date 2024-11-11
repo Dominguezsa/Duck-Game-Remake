@@ -206,27 +206,30 @@ void Game::startNewRound() {
 }
 
 bool Game::checkGameEnd() {
-    // Por ahora tiro un suppress, en teoría debería usar un std::of_any() pero después vemos
-    // cppcheck-suppress useStlAlgorithm
-    for (const auto& victory_pair: victories) {
-        if (victory_pair.second >= VICTORIES_TO_WIN) {
-            uint16_t max_victories = victory_pair.second;
-            uint16_t next_max = 0;
+    // No se y no entiendo por que mi cppcheck local se pone como loca de que debería usar
+    // algoritmos de la librería estándar para esto aunque haga que el código sea horrible,
+    // estoy hace horas tratando de que no pase pero ni idea por que carajo sigue igual, otro
+    // dia se verá
+    auto max_victory = std::max_element(
+            victories.cbegin(), victories.cend(),
+            [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
 
-            // Check if there's a tie
-            for (const auto& other_pair: victories) {
-                if (other_pair.first != victory_pair.first && other_pair.second > next_max) {
-                    // Y acá tira de usar std::all_of, any_of o none_of ¿? el cppcheck
-                    // cppcheck-suppress useStlAlgorithm
-                    next_max = other_pair.second;
-                }
-            }
+    if (max_victory->second >= VICTORIES_TO_WIN) {
+        auto next_max = std::any_of(victories.cbegin(), victories.cend(),
+                                    [max_victory](const auto& pair) {
+                                        return pair.first != max_victory->first &&
+                                               pair.second > max_victory->second;
+                                    }) ?
+                                std::max_element(victories.cbegin(), victories.cend(),
+                                                 [](const auto& lhs, const auto& rhs) {
+                                                     return lhs.second < rhs.second;
+                                                 })
+                                        ->second :
+                                0;
 
-            if (max_victories > next_max) {
-                return true;  // We have a winner
-            }
-        }
+        return max_victory->second > next_max;
     }
+
     return false;
 }
 
