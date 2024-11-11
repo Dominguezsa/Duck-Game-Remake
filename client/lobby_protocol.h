@@ -18,12 +18,11 @@ public:
 
     void sendCreateCommand(const std::string& playerName);
     std::vector<std::string> receiveMapList();
-    std::shared_ptr<MatchInitialState> sendMatchCreation(uint8_t numPlayers,
-                                                         const std::string& matchName,
-                                                         const std::string& mapName);
+    int sendMatchCreation(uint8_t numPlayers, const std::string& matchName,
+                          const std::string& mapName);
     void sendJoinCommand(const std::string& playerName);
     std::vector<std::string> receiveMatchList();
-    std::shared_ptr<MatchInitialState> sendMatchSelection(const std::string& matchName);
+    int sendMatchSelection(const std::string& matchName);
 
 private:
     DuckIdentity receiveDuckIdentity();

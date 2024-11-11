@@ -6,7 +6,7 @@
 #include <utility>
 
 Lobby::Lobby(Socket& s): skt(std::move(s)), protocol(s), skt_ownership(true), is_connected(true) {}
-
+/*
 std::shared_ptr<MatchInitialState> Lobby::createGame(const std::string& playerName,
                                                      uint8_t numPlayers,
                                                      const std::string& matchName,
@@ -69,7 +69,7 @@ std::vector<std::string> Lobby::getAvailableMatches(const std::string& playerNam
         return std::vector<std::string>();
     }
 }
-
+*/
 void Lobby::run() {
     if (playerName.empty()) {
         std::cout << "What is your name?\n";
@@ -96,7 +96,7 @@ void Lobby::run() {
 
 void Lobby::handle_create_party() {
     protocol.sendCreateCommand(playerName);
-    std::vector<std::string> maps = protocol.receiveMapList();
+    auto maps = protocol.receiveMapList();
     for (size_t i = 0; i < maps.size(); i++) {
         std::cout << i + 1 << ". " << maps[i] << '\n';
     }
@@ -124,7 +124,13 @@ void Lobby::handle_create_party() {
             break;
         }
     }
-    protocol.sendMatchCreation(numPlayers, matchName, maps[mapIndex]);
+    int confirmation = protocol.sendMatchCreation(numPlayers, matchName, maps[mapIndex]);
+    if (confirmation == 1) {
+        std::cout << "Match created successfully\n";
+    } else {
+        std::cout << "Match creation failed\n";
+        run();
+    }
 }
 
 void Lobby::handle_join_party() {
@@ -144,8 +150,13 @@ void Lobby::handle_join_party() {
         }
     }
     matchName = matches[std::stoi(matchName) - 1];
-    protocol.sendMatchSelection(matchName);
-    protocol
+    int confirmation = protocol.sendMatchSelection(matchName);
+    if (confirmation == 1) {
+        std::cout << "Match joined successfully\n";
+    } else {
+        std::cout << "Match join failed\n";
+        run();
+    }
 }
 
 
