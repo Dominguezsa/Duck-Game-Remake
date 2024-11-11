@@ -55,6 +55,8 @@ int LobbyProtocol::sendMatchCreation(uint8_t numPlayers, const std::string& matc
 
     send_data(vectorForSocket.data(), vectorForSocket.size());
 
+    std::cout << "SE ENVIO EL VECTOR\n";
+
     // Receive confirmation byte
     uint8_t confirmation;
     recv_uint_8(confirmation);
