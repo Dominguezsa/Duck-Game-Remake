@@ -1,29 +1,29 @@
 #ifndef LOBBY_PROTOCOL_H
 #define LOBBY_PROTOCOL_H
+#include "../common/common_protocol.h"
+#include "../common/common_socket.h"
+#include "../common/types/match_state.h"
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <memory>
 
-#include "../common/common_protocol.h"
-#include "../common/common_socket.h"
-
-class LobbyProtocol: public Protocol {
+class LobbyProtocol : public Protocol {
 public:
     explicit LobbyProtocol(Socket& socket);
 
-    // Added override keyword
     void read_msg(void* msg) override;
     void send_msg(void* msg) override;
 
-
     void sendCreateCommand(const std::string& playerName);
     std::vector<std::string> receiveMapList();
-    bool sendMatchCreation(uint8_t numPlayers, const std::string& matchName);
+    std::shared_ptr<MatchInitialState> sendMatchCreation(uint8_t numPlayers, const std::string& matchName, const std::string& mapName);
     void sendJoinCommand(const std::string& playerName);
     std::vector<std::string> receiveMatchList();
-    bool sendMatchSelection(const std::string& matchName);
+    std::shared_ptr<MatchInitialState> sendMatchSelection(const std::string& matchName);
 
 private:
+    DuckIdentity receiveDuckIdentity();
     bool receiveConfirmation();
 
     static constexpr char CMD_CREATE = 'C';

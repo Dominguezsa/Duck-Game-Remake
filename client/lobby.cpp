@@ -6,46 +6,33 @@
 
 Lobby::Lobby(Socket& s): skt(std::move(s)), protocol(s), skt_ownership(true), is_connected(true) {}
 
-bool Lobby::createGame(const std::string& playerName, uint8_t numPlayers,
-                       const std::string& matchName) {
-    if (!is_connected)
-        return false;
-
+std::shared_ptr<MatchInitialState> Lobby::createGame(const std::string& playerName, uint8_t numPlayers, 
+                                                    const std::string& matchName, const std::string& mapName) {
+    if (!is_connected) return nullptr;
+    
     try {
-        // Send create command and player name
         protocol.sendCreateCommand(playerName);
-
-        // Get available maps
         auto maps = protocol.receiveMapList();
-        if (maps.empty())
-            return false;
-
-        // Create match
-        return protocol.sendMatchCreation(numPlayers, matchName);
+        if (maps.empty()) return nullptr;
+        
+        return protocol.sendMatchCreation(numPlayers, matchName, mapName);
     } catch (const std::exception& e) {
         is_connected = false;
-        return false;
+        return nullptr;
     }
 }
-
-bool Lobby::joinGame(const std::string& playerName, const std::string& matchName) {
-    if (!is_connected)
-        return false;
-
+std::shared_ptr<MatchInitialState> Lobby::joinGame(const std::string& playerName, const std::string& matchName) {
+    if (!is_connected) return nullptr;
+    
     try {
-        // Send join command and player name
         protocol.sendJoinCommand(playerName);
-
-        // Get available matches
         auto matches = protocol.receiveMatchList();
-        if (matches.empty())
-            return false;
-
-        // Select match
+        if (matches.empty()) return nullptr;
+        
         return protocol.sendMatchSelection(matchName);
     } catch (const std::exception& e) {
         is_connected = false;
-        return false;
+        return nullptr;
     }
 }
 
