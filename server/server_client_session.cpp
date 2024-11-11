@@ -76,7 +76,10 @@ void ClientSession::run_lobby_loop() {
         while (true) {
             char lobby_action;
             this->protocol.recv_action(lobby_action);
-
+            std::string player_name;
+            this->protocol.recv_player_name(player_name);
+            identity.name = player_name;
+            
             if (lobby_action == EXIT) {
                 this->_is_alive = false;
                 break;

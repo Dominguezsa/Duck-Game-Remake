@@ -19,7 +19,6 @@ protected:
     /* Pos: Recepcion de mensaje enviado por el servidor mediante el socket
             con el que se establecio la conexion.
     */
-    void recv_string(std::string& received);
 
     /* Pos: Se leen dos bytes mediante el socket que nos comunica con
             el servidor, los cuales representan el largo del mensaje
@@ -42,6 +41,8 @@ public:
     explicit Protocol(Socket& skt);
 
     virtual ~Protocol() = 0;
+
+    void recv_string(std::string& received);
 
     // --- Impedimos la creacion de copias de la clase ---
     Protocol(const Protocol&) = delete;
