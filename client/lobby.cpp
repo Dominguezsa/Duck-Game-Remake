@@ -5,7 +5,8 @@
 #include <stdexcept>
 #include <utility>
 
-Lobby::Lobby(Socket& s): skt(std::move(s)), protocol(s), skt_ownership(true), is_connected(true) {}
+Lobby::Lobby(Socket& s):
+        skt("localhost", "8080"), protocol(s), skt_ownership(true), is_connected(true) {}
 /*
 std::shared_ptr<MatchInitialState> Lobby::createGame(const std::string& playerName,
                                                      uint8_t numPlayers,
@@ -96,7 +97,9 @@ void Lobby::run() {
 
 void Lobby::handle_create_party() {
     protocol.sendCreateCommand(playerName);
+    std::cout << "CHECKPOINT 1:\n";
     auto maps = protocol.receiveMapList();
+    std::cout << "CHECKPOINT 2:\n";
     for (size_t i = 0; i < maps.size(); i++) {
         std::cout << i + 1 << ". " << maps[i] << '\n';
     }
