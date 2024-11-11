@@ -93,7 +93,7 @@ void ServerProtocol::recv_action(char& action) {
     std::unique_lock<std::mutex> lock(this->mutex);
     uint8_t buf;
     recv_uint_8(buf);
-    action = buf;    
+    action = buf;
 }
 
 void ServerProtocol::recv_match_name(std::string& match_name) { recv_string(match_name); }

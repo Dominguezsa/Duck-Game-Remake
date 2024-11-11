@@ -5,8 +5,7 @@
 #include <stdexcept>
 #include <utility>
 
-Lobby::Lobby(Socket& s):
-        skt("localhost", "8080"), protocol(s), skt_ownership(true), is_connected(true) {}
+Lobby::Lobby(Socket& s): skt(s), protocol(s), skt_ownership(true), is_connected(true) {}
 /*
 std::shared_ptr<MatchInitialState> Lobby::createGame(const std::string& playerName,
                                                      uint8_t numPlayers,

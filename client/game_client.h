@@ -39,7 +39,6 @@ private:
     ResourceManager resourceManager;
     Socket socket;
     Lobby lobby;
-    ClientProtocol protocol;
     Queue<uint8_t> messagesForServer;
     Queue<std::vector<DuckState>> graphic_queue;
     std::vector<Duck> ducks;

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <list>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <vector>
 
@@ -14,7 +15,6 @@
 #include "../common/types/match_state.h"
 
 #include "server_gameloop_message.h"
-#include <mutex>
 
 class ServerProtocol: public Protocol {
 public:

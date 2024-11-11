@@ -43,7 +43,6 @@ GameClient::GameClient(const int window_width, const int window_height,
         resourceManager(renderer),
         socket(server_ip.c_str(), port.c_str()),
         lobby(socket),
-        protocol(socket),
         messagesForServer(),
         graphic_queue(GRAPHIC_QUEUE_SIZE),
         ducks({Duck(), Duck()}),
@@ -54,6 +53,7 @@ GameClient::GameClient(const int window_width, const int window_height,
 // Moved the constantRateLoop implementation here because making it a separate file was causing a
 // lot of problems, but yeah its repeating the same code in both client and server
 void GameClient::run() {
+    ClientProtocol protocol(socket);
     ThreadReceiver threadReceiver(protocol, graphic_queue);
     ThreadSender threadSender(protocol, messagesForServer);
     threadReceiver.start();

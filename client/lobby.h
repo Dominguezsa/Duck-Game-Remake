@@ -11,7 +11,7 @@
 
 class Lobby {
 private:
-    Socket skt;
+    Socket& skt;
     LobbyProtocol protocol;
     bool skt_ownership;
     bool is_connected;
