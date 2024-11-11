@@ -27,7 +27,7 @@ public:
 
 private:
     DuckIdentity receiveDuckIdentity();
-    bool receiveConfirmation();  // cppcheck-suppress unusedPrivateFunction
+    // bool receiveConfirmation();
 
     static constexpr char CMD_CREATE = 'C';
     static constexpr char CMD_JOIN = 'J';

@@ -96,9 +96,9 @@ DuckIdentity LobbyProtocol::receiveDuckIdentity() {
     identity.initial_pos_y = pos_y;
     return identity;
 }
-
+/*
 bool LobbyProtocol::receiveConfirmation() {
     uint8_t confirmation;
     recv_uint_8(confirmation);
     return confirmation == SUCCESS;
-}
+}*/

@@ -95,28 +95,57 @@ void Lobby::run() {
 }
 
 void Lobby::handle_create_party() {
-    // enviar C LEN_NAME NAME
-    // recibir mapas
-    // mostrar mapas
+    protocol.sendCreateCommand(playerName);
+    std::vector<std::string> maps = protocol.receiveMapList();
+    for (size_t i = 0; i < maps.size(); i++) {
+        std::cout << i + 1 << ". " << maps[i] << '\n';
+    }
+    int mapIndex = 0;
+    while (true) {
+        std::cout << "Select the map you wanna play\n";
+        std::cin >> mapIndex;
+        if (mapIndex < 1 || mapIndex > maps.size()) {
+            std::cout << "Invalid map\n";
+        } else {
+            break;
+        }
+    }
+    mapIndex--;
     uint8_t numPlayers;
     std::string matchName;
     std::cout << "Enter the match name\n";
     std::cin >> matchName;
-    std::cout << "Enter the number of players\n";
-    std::cin >> numPlayers;
-    // createGame(numPlayers, matchName))
-    // imprimir si se creo la partida correctamente o no
+    while (true) {
+        std::cout << "Enter the number of players\n";
+        std::cin >> numPlayers;
+        if (numPlayers < 2 || numPlayers > 4) {
+            std::cout << "Invalid number of players\n";
+        } else {
+            break;
+        }
+    }
+    protocol.sendMatchCreation(numPlayers, matchName, maps[mapIndex]);
 }
 
 void Lobby::handle_join_party() {
-    // enviar J LEN_NAME NAME
-    // recibir partidas
-    // mostrar partidas
+    protocol.sendJoinCommand(playerName);
+    std::vector<std::string> matches = protocol.receiveMatchList();
+    for (size_t i = 0; i < matches.size(); i++) {
+        std::cout << i + 1 << ". " << matches[i] << '\n';
+    }
     std::string matchName;
     std::cout << "Enter the party you wanna join (select the numbre f.e: 1,2,3,...)\n";
-    std::cin >> matchName;
-    // joinGame(matchName)
-    // imprimir si se unio a la partida correctamente o no
+    while (true) {
+        std::cin >> matchName;
+        if (std::stoi(matchName) < 1 || std::stoi(matchName) > matches.size()) {
+            std::cout << "Invalid party\n";
+        } else {
+            break;
+        }
+    }
+    matchName = matches[std::stoi(matchName) - 1];
+    protocol.sendMatchSelection(matchName);
+    protocol
 }
 
 

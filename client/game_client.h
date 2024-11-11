@@ -42,7 +42,7 @@ private:
     ClientProtocol protocol;
     Queue<uint8_t> messagesForServer;
     Queue<std::vector<DuckState>> graphic_queue;
-    std::vector<Duck> ducks;  // cppcheck-suppress unusedStructMember
+    std::vector<Duck> ducks;
     AnimationHelper animationHelper;
     ScreenRenderer screenRenderer;
     // Algo específico de SDL, no creo que está en la librería SDL2pp
