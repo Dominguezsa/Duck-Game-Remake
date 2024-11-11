@@ -97,9 +97,7 @@ void Lobby::run() {
 
 void Lobby::handle_create_party() {
     protocol.sendCreateCommand(playerName);
-    std::cout << "CHECKPOINT 1:\n";
     auto maps = protocol.receiveMapList();
-    std::cout << "CHECKPOINT 2:\n";
     for (size_t i = 0; i < maps.size(); i++) {
         std::cout << i + 1 << ". " << maps[i] << '\n';
     }
@@ -128,9 +126,7 @@ void Lobby::handle_create_party() {
         }
     }
     uint8_t numPlayersUint8 = static_cast<uint8_t>(numPlayers);
-    std::cout << "CHECKPOINT 3:\n";
     int confirmation = protocol.sendMatchCreation(numPlayersUint8, matchName, maps[mapIndex]);
-    std::cout << "CHECKPOINT 4:\n";
     if (confirmation == 1) {
         std::cout << "Match created successfully\n";
     } else {
