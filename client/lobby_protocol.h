@@ -25,8 +25,7 @@ public:
     int sendMatchSelection(const std::string& matchName);
 
 private:
-    DuckIdentity receiveDuckIdentity();
-    // bool receiveConfirmation();
+    // DuckIdentity receiveDuckIdentity();
 
     static constexpr char CMD_CREATE = 'C';
     static constexpr char CMD_JOIN = 'J';

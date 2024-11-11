@@ -87,7 +87,7 @@ int LobbyProtocol::sendMatchSelection(const std::string& matchName) {
     }
     return nullptr;*/
 }
-
+/*
 DuckIdentity LobbyProtocol::receiveDuckIdentity() {
     DuckIdentity identity;
     recv_string(identity.name);
@@ -101,10 +101,4 @@ DuckIdentity LobbyProtocol::receiveDuckIdentity() {
     identity.initial_pos_x = pos_x;
     identity.initial_pos_y = pos_y;
     return identity;
-}
-/*
-bool LobbyProtocol::receiveConfirmation() {
-    uint8_t confirmation;
-    recv_uint_8(confirmation);
-    return confirmation == SUCCESS;
 }*/
