@@ -12,13 +12,9 @@ private:
     Duck& my_duck;
 
 public:
-    // cppcheck-suppress unusedStructMember
     std::string current_animation;
-    // cppcheck-suppress unusedStructMember
     int current_frame;
-    // cppcheck-suppress unusedStructMember
     int animation_start;
-    // cppcheck-suppress unusedStructMember
     std::string current_arm_animation;
 
 

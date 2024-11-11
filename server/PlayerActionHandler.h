@@ -19,11 +19,8 @@
 class PlayerActionHandler {
 
 private:
-    // cppcheck-suppress unusedStructMember
     std::map<std::uint8_t, std::function<void(Duck&)>> action_handlers;
-    // cppcheck-suppress unusedStructMember
     std::unordered_map<uint8_t, std::unique_ptr<Duck>>& ducks;
-    // cppcheck-suppress unusedStructMember
     std::map<std::uint8_t, void (PlayerActionHandler::*)(Duck& duck)> action_to_handlers = {
             {MOVE_RIGHT_KEY_DOWN, &PlayerActionHandler::handle_move_right_key_down},
             {MOVE_RIGHT_KEY_UP, &PlayerActionHandler::handle_move_right_key_up},

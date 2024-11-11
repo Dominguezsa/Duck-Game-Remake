@@ -20,42 +20,25 @@
 class Game: public Thread {
 private:
     struct Platform {
-        // cppcheck-suppress unusedStructMember
         float x;
-        // cppcheck-suppress unusedStructMember
         float y;
-        // cppcheck-suppress unusedStructMember
         float width;
-        // cppcheck-suppress unusedStructMember
         float height;
     };
-    // cppcheck-suppress unusedStructMember
     std::unordered_map<uint8_t, std::unique_ptr<Duck>> ducks;
-    // cppcheck-suppress unusedStructMember
     Queue<GameloopMessage>& message_queue;
-    // cppcheck-suppress unusedStructMember
     std::atomic<bool> is_running;
-    // cppcheck-suppress unusedStructMember
     uint8_t next_player_id;
-    // cppcheck-suppress unusedStructMember
     uint16_t round_number;
-    // cppcheck-suppress unusedStructMember
     std::unordered_map<uint8_t, uint16_t> victories;
-    // cppcheck-suppress unusedStructMember
     std::vector<Platform> platforms;
-    // cppcheck-suppress unusedStructMember
     MatchQueuesMonitor& monitor;
-    // cppcheck-suppress unusedStructMember
     PlayerActionHandler action_handler;
 
 
-    // cppcheck-suppress unusedStructMember
     static constexpr double TICK_RATE = 60.0;
-    // cppcheck-suppress unusedStructMember
     static constexpr double TICK_DURATION = 1.0 / TICK_RATE;
-    // cppcheck-suppress unusedStructMember
     static constexpr uint16_t ROUNDS_PER_SET = 5;
-    // cppcheck-suppress unusedStructMember
     static constexpr uint16_t VICTORIES_TO_WIN = 10;
 
     void updateGameState();

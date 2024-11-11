@@ -13,13 +13,9 @@
 #include "ResourceManager.h"
 
 struct Platform {
-    // cppcheck-suppress unusedStructMember
     float x;
-    // cppcheck-suppress unusedStructMember
     float y;
-    // cppcheck-suppress unusedStructMember
     float width;
-    // cppcheck-suppress unusedStructMember
     float height;
 };
 

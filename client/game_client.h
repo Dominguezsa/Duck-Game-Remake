@@ -31,7 +31,6 @@
 
 class GameClient {
 private:
-    // cppcheck-suppress unusedStructMember
     bool quit;
     SDL2pp::SDL sdl;
     SDL2pp::SDLTTF ttf;
@@ -43,7 +42,6 @@ private:
     ClientProtocol protocol;
     Queue<uint8_t> messagesForServer;
     Queue<std::vector<DuckState>> graphic_queue;
-    // cppcheck-suppress unusedStructMember
     std::vector<Duck> ducks;
     AnimationHelper animationHelper;
     ScreenRenderer screenRenderer;

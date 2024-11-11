@@ -17,11 +17,9 @@ class CommandCenter {
 
 private:
     std::map<std::pair<SDL_EventType, SDL_Keycode>, std::function<void(CommandCenter&)>>
-            // cppcheck-suppress unusedStructMember
             event_handlers;
     Queue<uint8_t>& messagesForServer;
     std::shared_ptr<const uint8_t*> keyboardState;
-    // cppcheck-suppress unusedStructMember
     bool& quit;
     std::map<std::pair<SDL_EventType, SDL_Keycode>, void (CommandCenter::*)()> event_to_handlers = {
             {std::make_pair(SDL_QUIT, SDLK_UNKNOWN), &CommandCenter::handle_quit},
