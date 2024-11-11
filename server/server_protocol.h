@@ -14,9 +14,11 @@
 #include "../common/types/match_state.h"
 
 #include "server_gameloop_message.h"
+#include <mutex>
 
 class ServerProtocol: public Protocol {
 public:
+    std::mutex mutex;
     explicit ServerProtocol(Socket& skt): Protocol(skt) {}
 
     void recv_msg(uint8_t& command);

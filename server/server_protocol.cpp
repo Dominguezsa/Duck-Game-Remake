@@ -62,14 +62,14 @@ void ServerProtocol::send_game_map_list(const std::list<std::string>& map_names)
 
 void ServerProtocol::recv_match_info(std::string& map_name, std::string& match_name,
                                      uint8_t& number_of_players) {
+    std::cout << "receiving part1" << std::endl;
     uint8_t buf;
-    std::cout << "createcomm";
     recv_uint_8(buf);  // aca recibe el 'C' no se si sirve guardarlo/enviarlo
-    std::cout << "createcomm";
-    recv_uint_8(number_of_players);  // aca recibe el 'M' no se si sirve guardarlo/enviarlo
-    std::cout << "createcomm";
+    std::cout << "receiving part2" << std::endl;
+    recv_uint_8(number_of_players);
+    std::cout << "receiving part3" << std::endl;
     recv_string(match_name);
-    std::cout << "createcomm";
+    std::cout << "receiving part4" << std::endl;
     recv_string(map_name);
 }
 
@@ -86,9 +86,10 @@ void ServerProtocol::send_match_list(const std::list<std::string>& match_names) 
 }
 
 void ServerProtocol::recv_action(char& action) {
+    std::unique_lock<std::mutex> lock(this->mutex);
     uint8_t buf;
     recv_uint_8(buf);
-    action = static_cast<char>(buf);
+    action = buf;    
 }
 
 void ServerProtocol::recv_match_name(std::string& match_name) { recv_string(match_name); }
