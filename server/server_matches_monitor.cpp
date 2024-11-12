@@ -19,14 +19,15 @@ bool MatchesMonitor::create_match(std::string match_name, uint8_t player_limit,
 
 bool MatchesMonitor::join_match(std::string match_name, DuckIdentity& duck_info,
                                 Queue<std::shared_ptr<std::vector<DuckState>>>* q) {
-    std::lock_guard<std::mutex> lock(matches_mtx);
 
+    std::lock_guard<std::mutex> lock(matches_mtx);
     bool match_exists = matches.find(match_name) != matches.end();
     bool player_limit_reached = !matches[match_name]->can_accept_players();
     if (!match_exists || player_limit_reached) {
         std::cout << "Match does not exist or is full\n";
         return false;
     }
+    std::cout << "LLEGA HASTA ACA, NO LO AÑADE AL MATCH\n";
     matches[match_name]->add_player(q, duck_info);
     std::cout << "Player added to match\n";
     return true;

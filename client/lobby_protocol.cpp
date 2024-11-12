@@ -78,7 +78,6 @@ std::vector<std::string> LobbyProtocol::receiveMatchList() {
 }
 
 int LobbyProtocol::sendMatchSelection(const std::string& matchName) {
-    std::cout << matchName << std::endl;
     send_string(matchName);
 
     // Receive confirmation byte
