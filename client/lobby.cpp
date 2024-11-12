@@ -96,7 +96,6 @@ void Lobby::run() {
 
 void Lobby::handle_create_party() {
     protocol.sendCreateCommand(playerName);
-    std::cout << "Receiving match list\n";
     auto maps = protocol.receiveMapList();
     std::cout << "Dies\n";
 

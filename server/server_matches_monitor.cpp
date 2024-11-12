@@ -24,9 +24,11 @@ bool MatchesMonitor::join_match(std::string match_name, DuckIdentity& duck_info,
     bool match_exists = matches.find(match_name) != matches.end();
     bool player_limit_reached = !matches[match_name]->can_accept_players();
     if (!match_exists || player_limit_reached) {
+        std::cout << "Match does not exist or is full\n";
         return false;
     }
     matches[match_name]->add_player(q, duck_info);
+    std::cout << "Player added to match\n";
     return true;
 }
 

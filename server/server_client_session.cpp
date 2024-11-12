@@ -107,21 +107,16 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
             // sean provistos por alguna otra entidad.
             std::list<std::string> map_list;
             map_list.push_back("Golden Grove Clash");
-            std::cout << "Sending map list\n";
             protocol.send_game_map_list(map_list);
-            std::cout << "map list SENT\n";
             // (3)
             uint8_t number_of_players;
             std::string map_name;
             this->protocol.recv_match_info(map_name, match_name, number_of_players);
-            std::cout << "Something reciiived\n";
             success = matches_monitor.create_match(match_name, number_of_players, duck_info,
                                                    &client_queue);
 
             // (4)
-            std::cout << "Sending confirmation\n";
             protocol.send_confirmation(success);
-            std::cout << "Confirmation sent\n";
             break;
         }
         case CMD_JOIN: {
@@ -129,7 +124,7 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
             std::list<std::string> available_matches = matches_monitor.get_available_match_names();
 
             protocol.send_match_list(available_matches);
-
+            std::cout << "Match list sent\n";
             // (3)
             this->protocol.recv_match_name(match_name);
 

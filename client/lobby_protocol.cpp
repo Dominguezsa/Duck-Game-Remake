@@ -25,7 +25,6 @@ std::vector<std::string> LobbyProtocol::receiveMapList() {
     std::vector<std::string> maps;
     uint16_t count;
     recv_uint_16(count);
-    std::cout << "I received: " << +count << " maps\n";
     for (uint16_t i = 0; i < count; i++) {
         std::string mapName;
         recv_string(mapName);
@@ -49,15 +48,8 @@ int LobbyProtocol::sendMatchCreation(uint8_t numPlayers, const std::string& matc
     vectorForSocket.push_back(mapNameSize & 0xFF);
 
     vectorForSocket.insert(vectorForSocket.end(), mapName.begin(), mapName.end());
-    std::cout << "Sending match creation\n";
-    for (char c: vectorForSocket) {
-        std::cout << static_cast<int>(c) << " ";
-    }
-    std::cout << std::endl;
 
     send_data(vectorForSocket.data(), vectorForSocket.size());
-
-    std::cout << "SE ENVIO EL VECTOR\n";
 
     // Receive confirmation byte
     uint8_t confirmation;
@@ -86,6 +78,7 @@ std::vector<std::string> LobbyProtocol::receiveMatchList() {
 }
 
 int LobbyProtocol::sendMatchSelection(const std::string& matchName) {
+    std::cout << matchName << std::endl;
     send_string(matchName);
 
     // Receive confirmation byte
