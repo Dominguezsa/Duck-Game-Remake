@@ -22,6 +22,7 @@
 #include "../common/types/duck_state.h"
 
 #include "AnimationHelper.h"
+#include "CommandCenter.h"
 #include "ResourceManager.h"
 #include "ScreenRenderer.h"
 #include "lobby.h"
@@ -31,6 +32,7 @@
 
 class GameClient {
 private:
+    bool quit;
     SDL2pp::SDL sdl;
     SDL2pp::SDLTTF ttf;
     SDL2pp::Mixer mixer;
@@ -45,10 +47,8 @@ private:
     AnimationHelper animationHelper;
     ScreenRenderer screenRenderer;
     // Algo específico de SDL, no creo que está en la librería SDL2pp
-    std::unique_ptr<const uint8_t*> keyboardState;
-
-    // DuckState stateDuck1;
-    // DuckState stateDuck2;
+    std::shared_ptr<const uint8_t*> keyboardState;
+    CommandCenter commandCenter;
 
 
 public:
@@ -59,8 +59,7 @@ public:
     void run();
     void run_lobby();
     void updateDuckStates();
-    void processEvent(const SDL_Event& event, bool& quit, int it);
-    void mainLoop(const int it, bool& quit);
+    void mainLoop(const int it);
 };
 
 #endif

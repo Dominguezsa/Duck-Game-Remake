@@ -15,8 +15,8 @@
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Music.hh>
 
-#include "../common/common_weapon.h"
-#include "../common/types/action_type.h"
+// #include "../common/common_weapon.h"
+// #include "../common/types/action_type.h"
 #include "../common/types/duck_state.h"
 
 #include "lobby.h"
@@ -33,6 +33,7 @@
 GameClient::GameClient(const int window_width, const int window_height,
                        const std::string& window_title, const int max_chunk_size_audio,
                        const std::string& server_ip, const std::string& port):
+        quit(false),
         sdl(SDL_INIT_VIDEO),
         ttf(),
         mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS,
@@ -48,10 +49,9 @@ GameClient::GameClient(const int window_width, const int window_height,
         ducks({Duck(), Duck()}),
         animationHelper(ducks, resourceManager),
         screenRenderer(renderer, resourceManager, animationHelper),
-        keyboardState(std::make_unique<const uint8_t*>(SDL_GetKeyboardState(nullptr))) {}
+        keyboardState(std::make_shared<const uint8_t*>(SDL_GetKeyboardState(nullptr))),
+        commandCenter(messagesForServer, keyboardState, quit) {}
 
-// Moved the constantRateLoop implementation here because making it a separate file was causing a
-// lot of problems, but yeah its repeating the same code in both client and server
 void GameClient::run() {
     ClientProtocol protocol(socket);
     ThreadReceiver threadReceiver(protocol, graphic_queue);
@@ -74,11 +74,11 @@ void GameClient::run() {
     auto musicTrack = resourceManager.getMusicTrack("back_music");
     mixer.PlayMusic(*musicTrack, -1);
 
-    bool quit = false;
+    // bool quit = false;
 
     while (true) {
         updateDuckStates();
-        mainLoop(iteration, quit);
+        mainLoop(iteration);
 
         if (quit) {
             std::cout << "Exiting the game\n";
@@ -127,82 +127,7 @@ void GameClient::updateDuckStates() {
     }
 }
 
-void GameClient::processEvent(const SDL_Event& event, bool& quit, int it) {
-    // Esto debería ser algo tipo double dispatch porque es un asco así
-    if (event.type == SDL_QUIT) {
-        quit = true;
-    } else if (event.type == SDL_KEYDOWN) {
-        animationHelper.set_run_anim_start(it);
-
-        switch (event.key.keysym.sym) {
-            case SDLK_ESCAPE:
-                quit = true;
-                break;
-            case SDLK_1:
-                mixer.PlayChannel(-1, *resourceManager.getSFX("boom1"), 1);
-                break;
-            case SDLK_2:
-                mixer.PlayChannel(-1, *resourceManager.getSFX("boom2"), 0);
-                break;
-            case SDLK_3:
-                mixer.PlayChannel(-1, *resourceManager.getSFX("boom3"), 0);
-                break;
-            case SDLK_d:
-                messagesForServer.push(MOVE_RIGHT_KEY_DOWN);
-                break;
-            case SDLK_a:
-                messagesForServer.push(MOVE_LEFT_KEY_DOWN);
-                break;
-            case SDLK_w:
-                messagesForServer.push(LOOKING_UP_KEY_DOWN);
-                break;
-            case SDLK_s:
-                messagesForServer.push(LOOKING_DOWN_KEY_DOWN);
-                break;
-            case SDLK_SPACE:
-                messagesForServer.push(JUMP_KEY_DOWN);
-                break;
-            case SDLK_f:
-                messagesForServer.push(SHOOT_KEY_DOWN);
-                break;
-            default:
-                break;
-        }
-    } else if (event.type == SDL_KEYUP) {
-        switch (event.key.keysym.sym) {
-            case SDLK_d:
-                if ((*keyboardState)[SDL_SCANCODE_A]) {
-                    messagesForServer.push(LOOKING_LEFT_KEY_DOWN);
-                    break;
-                }
-                messagesForServer.push(MOVE_RIGHT_KEY_UP);
-                break;
-            case SDLK_a:
-                if ((*keyboardState)[SDL_SCANCODE_D]) {
-                    messagesForServer.push(LOOKING_RIGHT_KEY_DOWN);
-                    break;
-                }
-                messagesForServer.push(MOVE_LEFT_KEY_UP);
-                break;
-            case SDLK_w:
-                messagesForServer.push(LOOKING_UP_KEY_UP);
-                break;
-            case SDLK_s:
-                messagesForServer.push(LOOKING_DOWN_KEY_UP);
-                break;
-            case SDLK_SPACE:
-                messagesForServer.push(JUMP_KEY_UP);
-                break;
-            case SDLK_f:
-                messagesForServer.push(SHOOT_KEY_UP);
-                break;
-            default:
-                break;
-        }
-    }
-}
-
-void GameClient::mainLoop(const int it, bool& quit) {
+void GameClient::mainLoop(const int it) {
     // Now it should do everything that the game needs to do in one iteration, like play if it needs
     // to play music, render sprites, etc.
 
@@ -210,9 +135,20 @@ void GameClient::mainLoop(const int it, bool& quit) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN && event.key.repeat) {
+            // std::cout << "This is a repeated keydown" << std::endl;
+            // std::cout << "Key: " << event.key.keysym.sym << std::endl;
             continue;
         }
-        processEvent(event, quit, it);
+        if (event.type == SDL_KEYDOWN) {
+            animationHelper.set_run_anim_start(it);
+        }
+        // Por ahora, como estos son los únicos eventos que reciben algo
+        // los trato de forma separada
+        // if (event.type == SDL_QUIT ||
+        //     (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
+        //     quit = true;
+        // }
+        commandCenter.processEvent(event);
     }
 
     screenRenderer.updateScreen(ducks, it);

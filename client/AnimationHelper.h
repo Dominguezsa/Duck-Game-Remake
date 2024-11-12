@@ -16,7 +16,6 @@ private:
     std::vector<DuckGraphicData> ducks_animation_data;
     std::vector<int> current_frames_per_duck;
     ResourceManager& resourceManager;
-    // std::map<uint8_t, AnimationData> duckAnimData;
 
 public:
     explicit AnimationHelper(std::vector<Duck>& ducks, ResourceManager& resourceManager);

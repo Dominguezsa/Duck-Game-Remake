@@ -26,7 +26,8 @@ Game::Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue):
         is_running(false),
         next_player_id(0),
         round_number(0),
-        monitor(monitor) {}
+        monitor(monitor),
+        action_handler(ducks) {}
 
 void Game::addPlayer(DuckIdentity& duck_info) {
     Position initial_pos{100 + (duck_info.id * 100), 100};  // Example starting positions
@@ -53,53 +54,6 @@ void Game::removePlayer(uint8_t player_id) {
     }
 }
 
-void Game::handlePlayerAction(const GameloopMessage& msg) {
-    auto it = ducks.find(msg.player_id);
-    if (it == ducks.end())
-        return;
-
-    Duck* duck = it->second.get();
-    // Ya esto se está haciendo medio inmanejable, deberiamos ya ver de hacer un double dispatch
-    // (lo mismo en el cliente)
-    switch (msg.action) {
-        case MOVE_RIGHT_KEY_DOWN:
-            duck->move_to(RIGHT);
-            break;
-        case MOVE_RIGHT_KEY_UP:
-            duck->stop_running();
-            break;
-        case MOVE_LEFT_KEY_DOWN:
-            duck->move_to(LEFT);
-            break;
-        case MOVE_LEFT_KEY_UP:
-            duck->stop_running();
-            break;
-        case JUMP_KEY_DOWN:
-            duck->jump(true);
-            break;
-        case JUMP_KEY_UP:
-            duck->jump(false);
-            break;
-        case SHOOT_KEY_DOWN:
-            duck->shoot(true);
-            break;
-        case SHOOT_KEY_UP:
-            duck->shoot(false);
-            break;
-        case LOOKING_RIGHT_KEY_DOWN:
-            duck->look_to(RIGHT);
-            break;
-        case LOOKING_LEFT_KEY_DOWN:
-            duck->look_to(LEFT);
-            break;
-        case LOOKING_UP_KEY_DOWN:
-            duck->look_to(UP);
-            break;
-        case LOOKING_DOWN_KEY_DOWN:
-            duck->look_to(DOWN);
-            break;
-    }
-}
 
 bool Game::checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height,
                                   const Platform& platform) {
@@ -267,26 +221,30 @@ void Game::startNewRound() {
 }
 
 bool Game::checkGameEnd() {
-    // Por ahora tiro un suppress, en teoría debería usar un std::of_any() pero después vemos
-    for (const auto& victory_pair: victories) {
-        if (victory_pair.second >= VICTORIES_TO_WIN) {
-            uint16_t max_victories = victory_pair.second;
-            uint16_t next_max = 0;
+    // No se y no entiendo por que mi cppcheck local se pone como loca de que debería usar
+    // algoritmos de la librería estándar para esto aunque haga que el código sea horrible,
+    // estoy hace horas tratando de que no pase pero ni idea por que carajo sigue igual, otro
+    // dia se verá
+    auto max_victory = std::max_element(
+            victories.cbegin(), victories.cend(),
+            [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
 
-            // Check if there's a tie
-            for (const auto& other_pair: victories) {
-                if (other_pair.first != victory_pair.first && other_pair.second > next_max) {
-                    // Y acá tira de usar std::all_of, any_of o none_of ¿? el cppcheck
-                    // cppcheck-suppress useStlAlgorithm
-                    next_max = other_pair.second;
-                }
-            }
+    if (max_victory->second >= VICTORIES_TO_WIN) {
+        auto next_max = std::any_of(victories.cbegin(), victories.cend(),
+                                    [max_victory](const auto& pair) {
+                                        return pair.first != max_victory->first &&
+                                               pair.second > max_victory->second;
+                                    }) ?
+                                std::max_element(victories.cbegin(), victories.cend(),
+                                                 [](const auto& lhs, const auto& rhs) {
+                                                     return lhs.second < rhs.second;
+                                                 })
+                                        ->second :
+                                0;
 
-            if (max_victories > next_max) {
-                return true;  // We have a winner
-            }
-        }
+        return max_victory->second > next_max;
     }
+
     return false;
 }
 
@@ -315,7 +273,8 @@ void Game::run() {
         // Process all pending messages
         GameloopMessage msg(0, 0);
         while (message_queue.try_pop(msg)) {
-            handlePlayerAction(msg);
+            action_handler.process_player_action(msg);
+            // handlePlayerAction(msg);
         }
         // std::cout << "Updating state\n";
         updateGameState();

@@ -13,6 +13,7 @@
 #include "../common/types/action_type.h"
 #include "../common/types/match_state.h"
 
+#include "PlayerActionHandler.h"
 #include "server_gameloop_message.h"
 #include "server_match_state_monitor.h"
 
@@ -20,13 +21,9 @@
 class Game: public Thread {
 private:
     struct Platform {
-        // cppcheck-suppress unusedStructMember
         float x;
-        // cppcheck-suppress unusedStructMember
         float y;
-        // cppcheck-suppress unusedStructMember
         float width;
-        // cppcheck-suppress unusedStructMember
         float height;
     };
     std::unordered_map<uint8_t, std::unique_ptr<Duck>> ducks;
@@ -36,15 +33,15 @@ private:
     uint16_t round_number;
     std::unordered_map<uint8_t, uint16_t> victories;
     std::vector<Platform> platforms;
-    MatchStateMonitor& monitor;
+    MatchQueuesMonitor& monitor;
+    PlayerActionHandler action_handler;
+
 
     static constexpr double TICK_RATE = 60.0;
     static constexpr double TICK_DURATION = 1.0 / TICK_RATE;
     static constexpr uint16_t ROUNDS_PER_SET = 5;
     static constexpr uint16_t VICTORIES_TO_WIN = 10;
 
-
-    void handlePlayerAction(const GameloopMessage& msg);
     void updateGameState();
     void checkRoundEnd();
     void startNewRound();
