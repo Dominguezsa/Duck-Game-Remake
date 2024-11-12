@@ -17,8 +17,9 @@ void AcceptorThread::accept_connection() {
     Socket peer = this->acceptor_skt.accept();
     ClientSession* client = new ClientSession(std::move(peer), this->matches);
     this->clients.push_back(client);
+    std::cout << "ACCEPTOR: Creating a new client\n";
     client->start();
-    client->run();
+    // client->run();
 }
 
 void AcceptorThread::check_unused_resources() {

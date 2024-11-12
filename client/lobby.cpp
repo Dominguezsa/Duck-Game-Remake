@@ -96,20 +96,29 @@ void Lobby::run() {
 
 void Lobby::handle_create_party() {
     protocol.sendCreateCommand(playerName);
+    std::cout << "Receiving match list\n";
     auto maps = protocol.receiveMapList();
+    std::cout << "Dies\n";
+
     for (size_t i = 0; i < maps.size(); i++) {
         std::cout << i + 1 << ". " << maps[i] << '\n';
     }
     int mapIndex = 0;
-    while (true) {
-        std::cout << "Select the map you wanna play\n";
-        std::cin >> mapIndex;
-        if (mapIndex < 1 || mapIndex > (int)maps.size()) {
-            std::cout << "Invalid map\n";
-        } else {
-            break;
+
+    std::string serverInput;
+    while (getline(std::cin, serverInput)) {
+        try {
+            mapIndex = std::stoi(serverInput);
+            if (mapIndex < 1 || mapIndex > (int)maps.size()) {
+                std::cout << "Invalid map\n";
+            } else {
+                break;
+            }
+        } catch (const std::invalid_argument& e) {
+            std::cout << "Invalid input\n";
         }
     }
+
     mapIndex--;
     unsigned int numPlayers;
     std::string matchName;

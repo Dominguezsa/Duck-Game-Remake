@@ -1,5 +1,6 @@
 #include "lobby_protocol.h"
 
+#include <iostream>
 #include <stdexcept>
 
 LobbyProtocol::LobbyProtocol(Socket& socket): Protocol(socket) {}
@@ -24,6 +25,7 @@ std::vector<std::string> LobbyProtocol::receiveMapList() {
     std::vector<std::string> maps;
     uint16_t count;
     recv_uint_16(count);
+    std::cout << "I received: " << +count << " maps\n";
     for (uint16_t i = 0; i < count; i++) {
         std::string mapName;
         recv_string(mapName);
