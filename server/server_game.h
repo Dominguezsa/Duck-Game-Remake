@@ -33,7 +33,7 @@ private:
     uint16_t round_number;
     std::unordered_map<uint8_t, uint16_t> victories;
     std::vector<Platform> platforms;
-    MatchQueuesMonitor& monitor;
+    MatchStateMonitor& monitor;
     PlayerActionHandler action_handler;
 
 
