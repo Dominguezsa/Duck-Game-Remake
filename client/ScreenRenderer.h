@@ -30,6 +30,7 @@ private:
     void copyBackground();
     void copyPlatforms();
     void copyDucks(const std::vector<Duck>& ducks, const int it);
+    void copyDuck();
     void copyDebugText(const std::vector<Duck>& ducks);
 
 public:
