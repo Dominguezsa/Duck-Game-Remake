@@ -37,7 +37,7 @@ private:
     PlayerActionHandler action_handler;
 
 
-    static constexpr double TICK_RATE = 60.0;
+    static constexpr double TICK_RATE = 100.0;
     static constexpr double TICK_DURATION = 1.0 / TICK_RATE;
     static constexpr uint16_t ROUNDS_PER_SET = 5;
     static constexpr uint16_t VICTORIES_TO_WIN = 10;
