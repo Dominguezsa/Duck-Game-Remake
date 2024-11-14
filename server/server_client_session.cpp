@@ -28,6 +28,7 @@ void ClientSession::run_receiver_loop() {
     Queue<GameloopMessage>* gameloop_queue = get_match_queue();
     try {
         while (this->_is_alive) {
+            std::cout << "Waiting for message\n";
             protocol.recv_msg(msg.action);
             gameloop_queue->push(msg);
         }

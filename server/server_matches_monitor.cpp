@@ -27,7 +27,6 @@ bool MatchesMonitor::join_match(std::string match_name, DuckIdentity& duck_info,
         std::cout << "Match does not exist or is full\n";
         return false;
     }
-    std::cout << "LLEGA HASTA ACA, NO LO AÑADE AL MATCH\n";
     matches[match_name]->add_player(q, duck_info);
     std::cout << "Player added to match\n";
     return true;

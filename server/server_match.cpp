@@ -22,6 +22,7 @@ void Match::add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, DuckId
     state_monitor.add_player(q, duck_info.id);
     game.addPlayer(duck_info);
     if (state_monitor.playing_status()) {
+        std::cout << "Match NOW PLAYING\n";
         initialize_game();
     }
 }

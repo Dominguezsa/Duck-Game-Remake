@@ -8,7 +8,6 @@
 #include <utility>
 
 #include <SDL2/SDL.h>
-#include <SDL2pp/SDL2pp.hh>
 
 #include "../common/common_queue.h"
 #include "../common/duck.h"

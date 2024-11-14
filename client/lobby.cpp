@@ -1,6 +1,7 @@
 #include "lobby.h"
 
 #include <iostream>
+#include <limits>
 #include <memory>
 #include <stdexcept>
 #include <utility>
@@ -97,14 +98,15 @@ void Lobby::run() {
 void Lobby::handle_create_party() {
     protocol.sendCreateCommand(playerName);
     auto maps = protocol.receiveMapList();
-    std::cout << "Dies\n";
-
+    std::cout << "These are the available maps:\n";
     for (size_t i = 0; i < maps.size(); i++) {
         std::cout << i + 1 << ". " << maps[i] << '\n';
     }
+    std::cout << "Enter the map you wanna play (select the number f.e: 1,2,3,...)\n";
     int mapIndex = 0;
 
-    std::string serverInput;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::string serverInput = "";
     while (getline(std::cin, serverInput)) {
         try {
             mapIndex = std::stoi(serverInput);
