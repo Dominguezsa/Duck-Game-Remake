@@ -58,6 +58,7 @@ void GameClient::run() {
     ThreadSender threadSender(protocol, messagesForServer);
     threadReceiver.start();
     threadSender.start();
+    std::cout << "CLIENT: Starting the UI \n";
 
 
     // Load resources

@@ -29,7 +29,6 @@ void Match::add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, DuckId
 
 void Match::initialize_game() {
     game.start();
-    // game.run();
 }
 
 Queue<GameloopMessage>* Match::get_gameloop_queue() { return &gameloop_queue; }
