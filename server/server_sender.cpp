@@ -1,8 +1,8 @@
 #include "server_sender.h"
 
+#include <iostream>
 #include <memory>
 #include <vector>
-#include <iostream>
 SenderThread::SenderThread(ServerProtocol& p, Queue<std::shared_ptr<std::vector<DuckState>>>& q):
         protocol(p), client_queue(q) {}
 

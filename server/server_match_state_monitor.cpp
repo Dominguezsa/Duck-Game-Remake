@@ -15,7 +15,7 @@ void MatchStateMonitor::add_player(Queue<std::shared_ptr<std::vector<DuckState>>
     std::lock_guard<std::mutex> lock(data_mtx);
 
     if (accepting_players) {
-        id = ++assigned_ids;
+        id = assigned_ids;
         requester_queues[id] = q;
         player_count++;
         std::cout << +player_count << " players in match\n";
@@ -25,6 +25,7 @@ void MatchStateMonitor::add_player(Queue<std::shared_ptr<std::vector<DuckState>>
             std::cout << "Match is now playing\n";
             status = MatchStatus::Playing;
         }
+        assigned_ids++;
     }
 }
 

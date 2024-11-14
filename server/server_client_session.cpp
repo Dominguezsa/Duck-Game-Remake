@@ -40,7 +40,7 @@ void ClientSession::run_receiver_loop() {
 }
 
 void ClientSession::run() {
-    SenderThread *sender_ptr;
+    SenderThread* sender_ptr;
     try {
         while (this->_is_alive) {
             run_lobby_loop();
@@ -157,7 +157,7 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
         // va a ser unico).
         duck_info.color = static_cast<char>(duck_info.id);
 
-        //protocol.send_duck_unique_attributes(duck_info);
+        // protocol.send_duck_unique_attributes(duck_info);
 
         identity.name = player_name;
         identity.joined_match_name = match_name;
