@@ -28,7 +28,6 @@ void ClientSession::run_receiver_loop() {
     Queue<GameloopMessage>* gameloop_queue = get_match_queue();
     try {
         while (this->_is_alive) {
-            std::cout << "Waiting for message\n";
             protocol.recv_msg(msg.action);
             gameloop_queue->push(msg);
         }
@@ -52,7 +51,6 @@ void ClientSession::run() {
             SenderThread sender(protocol, client_queue);
             sender_ptr = &sender;
             sender.start();
-            sender.run();
             run_receiver_loop();
             sender.stop();
             sender.join();
