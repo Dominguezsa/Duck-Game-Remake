@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <vector>
-
+#include <iostream>
 SenderThread::SenderThread(ServerProtocol& p, Queue<std::shared_ptr<std::vector<DuckState>>>& q):
         protocol(p), client_queue(q) {}
 
@@ -23,6 +23,7 @@ void SenderThread::run() {
     try {
         while (this->_is_alive) {
             std::shared_ptr<std::vector<DuckState>> snapshot = client_queue.pop();
+            std::cout << "sending duck states\n";
             protocol.send_duck_states(snapshot);
             // std::cout << "SERVER: sended the duckstate\n";
         }
