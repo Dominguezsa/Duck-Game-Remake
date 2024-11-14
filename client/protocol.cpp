@@ -21,6 +21,7 @@ std::vector<Duck> ClientProtocol::receiveMessage() {
 }
 
 void ClientProtocol::read_msg(void* msg) {
+    std::cout << "Reading message\n";
     uint8_t duck_amount;
     recv_uint_8(duck_amount);
 
@@ -74,7 +75,7 @@ void ClientProtocol::read_msg(void* msg) {
         ducks->push_back(duck_state);
     }
 
-    // std::cout << "I received everything in theory\n";
+    std::cout << "I received everything in theory\n";
 
     // std::cout << msg << std::endl;
 }
