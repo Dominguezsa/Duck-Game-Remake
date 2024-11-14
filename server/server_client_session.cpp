@@ -34,10 +34,13 @@ void ClientSession::run_receiver_loop() {
         }
     } catch (const ClosedQueue& e) {
         this->matches_monitor.disconnect_player(identity.joined_match_name, identity.id);
+    } catch (...) {
+        // Después agrego un mejor tratado para esto.
     }
 }
 
 void ClientSession::run() {
+    SenderThread *sender_ptr;
     try {
         while (this->_is_alive) {
             run_lobby_loop();
@@ -47,7 +50,9 @@ void ClientSession::run() {
 
             // At this point, the client is in a match.
             SenderThread sender(protocol, client_queue);
+            sender_ptr = &sender;
             sender.start();
+            sender.run();
             run_receiver_loop();
             sender.stop();
             sender.join();
@@ -56,6 +61,17 @@ void ClientSession::run() {
         this->_is_alive = false;
         end_communication();
     } catch (const std::exception& err) {
+        if (_is_alive) {
+            sender_ptr->stop();
+            sender_ptr->join();
+        }
+        this->_is_alive = false;
+        end_communication();
+    } catch (...) {
+        if (_is_alive) {
+            sender_ptr->stop();
+            sender_ptr->join();
+        }
         this->_is_alive = false;
         end_communication();
     }
@@ -141,7 +157,7 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
         // va a ser unico).
         duck_info.color = static_cast<char>(duck_info.id);
 
-        protocol.send_duck_unique_attributes(duck_info);
+        //protocol.send_duck_unique_attributes(duck_info);
 
         identity.name = player_name;
         identity.joined_match_name = match_name;
