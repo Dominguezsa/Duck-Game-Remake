@@ -1,5 +1,7 @@
 #include "server_match_state_monitor.h"
 
+#include <iostream>
+
 MatchStateMonitor::MatchStateMonitor(uint8_t limit):
         data_mtx(),
         player_limit(limit),
@@ -10,11 +12,14 @@ MatchStateMonitor::MatchStateMonitor(uint8_t limit):
         status(MatchStatus::Waiting) {}
 
 void MatchStateMonitor::add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, uint8_t& id) {
+    std::cout << "im trying to add the player: " << +id << std::endl;
     std::lock_guard<std::mutex> lock(data_mtx);
+    std::cout << "Died on the lock?\n";
 
     if (accepting_players) {
         id = ++assigned_ids;
         requester_queues[id] = q;
+        std::cout << "The id is fucked?\n";
         player_count++;
         this->accepting_players = status == MatchStatus::Waiting && player_count < player_limit;
 
