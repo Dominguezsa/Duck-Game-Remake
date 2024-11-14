@@ -21,11 +21,8 @@ std::vector<Duck> ClientProtocol::receiveMessage() {
 }
 
 void ClientProtocol::read_msg(void* msg) {
-    std::cout << "Reading message\n";
     uint8_t duck_amount;
     recv_uint_8(duck_amount);
-
-    std::cout << "I received this many ducks: " << +duck_amount << std::endl;
 
     std::vector<DuckState>* ducks = static_cast<std::vector<DuckState>*>(msg);
 
@@ -74,8 +71,6 @@ void ClientProtocol::read_msg(void* msg) {
                              armor_on, in_air, vertical_velocity, WeaponType(weapon));
         ducks->push_back(duck_state);
     }
-
-    std::cout << "I received everything in theory\n";
 
     // std::cout << msg << std::endl;
 }
