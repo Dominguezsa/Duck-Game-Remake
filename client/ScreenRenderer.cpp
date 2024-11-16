@@ -45,10 +45,12 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
                       0.0, SDL2pp::NullOpt, flip);
 
         // Rendering it's arms
-        renderer.Copy(duck_texture, arm_frame,
-                      SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
-                                   DUCK_ARM_HEIGTH * DUCK_SCALE),
-                      0.0, SDL2pp::NullOpt, flip);
+        if (ducks[i].weapon.name == "None") {
+            renderer.Copy(duck_texture, arm_frame,
+                          SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
+                                       DUCK_ARM_HEIGTH * DUCK_SCALE),
+                          0.0, SDL2pp::NullOpt, flip);
+        }
     }
 }
 

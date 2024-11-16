@@ -123,6 +123,18 @@ void ResourceManager::loadAnimationFrames() {
 
     animationFrames.emplace("duck_jumping_arms", duckFrames);
 
+    duckFrames.clear();
+
+    //This is for the guns
+    for (int i = 0; i < 1; i++) {
+        duckFrames.emplace_back(SDL2pp::Rect(1,
+                                            14,
+                                            DUCK_ARMS_WIDTH,
+                                             DUCK_ARMS_HEIGHT));
+    }
+
+    gunsFrames.emplace("ak47", duckFrames);
+
 
     std::cout << "All animation frames loaded correctly\n";
 }
