@@ -8,7 +8,7 @@
 
 
 class Weapon {
-private:
+public:
     std::string name;
     WeaponType type = NoneType;
     uint8_t ammo;

@@ -29,7 +29,8 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
     for (int i = 0; i < (int)ducks.size(); i++) {
         // std::cout << "Color for this duck id: " << +ducks[i].duck_id
         //           << " is: " << colors_per_id[ducks[i].duck_id] << std::endl;
-
+        // std::cout << "Duck gun for id: " << +ducks[i].duck_id << " is: " << ducks[i].weapon.name
+                  //<< std::endl;
         if (ducks[i].looking == 0) {
             arm_position_x = ducks[i].position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9;
             arm_position_y = ducks[i].position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2;
@@ -59,6 +60,26 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
                           frameDucks[i].second,
                           SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
                                        DUCK_ARM_HEIGTH * DUCK_SCALE));
+        }
+    }
+}
+
+
+void ScreenRenderer::copyGuns(const std::vector<Duck>& ducks) {
+    for (int i = 0; i < (int)ducks.size(); i++) {
+        if (ducks[i].looking == 0) {
+            renderer.Copy(*resourceManager.getTexture(ducks[i].weapon.name),
+                          SDL2pp::NullOpt,
+                          SDL2pp::Rect(ducks[i].position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9,
+                                       ducks[i].position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2,
+                                       DUCK_ARM_WIDTH * DUCK_SCALE, DUCK_ARM_HEIGTH * DUCK_SCALE),
+                          0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+        } else {
+            renderer.Copy(*resourceManager.getTexture("gun"),
+                          SDL2pp::NullOpt,
+                          SDL2pp::Rect(ducks[i].position.x + (DUCK_ARM_WIDTH * DUCK_SCALE) / 3.5,
+                                       ducks[i].position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2,
+                                       DUCK_ARM_WIDTH * DUCK_SCALE, DUCK_ARM_HEIGTH * DUCK_SCALE));
         }
     }
 }
@@ -122,6 +143,7 @@ void ScreenRenderer::updateScreen(const std::vector<Duck>& ducks, const int it) 
     copyBackground();
     copyPlatforms();
     copyDucks(ducks, it);
+    //copyGuns(ducks);
     copyDebugText(ducks);
 
     renderer.Present();

@@ -30,8 +30,8 @@ Game::Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue):
         action_handler(ducks) {}
 
 void Game::addPlayer(DuckIdentity& duck_info) {
-    Position initial_pos{100 + (duck_info.id * 100), 100};  // Example starting positions
-    Weapon initial_weapon(WeaponType::NoneType, 0);
+    Position initial_pos{100 + (duck_info.id * 100), 100};  // Example starting position
+    Weapon initial_weapon(WeaponType::AK47, 0);
     ducks[duck_info.id] = std::make_unique<Duck>(duck_info.id, 100, 1, initial_pos, initial_weapon,
                                                  duck_info.name);
 
