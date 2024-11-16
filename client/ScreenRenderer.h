@@ -31,7 +31,7 @@ private:
     void copyPlatforms();
     void copyDucks(const std::vector<Duck>& ducks, const int it);
     void copyDuck();
-    void copyGuns(const std::vector<Duck>& ducks);
+    void copyGun(const Duck& duck);
     void copyDebugText(const std::vector<Duck>& ducks);
 
 public:
