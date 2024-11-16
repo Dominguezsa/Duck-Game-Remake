@@ -20,15 +20,15 @@ private:
     AnimationHelper& animationHelper;
     std::vector<std::string> colors_per_id = {"white_duck", "orange_duck", "grey_duck",
                                               "yellow_duck"};
-    std::vector<std::string> weapons_by_enum = {"Granade", "Banana", "PewPewLaser",
-                                                "LaserRifle", "ak47", "DuelPistol",
-                                                "CowboyPistol", "Magnum", "Shotgun",
-                                                "Sniper", "NoneType"};
+    std::vector<std::string> weapons_by_enum = {
+            "Granade",      "Banana", "PewPewLaser", "LaserRifle", "ak47",    "DuelPistol",
+            "CowboyPistol", "Magnum", "Shotgun",     "Sniper",     "NoneType"};
 
 
     void copyBackground();
     void copyPlatforms();
     void copyDucks(const std::vector<Duck>& ducks, const int it);
+    void copyDuck();
     void copyDebugText(const std::vector<Duck>& ducks);
     void copyGuns(const std::vector<Duck>& ducks);
 
