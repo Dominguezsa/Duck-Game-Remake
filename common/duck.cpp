@@ -38,7 +38,7 @@ Duck::Duck():
         helmet_on(false),
         armor_on(false),
         position({0, 0}),
-        weapon(Weapon("", 0)) {}
+        weapon(Weapon("None", 0)) {}
 
 Duck::Duck(const Duck& other):
         duck_id(other.duck_id),

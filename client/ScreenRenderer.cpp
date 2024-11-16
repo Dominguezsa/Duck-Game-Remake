@@ -41,11 +41,14 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
                                        DUCK_WIDTH * DUCK_SCALE, DUCK_HEIGTH * DUCK_SCALE),
                           0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
             // drawing the arms
-            renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
-                          frameDucks[i].second,
-                          SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
-                                       DUCK_ARM_HEIGTH * DUCK_SCALE),
-                          0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+            if (ducks[i].weapon.name == "None") {
+                renderer.Copy(
+                        *resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
+                        frameDucks[i].second,
+                        SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
+                                     DUCK_ARM_HEIGTH * DUCK_SCALE),
+                        0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+            }
 
         } else {
 
@@ -56,10 +59,14 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
                           frameDucks[i].first,
                           SDL2pp::Rect(ducks[i].position.x, ducks[i].position.y,
                                        DUCK_WIDTH * DUCK_SCALE, DUCK_HEIGTH * DUCK_SCALE));
-            renderer.Copy(*resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
-                          frameDucks[i].second,
-                          SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
-                                       DUCK_ARM_HEIGTH * DUCK_SCALE));
+
+            if (ducks[i].weapon.name == "None") {
+                renderer.Copy(
+                        *resourceManager.getTexture(colors_per_id[ducks[i].duck_id]),
+                        frameDucks[i].second,
+                        SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
+                                     DUCK_ARM_HEIGTH * DUCK_SCALE));
+            }
         }
     }
 }
@@ -67,21 +74,23 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
 
 void ScreenRenderer::copyGuns(const std::vector<Duck>& ducks) {
     try {
-    for (int i = 0; i < (int)ducks.size(); i++) {
-        if (ducks[i].looking == 0) {
-            renderer.Copy(*resourceManager.getTexture(ducks[i].weapon.name), SDL2pp::NullOpt,
-                          SDL2pp::Rect(ducks[i].position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9,
-                                       ducks[i].position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2,
-                                       DUCK_ARM_WIDTH * DUCK_SCALE, DUCK_ARM_HEIGTH * DUCK_SCALE),
-                          0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
-        } else {
-            renderer.Copy(*resourceManager.getTexture(ducks[i].weapon.name), SDL2pp::NullOpt,
-                          SDL2pp::Rect(ducks[i].position.x + (DUCK_ARM_WIDTH * DUCK_SCALE) / 3.5,
-                                       ducks[i].position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2,
-                                       DUCK_ARM_WIDTH * DUCK_SCALE, DUCK_ARM_HEIGTH * DUCK_SCALE));
+        for (int i = 0; i < (int)ducks.size(); i++) {
+            if (ducks[i].looking == 0) {
+                renderer.Copy(
+                        *resourceManager.getTexture(ducks[i].weapon.name), SDL2pp::NullOpt,
+                        SDL2pp::Rect(ducks[i].position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9,
+                                     ducks[i].position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2,
+                                     DUCK_ARM_WIDTH * DUCK_SCALE, DUCK_ARM_HEIGTH * DUCK_SCALE),
+                        0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+            } else {
+                renderer.Copy(
+                        *resourceManager.getTexture(ducks[i].weapon.name), SDL2pp::NullOpt,
+                        SDL2pp::Rect(ducks[i].position.x + (DUCK_ARM_WIDTH * DUCK_SCALE) / 3.5,
+                                     ducks[i].position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2,
+                                     DUCK_ARM_WIDTH * DUCK_SCALE, DUCK_ARM_HEIGTH * DUCK_SCALE));
+            }
         }
-    }
-    }catch (const std::exception& e) {
+    } catch (const std::exception& e) {
         // std::cerr << "Error: " << e.what() << std::endl;
     }
 }
