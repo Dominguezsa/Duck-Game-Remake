@@ -23,7 +23,7 @@ Game::Game(MatchQueuesMonitor& monitor, Queue<GameloopMessage>& queue):
 
 void Game::addPlayer(uint8_t player_id) {
     Position initial_pos{100 + (player_id * 100), 100};  // Example starting positions
-    Weapon initial_weapon(WeaponType::NoneType, 0);
+    Weapon initial_weapon(WeaponType::AK47, 0);
     ducks[player_id] = std::make_unique<Duck>(player_id, 100, 1, initial_pos, initial_weapon);
     platforms = {
             {0.0f, 350.0f, 600.0f, 32.0f},   // Left platform
