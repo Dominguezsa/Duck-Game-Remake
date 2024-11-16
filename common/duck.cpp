@@ -6,8 +6,8 @@
 
 #define JUMP_SPEED 15.0f
 
-Duck::Duck(uint8_t id, uint8_t vida, bool looking, Position pos,
-           const Weapon& weapon, const std::string& name = ""):
+Duck::Duck(uint8_t id, uint8_t vida, bool looking, Position pos, const Weapon& weapon,
+           const std::string& name = ""):
         name(name),
         duck_id(id),
         life_points(vida),

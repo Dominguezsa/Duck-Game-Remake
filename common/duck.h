@@ -2,6 +2,7 @@
 #define DUCK_H
 
 #include <cstdint>
+#include <string>
 
 #include "types/duck_state.h"
 #include "types/weapon_type.h"

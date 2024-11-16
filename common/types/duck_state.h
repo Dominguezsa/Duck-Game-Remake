@@ -28,10 +28,11 @@ struct DuckState {
     WeaponType weapon;
 
     // Constructor
-    DuckState(std::string _name, uint8_t _id, uint8_t starting_life_points, uint8_t looking, Position _position,
-              uint8_t _is_alive, uint8_t _is_running, uint8_t _is_jumping, uint8_t _is_gliding,
-              uint8_t _is_falling, uint8_t _is_ducking, uint8_t _is_shooting, uint8_t _helmet_on,
-              uint8_t _armor_on, uint8_t _in_air, float _vertical_velocity, WeaponType _weapon):
+    DuckState(std::string _name, uint8_t _id, uint8_t starting_life_points, uint8_t looking,
+              Position _position, uint8_t _is_alive, uint8_t _is_running, uint8_t _is_jumping,
+              uint8_t _is_gliding, uint8_t _is_falling, uint8_t _is_ducking, uint8_t _is_shooting,
+              uint8_t _helmet_on, uint8_t _armor_on, uint8_t _in_air, float _vertical_velocity,
+              WeaponType _weapon):
             name(_name),
             duck_id(_id),
             life_points(starting_life_points),
