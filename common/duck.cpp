@@ -192,5 +192,5 @@ void Duck::update_state(const DuckState& state) {
     helmet_on = static_cast<bool>(state.helmet_on);
     armor_on = static_cast<bool>(state.armor_on);
     // TO-DO: Ajustar el uso del tipo de weapon.
-    // weapon = Weapon("", 0);
+    weapon = Weapon("ak47", 0);
 }
