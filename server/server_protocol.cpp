@@ -11,6 +11,7 @@ void ServerProtocol::send_duck_states(std::shared_ptr<std::vector<DuckState>> st
     uint32_t y;
     std::vector<DuckState> state_vector = *states;
     for (uint16_t i = 0; i < state_count; i++) {
+        send_string(state_vector[i].name);
         send_data(&state_vector[i].duck_id, sizeof(uint8_t));
         send_data(&state_vector[i].life_points, sizeof(uint8_t));
         send_data(&state_vector[i].looking, sizeof(uint8_t));

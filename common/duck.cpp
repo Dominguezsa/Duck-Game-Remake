@@ -6,7 +6,9 @@
 
 #define JUMP_SPEED 15.0f
 
-Duck::Duck(uint8_t id, uint8_t vida, bool looking, Position pos, const Weapon& weapon):
+Duck::Duck(uint8_t id, uint8_t vida, bool looking, Position pos,
+           const Weapon& weapon, const std::string& name = ""):
+        name(name),
         duck_id(id),
         life_points(vida),
         looking(looking),
@@ -151,6 +153,7 @@ void Duck::pick_up_weapon(const Weapon& weapon) { this->weapon = weapon; }
 void Duck::throw_weapon() { this->weapon = Weapon("", 0); }
 
 void Duck::get_state(DuckState& state) {
+    state.name = name;
     state.duck_id = static_cast<uint8_t>(duck_id);
     state.life_points = life_points;
     state.looking = looking;
@@ -172,6 +175,7 @@ void Duck::get_state(DuckState& state) {
 }
 
 void Duck::update_state(const DuckState& state) {
+    name = state.name;
     duck_id = state.duck_id;
     life_points = state.life_points;
     looking = state.looking;

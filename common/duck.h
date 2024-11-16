@@ -11,6 +11,7 @@
 
 class Duck {
 public:
+    std::string name;
     uint8_t duck_id;
     uint8_t life_points;
     uint8_t looking;  // 0 -> izquierda, 1 -> derecha, 2 -> arriba, 3 -> abajo
@@ -30,7 +31,8 @@ public:
 
     // ------------------- Constructores -------------------
 
-    explicit Duck(uint8_t id, uint8_t vida, bool mira_hacia, Position pos, const Weapon& weapon);
+    explicit Duck(uint8_t id, uint8_t vida, bool mira_hacia, Position pos, const Weapon& weapon,
+                  const std::string& name);
 
     // Constructor sin parametros
     Duck();

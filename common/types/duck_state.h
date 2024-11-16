@@ -2,17 +2,19 @@
 #define DUCK_STATE_H
 
 #include <cstdint>
+#include <string>
 
 #include "../common_position.h"
 
 #include "weapon_type.h"
 
 struct DuckState {
-    uint8_t duck_id;  // protocol class is who assigns the id
+    std::string name;
+    uint8_t duck_id;
     uint8_t life_points;
     uint8_t looking;  // 0 -> left, 1 -> right, 2 -> up, 3 -> down
     Position position;
-    uint8_t is_alive;  // 1: true, 0: false
+    uint8_t is_alive;
     uint8_t is_running;
     uint8_t is_jumping;
     uint8_t is_gliding;
@@ -26,10 +28,11 @@ struct DuckState {
     WeaponType weapon;
 
     // Constructor
-    DuckState(uint8_t _id, uint8_t starting_life_points, uint8_t looking, Position _position,
+    DuckState(std::string _name, uint8_t _id, uint8_t starting_life_points, uint8_t looking, Position _position,
               uint8_t _is_alive, uint8_t _is_running, uint8_t _is_jumping, uint8_t _is_gliding,
               uint8_t _is_falling, uint8_t _is_ducking, uint8_t _is_shooting, uint8_t _helmet_on,
               uint8_t _armor_on, uint8_t _in_air, float _vertical_velocity, WeaponType _weapon):
+            name(_name),
             duck_id(_id),
             life_points(starting_life_points),
             looking(looking),
