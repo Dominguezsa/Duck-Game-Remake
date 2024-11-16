@@ -7,10 +7,10 @@
 #include <vector>
 
 struct Platform {
-        float x;
-        float y;
-        float width;
-        float height;
+    float x;
+    float y;
+    float width;
+    float height;
 };
 
 struct DuckIdentity {

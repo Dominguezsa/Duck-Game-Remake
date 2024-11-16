@@ -61,6 +61,10 @@ void ResourceManager::loadSprites() {
     textures.emplace("tablas", std::make_shared<SDL2pp::Texture>(
                                        renderer, SDL2pp::Surface("../client/data/tablon1.png")));
 
+    textures.emplace("ak47",
+                     std::make_shared<SDL2pp::Texture>(
+                             renderer, SDL2pp::Surface("../client/data/sprites/weapons/ak47.png")));
+
     // Loading white duck sprite_sheet
     textures.emplace(
             "white_duck",

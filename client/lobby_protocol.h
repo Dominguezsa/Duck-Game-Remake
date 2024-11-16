@@ -7,8 +7,8 @@
 
 #include "../common/common_protocol.h"
 #include "../common/common_socket.h"
-#include "../common/types/match_state.h"
 #include "../common/types/constants.h"
+#include "../common/types/match_state.h"
 
 class LobbyProtocol: public Protocol {
 public:
