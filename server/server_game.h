@@ -20,12 +20,6 @@
 
 class Game: public Thread {
 private:
-    struct Platform {
-        float x;
-        float y;
-        float width;
-        float height;
-    };
     std::unordered_map<uint8_t, std::unique_ptr<Duck>> ducks;
     Queue<GameloopMessage>& message_queue;
     std::atomic<bool> is_running;

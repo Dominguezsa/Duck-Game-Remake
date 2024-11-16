@@ -8,16 +8,10 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../common/duck.h"
+#include "../common/types/match_state.h"
 
 #include "AnimationHelper.h"
 #include "ResourceManager.h"
-
-struct Platform {
-    float x;
-    float y;
-    float width;
-    float height;
-};
 
 class ScreenRenderer {
 private:

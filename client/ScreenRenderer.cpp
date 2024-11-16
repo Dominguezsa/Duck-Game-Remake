@@ -1,9 +1,9 @@
 #include "ScreenRenderer.h"
 
+#include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
-#include <iostream>
 
 #define DUCK_WIDTH 32
 #define DUCK_HEIGTH 32
@@ -30,8 +30,6 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
         // std::cout << "Color for this duck id: " << +ducks[i].duck_id
         //           << " is: " << colors_per_id[ducks[i].duck_id] << std::endl;
 
-        std::cout << "Duck id: " << +ducks[i].duck_id;
-        std::cout << " , name:" << ducks[i].name << std::endl;
         if (ducks[i].looking == 0) {
             arm_position_x = ducks[i].position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9;
             arm_position_y = ducks[i].position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2;

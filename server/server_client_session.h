@@ -8,11 +8,12 @@
 
 #include "../common/common_socket.h"
 #include "../common/common_thread.h"
-#include "types/client_identity.h"
+#include "../common/types/constants.h"
 
 #include "server_matches_monitor.h"
 #include "server_protocol.h"
 #include "server_sender.h"
+#include "types/client_identity.h"
 
 /*
     This thread listens for and processes messages from clients, which

@@ -75,16 +75,6 @@ void ClientSession::run() {
     }
 }
 
-// --------------- Lobby logic ---------------
-
-// Estas constantes hay que pasarlas a algun .h en
-// common/types/ (tanto aca como del lado del cliente).
-static constexpr char EXIT = 'Q';
-static constexpr char CMD_CREATE = 'C';
-static constexpr char CMD_JOIN = 'J';
-static constexpr uint8_t SUCCESS = 0x01;
-static constexpr uint8_t FAILURE = 0x00;
-
 void ClientSession::run_lobby_loop() {
     bool success = false;
     try {

@@ -8,6 +8,7 @@
 #include "../common/common_protocol.h"
 #include "../common/common_socket.h"
 #include "../common/types/match_state.h"
+#include "../common/types/constants.h"
 
 class LobbyProtocol: public Protocol {
 public:
@@ -23,13 +24,5 @@ public:
     void sendJoinCommand(const std::string& playerName);
     std::vector<std::string> receiveMatchList();
     int sendMatchSelection(const std::string& matchName);
-
-private:
-    // DuckIdentity receiveDuckIdentity();
-
-    static constexpr char CMD_CREATE = 'C';
-    static constexpr char CMD_JOIN = 'J';
-    static constexpr uint8_t SUCCESS = 0x01;
-    static constexpr uint8_t FAILURE = 0x00;
 };
 #endif

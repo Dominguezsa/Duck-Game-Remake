@@ -6,6 +6,13 @@
 #include <string>
 #include <vector>
 
+struct Platform {
+        float x;
+        float y;
+        float width;
+        float height;
+};
+
 struct DuckIdentity {
     std::string name;
     // cppcheck-suppress unusedStructMember

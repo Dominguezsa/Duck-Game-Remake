@@ -67,9 +67,10 @@ void ClientProtocol::read_msg(void* msg) {
         recv_float(vertical_velocity);
         recv_uint_8(weapon);
 
-        DuckState duck_state(name, duck_id, life_points, looking, Position(x, y), is_alive, is_running,
-                             is_jumping, is_gliding, is_falling, is_ducking, is_shooting, helmet_on,
-                             armor_on, in_air, vertical_velocity, WeaponType(weapon));
+        DuckState duck_state(name, duck_id, life_points, looking, Position(x, y), is_alive,
+                             is_running, is_jumping, is_gliding, is_falling, is_ducking,
+                             is_shooting, helmet_on, armor_on, in_air, vertical_velocity,
+                             WeaponType(weapon));
         ducks->push_back(duck_state);
     }
 

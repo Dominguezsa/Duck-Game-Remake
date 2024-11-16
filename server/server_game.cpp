@@ -32,8 +32,8 @@ Game::Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue):
 void Game::addPlayer(DuckIdentity& duck_info) {
     Position initial_pos{100 + (duck_info.id * 100), 100};  // Example starting positions
     Weapon initial_weapon(WeaponType::NoneType, 0);
-    ducks[duck_info.id] = std::make_unique<Duck>(duck_info.id, 100, 1, initial_pos,
-                                                 initial_weapon, duck_info.name);
+    ducks[duck_info.id] = std::make_unique<Duck>(duck_info.id, 100, 1, initial_pos, initial_weapon,
+                                                 duck_info.name);
 
     platforms = {
             {0.0f, 350.0f, 600.0f, 32.0f},   // Left platform
@@ -206,9 +206,8 @@ void Game::startNewRound() {
     for (auto& duck_pair: ducks) {
         Position initial_pos{100 + (duck_pair.first * 100), 100};
         Weapon initial_weapon(WeaponType::NoneType, 0);
-        duck_pair.second =
-                std::make_unique<Duck>(duck_pair.first, 100, 1, initial_pos,
-                                       initial_weapon, duck_pair.second->name);
+        duck_pair.second = std::make_unique<Duck>(duck_pair.first, 100, 1, initial_pos,
+                                                  initial_weapon, duck_pair.second->name);
     }
 
     if (round_number % ROUNDS_PER_SET == 0) {
