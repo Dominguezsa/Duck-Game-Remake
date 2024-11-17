@@ -31,6 +31,8 @@ void Lobby::run() {
     } else if (option == 'j') {
         handle_join_party();
     }
+
+    skt_ownership = false;
 }
 
 void Lobby::handle_create_party() {
