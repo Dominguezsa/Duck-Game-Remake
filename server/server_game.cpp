@@ -77,6 +77,14 @@ void Game::updateGameState() {
         // if (duck->duck_id == 1) {
         //     std::cout << "Duck 1 vertical velocity: " << duck->vertical_velocity << std::endl;
         // }
+        
+
+        if (duck->is_shooting && duck->weapon.ammo > 0) {
+            // Shoot
+            
+            
+            
+        }
 
         // Apply gravity if in air
         if (duck->in_air) {
