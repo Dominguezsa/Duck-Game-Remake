@@ -26,7 +26,7 @@ public:
 
     uint8_t get_id() const;
 
-    Queue<std::shared_ptr<std::vector<DuckState>>>* get_queue();
+    Queue<std::shared_ptr<Snapshot>>* get_queue();
 
     void end_communication();
 

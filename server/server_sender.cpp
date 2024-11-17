@@ -10,7 +10,7 @@ void SenderThread::stop() {
     requester_queue.close();
 }
 
-Queue<std::shared_ptr<std::vector<DuckState>>>* SenderThread::get_queue() {
+Queue<std::shared_ptr<Snapshot>>* SenderThread::get_queue() {
     return &this->duck_states_queue;
 }
 

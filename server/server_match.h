@@ -9,6 +9,7 @@
 
 #include "server_game.h"
 #include "server_match_queues_monitor.h"
+#include "../common/snapshot.h"
 
 class Match {
 private:
@@ -25,7 +26,7 @@ private:
 public:
     explicit Match(unsigned int limit);
     bool delete_player(uint8_t id);
-    void add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, uint8_t id);
+    void add_player(Queue<std::shared_ptr<Snapshot>>* q, uint8_t id);
     void initialize_game();
     Queue<GameloopMessage>* get_gameloop_queue();
     bool can_accept_players() const;

@@ -24,7 +24,7 @@ private:
 
 public:
     explicit SenderThread(ServerProtocol& p);
-    Queue<std::shared_ptr<std::vector<DuckState>>>* get_queue();
+    Queue<std::shared_ptr<Snapshot>>* get_queue();
     void stop() override;
     void run() override;
 };

@@ -19,7 +19,7 @@ bool UserClient::is_alive() { return receiver.is_alive() && sender.is_alive(); }
 
 uint8_t UserClient::get_id() const { return this->id; }
 
-Queue<std::shared_ptr<std::vector<DuckState>>>* UserClient::get_queue() {
+Queue<std::shared_ptr<Snapshot>>* UserClient::get_queue() {
     return this->sender.get_queue();
 }
 

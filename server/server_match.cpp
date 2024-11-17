@@ -29,7 +29,7 @@ bool Match::delete_player(uint8_t id) {
 
 bool Match::can_accept_players() const { return accepting_players; }
 
-void Match::add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, uint8_t id) {
+void Match::add_player(Queue<std::shared_ptr<Snapshot>>* q, uint8_t id) {
     if (accepting_players) {
         monitor.add_player(q, id);
         game.addPlayer(id);
