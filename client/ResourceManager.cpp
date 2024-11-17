@@ -76,6 +76,16 @@ void ResourceManager::loadSprites() {
             std::make_shared<SDL2pp::Texture>(
                     renderer, SDL2pp::Surface("../client/data/sprites/ducks/orange_duck.png")));
 
+    textures.emplace(
+            "grey_duck",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("../client/data/sprites/ducks/grey_duck.png")));
+
+    textures.emplace(
+            "yellow_duck",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("../client/data/sprites/ducks/yellow_duck.png")));
+
     std::cout << "All textures loaded correctly\n";
 }
 
@@ -125,12 +135,9 @@ void ResourceManager::loadAnimationFrames() {
 
     duckFrames.clear();
 
-    //This is for the guns
+    // This is for the guns
     for (int i = 0; i < 1; i++) {
-        duckFrames.emplace_back(SDL2pp::Rect(1,
-                                            14,
-                                            DUCK_ARMS_WIDTH,
-                                             DUCK_ARMS_HEIGHT));
+        duckFrames.emplace_back(SDL2pp::Rect(1, 14, DUCK_ARMS_WIDTH, DUCK_ARMS_HEIGHT));
     }
 
     gunsFrames.emplace("ak47", duckFrames);
