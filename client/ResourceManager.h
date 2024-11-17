@@ -24,11 +24,11 @@ private:
 public:
     explicit ResourceManager(SDL2pp::Renderer& renderer);
     ~ResourceManager();
-    void loadResources();
+    void loadResources(uint8_t playerAmount);
     void loadSFX();
     void loadMusic();
     void loadFonts();
-    void loadSprites();
+    void loadSprites(uint8_t playerAmount);
     void loadAnimationFrames();
     std::shared_ptr<SDL2pp::Music> getMusicTrack(const std::string& key);
     std::shared_ptr<SDL2pp::Font> getFont(const std::string& key);

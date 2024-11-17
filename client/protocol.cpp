@@ -20,9 +20,12 @@ std::vector<Duck> ClientProtocol::receiveMessage() {
     return ducks;
 }
 
+void ClientProtocol::recv_player_amount(uint8_t& player_amount) { recv_uint_8(player_amount); }
+
 void ClientProtocol::read_msg(void* msg) {
     uint8_t duck_amount;
     recv_uint_8(duck_amount);
+    // std::cout << "In my read_msg function, duck_amount is: " << +duck_amount << std::endl;
 
     std::vector<DuckState>* ducks = static_cast<std::vector<DuckState>*>(msg);
     std::string name;

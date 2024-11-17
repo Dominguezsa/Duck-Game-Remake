@@ -46,11 +46,12 @@ GameClient::GameClient(const int window_width, const int window_height,
         lobby(socket),
         messagesForServer(),
         graphic_queue(GRAPHIC_QUEUE_SIZE),
-        ducks({Duck(), Duck(), Duck()}),
-        animationHelper(ducks, resourceManager),
+        ducks(),
+        animationHelper(resourceManager),
         screenRenderer(renderer, resourceManager, animationHelper),
         keyboardState(std::make_shared<const uint8_t*>(SDL_GetKeyboardState(nullptr))),
-        commandCenter(messagesForServer, keyboardState, quit) {}
+        commandCenter(messagesForServer, keyboardState, quit),
+        playerAmount(0) {}
 
 void GameClient::run() {
     ClientProtocol protocol(socket);
@@ -61,8 +62,23 @@ void GameClient::run() {
     std::cout << "CLIENT: Starting the UI \n";
 
 
+    // Muuuy feo, pero por ahora pruebo a ver si anda
+    std::vector<DuckState> ducksStates = graphic_queue.pop();
+
+    playerAmount = ducksStates.size();
+
+    // std::cout << "CLIENT: Player amount received: " << +playerAmount << std::endl;
+
     // Load resources
-    resourceManager.loadResources();
+    resourceManager.loadResources(playerAmount);
+
+    // Initialize the ducks
+    std::cout << "Now creating new " << +playerAmount << " ducks\n";
+    for (int i = 0; i < playerAmount; i++) {
+        ducks.push_back(Duck());
+    }
+
+    animationHelper.loadDucks(ducks);
 
     int64_t rate = 1000 / FPS;
     int iteration = 0;

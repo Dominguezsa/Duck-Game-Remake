@@ -45,7 +45,7 @@ void ResourceManager::loadFonts() {
     fonts.emplace("vera", std::make_shared<SDL2pp::Font>("../client/data/Vera.ttf", 12));
 }
 
-void ResourceManager::loadSprites() {
+void ResourceManager::loadSprites(uint8_t playerAmount) {
 
     textures.emplace(
             "duck",
@@ -65,26 +65,39 @@ void ResourceManager::loadSprites() {
                      std::make_shared<SDL2pp::Texture>(
                              renderer, SDL2pp::Surface("../client/data/sprites/weapons/ak47.png")));
 
-    // Loading white duck sprite_sheet
-    textures.emplace(
-            "white_duck",
-            std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("../client/data/sprites/ducks/white_duck.png")));
-    // Loading orange duck sprite_sheet
-    textures.emplace(
-            "orange_duck",
-            std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("../client/data/sprites/ducks/orange_duck.png")));
+    std::vector<std::string> duck_colors = {"white_duck", "orange_duck", "grey_duck",
+                                            "yellow_duck"};
 
-    textures.emplace(
-            "grey_duck",
-            std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("../client/data/sprites/ducks/grey_duck.png")));
+    std::cout << "Now loading " << +playerAmount << " ducks\n";
 
-    textures.emplace(
-            "yellow_duck",
-            std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("../client/data/sprites/ducks/yellow_duck.png")));
+    for (int i = 0; i < playerAmount; i++) {
+
+        std::string path = "../client/data/sprites/ducks/" + duck_colors[i] + ".png";
+
+        textures.emplace(duck_colors[i],
+                         std::make_shared<SDL2pp::Texture>(renderer, SDL2pp::Surface(path)));
+    }
+
+    // // Loading white duck sprite_sheet
+    // textures.emplace(
+    //         "white_duck",
+    //         std::make_shared<SDL2pp::Texture>(
+    //                 renderer, SDL2pp::Surface("../client/data/sprites/ducks/white_duck.png")));
+    // // Loading orange duck sprite_sheet
+    // textures.emplace(
+    //         "orange_duck",
+    //         std::make_shared<SDL2pp::Texture>(
+    //                 renderer, SDL2pp::Surface("../client/data/sprites/ducks/orange_duck.png")));
+
+    // textures.emplace(
+    //         "grey_duck",
+    //         std::make_shared<SDL2pp::Texture>(
+    //                 renderer, SDL2pp::Surface("../client/data/sprites/ducks/grey_duck.png")));
+
+    // textures.emplace(
+    //         "yellow_duck",
+    //         std::make_shared<SDL2pp::Texture>(
+    //                 renderer, SDL2pp::Surface("../client/data/sprites/ducks/yellow_duck.png")));
 
     std::cout << "All textures loaded correctly\n";
 }
@@ -146,11 +159,11 @@ void ResourceManager::loadAnimationFrames() {
     std::cout << "All animation frames loaded correctly\n";
 }
 
-void ResourceManager::loadResources() {
+void ResourceManager::loadResources(uint8_t playerAmount) {
     loadSFX();
     loadMusic();
     loadFonts();
-    loadSprites();
+    loadSprites(playerAmount);
     loadAnimationFrames();
 }
 
