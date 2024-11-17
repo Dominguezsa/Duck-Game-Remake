@@ -3,8 +3,8 @@
 #include <cmath>
 
 Bullet::Bullet(uint8_t id, float x, float y, float angle, float speed, float time,
-               bool going_right):
-        id(id), x(x), y(y), angle(angle), speed(speed), time(time), going_right(going_right) {}
+               bool going_right, uint8_t damage):
+        id(id), x(x), y(y), angle(angle), speed(speed), time(time), going_right(going_right), damage(damage) {}
 
 Bullet::Bullet(const Bullet& other):
         id(other.id),

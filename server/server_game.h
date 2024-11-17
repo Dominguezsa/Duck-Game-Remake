@@ -10,6 +10,7 @@
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
 #include "../common/duck.h"
+#include "../common/bullet.h"
 #include "../common/types/action_type.h"
 
 #include "PlayerActionHandler.h"
