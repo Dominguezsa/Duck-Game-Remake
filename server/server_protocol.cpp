@@ -32,6 +32,9 @@ void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
         send_data(&duck_vector[i].vertical_velocity, sizeof(float));
         send_data(&duck_vector[i].weapon, sizeof(uint8_t));
     }
+
+    unsigned int item_count = snapshot->bullets.size();
+    send_data(&item_count, sizeof(uint8_t));
 }
 // Solo para compilar, esto no se usa se tiene que ir:
 

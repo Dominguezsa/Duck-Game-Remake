@@ -75,6 +75,9 @@ void ClientProtocol::read_msg(void* msg) {
         ducks->push_back(duck_state);
     }
 
+    uint8_t bullet_amount;
+    recv_uint_8(bullet_amount);
+    std::cout << +bullet_amount << std::endl;
     // std::cout << "I received everything in theory\n";
 
     // std::cout << msg << std::endl;
