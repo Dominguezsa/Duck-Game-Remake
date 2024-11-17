@@ -59,7 +59,7 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
 void ScreenRenderer::copyGun(const Duck& duck) {
     SDL2pp::Texture& weapon_texture = *resourceManager.getTexture(duck.weapon.name);
     int flip = duck.looking == 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    int x_position = duck.looking == 0 ? duck.position.x + (DUCK_ARM_WIDTH * DUCK_SCALE) / 3.5 :
+    int x_position = duck.looking == 0 ? duck.position.x + (DUCK_ARM_WIDTH * DUCK_SCALE) / 3.5 -6 :
                                          duck.position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9;
     renderer.Copy(weapon_texture, SDL2pp::Rect(1, 19, 32, 32),
                   SDL2pp::Rect(x_position, duck.position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2 - 7,
