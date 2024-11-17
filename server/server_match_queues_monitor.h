@@ -25,7 +25,7 @@ public:
     bool delete_player(uint8_t id);
 
     // Pos: Broadcasts the current state of the duck to all players.
-    void push_to_all(std::shared_ptr<std::vector<DuckState>> duck_snapshot);
+    void push_to_all(std::shared_ptr<std::vector<DuckState>> duck_snapshot, std::shared_ptr<std::vector<Bullet>> bullets);
 };
 
 #endif  // MATCH_QUEUE_MONITOR_H

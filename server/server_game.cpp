@@ -67,7 +67,8 @@ void Game::updateGameState() {
     std::shared_ptr<std::vector<DuckState>> duck_states =
             std::make_shared<std::vector<DuckState>>();
 
-    std::vector<Bullet> bullets_in_game;
+    std::shared_ptr<std::vector<Bullet>> bullets_in_game =
+            std::make_shared<std::vector<Bullet>>();
 
     for (auto& duck_pair: ducks) {
         Duck* duck = duck_pair.second.get();
@@ -87,6 +88,7 @@ void Game::updateGameState() {
                 Bullet bullet(duck->weapon.id, duck->position.x, duck->position.y + DUCK_HEIGHT / 2,
                               duck->looking == 1 ? 0 : M_PI, 10.0f, 0.0f, duck->looking == 1,
                               duck->weapon.damage);
+                bullets_in_game->push_back(bullet);
             } else {
                 if (duck->weapon.actual_cicle == duck->weapon.cicles_to_reshoot) {
                     duck->weapon.actual_cicle = 0;
@@ -183,7 +185,7 @@ void Game::updateGameState() {
         duck->update_state(state);
         duck_states->push_back(state);
     }
-    monitor.push_to_all(duck_states);
+    monitor.push_to_all(duck_states, bullets_in_game);
 }
 
 void Game::checkRoundEnd() {

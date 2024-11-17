@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include "../common/bullet.h"
 
 MatchQueuesMonitor::MatchQueuesMonitor(): queues_mtx(), requester_queues() {}
 
@@ -16,9 +17,10 @@ bool MatchQueuesMonitor::delete_player(uint8_t id) {
     return deleted;
 }
 
-void MatchQueuesMonitor::push_to_all(std::shared_ptr<std::vector<DuckState>> duck_snapshot) {
+void MatchQueuesMonitor::push_to_all(std::shared_ptr<std::vector<DuckState>> duck_snapshot, std::shared_ptr<std::vector<Bullet>> bullets) {
     std::lock_guard<std::mutex> lock(queues_mtx);
     for (auto& pair: requester_queues) {
         pair.second->push(duck_snapshot);
+        pair.second->push(bullets);
     }
 }
