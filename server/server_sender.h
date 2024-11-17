@@ -20,12 +20,13 @@ class SenderThread: public Thread {
 private:
     Queue<Snapshot> requester_queue;
     ServerProtocol& protocol;
-    Queue<std::shared_ptr<Snapshot>> duck_states_queue;
+    Queue<std::shared_ptr<Snapshot>>& client_queue;
 
 public:
-    explicit SenderThread(ServerProtocol& p);
+    explicit SenderThread(ServerProtocol& p, Queue<std::shared_ptr<Snapshot>>& client_queue);
     Queue<std::shared_ptr<Snapshot>>* get_queue();
     void stop() override;
+    void join() override;
     void run() override;
 
 private:

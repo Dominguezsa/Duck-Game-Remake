@@ -3,7 +3,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
-SenderThread::SenderThread(ServerProtocol& p, Queue<std::shared_ptr<std::vector<DuckState>>>& q):
+SenderThread::SenderThread(ServerProtocol& p, Queue<std::shared_ptr<Snapshot>>& q):
         protocol(p), client_queue(q) {}
 
 void SenderThread::join() {
@@ -17,6 +17,11 @@ void SenderThread::clear_queue() {
         std::shared_ptr<Snapshot> e;
         is_empty = client_queue.try_pop(e) == false;
     } while (!is_empty);
+}
+
+void SenderThread::stop() {
+    this->_is_alive = false;
+    clear_queue();
 }
 
 void SenderThread::run() {

@@ -163,7 +163,7 @@ void ResourceManager::loadAnimationFrames() {
         duckFrames.emplace_back(SDL2pp::Rect(1, 14, DUCK_ARMS_WIDTH, DUCK_ARMS_HEIGHT));
     }
 
-    gunsFrames.emplace("ak47", duckFrames);
+    animationFrames.emplace("ak47", duckFrames);
 
 
     std::cout << "All animation frames loaded correctly\n";

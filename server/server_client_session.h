@@ -42,7 +42,7 @@ private:
     Socket skt;
     ServerProtocol protocol;
     MatchesMonitor& matches_monitor;
-    Queue<std::shared_ptr<std::vector<DuckState>>> client_queue;
+    Queue<std::shared_ptr<Snapshot>> client_queue;
 
 public:
     ClientSession(Socket _skt, MatchesMonitor& monitor);
