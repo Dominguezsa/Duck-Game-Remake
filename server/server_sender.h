@@ -10,6 +10,7 @@
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
 #include "../common/types/duck_state.h"
+#include "../common/snapshot.h"
 
 #include "server_protocol.h"
 
@@ -17,9 +18,9 @@
 
 class SenderThread: public Thread {
 private:
-    Queue<DuckState> requester_queue;
+    Queue<Snapshot> requester_queue;
     ServerProtocol& protocol;
-    Queue<std::shared_ptr<std::vector<DuckState>>> duck_states_queue;
+    Queue<std::shared_ptr<std::vector<Snapshot>>> duck_states_queue;
 
 public:
     explicit SenderThread(ServerProtocol& p);
