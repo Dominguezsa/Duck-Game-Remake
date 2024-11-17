@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <iostream>
 
+#include "../common/snapshot.h"
+
 enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
 
 #define GRAVITY 0.5f
@@ -79,6 +81,8 @@ void Game::updateGameState() {
     std::shared_ptr<std::vector<DuckState>> duck_states =
             std::make_shared<std::vector<DuckState>>();
 
+    std::shared_ptr<std::vector<Bullet>> bullets_in_game = std::make_shared<std::vector<Bullet>>();
+
     for (auto& duck_pair: ducks) {
         Duck* duck = duck_pair.second.get();
 
@@ -89,6 +93,22 @@ void Game::updateGameState() {
         // if (duck->duck_id == 1) {
         //     std::cout << "Duck 1 vertical velocity: " << duck->vertical_velocity << std::endl;
         // }
+
+
+        if (duck->is_shooting && duck->weapon.ammo > 0) {
+            if (duck->weapon.actual_cicle == 0) {
+                Bullet bullet(duck->weapon.id, duck->position.x, duck->position.y + DUCK_HEIGHT / 2,
+                              duck->looking == 1 ? 0 : M_PI, 10.0f, 0.0f, duck->looking == 1,
+                              duck->weapon.damage);
+                bullets_in_game->push_back(bullet);
+            } else {
+                if (duck->weapon.actual_cicle == duck->weapon.cicles_to_reshoot) {
+                    duck->weapon.actual_cicle = 0;
+                } else {
+                    duck->weapon.actual_cicle++;
+                }
+            }
+        }
 
         // Apply gravity if in air
         if (duck->in_air) {
@@ -177,7 +197,8 @@ void Game::updateGameState() {
         duck->update_state(state);
         duck_states->push_back(state);
     }
-    monitor.push_to_all(duck_states);
+    Snapshot snapshot(*duck_states, *bullets_in_game);
+    monitor.push_to_all(std::make_shared<Snapshot>(snapshot));
 }
 
 void Game::checkRoundEnd() {

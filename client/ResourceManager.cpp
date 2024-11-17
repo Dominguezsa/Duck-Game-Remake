@@ -61,10 +61,6 @@ void ResourceManager::loadSprites(uint8_t playerAmount) {
     textures.emplace("tablas", std::make_shared<SDL2pp::Texture>(
                                        renderer, SDL2pp::Surface("../client/data/tablon1.png")));
 
-    textures.emplace("ak47",
-                     std::make_shared<SDL2pp::Texture>(
-                             renderer, SDL2pp::Surface("../client/data/sprites/weapons/ak47.png")));
-
     std::vector<std::string> duck_colors = {"white_duck", "orange_duck", "grey_duck",
                                             "yellow_duck"};
 
@@ -98,6 +94,11 @@ void ResourceManager::loadSprites(uint8_t playerAmount) {
     //         "yellow_duck",
     //         std::make_shared<SDL2pp::Texture>(
     //                 renderer, SDL2pp::Surface("../client/data/sprites/ducks/yellow_duck.png")));
+
+
+    textures.emplace("ak47",
+                     std::make_shared<SDL2pp::Texture>(
+                             renderer, SDL2pp::Surface("../client/data/sprites/weapons/ak47.png")));
 
     std::cout << "All textures loaded correctly\n";
 }
@@ -145,6 +146,15 @@ void ResourceManager::loadAnimationFrames() {
     }
 
     animationFrames.emplace("duck_jumping_arms", duckFrames);
+
+    // duckFrames.clear();
+
+    // for (int i = 0; i < 1; i++) {
+    //     duckFrames.emplace_back(SDL2pp::Rect(1, 14,
+    //                                          16, 16));
+    // }
+
+    // weaponFrames.emplace("ak47", duckFrames);
 
     duckFrames.clear();
 

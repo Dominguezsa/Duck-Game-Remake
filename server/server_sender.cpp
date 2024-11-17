@@ -14,7 +14,7 @@ void SenderThread::join() {
 void SenderThread::clear_queue() {
     bool is_empty = false;
     do {
-        std::shared_ptr<std::vector<DuckState>> e;
+        std::shared_ptr<Snapshot> e;
         is_empty = client_queue.try_pop(e) == false;
     } while (!is_empty);
 }
@@ -22,8 +22,8 @@ void SenderThread::clear_queue() {
 void SenderThread::run() {
     try {
         while (this->_is_alive) {
-            std::shared_ptr<std::vector<DuckState>> snapshot = client_queue.pop();
-            protocol.send_duck_states(snapshot);
+            std::shared_ptr<Snapshot> snapshot = client_queue.pop();
+            protocol.send_snapshot(snapshot);
         }
     } catch (const SocketWasCLosedException& e) {
         if (this->_is_alive) {

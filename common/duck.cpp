@@ -38,7 +38,7 @@ Duck::Duck():
         helmet_on(false),
         armor_on(false),
         position({0, 0}),
-        weapon(Weapon("None", 0)) {}
+        weapon(Weapon(AK47, "ak47", 0, 15, 20)) {}
 
 Duck::Duck(const Duck& other):
         duck_id(other.duck_id),
@@ -150,7 +150,7 @@ void Duck::receive_damage(uint8_t danio) {
 
 void Duck::pick_up_weapon(const Weapon& weapon) { this->weapon = weapon; }
 
-void Duck::throw_weapon() { this->weapon = Weapon("", 0); }
+void Duck::throw_weapon() { this->weapon = Weapon(AK47, "", 0, 15, 20); }
 
 void Duck::get_state(DuckState& state) {
     state.name = name;
@@ -192,5 +192,5 @@ void Duck::update_state(const DuckState& state) {
     helmet_on = static_cast<bool>(state.helmet_on);
     armor_on = static_cast<bool>(state.armor_on);
     // TO-DO: Ajustar el uso del tipo de weapon.
-    weapon = Weapon("ak47", 0);
+    weapon = Weapon(AK47, "ak47", 0, 15, 20);
 }

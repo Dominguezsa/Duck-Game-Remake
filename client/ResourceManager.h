@@ -18,7 +18,7 @@ private:
     std::map<std::string, std::shared_ptr<SDL2pp::Font>> fonts;
     std::map<std::string, std::shared_ptr<SDL2pp::Texture>> textures;
     std::map<std::string, std::vector<SDL2pp::Rect>> animationFrames;
-    std::map<std::string, std::vector<SDL2pp::Rect>> gunsFrames;
+    std::map<std::string, std::vector<SDL2pp::Rect>> weaponFrames;
     SDL2pp::Renderer& renderer;
 
 public:

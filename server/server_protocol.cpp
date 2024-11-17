@@ -2,44 +2,38 @@
 
 void ServerProtocol::recv_msg(uint8_t& command) { recv_uint_8(command); }
 
-void ServerProtocol::send_duck_states(std::shared_ptr<std::vector<DuckState>> states) {
-    // Refactorizable!
-    // std::cout << "I entered the send_duck_states method\n";
-    unsigned int state_count = states->size();
+
+void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
+    unsigned int state_count = snapshot->ducks.size();
     send_data(&state_count, sizeof(uint8_t));
     uint32_t x;
     uint32_t y;
-    std::vector<DuckState> state_vector = *states;
+    std::vector<DuckState> duck_vector = snapshot->ducks;
     for (uint16_t i = 0; i < state_count; i++) {
-        send_string(state_vector[i].name);
-        send_data(&state_vector[i].duck_id, sizeof(uint8_t));
-        send_data(&state_vector[i].life_points, sizeof(uint8_t));
-        send_data(&state_vector[i].looking, sizeof(uint8_t));
+        send_string(duck_vector[i].name);
+        send_data(&duck_vector[i].duck_id, sizeof(uint8_t));
+        send_data(&duck_vector[i].life_points, sizeof(uint8_t));
+        send_data(&duck_vector[i].looking, sizeof(uint8_t));
 
-        x = htonl(state_vector[i].position.x);
-        y = htonl(state_vector[i].position.y);
+        x = htonl(duck_vector[i].position.x);
+        y = htonl(duck_vector[i].position.y);
 
         send_data(&x, sizeof(uint32_t));
-        // std::cout << "state_vector[i].position.x: " << state_vector[i].position.x << std::endl;
         send_data(&y, sizeof(uint32_t));
-        // std::cout << "state_vector[i].position.y: " << state_vector[i].position.y << std::endl;
-        send_data(&state_vector[i].is_alive, sizeof(uint8_t));
-        send_data(&state_vector[i].is_running, sizeof(uint8_t));
-        send_data(&state_vector[i].is_jumping, sizeof(u_int8_t));
-        send_data(&state_vector[i].is_gliding, sizeof(uint8_t));
-        send_data(&state_vector[i].is_falling, sizeof(uint8_t));
-        send_data(&state_vector[i].is_ducking, sizeof(uint8_t));
-        send_data(&state_vector[i].is_shooting, sizeof(uint8_t));
-        send_data(&state_vector[i].helmet_on, sizeof(uint8_t));
-        send_data(&state_vector[i].armor_on, sizeof(uint8_t));
-        send_data(&state_vector[i].in_air, sizeof(uint8_t));
-        send_data(&state_vector[i].vertical_velocity, sizeof(float));
-        send_data(&state_vector[i].weapon, sizeof(uint8_t));
-
-        // std::cout << "Sended the data regarding duck " << +state_vector[i].duck_id << std::endl;
+        send_data(&duck_vector[i].is_alive, sizeof(uint8_t));
+        send_data(&duck_vector[i].is_running, sizeof(uint8_t));
+        send_data(&duck_vector[i].is_jumping, sizeof(u_int8_t));
+        send_data(&duck_vector[i].is_gliding, sizeof(uint8_t));
+        send_data(&duck_vector[i].is_falling, sizeof(uint8_t));
+        send_data(&duck_vector[i].is_ducking, sizeof(uint8_t));
+        send_data(&duck_vector[i].is_shooting, sizeof(uint8_t));
+        send_data(&duck_vector[i].helmet_on, sizeof(uint8_t));
+        send_data(&duck_vector[i].armor_on, sizeof(uint8_t));
+        send_data(&duck_vector[i].in_air, sizeof(uint8_t));
+        send_data(&duck_vector[i].vertical_velocity, sizeof(float));
+        send_data(&duck_vector[i].weapon, sizeof(uint8_t));
     }
 }
-
 // Solo para compilar, esto no se usa se tiene que ir:
 
 void ServerProtocol::read_msg(void* msg) { std::cout << msg << std::endl; }
@@ -56,7 +50,7 @@ void ServerProtocol::send_game_map_list(const std::list<std::string>& map_names)
     map_count = htons(map_count);
     send_data(&map_count, sizeof(uint16_t));
 
-    for (std::string map_name: map_names) {
+    for (const std::string& map_name: map_names) {
         send_string(map_name);
     }
 }
@@ -78,7 +72,7 @@ void ServerProtocol::send_match_list(const std::list<std::string>& match_names) 
     match_count = htons(match_count);
     send_data(&match_count, sizeof(uint16_t));
 
-    for (std::string match_name: match_names) {
+    for (const std::string& match_name: match_names) {
         send_string(match_name);
     }
 }
@@ -94,7 +88,7 @@ void ServerProtocol::recv_match_name(std::string& match_name) { recv_string(matc
 
 void ServerProtocol::recv_player_name(std::string& player_name) { recv_string(player_name); }
 
-void ServerProtocol::send_duck_unique_attributes(DuckIdentity& attributes) {
+void ServerProtocol::send_duck_unique_attributes(const DuckIdentity& attributes) {
     send_string(attributes.name);
     send_data(&attributes.id, sizeof(uint8_t));
     send_data(&attributes.color, sizeof(char));

@@ -28,8 +28,8 @@ private:
     void copyBackground();
     void copyPlatforms();
     void copyDucks(const std::vector<Duck>& ducks, const int it);
-    void copyDebugText(const std::vector<Duck>& ducks);
     void copyGun(const Duck& duck);
+    void copyDebugText(const std::vector<Duck>& ducks);
 
 public:
     ScreenRenderer(SDL2pp::Renderer& renderer, ResourceManager& resourceManager,

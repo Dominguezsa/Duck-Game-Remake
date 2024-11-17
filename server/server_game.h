@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "../common/bullet.h"
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
 #include "../common/duck.h"
