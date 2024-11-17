@@ -7,6 +7,7 @@
 #include "duck_state.h"
 
 struct Snapshot {
+public:
     std::vector<DuckState> ducks;
     std::vector<Bullet> bullets;
 };

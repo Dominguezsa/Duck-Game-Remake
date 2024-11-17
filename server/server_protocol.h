@@ -10,6 +10,7 @@
 #include "../common/common_protocol.h"
 #include "../common/common_socket.h"
 #include "../common/types/duck_state.h"
+#include "../common/snapshot.h"
 
 #include "server_gameloop_message.h"
 
@@ -19,7 +20,8 @@ public:
 
     void recv_msg(uint8_t& command);
 
-    void send_duck_states(std::shared_ptr<std::vector<DuckState>> states);
+
+    void send_snapshot(std::shared_ptr<Snapshot> snapshot);
 
     // No se usan! Quitar despues de common/common_protocol.h
     void read_msg(void* msg) override;
