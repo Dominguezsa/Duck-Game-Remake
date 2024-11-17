@@ -51,52 +51,19 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
                           0.0, SDL2pp::NullOpt, flip);
         } else {
             copyGun(ducks[i]);
-            // SDL2pp::Texture& weapon_texture = *resourceManager.getTexture(ducks[i].weapon.name);
-            // renderer.Copy(weapon_texture, SDL2pp::NullOpt,
-            //               SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH *
-            //               DUCK_SCALE,
-            //                            DUCK_ARM_HEIGTH * DUCK_SCALE),
-            //               0.0, SDL2pp::NullOpt, flip);
         }
     }
 }
 
 void ScreenRenderer::copyGun(const Duck& duck) {
-    // try {
-    //     for (int i = 0; i < (int)ducks.size(); i++) {
-    //         SDL2pp::Texture& weapon_texture = *resourceManager.getTexture(ducks[i].weapon.name);
-    //         if (ducks[i].looking == 0) {
-    //             renderer.Copy(
-    //                     weapon_texture, SDL2pp::NullOpt,
-    //                     SDL2pp::Rect(ducks[i].position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9,
-    //                                  ducks[i].position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2,
-    //                                  DUCK_ARM_WIDTH * DUCK_SCALE, DUCK_ARM_HEIGTH * DUCK_SCALE),
-    //                     0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
-    //         } else {
-    //             renderer.Copy(
-    //                     weapon_texture, SDL2pp::NullOpt,
-    //                     SDL2pp::Rect(ducks[i].position.x + (DUCK_ARM_WIDTH * DUCK_SCALE) / 3.5,
-    //                                  ducks[i].position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2,
-    //                                  DUCK_ARM_WIDTH * DUCK_SCALE, DUCK_ARM_HEIGTH * DUCK_SCALE));
-    //         }
-    //     }
-    // } catch (const std::exception& e) {
-    //     // std::cerr << "Error: " << e.what() << std::endl;
-    // }
-
     SDL2pp::Texture& weapon_texture = *resourceManager.getTexture(duck.weapon.name);
-    if (duck.looking == 0) {
-        renderer.Copy(weapon_texture, SDL2pp::Rect(1, 19, 32, 32),
-                      SDL2pp::Rect(duck.position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9,
-                                   duck.position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2,
-                                   DUCK_ARM_WIDTH * DUCK_SCALE, DUCK_ARM_HEIGTH * DUCK_SCALE),
-                      0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
-    } else {
-        renderer.Copy(weapon_texture, SDL2pp::Rect(1, 19, 32, 32),
-                      SDL2pp::Rect(duck.position.x + (DUCK_ARM_WIDTH * DUCK_SCALE) / 3.5,
-                                   duck.position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2,
-                                   DUCK_ARM_WIDTH * DUCK_SCALE, DUCK_ARM_HEIGTH * DUCK_SCALE));
-    }
+    int aumento = duck.looking == 0 ? -16 : 0;
+    int flip = duck.looking == 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    renderer.Copy(weapon_texture, SDL2pp::Rect(1, 19, 32, 32),
+                  SDL2pp::Rect(duck.position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9 + aumento,
+                               duck.position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2 -7,
+                               DUCK_ARM_WIDTH * DUCK_SCALE +10, DUCK_ARM_HEIGTH * DUCK_SCALE +10),
+                  0.0, SDL2pp::NullOpt, flip);
 }
 
 void ScreenRenderer::copyPlatforms() {
