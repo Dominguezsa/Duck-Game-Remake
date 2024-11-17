@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "bullet.h"
-#include "duck_state.h"
+#include "types/duck_state.h"
 
 struct Snapshot {
 public:

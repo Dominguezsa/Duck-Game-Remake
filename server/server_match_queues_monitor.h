@@ -10,6 +10,7 @@
 
 #include "../common/common_queue.h"
 #include "../common/types/duck_state.h"
+#include "../common/snapshot.h"
 
 class MatchQueuesMonitor {
 private:
