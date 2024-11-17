@@ -12,9 +12,14 @@ public:
     std::string name;
     WeaponType type = NoneType;
     uint8_t ammo;
+    uint8_t cicles_to_reshoot; //esto seria que tan rapido es el arma disparando, osea cada cuantos ciclos de juego se puede disparar
+    uint8_t actual_cicle = 0;
+    uint8_t damage;
+    
 
 public:
-    Weapon(const std::string& name, uint8_t ammo): name(name), ammo(ammo) {}
+    Weapon(const std::string& name, uint8_t ammo, uint8_t cicles_to_reshoot, uint8_t damage)
+        : name(name), ammo(ammo), cicles_to_reshoot(cicles_to_reshoot), damage(damage) {}
 
     WeaponType getType() const { return type; }
 
