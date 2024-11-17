@@ -21,6 +21,7 @@ void MatchQueuesMonitor::push_to_all(std::shared_ptr<std::vector<DuckState>> duc
     std::lock_guard<std::mutex> lock(queues_mtx);
     for (auto& pair: requester_queues) {
         pair.second->push(duck_snapshot);
-        pair.second->push(bullets);
+        bullets->clear();
+        //pair.second->push(bullets);
     }
 }

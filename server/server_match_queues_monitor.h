@@ -5,6 +5,7 @@
 #include <memory>
 #include <mutex>
 #include <unordered_map>
+#include "../common/bullet.h"
 #include <vector>
 
 #include "../common/common_queue.h"
