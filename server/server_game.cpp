@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include "../common/snapshot.h"
 
 enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
 
@@ -185,7 +186,8 @@ void Game::updateGameState() {
         duck->update_state(state);
         duck_states->push_back(state);
     }
-    monitor.push_to_all(duck_states, bullets_in_game);
+    Snapshot snapshot(*duck_states, *bullets_in_game);
+    monitor.push_to_all(std::make_shared<Snapshot>(snapshot));
 }
 
 void Game::checkRoundEnd() {
