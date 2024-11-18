@@ -47,7 +47,14 @@ void CommandCenter::handle_key_down_d() { messagesForServer.push(MOVE_RIGHT_KEY_
 
 void CommandCenter::handle_key_down_a() { messagesForServer.push(MOVE_LEFT_KEY_DOWN); }
 
-void CommandCenter::handle_key_down_w() { messagesForServer.push(LOOKING_UP_KEY_DOWN); }
+void CommandCenter::handle_key_down_w() {
+    // if ((*keyboardState)[SDL_SCANCODE_SPACE] || (*keyboardState)[SDL_SCANCODE_A] ||
+    // (*keyboardState)[SDL_SCANCODE_D]) {
+    //     std::cout << "This should happen now\n";
+    //     return;
+    // }
+    messagesForServer.push(LOOKING_UP_KEY_DOWN);
+}
 
 void CommandCenter::handle_key_down_s() {
     if ((*keyboardState)[SDL_SCANCODE_SPACE]) {
@@ -77,7 +84,14 @@ void CommandCenter::handle_key_up_a() {
     messagesForServer.push(MOVE_LEFT_KEY_UP);
 }
 
-void CommandCenter::handle_key_up_w() { messagesForServer.push(LOOKING_UP_KEY_UP); }
+void CommandCenter::handle_key_up_w() {
+    // if ((*keyboardState)[SDL_SCANCODE_SPACE] || (*keyboardState)[SDL_SCANCODE_A] ||
+    // (*keyboardState)[SDL_SCANCODE_D]) {
+    //     std::cout << "This should happen now\n";
+    //     return;
+    // }
+    messagesForServer.push(LOOKING_UP_KEY_UP);
+}
 
 void CommandCenter::handle_key_up_s() {
     messagesForServer.push(LOOKING_DOWN_KEY_UP);

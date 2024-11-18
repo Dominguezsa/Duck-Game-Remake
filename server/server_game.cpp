@@ -13,7 +13,7 @@ enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
 #define MAX_FLUTTER_SPEED 3.0f
 #define DUCK_WIDTH 64.0f
 #define DUCK_HEIGHT 64.0f
-#define MOVE_SPEED 5.0f
+// #define MOVE_SPEED 5.0f
 
 #define GRAVITY 0.5f
 #define FLUTTER_FORCE -0.3f
@@ -22,8 +22,9 @@ enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
 #define DUCK_WIDTH 64.0f
 #define DUCK_HEIGHT 64.0f
 #define MOVE_SPEED 5.0f
+#define STOP_SPEED 0.1f
 
-#define MAX_HORIZONTAL_SPEED 7.0f
+#define MAX_HORIZONTAL_SPEED 5.0f
 
 Game::Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue):
         message_queue(queue),
@@ -133,15 +134,32 @@ void Game::updateGameState() {
         // Update horizontal position
         if (duck->is_running) {
             // std::cout << "Duck be running\n";
+
+            duck->horizontal_velocity += MOVE_SPEED;
+            if (duck->horizontal_velocity > MAX_HORIZONTAL_SPEED) {
+                duck->horizontal_velocity = MAX_HORIZONTAL_SPEED;
+            }
+
             if (duck->looking == 1) {
                 // duck->position.x += move_speed;
                 double actual_pos = duck->position.x;
-                double new_pos = actual_pos + MOVE_SPEED;
+                double new_pos = actual_pos + duck->horizontal_velocity;
                 duck->position.x = new_pos;
                 // std::cout << "New position is: " << duck->position.x << std::endl;
             } else if (duck->looking == 0) {
-                duck->position.x -= MOVE_SPEED;
+                duck->position.x -= duck->horizontal_velocity;
                 // std::cout << "New position is: " << duck->position.x << std::endl;
+            }
+        } else if (duck->is_sliding) {
+            duck->horizontal_velocity -= STOP_SPEED;
+            if (duck->horizontal_velocity < 0) {
+                duck->horizontal_velocity = 0;
+            }
+
+            if (duck->looking == 1) {
+                duck->position.x += duck->horizontal_velocity;
+            } else if (duck->looking == 0) {
+                duck->position.x -= duck->horizontal_velocity;
             }
         }
 

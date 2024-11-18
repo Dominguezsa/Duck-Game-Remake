@@ -112,6 +112,7 @@ void Duck::look_to(uint8_t direccion) {
 
     if (direccion == 2) {
         is_sliding = false;
+        // return;
     }
 
     looking = direccion;
@@ -121,6 +122,11 @@ void Duck::stop_running() { is_running = false; }
 
 void Duck::jump(bool activar) {
     // if true, spacebar down; if false, spacebar up
+
+    if (is_sliding || is_ducking) {
+        return;
+    }
+
     if (activar && is_jumping) {
         is_gliding = true;
         vertical_velocity = 0.0f;
@@ -137,12 +143,19 @@ void Duck::jump(bool activar) {
 
 void Duck::duck(bool activar) {
 
+    if (in_air) {
+        return;
+    }
+
     if (is_running) {
         is_sliding = true;
         is_running = false;
     }
 
     if (activar) {
+        if (is_sliding) {
+            return;
+        }
         is_ducking = true;
     } else {
         is_ducking = false;
