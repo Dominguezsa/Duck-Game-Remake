@@ -69,7 +69,10 @@ void PlayerActionHandler::handle_looking_left_key_down(Duck& duck) { duck.look_t
 
 void PlayerActionHandler::handle_looking_up_key_down(Duck& duck) { duck.look_to(UP); }
 
-void PlayerActionHandler::handle_looking_down_key_down(Duck& duck) { duck.look_to(DOWN); }
+void PlayerActionHandler::handle_looking_down_key_down(Duck& duck) { duck.duck(true); }
 
+void PlayerActionHandler::handle_looking_down_key_up(Duck& duck) { duck.duck(false); }
+
+void PlayerActionHandler::handle_looking_up_key_up(Duck& duck) { duck.look_to(UP); }
 
 PlayerActionHandler::~PlayerActionHandler() {}

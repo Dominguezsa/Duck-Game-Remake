@@ -82,10 +82,14 @@ void Duck::move_to(uint8_t direccion) {
     if (direccion > 1) {
         return;
     }
+    looking = direccion;
+
+    if (is_ducking) {
+        return;
+    }
 
     is_running = true;
 
-    looking = direccion;
 
     // if (direccion == 0) {
     //     looking = 0;
