@@ -37,6 +37,7 @@ void MatchStateMonitor::stop_match() {
     std::lock_guard<std::mutex> lock(data_mtx);
     status = MatchStatus::Finished;
     accepting_players = false;
+    requester_queues.clear();
 }
 
 bool MatchStateMonitor::remove_player_if_present(const uint8_t& id) {

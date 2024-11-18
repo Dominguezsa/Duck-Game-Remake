@@ -284,23 +284,30 @@ void Game::rateController(double start, double finish) {
 
 void Game::run() {
     is_running = true;
+    try {
+        while (is_running) {
+            double start_time = getCurrentTime();
 
-    while (is_running) {
-        double start_time = getCurrentTime();
+            // Process all pending messages
+            GameloopMessage msg(0, 0);
+            while (message_queue.try_pop(msg)) {
+                action_handler.process_player_action(msg);
+                // handlePlayerAction(msg);
+            }
+            // std::cout << "Updating state\n";
+            updateGameState();
+            checkRoundEnd();
 
-        // Process all pending messages
-        GameloopMessage msg(0, 0);
-        while (message_queue.try_pop(msg)) {
-            action_handler.process_player_action(msg);
-            // handlePlayerAction(msg);
+
+            double end_time = getCurrentTime();
+            rateController(start_time, end_time);
         }
-        // std::cout << "Updating state\n";
-        updateGameState();
-        checkRoundEnd();
-
-
-        double end_time = getCurrentTime();
-        rateController(start_time, end_time);
+    } catch (ClosedQueue& e) {
+        std::cerr << "Server interrupts game loop\n";
+        stop();
+    } catch (const std::exception& e) {
+        std::cerr << "Error occurred during game loop: " << e.what() << std::endl;
+        stop();
     }
 }
 

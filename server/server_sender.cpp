@@ -1,22 +1,19 @@
 #include "server_sender.h"
 
-#include <iostream>
-#include <memory>
-#include <vector>
 SenderThread::SenderThread(ServerProtocol& p, Queue<std::shared_ptr<Snapshot>>& q):
         protocol(p), client_queue(q) {}
 
-void SenderThread::join() {
-    clear_queue();
-    Thread::join();
-}
-
 void SenderThread::clear_queue() {
-    bool is_empty = false;
-    do {
-        std::shared_ptr<Snapshot> e;
-        is_empty = client_queue.try_pop(e) == false;
-    } while (!is_empty);
+    try {
+        bool is_empty = false;
+        do {
+            std::shared_ptr<Snapshot> e;
+            is_empty = client_queue.try_pop(e) == false;
+        } while (!is_empty);
+    } catch (const ClosedQueue& e) {
+        syslog(LOG_ERR, "%s", e.what());
+        closelog();
+    }
 }
 
 void SenderThread::stop() {
@@ -33,11 +30,13 @@ void SenderThread::run() {
     } catch (const SocketWasCLosedException& e) {
         if (this->_is_alive) {
             syslog(LOG_ERR, "%s", e.what());
+            closelog();
         }
         this->_is_alive = false;
     } catch (const std::exception& err) {
         if (this->_is_alive) {
             syslog(LOG_ERR, "%s", "Error occurred (SenderThread)\n");
+            closelog();
         }
         this->_is_alive = false;
     }

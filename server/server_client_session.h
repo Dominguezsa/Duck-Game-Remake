@@ -54,6 +54,8 @@ public:
 
     void run() override;
 
+    void stop() override;
+
     void run_lobby_loop();
 
     void run_receiver_loop();
