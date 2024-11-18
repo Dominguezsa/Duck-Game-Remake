@@ -32,6 +32,7 @@ void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
         send_data(&duck_vector[i].armor_on, sizeof(uint8_t));
         send_data(&duck_vector[i].in_air, sizeof(uint8_t));
         send_data(&duck_vector[i].vertical_velocity, sizeof(float));
+        send_data(&duck_vector[i].horizontal_velocity, sizeof(float));
         send_data(&duck_vector[i].weapon, sizeof(uint8_t));
     }
 

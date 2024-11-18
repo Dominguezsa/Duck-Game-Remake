@@ -26,6 +26,7 @@ struct DuckState {
     uint8_t armor_on;
     uint8_t in_air;
     float vertical_velocity;
+    float horizontal_velocity;
     WeaponType weapon;
 
     // Constructor
@@ -33,7 +34,7 @@ struct DuckState {
               Position _position, uint8_t _is_alive, uint8_t _is_running, uint8_t _is_jumping,
               uint8_t _is_gliding, uint8_t _is_falling, uint8_t _is_ducking, uint8_t _is_shooting,
               uint8_t _is_sliding, uint8_t _helmet_on, uint8_t _armor_on, uint8_t _in_air,
-              float _vertical_velocity, WeaponType _weapon):
+              float _vertical_velocity, float _horizontal_velocity, WeaponType _weapon):
             name(_name),
             duck_id(_id),
             life_points(starting_life_points),
@@ -51,6 +52,7 @@ struct DuckState {
             armor_on(_armor_on),
             in_air(_in_air),
             vertical_velocity(_vertical_velocity),
+            horizontal_velocity(_horizontal_velocity),
             weapon(_weapon) {}
 
     // Generic empty constructor
@@ -71,6 +73,7 @@ struct DuckState {
             armor_on(0),
             in_air(0),
             vertical_velocity(0.0f),
+            horizontal_velocity(0.0f),
             weapon(WeaponType::NoneType) {}
 };
 

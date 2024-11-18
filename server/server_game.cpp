@@ -23,6 +23,8 @@ enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
 #define DUCK_HEIGHT 64.0f
 #define MOVE_SPEED 5.0f
 
+#define MAX_HORIZONTAL_SPEED 7.0f
+
 Game::Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue):
         message_queue(queue),
         is_running(false),
@@ -192,7 +194,8 @@ void Game::updateGameState() {
                         duck->is_gliding ? 1 : 0, duck->is_falling ? 1 : 0,
                         duck->is_ducking ? 1 : 0, duck->is_shooting ? 1 : 0,
                         duck->is_sliding ? 1 : 0, duck->helmet_on ? 1 : 0, duck->armor_on ? 1 : 0,
-                        duck->in_air ? 1 : 0, duck->vertical_velocity, duck->weapon.getType());
+                        duck->in_air ? 1 : 0, duck->vertical_velocity, duck->horizontal_velocity,
+                        duck->weapon.getType());
 
         duck->update_state(state);
         duck_states->push_back(state);

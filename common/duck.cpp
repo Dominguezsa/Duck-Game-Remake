@@ -77,6 +77,7 @@ Duck& Duck::operator=(const Duck& other) {
         helmet_on = other.helmet_on;
         armor_on = other.armor_on;
         vertical_velocity = 0.0f;
+        horizontal_velocity = 0.0f;
         position = other.position;
         weapon = other.weapon;
     }
@@ -187,6 +188,7 @@ void Duck::get_state(DuckState& state) {
     state.is_falling = static_cast<uint8_t>(is_falling);
     state.in_air = static_cast<uint8_t>(in_air);
     state.vertical_velocity = vertical_velocity;
+    state.horizontal_velocity = horizontal_velocity;
     // TO-DO: Ajustar el uso del tipo de weapon a la
     //        clase correspondiente.
     state.weapon = WeaponType::NoneType;
@@ -206,6 +208,7 @@ void Duck::update_state(const DuckState& state) {
     is_falling = static_cast<bool>(state.is_falling);
     in_air = static_cast<bool>(state.in_air);
     vertical_velocity = state.vertical_velocity;
+    horizontal_velocity = state.horizontal_velocity;
     is_ducking = static_cast<bool>(state.is_ducking);
     is_shooting = static_cast<bool>(state.is_shooting);
     helmet_on = static_cast<bool>(state.helmet_on);

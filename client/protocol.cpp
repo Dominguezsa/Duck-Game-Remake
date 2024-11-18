@@ -46,6 +46,7 @@ void ClientProtocol::read_msg(void* msg) {
     uint8_t armor_on;
     uint8_t in_air;
     float vertical_velocity;
+    float horizontal_velocity;
     uint8_t weapon;
 
     for (int i = 0; i < duck_amount; i++) {
@@ -70,12 +71,13 @@ void ClientProtocol::read_msg(void* msg) {
         recv_uint_8(armor_on);
         recv_uint_8(in_air);
         recv_float(vertical_velocity);
+        recv_float(horizontal_velocity);
         recv_uint_8(weapon);
 
         DuckState duck_state(name, duck_id, life_points, looking, Position(x, y), is_alive,
                              is_running, is_jumping, is_gliding, is_falling, is_ducking,
                              is_shooting, is_sliding, helmet_on, armor_on, in_air,
-                             vertical_velocity, WeaponType(weapon));
+                             vertical_velocity, horizontal_velocity, WeaponType(weapon));
         ducks->push_back(duck_state);
     }
 
