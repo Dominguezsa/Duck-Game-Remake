@@ -55,7 +55,7 @@ void CommandCenter::handle_key_down_s() {
     if ((*keyboardState)[SDL_SCANCODE_SPACE]) {
         return;
     }
-    std::cout << "Sending ducking\n";
+    // std::cout << "Sending ducking\n";
     messagesForServer.push(LOOKING_DOWN_KEY_DOWN);
 }
 

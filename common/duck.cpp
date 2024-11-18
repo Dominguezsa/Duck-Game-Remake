@@ -19,6 +19,7 @@ Duck::Duck(uint8_t id, uint8_t vida, bool looking, Position pos, const Weapon& w
         is_falling(false),
         is_ducking(false),
         is_shooting(false),
+        is_sliding(false),
         helmet_on(false),
         armor_on(false),
         position(pos),
@@ -35,6 +36,7 @@ Duck::Duck():
         is_falling(false),
         is_ducking(false),
         is_shooting(false),
+        is_sliding(false),
         helmet_on(false),
         armor_on(false),
         position({0, 0}),
@@ -51,6 +53,7 @@ Duck::Duck(const Duck& other):
         is_falling(other.is_falling),
         is_ducking(other.is_ducking),
         is_shooting(other.is_shooting),
+        is_sliding(other.is_sliding),
         helmet_on(other.helmet_on),
         armor_on(other.armor_on),
         position(other.position),
@@ -70,6 +73,7 @@ Duck& Duck::operator=(const Duck& other) {
         is_falling = other.is_falling;
         is_ducking = other.is_ducking;
         is_shooting = other.is_shooting;
+        is_sliding = other.is_sliding;
         helmet_on = other.helmet_on;
         armor_on = other.armor_on;
         vertical_velocity = 0.0f;
@@ -176,6 +180,7 @@ void Duck::get_state(DuckState& state) {
     // TO-DO: Ajustar el uso del tipo de weapon a la
     //        clase correspondiente.
     state.weapon = WeaponType::NoneType;
+    state.is_sliding = static_cast<uint8_t>(is_sliding);
 }
 
 void Duck::update_state(const DuckState& state) {
@@ -197,4 +202,5 @@ void Duck::update_state(const DuckState& state) {
     armor_on = static_cast<bool>(state.armor_on);
     // TO-DO: Ajustar el uso del tipo de weapon.
     weapon = Weapon(AK47, "ak47", 0, 15, 20);
+    is_sliding = static_cast<bool>(state.is_sliding);
 }

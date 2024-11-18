@@ -106,11 +106,14 @@ void ScreenRenderer::copyDebugText(const std::vector<Duck>& ducks) {
                 " Duck " + std::to_string(i + 1) +
                 " is jumping: " + std::to_string(ducks[i].is_jumping) + " Duck " +
                 std::to_string(i + 1) + " is falling: " + std::to_string(ducks[i].is_falling) +
+                // " Duck " + std::to_string(i + 1) +
+                // " is gliding: " + std::to_string(ducks[i].is_gliding) + " Duck " +
+                // std::to_string(i + 1) + " is on air: " + std::to_string(ducks[i].in_air) +
+                // " Duck " + std::to_string(i + 1) +
+                // " vertical velocity: " + std::to_string(ducks[i].vertical_velocity) +
                 " Duck " + std::to_string(i + 1) +
-                " is gliding: " + std::to_string(ducks[i].is_gliding) + " Duck " +
-                std::to_string(i + 1) + " is on air: " + std::to_string(ducks[i].in_air) +
-                " Duck " + std::to_string(i + 1) +
-                " vertical velocity: " + std::to_string(ducks[i].vertical_velocity);
+                " is ducking: " + std::to_string(ducks[i].is_ducking) + " Duck " +
+                std::to_string(i + 1) + " is sliding: " + std::to_string(ducks[i].is_sliding);
 
         SDL2pp::Texture text_sprite(renderer,
                                     resourceManager.getFont("vera")->RenderText_Blended(

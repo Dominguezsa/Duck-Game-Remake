@@ -21,6 +21,7 @@ struct DuckState {
     uint8_t is_falling;
     uint8_t is_ducking;
     uint8_t is_shooting;
+    uint8_t is_sliding;
     uint8_t helmet_on;
     uint8_t armor_on;
     uint8_t in_air;
@@ -31,8 +32,8 @@ struct DuckState {
     DuckState(std::string _name, uint8_t _id, uint8_t starting_life_points, uint8_t looking,
               Position _position, uint8_t _is_alive, uint8_t _is_running, uint8_t _is_jumping,
               uint8_t _is_gliding, uint8_t _is_falling, uint8_t _is_ducking, uint8_t _is_shooting,
-              uint8_t _helmet_on, uint8_t _armor_on, uint8_t _in_air, float _vertical_velocity,
-              WeaponType _weapon):
+              uint8_t _is_sliding, uint8_t _helmet_on, uint8_t _armor_on, uint8_t _in_air,
+              float _vertical_velocity, WeaponType _weapon):
             name(_name),
             duck_id(_id),
             life_points(starting_life_points),
@@ -45,6 +46,7 @@ struct DuckState {
             is_falling(_is_falling),
             is_ducking(_is_ducking),
             is_shooting(_is_shooting),
+            is_sliding(_is_sliding),
             helmet_on(_helmet_on),
             armor_on(_armor_on),
             in_air(_in_air),
@@ -64,6 +66,7 @@ struct DuckState {
             is_falling(0),
             is_ducking(0),
             is_shooting(0),
+            is_sliding(0),
             helmet_on(0),
             armor_on(0),
             in_air(0),

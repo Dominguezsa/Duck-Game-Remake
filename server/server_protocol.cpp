@@ -27,6 +27,7 @@ void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
         send_data(&duck_vector[i].is_falling, sizeof(uint8_t));
         send_data(&duck_vector[i].is_ducking, sizeof(uint8_t));
         send_data(&duck_vector[i].is_shooting, sizeof(uint8_t));
+        send_data(&duck_vector[i].is_sliding, sizeof(uint8_t));
         send_data(&duck_vector[i].helmet_on, sizeof(uint8_t));
         send_data(&duck_vector[i].armor_on, sizeof(uint8_t));
         send_data(&duck_vector[i].in_air, sizeof(uint8_t));

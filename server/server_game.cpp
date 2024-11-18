@@ -191,8 +191,8 @@ void Game::updateGameState() {
                         duck->is_alive ? 1 : 0, duck->is_running ? 1 : 0, duck->is_jumping ? 1 : 0,
                         duck->is_gliding ? 1 : 0, duck->is_falling ? 1 : 0,
                         duck->is_ducking ? 1 : 0, duck->is_shooting ? 1 : 0,
-                        duck->helmet_on ? 1 : 0, duck->armor_on ? 1 : 0, duck->in_air ? 1 : 0,
-                        duck->vertical_velocity, duck->weapon.getType());
+                        duck->is_sliding ? 1 : 0, duck->helmet_on ? 1 : 0, duck->armor_on ? 1 : 0,
+                        duck->in_air ? 1 : 0, duck->vertical_velocity, duck->weapon.getType());
 
         duck->update_state(state);
         duck_states->push_back(state);
