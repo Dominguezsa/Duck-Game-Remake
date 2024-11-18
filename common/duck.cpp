@@ -90,7 +90,7 @@ void Duck::move_to(uint8_t direccion) {
     }
     looking = direccion;
 
-    if (is_ducking) {
+    if (is_ducking || is_sliding) {
         return;
     }
 
@@ -107,6 +107,10 @@ void Duck::move_to(uint8_t direccion) {
 void Duck::look_to(uint8_t direccion) {
     if (direccion > 3) {
         return;
+    }
+
+    if (direccion == 2) {
+        is_sliding = false;
     }
 
     looking = direccion;
@@ -131,6 +135,12 @@ void Duck::jump(bool activar) {
 }
 
 void Duck::duck(bool activar) {
+
+    if (is_running) {
+        is_sliding = true;
+        is_running = false;
+    }
+
     if (activar) {
         is_ducking = true;
     } else {
