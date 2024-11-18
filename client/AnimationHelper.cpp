@@ -28,7 +28,8 @@ void AnimationHelper::update_animation_frame(int it) {
         duck.update_current_frame(it);
     }
 }
-
+// This returns a pair of frames, the first one is the duck frame and the second is the arms frame
+// to sync both at the same time
 std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> AnimationHelper::get_animation_frames(int it) {
 
     // set_run_anim_start(it);

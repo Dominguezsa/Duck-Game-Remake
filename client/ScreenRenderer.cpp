@@ -120,8 +120,7 @@ void ScreenRenderer::copyDebugText(const std::vector<Duck>& ducks) {
                       SDL2pp::Rect(0, i * 20, text_sprite.GetWidth(), text_sprite.GetHeight()));
     }
 }
-// Por ahora que reciba los dos patos por parámetro, probablemente en un futuro sean o una clase o
-// directamente un vector de patos para la partida
+
 void ScreenRenderer::updateScreen(const std::vector<Duck>& ducks, const int it) {
     renderer.Clear();
     copyBackground();
