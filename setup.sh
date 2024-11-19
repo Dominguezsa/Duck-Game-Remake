@@ -1,0 +1,29 @@
+echo "Updating package list..."
+sudo apt update
+
+if ! command -v gcc &> /dev/null; then
+    echo "Installing GCC..."
+    sudo apt install -y gcc
+else
+    echo "GCC is already installed."
+fi
+
+if ! command -v g++ &> /dev/null; then
+    echo "Installing G++..."
+    sudo apt install -y g++
+else
+    echo "G++ is already installed."
+fi
+
+if ! command -v cmake &> /dev/null; then
+    echo "Installing CMake..."
+    sudo apt install -y cmake
+else
+    echo "CMake is already installed."
+fi
+
+# Install SDL2 and related libraries
+echo "Installing SDL2 and additional libraries..."
+sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
+
+echo "All required dependencies have been installed."

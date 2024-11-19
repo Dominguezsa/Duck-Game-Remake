@@ -1,4 +1,9 @@
-# Ejemplo de CMAKE para el TP Final
+# Duck Game
+
+## Cómo correr el proyecto
+
+Instalar dependencias:
+
 
 **Importante:** el primer commit de este repositorio tiene el setup
 básico para el TP Final que incluye la instalación de la lib

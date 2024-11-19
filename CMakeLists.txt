@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.13)
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
+endif()
 
 if(POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif()
-
 
 if(NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 20)
@@ -14,6 +16,24 @@ endif()
 # -Wpedantic being enabled and -std=c++20 and -std=gnu++20 for example
 # when compiling with PCH enabled
 set(CMAKE_CXX_EXTENSIONS ON)
+
+# Set the BUILD_MODE custom variable to allow choosing between 'release' or other modes (defaults to debug)
+set(BUILD_MODE "release" CACHE STRING "Defines if the build should be optimized or set to debug mode")
+
+# Set compiler flags conditionally
+if(BUILD_MODE STREQUAL "release")
+    # Release mode flags (optimizations enabled)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -pedantic -pedantic-errors -O3 -fno-inline -D _POSIX_C_SOURCE=200809L")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -pedantic -pedantic-errors -O3 -fno-inline -D _POSIX_C_SOURCE=200809L")
+    message("-- Compiling in release mode (optimizations enabled)")
+else()
+    # Debug mode flags (no optimization, debugging info)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -pedantic -pedantic-errors -O0 -ggdb -DDEBUG -fno-inline -D _POSIX_C_SOURCE=200809L")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -pedantic -pedantic-errors -O0 -ggdb -DDEBUG -fno-inline -D _POSIX_C_SOURCE=200809L")
+    message("-- Compiling in debug mode (no optimizations, debugging info)")
+endif()
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=return-type")
 
 project(taller_tp
     VERSION 1.0
