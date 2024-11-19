@@ -5,12 +5,12 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <unistd.h>
 
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Font.hh>
 #include <SDL2pp/Music.hh>
 #include <SDL2pp/Texture.hh>
+#include <unistd.h>
 
 class ResourceManager {
 private:

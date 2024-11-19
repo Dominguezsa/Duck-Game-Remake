@@ -2,9 +2,16 @@
 
 #include <cmath>
 
-Bullet::Bullet(uint8_t id, float x, float y, float angle, float speed, float time,
-               bool going_right, uint8_t damage):
-        id(id), x(x), y(y), angle(angle), speed(speed), time(time), going_right(going_right), damage(damage) {}
+Bullet::Bullet(uint8_t id, float x, float y, float angle, float speed, float time, bool going_right,
+               uint8_t damage):
+        id(id),
+        x(x),
+        y(y),
+        angle(angle),
+        speed(speed),
+        time(time),
+        going_right(going_right),
+        damage(damage) {}
 
 Bullet::Bullet(const Bullet& other):
         id(other.id),
@@ -13,6 +20,7 @@ Bullet::Bullet(const Bullet& other):
         angle(other.angle),
         speed(other.speed),
         time(other.time),
+        damage(other.damage),
         going_right(other.going_right) {}
 
 void Bullet::move() {

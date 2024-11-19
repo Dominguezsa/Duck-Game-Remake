@@ -19,10 +19,13 @@ Estando dentro del directorio /usr/bin/, correr:
 ```bash
 ./taller_server <puerto>
 ```
+para el server, y:
 
 ```bash
 ./taller_client <hostname> <puerto>
 ```
+
+para correr los clientes.
 
 -------------------------------------------------------------
 

@@ -131,7 +131,7 @@ void ScreenRenderer::updateScreen(const std::vector<Duck>& ducks, const int it) 
     copyBackground();
     copyPlatforms();
     copyDucks(ducks, it);
-    //copyGuns(ducks);
+    // copyGuns(ducks);
     copyDebugText(ducks);
 
     renderer.Present();
