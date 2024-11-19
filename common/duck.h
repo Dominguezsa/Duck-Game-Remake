@@ -23,9 +23,11 @@ public:
     bool is_falling = true;
     bool is_ducking;
     bool is_shooting;
+    bool is_sliding;
     bool helmet_on;
     bool armor_on;
     float vertical_velocity = 0.0f;
+    float horizontal_velocity = 0.0f;
     bool in_air = true;
     Position position;
     Weapon weapon;

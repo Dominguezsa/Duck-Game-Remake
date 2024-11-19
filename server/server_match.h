@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 
+#include "../common/snapshot.h"
 #include "../common/types/match_state.h"
 #include "types/match_status.h"
 
@@ -22,7 +23,7 @@ private:
 public:
     explicit Match(uint8_t limit);
     bool remove_player_if_in_match(const uint8_t& id);
-    void add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, DuckIdentity& duck_info);
+    void add_player(Queue<std::shared_ptr<Snapshot>>* q, DuckIdentity& duck_info);
     Queue<GameloopMessage>* get_gameloop_queue();
     bool can_accept_players();
     bool is_finished();

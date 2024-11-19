@@ -9,6 +9,7 @@
 #include "../common/common_liberror.h"
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
+#include "../common/snapshot.h"
 #include "../common/types/duck_state.h"
 
 #include "server_protocol.h"
@@ -18,11 +19,11 @@
 class SenderThread: public Thread {
 private:
     ServerProtocol& protocol;
-    Queue<std::shared_ptr<std::vector<DuckState>>>& client_queue;
+    Queue<std::shared_ptr<Snapshot>>& client_queue;
 
 public:
-    explicit SenderThread(ServerProtocol& p, Queue<std::shared_ptr<std::vector<DuckState>>>& q);
-    void join() override;
+    explicit SenderThread(ServerProtocol& p, Queue<std::shared_ptr<Snapshot>>& client_queue);
+    void stop() override;
     void run() override;
 
 private:

@@ -18,7 +18,7 @@ bool Match::remove_player_if_in_match(const uint8_t& id) {
 
 bool Match::can_accept_players() { return !state_monitor.playing_status(); }
 
-void Match::add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, DuckIdentity& duck_info) {
+void Match::add_player(Queue<std::shared_ptr<Snapshot>>* q, DuckIdentity& duck_info) {
     state_monitor.add_player(q, duck_info.id);
     game.addPlayer(duck_info);
     if (state_monitor.playing_status()) {

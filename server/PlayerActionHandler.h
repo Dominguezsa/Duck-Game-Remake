@@ -32,7 +32,9 @@ private:
             {LOOKING_RIGHT_KEY_DOWN, &PlayerActionHandler::handle_looking_right_key_down},
             {LOOKING_LEFT_KEY_DOWN, &PlayerActionHandler::handle_looking_left_key_down},
             {LOOKING_UP_KEY_DOWN, &PlayerActionHandler::handle_looking_up_key_down},
-            {LOOKING_DOWN_KEY_DOWN, &PlayerActionHandler::handle_looking_down_key_down}};
+            {LOOKING_DOWN_KEY_DOWN, &PlayerActionHandler::handle_looking_down_key_down},
+            {LOOKING_DOWN_KEY_UP, &PlayerActionHandler::handle_looking_down_key_up},
+            {LOOKING_UP_KEY_UP, &PlayerActionHandler::handle_looking_up_key_up}};
 
     void add_handler(std::uint8_t action, void (PlayerActionHandler::*handler)(Duck& duck));
     void init_handler_map();
@@ -49,6 +51,8 @@ private:
     void handle_looking_left_key_down(Duck& duck);
     void handle_looking_up_key_down(Duck& duck);
     void handle_looking_down_key_down(Duck& duck);
+    void handle_looking_down_key_up(Duck& duck);
+    void handle_looking_up_key_up(Duck& duck);
 
 public:
     explicit PlayerActionHandler(std::unordered_map<uint8_t, std::unique_ptr<Duck>>& ducks);

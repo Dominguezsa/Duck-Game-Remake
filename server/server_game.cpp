@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <iostream>
 
+#include "../common/snapshot.h"
+
 enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
 
 #define GRAVITY 0.5f
@@ -11,7 +13,7 @@ enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
 #define MAX_FLUTTER_SPEED 3.0f
 #define DUCK_WIDTH 64.0f
 #define DUCK_HEIGHT 64.0f
-#define MOVE_SPEED 5.0f
+// #define MOVE_SPEED 5.0f
 
 #define GRAVITY 0.5f
 #define FLUTTER_FORCE -0.3f
@@ -20,6 +22,9 @@ enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
 #define DUCK_WIDTH 64.0f
 #define DUCK_HEIGHT 64.0f
 #define MOVE_SPEED 5.0f
+#define STOP_SPEED 0.1f
+
+#define MAX_HORIZONTAL_SPEED 5.0f
 
 Game::Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue):
         message_queue(queue),
@@ -79,6 +84,8 @@ void Game::updateGameState() {
     std::shared_ptr<std::vector<DuckState>> duck_states =
             std::make_shared<std::vector<DuckState>>();
 
+    std::shared_ptr<std::vector<Bullet>> bullets_in_game = std::make_shared<std::vector<Bullet>>();
+
     for (auto& duck_pair: ducks) {
         Duck* duck = duck_pair.second.get();
 
@@ -89,6 +96,22 @@ void Game::updateGameState() {
         // if (duck->duck_id == 1) {
         //     std::cout << "Duck 1 vertical velocity: " << duck->vertical_velocity << std::endl;
         // }
+
+
+        if (duck->is_shooting && duck->weapon.ammo > 0) {
+            if (duck->weapon.actual_cicle == 0) {
+                Bullet bullet(duck->weapon.id, duck->position.x, duck->position.y + DUCK_HEIGHT / 2,
+                              duck->looking == 1 ? 0 : M_PI, 10.0f, 0.0f, duck->looking == 1,
+                              duck->weapon.damage);
+                bullets_in_game->push_back(bullet);
+            } else {
+                if (duck->weapon.actual_cicle == duck->weapon.cicles_to_reshoot) {
+                    duck->weapon.actual_cicle = 0;
+                } else {
+                    duck->weapon.actual_cicle++;
+                }
+            }
+        }
 
         // Apply gravity if in air
         if (duck->in_air) {
@@ -111,15 +134,32 @@ void Game::updateGameState() {
         // Update horizontal position
         if (duck->is_running) {
             // std::cout << "Duck be running\n";
+
+            duck->horizontal_velocity += MOVE_SPEED;
+            if (duck->horizontal_velocity > MAX_HORIZONTAL_SPEED) {
+                duck->horizontal_velocity = MAX_HORIZONTAL_SPEED;
+            }
+
             if (duck->looking == 1) {
                 // duck->position.x += move_speed;
                 double actual_pos = duck->position.x;
-                double new_pos = actual_pos + MOVE_SPEED;
+                double new_pos = actual_pos + duck->horizontal_velocity;
                 duck->position.x = new_pos;
                 // std::cout << "New position is: " << duck->position.x << std::endl;
             } else if (duck->looking == 0) {
-                duck->position.x -= MOVE_SPEED;
+                duck->position.x -= duck->horizontal_velocity;
                 // std::cout << "New position is: " << duck->position.x << std::endl;
+            }
+        } else if (duck->is_sliding) {
+            duck->horizontal_velocity -= STOP_SPEED;
+            if (duck->horizontal_velocity < 0) {
+                duck->horizontal_velocity = 0;
+            }
+
+            if (duck->looking == 1) {
+                duck->position.x += duck->horizontal_velocity;
+            } else if (duck->looking == 0) {
+                duck->position.x -= duck->horizontal_velocity;
             }
         }
 
@@ -171,13 +211,15 @@ void Game::updateGameState() {
                         duck->is_alive ? 1 : 0, duck->is_running ? 1 : 0, duck->is_jumping ? 1 : 0,
                         duck->is_gliding ? 1 : 0, duck->is_falling ? 1 : 0,
                         duck->is_ducking ? 1 : 0, duck->is_shooting ? 1 : 0,
-                        duck->helmet_on ? 1 : 0, duck->armor_on ? 1 : 0, duck->in_air ? 1 : 0,
-                        duck->vertical_velocity, duck->weapon.getType());
+                        duck->is_sliding ? 1 : 0, duck->helmet_on ? 1 : 0, duck->armor_on ? 1 : 0,
+                        duck->in_air ? 1 : 0, duck->vertical_velocity, duck->horizontal_velocity,
+                        duck->weapon.getType());
 
         duck->update_state(state);
         duck_states->push_back(state);
     }
-    monitor.push_to_all(duck_states);
+    Snapshot snapshot(*duck_states, *bullets_in_game);
+    monitor.push_to_all(std::make_shared<Snapshot>(snapshot));
 }
 
 void Game::checkRoundEnd() {
@@ -263,23 +305,30 @@ void Game::rateController(double start, double finish) {
 
 void Game::run() {
     is_running = true;
+    try {
+        while (is_running) {
+            double start_time = getCurrentTime();
 
-    while (is_running) {
-        double start_time = getCurrentTime();
+            // Process all pending messages
+            GameloopMessage msg(0, 0);
+            while (message_queue.try_pop(msg)) {
+                action_handler.process_player_action(msg);
+                // handlePlayerAction(msg);
+            }
+            // std::cout << "Updating state\n";
+            updateGameState();
+            checkRoundEnd();
 
-        // Process all pending messages
-        GameloopMessage msg(0, 0);
-        while (message_queue.try_pop(msg)) {
-            action_handler.process_player_action(msg);
-            // handlePlayerAction(msg);
+
+            double end_time = getCurrentTime();
+            rateController(start_time, end_time);
         }
-        // std::cout << "Updating state\n";
-        updateGameState();
-        checkRoundEnd();
-
-
-        double end_time = getCurrentTime();
-        rateController(start_time, end_time);
+    } catch (ClosedQueue& e) {
+        std::cerr << "Server interrupts game loop\n";
+        stop();
+    } catch (const std::exception& e) {
+        std::cerr << "Error occurred during game loop: " << e.what() << std::endl;
+        stop();
     }
 }
 

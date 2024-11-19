@@ -45,12 +45,28 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
                       0.0, SDL2pp::NullOpt, flip);
 
         // Rendering it's arms
-        renderer.Copy(duck_texture, arm_frame,
-                      SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
-                                   DUCK_ARM_HEIGTH * DUCK_SCALE),
-                      0.0, SDL2pp::NullOpt, flip);
+        if (ducks[i].weapon.name == "None") {
+            renderer.Copy(duck_texture, arm_frame,
+                          SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
+                                       DUCK_ARM_HEIGTH * DUCK_SCALE),
+                          0.0, SDL2pp::NullOpt, flip);
+        } else {
+            copyGun(ducks[i]);
+        }
     }
 }
+
+void ScreenRenderer::copyGun(const Duck& duck) {
+    SDL2pp::Texture& weapon_texture = *resourceManager.getTexture(duck.weapon.name);
+    int flip = duck.looking == 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    int x_position = duck.looking == 0 ? duck.position.x + (DUCK_ARM_WIDTH * DUCK_SCALE) / 3.5 - 6 :
+                                         duck.position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9;
+    renderer.Copy(weapon_texture, SDL2pp::Rect(1, 19, 32, 32),
+                  SDL2pp::Rect(x_position, duck.position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2 - 7,
+                               DUCK_ARM_WIDTH * DUCK_SCALE + 10, DUCK_ARM_HEIGTH * DUCK_SCALE + 10),
+                  0.0, SDL2pp::NullOpt, flip);
+}
+
 
 void ScreenRenderer::copyPlatforms() {
     int cell_width = renderer.GetOutputWidth() / 12;
@@ -90,11 +106,16 @@ void ScreenRenderer::copyDebugText(const std::vector<Duck>& ducks) {
                 " Duck " + std::to_string(i + 1) +
                 " is jumping: " + std::to_string(ducks[i].is_jumping) + " Duck " +
                 std::to_string(i + 1) + " is falling: " + std::to_string(ducks[i].is_falling) +
+                // " Duck " + std::to_string(i + 1) +
+                // " is gliding: " + std::to_string(ducks[i].is_gliding) + " Duck " +
+                // std::to_string(i + 1) + " is on air: " + std::to_string(ducks[i].in_air) +
+                // " Duck " + std::to_string(i + 1) +
+                // " vertical velocity: " + std::to_string(ducks[i].vertical_velocity) +
                 " Duck " + std::to_string(i + 1) +
-                " is gliding: " + std::to_string(ducks[i].is_gliding) + " Duck " +
-                std::to_string(i + 1) + " is on air: " + std::to_string(ducks[i].in_air) +
+                " is ducking: " + std::to_string(ducks[i].is_ducking) + " Duck " +
+                std::to_string(i + 1) + " is sliding: " + std::to_string(ducks[i].is_sliding) +
                 " Duck " + std::to_string(i + 1) +
-                " vertical velocity: " + std::to_string(ducks[i].vertical_velocity);
+                " horizontal velocity: " + std::to_string(ducks[i].horizontal_velocity);
 
         SDL2pp::Texture text_sprite(renderer,
                                     resourceManager.getFont("vera")->RenderText_Blended(
@@ -104,8 +125,7 @@ void ScreenRenderer::copyDebugText(const std::vector<Duck>& ducks) {
                       SDL2pp::Rect(0, i * 20, text_sprite.GetWidth(), text_sprite.GetHeight()));
     }
 }
-// Por ahora que reciba los dos patos por parámetro, probablemente en un futuro sean o una clase o
-// directamente un vector de patos para la partida
+
 void ScreenRenderer::updateScreen(const std::vector<Duck>& ducks, const int it) {
     renderer.Clear();
     copyBackground();

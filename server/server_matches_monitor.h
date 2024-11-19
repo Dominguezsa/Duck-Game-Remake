@@ -28,7 +28,7 @@ public:
 
     */
     bool create_match(std::string match_name, uint8_t player_limit, DuckIdentity& duck_info,
-                      Queue<std::shared_ptr<std::vector<DuckState>>>* q);
+                      Queue<std::shared_ptr<Snapshot>>* q);
 
     /* Pos: Returns true if the player was successfully added to the match.
             If that occurs, the player is added to the match and the created
@@ -37,7 +37,7 @@ public:
             If the player could not be added, the function returns false.
     */
     bool join_match(std::string match_name, DuckIdentity& duck_info,
-                    Queue<std::shared_ptr<std::vector<DuckState>>>* q);
+                    Queue<std::shared_ptr<Snapshot>>* q);
 
     Queue<GameloopMessage>* get_match_queue(const std::string& match_name);
 

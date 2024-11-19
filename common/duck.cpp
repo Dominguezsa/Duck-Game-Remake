@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "types/weapon_type.h"
+
 // ------------------- Constructores -------------------
 
 #define JUMP_SPEED 15.0f
@@ -19,6 +21,7 @@ Duck::Duck(uint8_t id, uint8_t vida, bool looking, Position pos, const Weapon& w
         is_falling(false),
         is_ducking(false),
         is_shooting(false),
+        is_sliding(false),
         helmet_on(false),
         armor_on(false),
         position(pos),
@@ -35,10 +38,11 @@ Duck::Duck():
         is_falling(false),
         is_ducking(false),
         is_shooting(false),
+        is_sliding(false),
         helmet_on(false),
         armor_on(false),
         position({0, 0}),
-        weapon(Weapon("None", 0)) {}
+        weapon(Weapon(AK47, "ak47", 0, 15, 20)) {}
 
 Duck::Duck(const Duck& other):
         duck_id(other.duck_id),
@@ -51,6 +55,7 @@ Duck::Duck(const Duck& other):
         is_falling(other.is_falling),
         is_ducking(other.is_ducking),
         is_shooting(other.is_shooting),
+        is_sliding(other.is_sliding),
         helmet_on(other.helmet_on),
         armor_on(other.armor_on),
         position(other.position),
@@ -70,9 +75,11 @@ Duck& Duck::operator=(const Duck& other) {
         is_falling = other.is_falling;
         is_ducking = other.is_ducking;
         is_shooting = other.is_shooting;
+        is_sliding = other.is_sliding;
         helmet_on = other.helmet_on;
         armor_on = other.armor_on;
         vertical_velocity = 0.0f;
+        horizontal_velocity = 0.0f;
         position = other.position;
         weapon = other.weapon;
     }
@@ -84,10 +91,14 @@ void Duck::move_to(uint8_t direccion) {
     if (direccion > 1) {
         return;
     }
+    looking = direccion;
+
+    if (is_ducking || is_sliding) {
+        return;
+    }
 
     is_running = true;
 
-    looking = direccion;
 
     // if (direccion == 0) {
     //     looking = 0;
@@ -101,6 +112,11 @@ void Duck::look_to(uint8_t direccion) {
         return;
     }
 
+    if (direccion == 2) {
+        is_sliding = false;
+        // return;
+    }
+
     looking = direccion;
 }
 
@@ -108,6 +124,11 @@ void Duck::stop_running() { is_running = false; }
 
 void Duck::jump(bool activar) {
     // if true, spacebar down; if false, spacebar up
+
+    if (is_sliding || is_ducking) {
+        return;
+    }
+
     if (activar && is_jumping) {
         is_gliding = true;
         vertical_velocity = 0.0f;
@@ -123,7 +144,20 @@ void Duck::jump(bool activar) {
 }
 
 void Duck::duck(bool activar) {
+
+    // if (in_air) {
+    //     return;
+    // }
+
+    if (is_running) {
+        is_sliding = true;
+        is_running = false;
+    }
+
     if (activar) {
+        if (is_sliding) {
+            return;
+        }
         is_ducking = true;
     } else {
         is_ducking = false;
@@ -150,7 +184,7 @@ void Duck::receive_damage(uint8_t danio) {
 
 void Duck::pick_up_weapon(const Weapon& weapon) { this->weapon = weapon; }
 
-void Duck::throw_weapon() { this->weapon = Weapon("", 0); }
+void Duck::throw_weapon() { this->weapon = Weapon(AK47, "", 0, 15, 20); }
 
 void Duck::get_state(DuckState& state) {
     state.name = name;
@@ -169,9 +203,11 @@ void Duck::get_state(DuckState& state) {
     state.is_falling = static_cast<uint8_t>(is_falling);
     state.in_air = static_cast<uint8_t>(in_air);
     state.vertical_velocity = vertical_velocity;
+    state.horizontal_velocity = horizontal_velocity;
     // TO-DO: Ajustar el uso del tipo de weapon a la
     //        clase correspondiente.
     state.weapon = WeaponType::NoneType;
+    state.is_sliding = static_cast<uint8_t>(is_sliding);
 }
 
 void Duck::update_state(const DuckState& state) {
@@ -187,10 +223,13 @@ void Duck::update_state(const DuckState& state) {
     is_falling = static_cast<bool>(state.is_falling);
     in_air = static_cast<bool>(state.in_air);
     vertical_velocity = state.vertical_velocity;
+    horizontal_velocity = state.horizontal_velocity;
     is_ducking = static_cast<bool>(state.is_ducking);
     is_shooting = static_cast<bool>(state.is_shooting);
     helmet_on = static_cast<bool>(state.helmet_on);
     armor_on = static_cast<bool>(state.armor_on);
     // TO-DO: Ajustar el uso del tipo de weapon.
-    weapon = Weapon("ak47", 0);
+    // weapon = Weapon(AK47, "ak47", 0, 15, 20);
+    weapon = Weapon(NoneType, "None", 0, 0, 0);
+    is_sliding = static_cast<bool>(state.is_sliding);
 }

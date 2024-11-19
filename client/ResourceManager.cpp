@@ -1,6 +1,7 @@
 #include "ResourceManager.h"
 
 #include <memory>
+#include <stdexcept>
 #include <vector>
 
 #include <SDL2pp/Rect.hh>
@@ -25,56 +26,93 @@
 #define DUCK_JUMPING_ARMS_X 1
 #define DUCK_JUMPING_ARMS_Y 534
 
-ResourceManager::ResourceManager(SDL2pp::Renderer& renderer): renderer(renderer) {}
+#define DUCK_DUCKING_X 129
+#define DUCK_DUCKING_Y 71
+
+#define DUCK_SLIDING_X 1
+#define DUCK_SLIDING_Y 71
+
+#define DUCK_SLIDING_AIR_X 161
+#define DUCK_SLIDING_AIR_Y 39
+
+ResourceManager::ResourceManager(SDL2pp::Renderer& renderer): renderer(renderer) {
+    if (chdir("client") != 0) {
+        throw std::runtime_error("Error: Could not change to 'client' directory\n");
+    }
+}
 
 void ResourceManager::loadSFX() {
 
-    sfx.emplace("boom1", std::make_shared<SDL2pp::Chunk>("../client/data/audio/sfx/boom1.wav"));
-    sfx.emplace("boom2", std::make_shared<SDL2pp::Chunk>("../client/data/audio/sfx/boom2.wav"));
-    sfx.emplace("boom3", std::make_shared<SDL2pp::Chunk>("../client/data/audio/sfx/boom3.wav"));
+    sfx.emplace("boom1", std::make_shared<SDL2pp::Chunk>("data/audio/sfx/boom1.wav"));
+    sfx.emplace("boom2", std::make_shared<SDL2pp::Chunk>("data/audio/sfx/boom2.wav"));
+    sfx.emplace("boom3", std::make_shared<SDL2pp::Chunk>("data/audio/sfx/boom3.wav"));
     std::cout << "Every sfx loaded correctly\n";
 }
 
 void ResourceManager::loadMusic() {
     music.emplace("back_music",
                   std::make_shared<SDL2pp::Music>(
-                          "../client/data/audio/ost/back_music_space_mystery_out.ogg"));
+                          "data/audio/ost/back_music_space_mystery_out.ogg"));
 }
 
 void ResourceManager::loadFonts() {
-    fonts.emplace("vera", std::make_shared<SDL2pp::Font>("../client/data/Vera.ttf", 12));
+    fonts.emplace("vera", std::make_shared<SDL2pp::Font>("data/Vera.ttf", 12));
 }
 
-void ResourceManager::loadSprites() {
+void ResourceManager::loadSprites(uint8_t playerAmount) {
 
     textures.emplace(
             "duck",
             std::make_shared<SDL2pp::Texture>(
                     renderer,
-                    SDL2pp::Surface("../client/data/imagenesDePatos.png").SetColorKey(true, 0)));
+                    SDL2pp::Surface("data/imagenesDePatos.png").SetColorKey(true, 0)));
 
     textures["duck"]->SetBlendMode(SDL_BLENDMODE_BLEND);
 
     textures.emplace("background", std::make_shared<SDL2pp::Texture>(
-                                           renderer, SDL2pp::Surface("../client/data/fondo.png")));
+                                           renderer, SDL2pp::Surface("data/fondo.png")));
 
     textures.emplace("tablas", std::make_shared<SDL2pp::Texture>(
-                                       renderer, SDL2pp::Surface("../client/data/tablon1.png")));
+                                       renderer, SDL2pp::Surface("data/tablon1.png")));
+
+    std::vector<std::string> duck_colors = {"white_duck", "orange_duck", "grey_duck",
+                                            "yellow_duck"};
+
+    std::cout << "Now loading " << +playerAmount << " ducks\n";
+
+    for (int i = 0; i < playerAmount; i++) {
+
+        std::string path = "data/sprites/ducks/" + duck_colors[i] + ".png";
+
+        textures.emplace(duck_colors[i],
+                         std::make_shared<SDL2pp::Texture>(renderer, SDL2pp::Surface(path)));
+    }
+
+    // // Loading white duck sprite_sheet
+    // textures.emplace(
+    //         "white_duck",
+    //         std::make_shared<SDL2pp::Texture>(
+    //                 renderer, SDL2pp::Surface("data/sprites/ducks/white_duck.png")));
+    // // Loading orange duck sprite_sheet
+    // textures.emplace(
+    //         "orange_duck",
+    //         std::make_shared<SDL2pp::Texture>(
+    //                 renderer, SDL2pp::Surface("data/sprites/ducks/orange_duck.png")));
+
+    // textures.emplace(
+    //         "grey_duck",
+    //         std::make_shared<SDL2pp::Texture>(
+    //                 renderer, SDL2pp::Surface("data/sprites/ducks/grey_duck.png")));
+
+    // textures.emplace(
+    //         "yellow_duck",
+    //         std::make_shared<SDL2pp::Texture>(
+    //                 renderer, SDL2pp::Surface("data/sprites/ducks/yellow_duck.png")));
+
 
     textures.emplace("ak47",
                      std::make_shared<SDL2pp::Texture>(
-                             renderer, SDL2pp::Surface("../client/data/sprites/weapons/ak47.png")));
-
-    // Loading white duck sprite_sheet
-    textures.emplace(
-            "white_duck",
-            std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("../client/data/sprites/ducks/white_duck.png")));
-    // Loading orange duck sprite_sheet
-    textures.emplace(
-            "orange_duck",
-            std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("../client/data/sprites/ducks/orange_duck.png")));
+                             renderer, SDL2pp::Surface("data/sprites/weapons/ak47.png")));
 
     std::cout << "All textures loaded correctly\n";
 }
@@ -123,15 +161,61 @@ void ResourceManager::loadAnimationFrames() {
 
     animationFrames.emplace("duck_jumping_arms", duckFrames);
 
+    // duckFrames.clear();
+
+    // for (int i = 0; i < 1; i++) {
+    //     duckFrames.emplace_back(SDL2pp::Rect(1, 14,
+    //                                          16, 16));
+    // }
+
+    // weaponFrames.emplace("ak47", duckFrames);
+
+    // Loading ducking animation
+
+    duckFrames.clear();
+
+    duckFrames.emplace_back(
+            SDL2pp::Rect(DUCK_DUCKING_X, DUCK_DUCKING_Y, DUCK_RECT_WIDTH, DUCK_RECT_HEIGHT));
+
+    animationFrames.emplace("duck_ducking", duckFrames);
+
+    duckFrames.clear();
+
+    duckFrames.emplace_back(
+            SDL2pp::Rect(DUCK_SLIDING_X, DUCK_SLIDING_Y, DUCK_RECT_WIDTH, DUCK_RECT_HEIGHT));
+
+    animationFrames.emplace("duck_sliding", duckFrames);
+
+    duckFrames.clear();
+
+    duckFrames.emplace_back(SDL2pp::Rect(DUCK_SLIDING_AIR_X, DUCK_SLIDING_AIR_Y, DUCK_RECT_WIDTH,
+                                         DUCK_RECT_HEIGHT));
+
+    animationFrames.emplace("duck_sliding_air", duckFrames);
+
+    duckFrames.clear();
+
+    duckFrames.emplace_back(SDL2pp::Rect(0, 0, 0, 0));
+
+    animationFrames.emplace("empty", duckFrames);
+    duckFrames.clear();
+
+    // This is for the guns
+    for (int i = 0; i < 1; i++) {
+        duckFrames.emplace_back(SDL2pp::Rect(1, 14, DUCK_ARMS_WIDTH, DUCK_ARMS_HEIGHT));
+    }
+
+    animationFrames.emplace("ak47", duckFrames);
+
 
     std::cout << "All animation frames loaded correctly\n";
 }
 
-void ResourceManager::loadResources() {
+void ResourceManager::loadResources(uint8_t playerAmount) {
     loadSFX();
     loadMusic();
     loadFonts();
-    loadSprites();
+    loadSprites(playerAmount);
     loadAnimationFrames();
 }
 

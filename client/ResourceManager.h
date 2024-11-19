@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <unistd.h>
 
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Font.hh>
@@ -18,16 +19,17 @@ private:
     std::map<std::string, std::shared_ptr<SDL2pp::Font>> fonts;
     std::map<std::string, std::shared_ptr<SDL2pp::Texture>> textures;
     std::map<std::string, std::vector<SDL2pp::Rect>> animationFrames;
+    std::map<std::string, std::vector<SDL2pp::Rect>> weaponFrames;
     SDL2pp::Renderer& renderer;
 
 public:
     explicit ResourceManager(SDL2pp::Renderer& renderer);
     ~ResourceManager();
-    void loadResources();
+    void loadResources(uint8_t playerAmount);
     void loadSFX();
     void loadMusic();
     void loadFonts();
-    void loadSprites();
+    void loadSprites(uint8_t playerAmount);
     void loadAnimationFrames();
     std::shared_ptr<SDL2pp::Music> getMusicTrack(const std::string& key);
     std::shared_ptr<SDL2pp::Font> getFont(const std::string& key);

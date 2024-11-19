@@ -11,7 +11,7 @@ MatchStateMonitor::MatchStateMonitor(uint8_t limit):
         player_count(0),
         status(MatchStatus::Waiting) {}
 
-void MatchStateMonitor::add_player(Queue<std::shared_ptr<std::vector<DuckState>>>* q, uint8_t& id) {
+void MatchStateMonitor::add_player(Queue<std::shared_ptr<Snapshot>>* q, uint8_t& id) {
     std::lock_guard<std::mutex> lock(data_mtx);
 
     if (accepting_players) {
@@ -37,6 +37,7 @@ void MatchStateMonitor::stop_match() {
     std::lock_guard<std::mutex> lock(data_mtx);
     status = MatchStatus::Finished;
     accepting_players = false;
+    requester_queues.clear();
 }
 
 bool MatchStateMonitor::remove_player_if_present(const uint8_t& id) {
@@ -56,7 +57,7 @@ bool MatchStateMonitor::remove_player_if_present(const uint8_t& id) {
     return true;
 }
 
-void MatchStateMonitor::push_to_all(std::shared_ptr<std::vector<DuckState>> duck_snapshot) {
+void MatchStateMonitor::push_to_all(std::shared_ptr<Snapshot> duck_snapshot) {
     std::lock_guard<std::mutex> lock(data_mtx);
     for (auto& pair: requester_queues) {
         pair.second->push(duck_snapshot);

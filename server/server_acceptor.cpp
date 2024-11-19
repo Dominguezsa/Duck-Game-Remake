@@ -4,10 +4,10 @@ AcceptorThread::AcceptorThread(const std::string& servname):
         acceptor_skt(servname.c_str()), clients() {}
 
 void AcceptorThread::stop() {
-    free_all_resources();
     _is_alive = false;
     this->acceptor_skt.shutdown(2);
     this->acceptor_skt.close();
+    free_all_resources();
 }
 
 void AcceptorThread::accept_connection() {
@@ -57,8 +57,8 @@ void AcceptorThread::run() {
     } catch (const std::exception& err) {
         if (this->_is_alive) {
             syslog(LOG_ERR, "%s", "Unexpected exception: \n");
+            closelog();
         }
-        free_all_resources();
         this->_is_alive = false;
     }
 }

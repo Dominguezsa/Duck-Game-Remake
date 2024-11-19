@@ -49,6 +49,7 @@ private:
     // Algo específico de SDL, no creo que está en la librería SDL2pp
     std::shared_ptr<const uint8_t*> keyboardState;
     CommandCenter commandCenter;
+    uint8_t playerAmount;
 
 
 public:

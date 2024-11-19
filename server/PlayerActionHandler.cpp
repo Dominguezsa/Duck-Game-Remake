@@ -25,6 +25,7 @@ void PlayerActionHandler::add_handler(std::uint8_t player_action,
                                       void (PlayerActionHandler::*handler)(Duck& duck)) {
     action_handlers.emplace(player_action, std::bind(handler, this, std::placeholders::_1));
 }
+#include <iostream>
 
 void PlayerActionHandler::process_player_action(const GameloopMessage& msg) {
 
@@ -37,6 +38,9 @@ void PlayerActionHandler::process_player_action(const GameloopMessage& msg) {
     // action_handlers.at(key)(*this);
     // No se si hacerlo así para evitar las excepciones
     auto it_2 = action_handlers.find(msg.action);
+    if (msg.action == SHOOT_KEY_DOWN) {
+        std::cout << "SHOOOT_KEY_DOWN" << std::endl;
+    }
     if (it_2 != action_handlers.end()) {
         auto handler = it_2->second;
         handler(*duck);
@@ -65,7 +69,10 @@ void PlayerActionHandler::handle_looking_left_key_down(Duck& duck) { duck.look_t
 
 void PlayerActionHandler::handle_looking_up_key_down(Duck& duck) { duck.look_to(UP); }
 
-void PlayerActionHandler::handle_looking_down_key_down(Duck& duck) { duck.look_to(DOWN); }
+void PlayerActionHandler::handle_looking_down_key_down(Duck& duck) { duck.duck(true); }
 
+void PlayerActionHandler::handle_looking_down_key_up(Duck& duck) { duck.duck(false); }
+
+void PlayerActionHandler::handle_looking_up_key_up(Duck& duck) { duck.look_to(UP); }
 
 PlayerActionHandler::~PlayerActionHandler() {}

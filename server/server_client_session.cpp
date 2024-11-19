@@ -11,11 +11,18 @@ ClientSession::ClientSession(Socket _skt, MatchesMonitor& monitor):
 uint8_t ClientSession::get_id() const { return identity.id; }
 
 void ClientSession::end_communication() {
-    // We disconnect the player from the any match it was in.
-    matches_monitor.disconnect_player(identity.joined_match_name, identity.id);
-
-    // We close the communication channel.
+    // Closes the communication channel.
     protocol.end_communication();
+}
+
+void ClientSession::stop() {
+    try {
+        this->_is_alive = false;
+        end_communication();
+        this->client_queue.close();
+    } catch (const std::exception& e) {
+        // Disconnecting the client.
+    }
 }
 
 Queue<GameloopMessage>* ClientSession::get_match_queue() {
@@ -31,15 +38,14 @@ void ClientSession::run_receiver_loop() {
             protocol.recv_msg(msg.action);
             gameloop_queue->push(msg);
         }
-    } catch (const ClosedQueue& e) {
+    } catch (std::exception& e) {
+        // If an exception is thrown in this while loop, that means the client
+        // has disconnected from the server or the match is finished.
         this->matches_monitor.disconnect_player(identity.joined_match_name, identity.id);
-    } catch (...) {
-        // Después agrego un mejor tratado para esto.
     }
 }
 
 void ClientSession::run() {
-    SenderThread* sender_ptr;
     try {
         while (this->_is_alive) {
             run_lobby_loop();
@@ -49,7 +55,6 @@ void ClientSession::run() {
 
             // At this point, the client is in a match.
             SenderThread sender(protocol, client_queue);
-            sender_ptr = &sender;
             sender.start();
             run_receiver_loop();
             sender.stop();
@@ -58,24 +63,14 @@ void ClientSession::run() {
     } catch (const SocketWasCLosedException& e) {
         this->_is_alive = false;
         end_communication();
-    } catch (const std::exception& err) {
-        if (_is_alive) {
-            sender_ptr->stop();
-            sender_ptr->join();
-        }
-        this->_is_alive = false;
-        end_communication();
     } catch (...) {
-        if (_is_alive) {
-            sender_ptr->stop();
-            sender_ptr->join();
-        }
         this->_is_alive = false;
         end_communication();
     }
 }
 
 void ClientSession::run_lobby_loop() {
+    std::cout << "Entering lobby mode\n";
     bool success = false;
     try {
         while (true) {
@@ -92,6 +87,7 @@ void ClientSession::run_lobby_loop() {
         }
     } catch (SocketWasCLosedException& e) {
         if (success) {
+            this->matches_monitor.disconnect_player(identity.joined_match_name, identity.id);
             end_communication();
         }
         this->_is_alive = false;
@@ -129,7 +125,6 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
             std::list<std::string> available_matches = matches_monitor.get_available_match_names();
 
             protocol.send_match_list(available_matches);
-            std::cout << "Match list sent\n";
             // (3)
             this->protocol.recv_match_name(match_name);
 

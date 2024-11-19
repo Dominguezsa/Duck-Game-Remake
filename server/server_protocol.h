@@ -11,6 +11,7 @@
 
 #include "../common/common_protocol.h"
 #include "../common/common_socket.h"
+#include "../common/snapshot.h"
 #include "../common/types/duck_state.h"
 #include "../common/types/match_state.h"
 
@@ -23,7 +24,8 @@ public:
 
     void recv_msg(uint8_t& command);
 
-    void send_duck_states(std::shared_ptr<std::vector<DuckState>> states);
+
+    void send_snapshot(std::shared_ptr<Snapshot> snapshot);
 
     // No se usan! Quitar despues de common/common_protocol.h
     void read_msg(void* msg) override;
@@ -56,7 +58,7 @@ public:
 
     void recv_player_name(std::string& player_name);
 
-    void send_duck_unique_attributes(DuckIdentity& attributes);
+    void send_duck_unique_attributes(const DuckIdentity& attributes);
 };
 
 #endif  // SERVER_PROTOCOLO_H

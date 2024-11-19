@@ -17,6 +17,8 @@ public:
 
     std::vector<Duck> receiveMessage();
 
+    void recv_player_amount(uint8_t& player_amount);
+
     void read_msg(void* msg) override;
 
     void send_msg(void* msg) override;
