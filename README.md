@@ -2,8 +2,35 @@
 
 ## Cómo correr el proyecto
 
-Instalar dependencias:
+Para instalar las dependencias del proyecto correr:
 
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+Para generar los ejecutables correr:
+
+```bash
+chmod +x build.sh
+./build.sh
+```
+
+## Ejecución
+
+Estando dentro del directorio principal del proyecto;
+
+```bash
+cd build
+./taller_server <puerto>
+```
+
+```bash
+cd build
+./taller_client <hostname> <puerto>
+```
+
+-------------------------------------------------------------
 
 **Importante:** el primer commit de este repositorio tiene el setup
 básico para el TP Final que incluye la instalación de la lib
