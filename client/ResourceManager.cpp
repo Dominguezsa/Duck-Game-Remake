@@ -31,6 +31,9 @@
 #define DUCK_SLIDING_X 1
 #define DUCK_SLIDING_Y 71
 
+#define DUCK_SLIDING_AIR_X 161
+#define DUCK_SLIDING_AIR_Y 39
+
 ResourceManager::ResourceManager(SDL2pp::Renderer& renderer): renderer(renderer) {}
 
 void ResourceManager::loadSFX() {
@@ -177,6 +180,13 @@ void ResourceManager::loadAnimationFrames() {
             SDL2pp::Rect(DUCK_SLIDING_X, DUCK_SLIDING_Y, DUCK_RECT_WIDTH, DUCK_RECT_HEIGHT));
 
     animationFrames.emplace("duck_sliding", duckFrames);
+
+    duckFrames.clear();
+
+    duckFrames.emplace_back(SDL2pp::Rect(DUCK_SLIDING_AIR_X, DUCK_SLIDING_AIR_Y, DUCK_RECT_WIDTH,
+                                         DUCK_RECT_HEIGHT));
+
+    animationFrames.emplace("duck_sliding_air", duckFrames);
 
     duckFrames.clear();
 

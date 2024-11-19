@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "types/weapon_type.h"
+
 // ------------------- Constructores -------------------
 
 #define JUMP_SPEED 15.0f
@@ -143,9 +145,9 @@ void Duck::jump(bool activar) {
 
 void Duck::duck(bool activar) {
 
-    if (in_air) {
-        return;
-    }
+    // if (in_air) {
+    //     return;
+    // }
 
     if (is_running) {
         is_sliding = true;
@@ -227,6 +229,7 @@ void Duck::update_state(const DuckState& state) {
     helmet_on = static_cast<bool>(state.helmet_on);
     armor_on = static_cast<bool>(state.armor_on);
     // TO-DO: Ajustar el uso del tipo de weapon.
-    weapon = Weapon(AK47, "ak47", 0, 15, 20);
+    // weapon = Weapon(AK47, "ak47", 0, 15, 20);
+    weapon = Weapon(NoneType, "None", 0, 0, 0);
     is_sliding = static_cast<bool>(state.is_sliding);
 }
