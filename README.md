@@ -18,16 +18,14 @@ chmod +x build.sh
 
 ## Ejecución
 
-Estando dentro del directorio principal del proyecto;
+Estando dentro del directorio principal del proyecto:
 
 ```bash
-cd build
-./taller_server <puerto>
+./build/taller_server <puerto>
 ```
 
 ```bash
-cd build
-./taller_client <hostname> <puerto>
+./build/taller_client <hostname> <puerto>
 ```
 
 -------------------------------------------------------------
