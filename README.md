@@ -2,30 +2,26 @@
 
 ## Cómo correr el proyecto
 
-Para instalar las dependencias del proyecto correr:
-
+Para instalar el juego, correr
 ```bash
-chmod +x setup.sh
-./setup.sh
+
+sudo bash ./install.sh
+
 ```
 
-Para generar los ejecutables correr:
-
-```bash
-chmod +x build.sh
-./build.sh
-```
+Que corre los scripts para descargar las dependencias necesarias y mueve los binarios a 
+/usr/bin y los recursos del juego a /var/duck_game/data
 
 ## Ejecución
 
-Estando dentro del directorio principal del proyecto:
+Estando dentro del directorio /usr/bin/, correr:
 
 ```bash
-./build/taller_server <puerto>
+./taller_server <puerto>
 ```
 
 ```bash
-./build/taller_client <hostname> <puerto>
+./taller_client <hostname> <puerto>
 ```
 
 -------------------------------------------------------------
