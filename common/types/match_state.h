@@ -15,13 +15,9 @@ struct Platform {
 
 struct DuckIdentity {
     std::string name;
-    // cppcheck-suppress unusedStructMember
     uint8_t id;
-    // cppcheck-suppress unusedStructMember
     char color;
-    // cppcheck-suppress unusedStructMember
     float initial_pos_x;
-    // cppcheck-suppress unusedStructMember
     float initial_pos_y;
 };
 
