@@ -303,9 +303,9 @@ int Socket::sendsome(const void* data, unsigned int sz, bool* was_closed) {
          * Jamas debería pasar.
          * */
         assert(false);
-    } else {
-        return s;
     }
+    return s;
+    
 }
 
 int Socket::recvall(void* data, unsigned int sz, bool* was_closed) {
