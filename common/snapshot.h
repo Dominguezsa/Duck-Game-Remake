@@ -15,6 +15,8 @@ public:
 
     Snapshot(std::vector<DuckState>& ducks, std::vector<Bullet>& bullets, std::vector<Weapon>& weapons):
             ducks(ducks), bullets(bullets), weapons(weapons) {}
+
+    Snapshot() = default;
 };
 
 #endif  // SNAPSHOT_H

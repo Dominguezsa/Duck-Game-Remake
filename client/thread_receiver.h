@@ -19,7 +19,7 @@ private:
 
 public:
     explicit ThreadReceiver(ClientProtocol& protocol,
-                            Queue<std::vector<DuckState>>& graphique_queue);
+                            Queue<Snapshot>& graphique_queue);
 
     void run() override;
 

@@ -19,6 +19,7 @@
 #include "../common/common_queue.h"
 #include "../common/common_socket.h"
 #include "../common/duck.h"
+#include "../common/snapshot.h"
 #include "../common/types/duck_state.h"
 
 #include "AnimationHelper.h"
@@ -42,7 +43,7 @@ private:
     Socket socket;
     Lobby lobby;
     Queue<uint8_t> messagesForServer;
-    Queue<std::vector<DuckState>> graphic_queue;
+    Queue<Snapshot> graphic_queue;
     std::vector<Duck> ducks;
     AnimationHelper animationHelper;
     ScreenRenderer screenRenderer;

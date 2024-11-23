@@ -63,9 +63,9 @@ void GameClient::run() {
 
 
     // Muuuy feo, pero por ahora pruebo a ver si anda
-    std::vector<DuckState> ducksStates = graphic_queue.pop();
+    Snapshot ducksStates = graphic_queue.pop();
 
-    playerAmount = ducksStates.size();
+    playerAmount = ducksStates.ducks.size();
 
     // std::cout << "CLIENT: Player amount received: " << +playerAmount << std::endl;
 

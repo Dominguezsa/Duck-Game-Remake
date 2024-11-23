@@ -3,13 +3,12 @@
 #include <string>
 
 ThreadReceiver::ThreadReceiver(ClientProtocol& protocol,
-                               Queue<std::vector<DuckState>>& graphique_queue):
+                               Queue<Snapshot>& graphique_queue) :
         protocol(protocol), is_alive(true), ducks_snapshots_queue(graphique_queue) {}
 
 
 void ThreadReceiver::run() {
     try {
-        // std::cout << "Este es el primer snapshot que recibí\n";
         while (is_alive) {
             Snapshot snapShot;
             this->protocol.read_msg(&snapShot);
