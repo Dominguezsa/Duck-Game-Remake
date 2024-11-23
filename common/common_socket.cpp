@@ -305,7 +305,6 @@ int Socket::sendsome(const void* data, unsigned int sz, bool* was_closed) {
         assert(false);
     }
     return s;
-    
 }
 
 int Socket::recvall(void* data, unsigned int sz, bool* was_closed) {
