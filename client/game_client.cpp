@@ -133,14 +133,14 @@ void GameClient::run_lobby() { lobby.run(); }
 
 void GameClient::updateDuckStates() {
 
-    std::vector<DuckState> duck_states;
+    Snapshot snapshot;
 
 
-    while (graphic_queue.try_pop(duck_states)) {}
+    while (graphic_queue.try_pop(snapshot)) {}
 
-    for (int i = 0; i < (int)duck_states.size(); i++) {
+    for (int i = 0; i < (int)snapshot.ducks.size(); i++) {
         // std::cout << "updated ducks\n";
-        ducks[i].update_state(duck_states[i]);
+        ducks[i].update_state(snapshot.ducks[i]);
     }
 }
 
