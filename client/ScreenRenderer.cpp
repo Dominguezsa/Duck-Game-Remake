@@ -4,6 +4,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include "../common/snapshot.h"
 
 #include <SDL2/SDL_render.h>
 
@@ -18,7 +19,7 @@ ScreenRenderer::ScreenRenderer(SDL2pp::Renderer& renderer, ResourceManager& reso
                                AnimationHelper& animHelp):
         renderer(renderer), resourceManager(resourceManager), animationHelper(animHelp) {}
 
-void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
+void ScreenRenderer::copyDucks(const std::vector<DuckState>& ducks, const int it) {
 
     std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> frameDucks =
             animationHelper.get_animation_frames(it);
@@ -45,7 +46,7 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
                       0.0, SDL2pp::NullOpt, flip);
 
         // Rendering it's arms
-        if (ducks[i].weapon.name == "None") {
+        if (ducks[i].weapon == WeaponType::NoneType) {
             renderer.Copy(duck_texture, arm_frame,
                           SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
                                        DUCK_ARM_HEIGTH * DUCK_SCALE),
@@ -56,7 +57,7 @@ void ScreenRenderer::copyDucks(const std::vector<Duck>& ducks, const int it) {
     }
 }
 
-void ScreenRenderer::copyGun(const Duck& duck) {
+void ScreenRenderer::copyGun(const DuckState& duck) {
     SDL2pp::Texture& weapon_texture = *resourceManager.getTexture(duck.weapon.name);
     int flip = duck.looking == 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     int x_position = duck.looking == 0 ? duck.position.x + (DUCK_ARM_WIDTH * DUCK_SCALE) / 3.5 - 6 :
@@ -94,7 +95,7 @@ void ScreenRenderer::copyBackground() {
     renderer.Copy(*resourceManager.getTexture("background"), SDL2pp::NullOpt, SDL2pp::NullOpt);
 }
 
-void ScreenRenderer::copyDebugText(const std::vector<Duck>& ducks) {
+void ScreenRenderer::copyDebugText(const std::vector<DuckState>& ducks) {
     // Debug text
     for (int i = 0; i < (int)ducks.size(); ++i) {
         std::string duck_position_text =
@@ -126,13 +127,13 @@ void ScreenRenderer::copyDebugText(const std::vector<Duck>& ducks) {
     }
 }
 
-void ScreenRenderer::updateScreen(const std::vector<Duck>& ducks, const int it) {
+void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     renderer.Clear();
     copyBackground();
     copyPlatforms();
-    copyDucks(ducks, it);
+    copyDucks(snapshot.ducks, it);
     // copyGuns(ducks);
-    copyDebugText(ducks);
+    copyDebugText(snapshot.ducks);
 
     renderer.Present();
 }

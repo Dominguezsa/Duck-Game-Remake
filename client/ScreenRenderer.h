@@ -8,7 +8,9 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../common/duck.h"
+#include "../common/types/duck_state.h"
 #include "../common/types/match_state.h"
+#include "../common/types/weapon_type.h"
 
 #include "AnimationHelper.h"
 #include "ResourceManager.h"
@@ -27,14 +29,14 @@ private:
 
     void copyBackground();
     void copyPlatforms();
-    void copyDucks(const std::vector<Duck>& ducks, const int it);
-    void copyGun(const Duck& duck);
-    void copyDebugText(const std::vector<Duck>& ducks);
+    void copyDucks(const std::vector<DuckState>& ducks, const int it);
+    void copyGun(const DuckState& duck);
+    void copyDebugText(const std::vector<DuckState>& ducks);
 
 public:
     ScreenRenderer(SDL2pp::Renderer& renderer, ResourceManager& resourceManager,
                    AnimationHelper& animHelp);
-    void updateScreen(const std::vector<Duck>& ducks, const int it);
+    void updateScreen(const Snapshot& snapshot, const int it);
 };
 
 
