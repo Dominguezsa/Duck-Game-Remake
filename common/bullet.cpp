@@ -20,8 +20,8 @@ Bullet::Bullet(const Bullet& other):
         angle(other.angle),
         speed(other.speed),
         time(other.time),
-        damage(other.damage),
-        going_right(other.going_right) {}
+        going_right(other.going_right),
+        damage(other.damage) {}
 
 void Bullet::move() {
     // Update the position of the bullet based on its speed and angle
