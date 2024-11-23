@@ -6,6 +6,7 @@
 
 #include "types/weapon_type.h"
 
+#include "common_position.h"
 
 class Weapon {
 public:
@@ -17,6 +18,7 @@ public:
                                     // cuantos ciclos de juego se puede disparar
     uint8_t actual_cicle = 0;
     uint8_t damage = 0;
+    Position pos;
 
 
 public:
@@ -24,9 +26,18 @@ public:
            uint8_t damage):
             id(id), name(name), ammo(ammo), cicles_to_reshoot(cicles_to_reshoot), damage(damage) {}
 
+    Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint8_t cicles_to_reshoot,
+           uint8_t damage, Position pos):
+            id(id),
+            name(name),
+            ammo(ammo),
+            cicles_to_reshoot(cicles_to_reshoot),
+            damage(damage),
+            pos(pos) {}
+
     WeaponType getType() const { return type; }
 
-    Weapon(WeaponType _type, uint8_t _ammo): type(_type), ammo(_ammo) {}
+    Weapon() = default;
 };
 
 #endif  // COMMON_WEAPON_H

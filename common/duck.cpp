@@ -184,7 +184,7 @@ void Duck::receive_damage(uint8_t danio) {
 
 void Duck::pick_up_weapon(const Weapon& weapon) { this->weapon = weapon; }
 
-void Duck::throw_weapon() { this->weapon = Weapon(AK47, "", 0, 15, 20); }
+void Duck::throw_weapon() { weapon = Weapon(); }
 
 void Duck::get_state(DuckState& state) {
     state.name = name;

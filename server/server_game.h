@@ -22,6 +22,7 @@
 class Game: public Thread {
 private:
     std::unordered_map<uint8_t, std::unique_ptr<Duck>> ducks;
+    std::vector<Weapon> weapons;
     Queue<GameloopMessage>& message_queue;
     std::atomic<bool> is_running;
     uint8_t next_player_id;

@@ -83,10 +83,6 @@ void ClientProtocol::read_msg(void* msg) {
 
     uint8_t bullet_amount;
     recv_uint_8(bullet_amount);
-    // std::cout << +bullet_amount << std::endl;
-    // std::cout << "I received everything in theory\n";
-
-    // std::cout << msg << std::endl;
 }
 
 void ClientProtocol::send_msg(void* msg) {
