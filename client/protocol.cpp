@@ -16,9 +16,9 @@ ClientProtocol::ClientProtocol(Socket& socket): Protocol(socket) {}
 
 std::vector<Duck> ClientProtocol::receiveMessage() {
     // Placeholder
-    std::vector<Duck> ducks;
+    std::vector<Duck> snapsho;
     std::this_thread::sleep_for(std::chrono::seconds(1));
-    return ducks;
+    return snapsho;
 }
 
 void ClientProtocol::recv_player_amount(uint8_t& player_amount) { recv_uint_8(player_amount); }
@@ -28,7 +28,7 @@ void ClientProtocol::read_msg(void* msg) {
     recv_uint_8(duck_amount);
     // std::cout << "In my read_msg function, duck_amount is: " << +duck_amount << std::endl;
 
-    Snapshot* ducks = static_cast<Snapshot*>(msg);
+    Snapshot* snapsho = static_cast<Snapshot*>(msg);
     std::string name;
     uint8_t duck_id;
     uint8_t life_points;
@@ -79,7 +79,8 @@ void ClientProtocol::read_msg(void* msg) {
                              is_running, is_jumping, is_gliding, is_falling, is_ducking,
                              is_shooting, is_sliding, helmet_on, armor_on, in_air,
                              vertical_velocity, horizontal_velocity, WeaponType(weapon));
-        Snapshot->ducks.push_back(duck_state);
+
+        snapsho->ducks.push_back(duck_state);
     }
 
     uint8_t bullet_amount;
@@ -97,6 +98,8 @@ void ClientProtocol::read_msg(void* msg) {
         recv_uint_8(id);
         recv_uint_32(x);
         recv_uint_32(y);
+        Weapon weapon(id, Position(x, y)); // este tipo de creacion de arma es lo minimo que necesito para saber el arma y la posicion del lado del cliente
+        snapsho->weapons.push_back(weapon);
     }
 
 }

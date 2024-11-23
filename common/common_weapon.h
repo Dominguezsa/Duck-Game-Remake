@@ -35,6 +35,10 @@ public:
             damage(damage),
             pos(pos) {}
 
+    Weapon(uint8_t id, Position pos):
+            id(id),
+            pos(pos) {}
+
     WeaponType getType() const { return type; }
 
     Weapon() = default;
