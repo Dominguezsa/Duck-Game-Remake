@@ -104,6 +104,9 @@ void Game::updateGameState() {
                               duck->looking == 1 ? 0 : M_PI, 10.0f, 0.0f, duck->looking == 1,
                               duck->weapon.damage);
                 bullets_in_game->push_back(bullet);
+                duck->weapon.ammo--;
+                duck->weapon.actual_cicle++;
+                std::cout << "se disparo una balabala\n";
             } else {
                 if (duck->weapon.actual_cicle == duck->weapon.cicles_to_reshoot) {
                     duck->weapon.actual_cicle = 0;
