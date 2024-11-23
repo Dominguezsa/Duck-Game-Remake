@@ -27,18 +27,18 @@ enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
 #define MAX_HORIZONTAL_SPEED 5.0f
 
 Game::Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue):
+        weapons({Weapon(0, "ak47", 30, 15, 20,
+                        {20, 20})}),  // las weapons deberian estar en el yaml
         message_queue(queue),
         is_running(false),
         next_player_id(0),
         round_number(0),
         monitor(monitor),
-        action_handler(ducks),
-        weapons({Weapon(0, "ak47", 30, 15, 20, {20, 20})})  // las weapons deberian estar en el yaml
-{}
+        action_handler(ducks) {}
 
 void Game::addPlayer(DuckIdentity& duck_info) {
     Position initial_pos{100 + (duck_info.id * 100), 100};  // Example starting position
-    Weapon initial_weapon();
+    Weapon initial_weapon;
     ducks[duck_info.id] = std::make_unique<Duck>(duck_info.id, 100, 1, initial_pos, initial_weapon,
                                                  duck_info.name);
 
@@ -252,7 +252,7 @@ void Game::startNewRound() {
     // Reset all ducks to initial positions
     for (auto& duck_pair: ducks) {
         Position initial_pos{100 + (duck_pair.first * 100), 100};
-        Weapon initial_weapon(WeaponType::NoneType, 0);
+        Weapon initial_weapon;
         duck_pair.second = std::make_unique<Duck>(duck_pair.first, 100, 1, initial_pos,
                                                   initial_weapon, duck_pair.second->name);
     }
