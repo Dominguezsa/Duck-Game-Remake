@@ -131,9 +131,10 @@ void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     renderer.Clear();
     copyBackground();
     copyPlatforms();
-    copyDucks(snapshot.ducks, it);
-    // copyGuns(ducks);
+    copyDucks(snapshot.ducks, it); //aca tambien se copian las armas si las portan los patos
     copyDebugText(snapshot.ducks);
+
+    // copyGuns(snapshot.weapons); //aca se copian las armas que estan en el suelo para pickear
 
     renderer.Present();
 }
