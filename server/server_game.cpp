@@ -32,7 +32,9 @@ Game::Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue):
         next_player_id(0),
         round_number(0),
         monitor(monitor),
-        action_handler(ducks) {}
+        action_handler(ducks),
+        weapons({Weapon(0, "ak47", 30, 15, 20, {20, 20})})  // las weapons deberian estar en el yaml
+{}
 
 void Game::addPlayer(DuckIdentity& duck_info) {
     Position initial_pos{100 + (duck_info.id * 100), 100};  // Example starting position
@@ -221,7 +223,7 @@ void Game::updateGameState() {
         duck->update_state(state);
         duck_states->push_back(state);
     }
-    Snapshot snapshot(*duck_states, *bullets_in_game);
+    Snapshot snapshot(*duck_states, *bullets_in_game, weapons);
     monitor.push_to_all(std::make_shared<Snapshot>(snapshot));
 }
 

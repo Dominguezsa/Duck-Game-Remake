@@ -10,7 +10,7 @@
 
 class Weapon {
 public:
-    uint8_t id = 0;
+    uint8_t id = 0; // id del arma 
     std::string name = "None";
     WeaponType type = NoneType;
     uint8_t ammo = 0;
