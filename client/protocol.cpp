@@ -10,6 +10,7 @@
 #include "../common/duck.h"
 #include "../common/types/duck_state.h"
 #include "../common/types/weapon_type.h"
+#include "../common/snapshot.h"
 
 ClientProtocol::ClientProtocol(Socket& socket): Protocol(socket) {}
 
@@ -27,7 +28,7 @@ void ClientProtocol::read_msg(void* msg) {
     recv_uint_8(duck_amount);
     // std::cout << "In my read_msg function, duck_amount is: " << +duck_amount << std::endl;
 
-    std::vector<DuckState>* ducks = static_cast<std::vector<DuckState>*>(msg);
+    Snapshot* ducks = static_cast<Snapshot*>(msg);
     std::string name;
     uint8_t duck_id;
     uint8_t life_points;
@@ -78,7 +79,7 @@ void ClientProtocol::read_msg(void* msg) {
                              is_running, is_jumping, is_gliding, is_falling, is_ducking,
                              is_shooting, is_sliding, helmet_on, armor_on, in_air,
                              vertical_velocity, horizontal_velocity, WeaponType(weapon));
-        ducks->push_back(duck_state);
+        Snapshot->ducks.push_back(duck_state);
     }
 
     uint8_t bullet_amount;

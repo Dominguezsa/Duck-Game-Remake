@@ -7,6 +7,7 @@
 #include "../common/common_thread.h"
 #include "../common/duck.h"
 #include "../common/types/duck_state.h"
+#include "../common/snapshot.h"
 
 #include "protocol.h"
 
@@ -14,7 +15,7 @@ class ThreadReceiver: public Thread {
 private:
     ClientProtocol& protocol;
     std::atomic<bool> is_alive;
-    Queue<std::vector<DuckState>>& ducks_snapshots_queue;
+    Queue<Snapshot>& ducks_snapshots_queue;
 
 public:
     explicit ThreadReceiver(ClientProtocol& protocol,

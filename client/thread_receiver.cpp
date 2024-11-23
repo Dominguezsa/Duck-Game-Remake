@@ -11,10 +11,10 @@ void ThreadReceiver::run() {
     try {
         // std::cout << "Este es el primer snapshot que recibí\n";
         while (is_alive) {
-            std::vector<DuckState> duck_states;
-            this->protocol.read_msg(&duck_states);
+            Snapshot snapShot;
+            this->protocol.read_msg(&snapShot);
             // std::cout << duck_states.size() << " ducks in snapshot\n";
-            ducks_snapshots_queue.push(duck_states);
+            ducks_snapshots_queue.push(snapShot);
         }
     } catch (const std::exception& e) {
         this->is_alive = false;
