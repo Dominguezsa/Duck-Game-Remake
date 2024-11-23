@@ -38,7 +38,17 @@ void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
 
     unsigned int item_count = snapshot->bullets.size();
     send_data(&item_count, sizeof(uint8_t));
-    std::cout << "Sending " << snapshot->weapons.size() << " wqwwasd" << std::endl;
+
+    unsigned int weapon_count = snapshot->weapons.size();
+    send_data(&weapon_count, sizeof(uint8_t));
+
+    for (uint16_t i = 0; i < weapon_count; i++) {
+        send_data(&snapshot->weapons[i].id, sizeof(uint8_t));
+        x = htonl(snapshot->weapons[i].pos.x);
+        y = htonl(snapshot->weapons[i].pos.y);
+        send_data(&x, sizeof(uint32_t));
+        send_data(&y, sizeof(uint32_t));
+    }
 }
 // Solo para compilar, esto no se usa se tiene que ir:
 

@@ -83,6 +83,21 @@ void ClientProtocol::read_msg(void* msg) {
 
     uint8_t bullet_amount;
     recv_uint_8(bullet_amount);
+
+
+    uint8_t weapon_amount;
+
+    recv_uint_8(weapon_amount);
+
+    for (int i = 0; i < weapon_amount; i++) {
+        uint8_t id;
+        uint32_t x;
+        uint32_t y;
+        recv_uint_8(id);
+        recv_uint_32(x);
+        recv_uint_32(y);
+    }
+
 }
 
 void ClientProtocol::send_msg(void* msg) {
