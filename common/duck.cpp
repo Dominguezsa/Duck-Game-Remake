@@ -180,6 +180,7 @@ void Duck::duck(bool activar) {
 void Duck::shoot(bool activar) {
     if (activar) {
         is_shooting = true;
+        this->weapon.actual_cicle = 0;
         // std::cout << "Duck is shooting" << std::endl;
     } else {
         is_shooting = false;
