@@ -27,8 +27,8 @@ public:
         }
         // se necesita estos ifs porque cambian de tambaño y en tal caso crea las armas
         //  por default y las actualiza
-        if (this->bullets.size() != bullets.size()) {
-            this->bullets.resize(bullets.size());
+        while (this->bullets.size() < bullets.size()) {
+            this->bullets.push_back(Bullet());
         }
         for (int i = 0; i < (int)bullets.size(); i++) {
             this->bullets[i].update(bullets[i]);
