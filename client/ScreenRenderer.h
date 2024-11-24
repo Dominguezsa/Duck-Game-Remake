@@ -11,6 +11,7 @@
 #include "../common/types/duck_state.h"
 #include "../common/types/match_state.h"
 #include "../common/types/weapon_type.h"
+#include "../common/snapshot.h"
 
 #include "AnimationHelper.h"
 #include "ResourceManager.h"
