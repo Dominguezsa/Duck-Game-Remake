@@ -133,15 +133,12 @@ void GameClient::run_lobby() { lobby.run(); }
 
 void GameClient::updateDuckStates() {
 
-    Snapshot snapshot;
+    Snapshot snapshot_from_queue;
 
 
-    while (graphic_queue.try_pop(snapshot)) {}
+    while (graphic_queue.try_pop(snapshot_from_queue)) {}
 
-    for (int i = 0; i < (int)snapshot.ducks.size(); i++) {
-        // std::cout << "updated ducks\n";
-        ducks[i].update_state(snapshot.ducks[i]);
-    }
+    snapshot = snapshot_from_queue;
 }
 
 void GameClient::mainLoop(const int it) {
@@ -168,7 +165,7 @@ void GameClient::mainLoop(const int it) {
         commandCenter.processEvent(event);
     }
 
-    screenRenderer.updateScreen(ducks, it);
+    screenRenderer.updateScreen(snapshot, it);
 }
 
 
