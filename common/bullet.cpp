@@ -23,6 +23,27 @@ Bullet::Bullet(const Bullet& other):
         going_right(other.going_right),
         damage(other.damage) {}
 
+Bullet::Bullet(uint8_t id, float x, float y, bool going_right):
+        id(id),
+        x(x),
+        y(y),
+        angle(0.0f),
+        speed(0.0f),
+        time(0.0f),
+        going_right(going_right),
+        damage(0) {}
+
+
+Bullet::Bullet():
+        id(0),
+        x(0.0f),
+        y(0.0f),
+        angle(0.0f),
+        speed(0.0f),
+        time(0.0f),
+        going_right(false),
+        damage(0) {}
+
 void Bullet::move() {
     // Update the position of the bullet based on its speed and angle
     float delta_x = speed * cos(angle);
@@ -49,6 +70,3 @@ void Bullet::update(const Bullet& other) {
     going_right = other.going_right;
     damage = other.damage;
 }
-
-
-Bullet::Bullet() = default;

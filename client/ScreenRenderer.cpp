@@ -144,6 +144,21 @@ void ScreenRenderer::copyWeapons(const std::vector<Weapon>& weapons) {
     }
 }
 
+void ScreenRenderer::copyBullets(const std::vector<Bullet>& bullets) {
+
+    for (const auto& bullet: bullets) {
+        SDL2pp::Texture& bullet_texture = *resourceManager.getTexture("ak47");
+        renderer.Copy(bullet_texture, SDL2pp::Rect(2, 205, 8, 8),
+                      SDL2pp::Rect(bullet.x, bullet.y, 16, 16));
+    }
+
+    // for (int i = 0; i < (int)bullets.size(); i++) {
+    //     SDL2pp::Texture& bullet_texture = *resourceManager.getTexture("ak57_bullet");
+    //     renderer.Copy(bullet_texture, SDL2pp::NullOpt,
+    //                   SDL2pp::Rect(bullets[i].position.x, bullets[i].position.y, 10, 10));
+    // }
+}
+
 void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     renderer.Clear();
     copyBackground();
@@ -152,6 +167,8 @@ void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     copyDebugText(snapshot.ducks);
 
     copyWeapons(snapshot.weapons);  // aca se copian las armas que estan en el suelo para pickear
+    // std::cout << "The bullets are: " << snapshot.bullets.size() << std::endl;
+    copyBullets(snapshot.bullets);
 
     renderer.Present();
 }

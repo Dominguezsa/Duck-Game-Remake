@@ -22,12 +22,12 @@ public:
 
     Bullet(uint8_t id, float x, float y, float angle, float speed, float time, bool going_right,
            uint8_t damage);
+    Bullet(uint8_t id, float x, float y, bool going_right);
     Bullet(const Bullet& other);
+    Bullet();
     void move();
 
     void update(const Bullet& other);
-
-    Bullet();
 };
 
 

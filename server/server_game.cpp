@@ -1,5 +1,6 @@
 #include "server_game.h"
 
+#include <algorithm>
 #include <cstdint>
 #include <iostream>
 
@@ -87,8 +88,6 @@ void Game::updateGameState() {
     std::shared_ptr<std::vector<DuckState>> duck_states =
             std::make_shared<std::vector<DuckState>>();
 
-    std::shared_ptr<std::vector<Bullet>> bullets_in_game = std::make_shared<std::vector<Bullet>>();
-
     for (auto& duck_pair: ducks) {
         Duck* duck = duck_pair.second.get();
 
@@ -126,7 +125,7 @@ void Game::updateGameState() {
         // }
 
         if (duck->is_shooting && duck->weapon.ammo > 0) {
-            std::cout << "Trying to shoot\n";
+            // std::cout << "Trying to shoot\n";
             if (duck->weapon.actual_cicle == 0) {
                 Bullet bullet(duck->weapon.id, duck->position.x, duck->position.y + DUCK_HEIGHT / 2,
                               duck->looking == 1 ? 0 : M_PI, 10.0f, 0.0f, duck->looking == 1,
@@ -135,7 +134,8 @@ void Game::updateGameState() {
                 next_bullet_id++;
                 duck->weapon.ammo--;
                 duck->weapon.actual_cicle++;
-                std::cout << "se disparo una balabala\n";
+                // std::cout << "se disparo una balabala\n";
+                // std::cout << "Now the # of bullets is: " << bullets_by_id.size() << std::endl;
             } else {
                 if (duck->weapon.actual_cicle == duck->weapon.cicles_to_reshoot) {
                     duck->weapon.actual_cicle = 0;
@@ -250,6 +250,12 @@ void Game::updateGameState() {
         duck->update_state(state);
         duck_states->push_back(state);
     }
+
+    std::shared_ptr<std::vector<Bullet>> bullets_in_game = std::make_shared<std::vector<Bullet>>();
+
+    std::transform(bullets_by_id.begin(), bullets_by_id.end(), std::back_inserter(*bullets_in_game),
+                   [](const auto& pair) { return pair.second; });
+
     Snapshot snapshot(*duck_states, *bullets_in_game, weapons);
     monitor.push_to_all(std::make_shared<Snapshot>(snapshot));
 }

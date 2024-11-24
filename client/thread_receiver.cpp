@@ -11,7 +11,10 @@ void ThreadReceiver::run() {
         while (is_alive) {
             Snapshot snapShot;
             this->protocol.read_msg(&snapShot);
-            // std::cout << duck_states.size() << " ducks in snapshot\n";
+            // std::cout << snapShot.ducks.size() << " ducks in snapshot\n";
+            // std::cout << "Theres this many bullets in a snapshot: " << snapShot.bullets.size() <<
+            // std::endl; std::cout << "Theres this many weapons in a snapshot: " <<
+            // snapShot.weapons.size() << std::endl;
             ducks_snapshots_queue.push(snapShot);
         }
     } catch (const std::exception& e) {

@@ -2,7 +2,7 @@
 
 void ServerProtocol::recv_msg(uint8_t& command) { recv_uint_8(command); }
 
-
+// Massive refactor needed, too many sends and recv are so bad for performance
 void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
     unsigned int state_count = snapshot->ducks.size();
     send_data(&state_count, sizeof(uint8_t));
@@ -38,6 +38,17 @@ void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
 
     unsigned int item_count = snapshot->bullets.size();
     send_data(&item_count, sizeof(uint8_t));
+
+
+    for (const auto& bullet: snapshot->bullets) {
+        send_data(&bullet.id, sizeof(uint8_t));
+        x = htonl(bullet.x);
+        y = htonl(bullet.y);
+        send_data(&x, sizeof(uint32_t));
+        send_data(&y, sizeof(uint32_t));
+        send_data(&bullet.going_right, sizeof(uint8_t));
+    }
+
 
     unsigned int weapon_count = snapshot->weapons.size();
     send_data(&weapon_count, sizeof(uint8_t));
