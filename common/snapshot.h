@@ -33,8 +33,8 @@ public:
         for (int i = 0; i < (int)bullets.size(); i++) {
             this->bullets[i].update(bullets[i]);
         }
-        if (this->weapons.size() != weapons.size()) {
-            this->weapons.resize(weapons.size());
+        while (this->weapons.size() < weapons.size()) {
+            this->weapons.push_back(Weapon());
         }
         for (int i = 0; i < (int)weapons.size(); i++) {
             this->weapons[i].update(weapons[i]);

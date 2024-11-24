@@ -18,7 +18,7 @@ public:
                                     // cuantos ciclos de juego se puede disparar
     uint8_t actual_cicle = 0;
     uint8_t damage = 0;
-    Position pos;
+    Position pos = Position(0, 0);
 
 
 public:
