@@ -20,13 +20,13 @@ public:
 
     Snapshot() = default;
 
-    void updateSnapshot(std::vector<DuckState>& ducks, std::vector<Bullet>& bullets,
-                        std::vector<Weapon>& weapons) {
+    void updateSnapshot(const std::vector<DuckState>& ducks, const std::vector<Bullet>& bullets,
+                        const std::vector<Weapon>& weapons) {
         for (int i = 0; i < (int)ducks.size(); i++) {
             this->ducks[i].update(ducks[i]);
         }
-        //se necesita estos ifs porque cambian de tambaño y en tal caso crea las armas
-        // por default y las actualiza
+        // se necesita estos ifs porque cambian de tambaño y en tal caso crea las armas
+        //  por default y las actualiza
         if (this->bullets.size() != bullets.size()) {
             this->bullets.resize(bullets.size());
         }

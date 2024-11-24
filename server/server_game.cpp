@@ -5,8 +5,6 @@
 
 #include "../common/snapshot.h"
 
-enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
-
 #define GRAVITY 0.5f
 #define FLUTTER_FORCE -0.3f
 #define MAX_FALL_SPEED 13.0f
@@ -26,14 +24,14 @@ enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
 
 #define MAX_HORIZONTAL_SPEED 5.0f
 
-Game::Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue):
+Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue):
         weapons({Weapon(WeaponType::AK47, "ak47", 30, 15, 20,
                         {20, 20})}),  // las weapons deberian estar en el yaml
         message_queue(queue),
         is_running(false),
         next_player_id(0),
         round_number(0),
-        monitor(monitor),
+        monitor(_monitor),
         action_handler(ducks) {}
 
 void Game::addPlayer(DuckIdentity& duck_info) {

@@ -4,6 +4,9 @@
 
 #include "types/weapon_type.h"
 
+enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
+
+
 // ------------------- Constructores -------------------
 
 #define JUMP_SPEED 15.0f
@@ -30,7 +33,7 @@ Duck::Duck(uint8_t id, uint8_t vida, bool looking, Position pos, const Weapon& w
 Duck::Duck():
         duck_id(0),
         life_points(0),
-        looking(0),
+        looking(LEFT),
         is_alive(false),
         is_running(false),
         is_jumping(false),
@@ -88,7 +91,7 @@ Duck& Duck::operator=(const Duck& other) {
 
 void Duck::move_to(uint8_t direccion) {
 
-    if (direccion > 1) {
+    if (direccion > RIGHT) {
         return;
     }
     looking = direccion;
@@ -100,10 +103,10 @@ void Duck::move_to(uint8_t direccion) {
     is_running = true;
 
 
-    // if (direccion == 0) {
-    //     looking = 0;
-    // } else if (direccion == 1) {
-    //     looking = 1;
+    // if (direccion == LEFT) {
+    //     looking = LEFT;
+    // } else if (direccion == RIGHT) {
+    //     looking = RIGHT;
     // }
 }
 
@@ -112,10 +115,15 @@ void Duck::look_to(uint8_t direccion) {
         return;
     }
 
-    if (direccion == 2) {
+    if (direccion != DOWN) {
+        is_ducking = false;
         is_sliding = false;
-        // return;
     }
+
+    // if (direccion == 2) {
+    //     is_sliding = false;
+    //     // return;
+    // }
 
     looking = direccion;
 }
@@ -160,7 +168,9 @@ void Duck::duck(bool activar) {
         }
         is_ducking = true;
     } else {
+        is_sliding = false;
         is_ducking = false;
+        is_running = true;
     }
 }
 
