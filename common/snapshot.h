@@ -25,12 +25,8 @@ public:
         for (int i = 0; i < (int)ducks.size(); i++) {
             this->ducks[i].update(ducks[i]);
         }
-        for (int i = 0; i < (int)bullets.size(); i++) {
-            this->bullets[i].update(bullets[i]);
-        }
-        for (int i = 0; i < (int)weapons.size(); i++) {
-            this->weapons[i].update(weapons[i]);
-        }
+        this->bullets = bullets;
+        this->weapons = weapons;
     }
 };
 
