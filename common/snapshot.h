@@ -25,8 +25,20 @@ public:
         for (int i = 0; i < (int)ducks.size(); i++) {
             this->ducks[i].update(ducks[i]);
         }
-        this->bullets = bullets;
-        this->weapons = weapons;
+        //se necesita estos ifs porque cambian de tambaño y en tal caso crea las armas
+        // por default y las actualiza
+        if (this->bullets.size() != bullets.size()) {
+            this->bullets.resize(bullets.size());
+        }
+        for (int i = 0; i < (int)bullets.size(); i++) {
+            this->bullets[i].update(bullets[i]);
+        }
+        if (this->weapons.size() != weapons.size()) {
+            this->weapons.resize(weapons.size());
+        }
+        for (int i = 0; i < (int)weapons.size(); i++) {
+            this->weapons[i].update(weapons[i]);
+        }
     }
 };
 

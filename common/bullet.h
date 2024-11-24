@@ -26,6 +26,8 @@ public:
     void move();
 
     void update(const Bullet& other);
+
+    Bullet();
 };
 
 

@@ -49,3 +49,6 @@ void Bullet::update(const Bullet& other) {
     going_right = other.going_right;
     damage = other.damage;
 }
+
+
+Bullet::Bullet() = default;

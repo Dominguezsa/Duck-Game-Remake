@@ -98,7 +98,6 @@ void ClientProtocol::read_msg(void* msg) {
         recv_uint_8(id);
         recv_uint_32(x);
         recv_uint_32(y);
-        std::cout << "Weapon id: " << +id << std::endl;
         Weapon weapon(id,
                       Position(x, y));  // este tipo de creacion de arma es lo minimo que necesito
                                         // para saber el arma y la posicion del lado del cliente
