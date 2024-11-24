@@ -9,7 +9,7 @@
 
 class DuckGraphicData {
 private:
-    Duck& my_duck;
+    DuckState& my_duck;
 
 public:
     std::string current_animation;
@@ -18,7 +18,7 @@ public:
     std::string current_arm_animation;
 
 
-    explicit DuckGraphicData(Duck& my_duck);
+    explicit DuckGraphicData(DuckState& my_duck);
 
     void update_current_frame(int it);
     void update_current_animation();

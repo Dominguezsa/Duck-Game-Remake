@@ -46,7 +46,6 @@ GameClient::GameClient(const int window_width, const int window_height,
         lobby(socket),
         messagesForServer(),
         graphic_queue(GRAPHIC_QUEUE_SIZE),
-        ducks(),
         animationHelper(resourceManager),
         screenRenderer(renderer, resourceManager, animationHelper),
         keyboardState(std::make_shared<const uint8_t*>(SDL_GetKeyboardState(nullptr))),
@@ -75,10 +74,10 @@ void GameClient::run() {
     // Initialize the ducks
     std::cout << "Now creating new " << +playerAmount << " ducks\n";
     for (int i = 0; i < playerAmount; i++) {
-        ducks.push_back(Duck());
+        snapshot.ducks.push_back(DuckState());
     }
 
-    animationHelper.loadDucks(ducks);
+    animationHelper.loadDucks(snapshot.ducks);
 
     int64_t rate = 1000 / FPS;
     int iteration = 0;

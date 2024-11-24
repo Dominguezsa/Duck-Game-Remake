@@ -11,9 +11,9 @@ AnimationHelper::AnimationHelper(ResourceManager& resourceManager):
     //                [](Duck& duck) { return DuckGraphicData(duck); });
 }
 
-void AnimationHelper::loadDucks(std::vector<Duck>& ducks) {
+void AnimationHelper::loadDucks(std::vector<DuckState>& ducks) {
     std::transform(ducks.begin(), ducks.end(), std::back_inserter(ducks_animation_data),
-                   [](Duck& duck) { return DuckGraphicData(duck); });
+                   [](DuckState& duck) { return DuckGraphicData(duck); });
 }
 
 void AnimationHelper::set_run_anim_start(int it) {

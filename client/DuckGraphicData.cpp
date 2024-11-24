@@ -2,7 +2,7 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
-DuckGraphicData::DuckGraphicData(Duck& my_duck):
+DuckGraphicData::DuckGraphicData(DuckState& my_duck):
         my_duck(my_duck),
         current_animation("duck_running"),
         current_frame(-1),

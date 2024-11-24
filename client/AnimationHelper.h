@@ -22,7 +22,7 @@ public:
     void set_run_anim_start(int it);
     void update_animation_frame(int it);
     std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> get_animation_frames(int it);
-    void loadDucks(std::vector<Duck>& ducks);
+    void loadDucks(std::vector<DuckState>& ducks);
     // std::vector<SDL2pp::Rect> get_animation_arms(int it);
     ~AnimationHelper() = default;
 };
