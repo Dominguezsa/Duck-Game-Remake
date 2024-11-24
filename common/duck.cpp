@@ -168,9 +168,12 @@ void Duck::duck(bool activar) {
         }
         is_ducking = true;
     } else {
+
+        is_running = is_sliding;
+
         is_sliding = false;
         is_ducking = false;
-        is_running = true;
+        // is_running = true;
     }
 }
 
