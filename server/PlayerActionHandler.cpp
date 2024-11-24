@@ -38,9 +38,6 @@ void PlayerActionHandler::process_player_action(const GameloopMessage& msg) {
     // action_handlers.at(key)(*this);
     // No se si hacerlo así para evitar las excepciones
     auto it_2 = action_handlers.find(msg.action);
-    if (msg.action == SHOOT_KEY_DOWN) {
-        std::cout << "SHOOOT_KEY_DOWN" << std::endl;
-    }
     if (it_2 != action_handlers.end()) {
         auto handler = it_2->second;
         handler(*duck);

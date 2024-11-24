@@ -3,8 +3,10 @@
 
 #include <atomic>
 #include <chrono>
+#include <map>
 #include <memory>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include "../common/bullet.h"
@@ -31,7 +33,10 @@ private:
     std::vector<Platform> platforms;
     MatchStateMonitor& monitor;
     PlayerActionHandler action_handler;
-
+    std::map<std::pair<uint32_t, uint8_t>, Bullet> bullets_by_id;  // son las balas que están
+    // vivas en el juego, se guardan por id de la bala específica y el id del arma que la
+    // disparó para ver los sprites a usar
+    uint32_t next_bullet_id;
 
     static constexpr double TICK_RATE = 100.0;
     static constexpr double TICK_DURATION = 1.0 / TICK_RATE;

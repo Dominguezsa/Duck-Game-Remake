@@ -53,6 +53,7 @@ void ScreenRenderer::copyDucks(const std::vector<DuckState>& ducks, const int it
                                        DUCK_ARM_HEIGTH * DUCK_SCALE),
                           0.0, SDL2pp::NullOpt, flip);
         } else {
+            // std::cout << "Trying to render the weapon\n";
             copyGun(ducks[i]);
         }
     }
@@ -116,8 +117,9 @@ void ScreenRenderer::copyDebugText(const std::vector<DuckState>& ducks) {
                 " Duck " + std::to_string(i + 1) +
                 " is ducking: " + std::to_string(ducks[i].is_ducking) + " Duck " +
                 std::to_string(i + 1) + " is sliding: " + std::to_string(ducks[i].is_sliding) +
-                " Duck " + std::to_string(i + 1) +
-                " horizontal velocity: " + std::to_string(ducks[i].horizontal_velocity);
+                " Duck's Weapon is: " + std::to_string(ducks[i].weapon);
+        // " Duck " + std::to_string(i + 1) +
+        // " horizontal velocity: " + std::to_string(ducks[i].horizontal_velocity);
 
         SDL2pp::Texture text_sprite(renderer,
                                     resourceManager.getFont("vera")->RenderText_Blended(
@@ -130,13 +132,15 @@ void ScreenRenderer::copyDebugText(const std::vector<DuckState>& ducks) {
 
 void ScreenRenderer::copyWeapons(const std::vector<Weapon>& weapons) {
     for (int i = 0; i < (int)weapons.size(); i++) {
-        SDL2pp::Texture& weapon_texture = *resourceManager.getTexture(weapons_by_enum[weapons[i].id]);
-        //renderer.Copy(weapon_texture, SDL2pp::Rect(1, 19, 32, 32),
-         //             SDL2pp::Rect(weapons[i].pos.x, weapons[i].pos.y, 32, 32));
+        SDL2pp::Texture& weapon_texture =
+                *resourceManager.getTexture(weapons_by_enum[weapons[i].id]);
         renderer.Copy(weapon_texture, SDL2pp::Rect(1, 19, 32, 32),
-                  SDL2pp::Rect(10, 200 + (DUCK_HEIGTH * DUCK_SCALE) / 2.2 - 7,
-                               DUCK_ARM_WIDTH * DUCK_SCALE + 10, DUCK_ARM_HEIGTH * DUCK_SCALE + 10),
-                  0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+                      SDL2pp::Rect(weapons[i].pos.x, weapons[i].pos.y, 64, 64));
+        // renderer.Copy(weapon_texture, SDL2pp::Rect(1, 19, 32, 32),
+        //           SDL2pp::Rect(10, 200 + (DUCK_HEIGTH * DUCK_SCALE) / 2.2 - 7,
+        //                        DUCK_ARM_WIDTH * DUCK_SCALE + 10, DUCK_ARM_HEIGTH * DUCK_SCALE +
+        //                        10),
+        //           0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
     }
 }
 
@@ -147,7 +151,7 @@ void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     copyDucks(snapshot.ducks, it);  // aca tambien se copian las armas si las portan los patos
     copyDebugText(snapshot.ducks);
 
-    copyWeapons(snapshot.weapons); //aca se copian las armas que estan en el suelo para pickear
+    copyWeapons(snapshot.weapons);  // aca se copian las armas que estan en el suelo para pickear
 
     renderer.Present();
 }

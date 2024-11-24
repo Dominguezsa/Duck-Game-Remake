@@ -24,15 +24,18 @@
 
 #define MAX_HORIZONTAL_SPEED 5.0f
 
+#define WEAPON_RECT 64
+
 Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue):
-        weapons({Weapon(WeaponType::AK47, "ak47", 30, 15, 20,
-                        {20, 20})}),  // las weapons deberian estar en el yaml
+        weapons({Weapon(WeaponType::AK47, "ak47", 30, 15, 20, {20, 320},
+                        WeaponType::AK47)}),  // las weapons deberian estar en el yaml
         message_queue(queue),
         is_running(false),
         next_player_id(0),
         round_number(0),
         monitor(_monitor),
-        action_handler(ducks) {}
+        action_handler(ducks),
+        next_bullet_id(0) {}
 
 void Game::addPlayer(DuckIdentity& duck_info) {
     Position initial_pos{100 + (duck_info.id * 100), 100};  // Example starting position
@@ -97,13 +100,39 @@ void Game::updateGameState() {
         //     std::cout << "Duck 1 vertical velocity: " << duck->vertical_velocity << std::endl;
         // }
 
+        // Now i should update all of the bullets positions, check if they hit a duck and if they
+        // hit a duck, reduce the life points of the duck and remove the bullet from the game
+        // Also, if the bullet is out of the screen, remove it from the game
+        // also, check if a weapon pickup is picked up by a duck and give it to the duck
+
+        // Checking if a duck collides with a weapon to pick it up
+
+        for (const auto& weapon: weapons) {
+            if (duck->position.x < weapon.pos.x + WEAPON_RECT &&
+                duck->position.x + DUCK_WIDTH > weapon.pos.x &&
+                duck->position.y < weapon.pos.y + WEAPON_RECT &&
+                duck->position.y + DUCK_HEIGHT > weapon.pos.y) {
+                // std::cout << "Intersecting weapon with duck\n";
+                duck->pick_up_weapon(weapon);
+            }
+        }
+
+        // for (const auto& weapon: weapons) {
+        //     // std::cout << "The weaponType of the weapon is: " << weapon.getType() << std::endl;
+        //     for (const auto& duck: ducks) {
+        //         // std::cout << "Checking if the weapon intersects with a duck\n";
+        //         // Here i need to check if the duck is colliding with the weapon
+        //     }
+        // }
 
         if (duck->is_shooting && duck->weapon.ammo > 0) {
+            std::cout << "Trying to shoot\n";
             if (duck->weapon.actual_cicle == 0) {
                 Bullet bullet(duck->weapon.id, duck->position.x, duck->position.y + DUCK_HEIGHT / 2,
                               duck->looking == 1 ? 0 : M_PI, 10.0f, 0.0f, duck->looking == 1,
                               duck->weapon.damage);
-                bullets_in_game->push_back(bullet);
+                bullets_by_id.insert({{next_bullet_id, bullet.id}, bullet});
+                next_bullet_id++;
                 duck->weapon.ammo--;
                 duck->weapon.actual_cicle++;
                 std::cout << "se disparo una balabala\n";

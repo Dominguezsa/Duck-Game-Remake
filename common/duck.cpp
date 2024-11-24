@@ -180,8 +180,10 @@ void Duck::duck(bool activar) {
 void Duck::shoot(bool activar) {
     if (activar) {
         is_shooting = true;
+        // std::cout << "Duck is shooting" << std::endl;
     } else {
         is_shooting = false;
+        // std::cout << "Duck stopped shooting" << std::endl;
     }
 }
 
@@ -195,7 +197,14 @@ void Duck::receive_damage(uint8_t danio) {
     }
 }
 
-void Duck::pick_up_weapon(const Weapon& weapon) { this->weapon = weapon; }
+void Duck::pick_up_weapon(const Weapon& weapon) {
+    // std::cout << "The weapon type of the picked up weapon is: " << weapon.getType() << std::endl;
+    // std::cout << "The weapon type of the duck's weapon is: " << this->weapon.getType() <<
+    // std::endl;
+    this->weapon.update(weapon);
+    // std::cout << "Now, the weapon type of the duck's weapon is: " << this->weapon.getType() <<
+    // std::endl;
+}
 
 void Duck::throw_weapon() { weapon = Weapon(); }
 
@@ -219,7 +228,7 @@ void Duck::get_state(DuckState& state) {
     state.horizontal_velocity = horizontal_velocity;
     // TO-DO: Ajustar el uso del tipo de weapon a la
     //        clase correspondiente.
-    state.weapon = WeaponType::NoneType;
+    state.weapon = weapon.getType();
     state.is_sliding = static_cast<uint8_t>(is_sliding);
 }
 
@@ -243,6 +252,6 @@ void Duck::update_state(const DuckState& state) {
     armor_on = static_cast<bool>(state.armor_on);
     // TO-DO: Ajustar el uso del tipo de weapon.
     // weapon = Weapon(AK47, "ak47", 0, 15, 20);
-    weapon = Weapon(NoneType, "None", 0, 0, 0);
+    // weapon = Weapon(NoneType, "None", 0, 0, 0);
     is_sliding = static_cast<bool>(state.is_sliding);
 }

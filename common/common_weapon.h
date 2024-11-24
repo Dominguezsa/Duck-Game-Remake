@@ -2,6 +2,7 @@
 #define COMMON_WEAPON_H
 
 #include <cstdint>
+#include <iostream>
 #include <string>
 
 #include "types/weapon_type.h"
@@ -27,9 +28,10 @@ public:
             id(id), name(name), ammo(ammo), cicles_to_reshoot(cicles_to_reshoot), damage(damage) {}
 
     Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint8_t cicles_to_reshoot,
-           uint8_t damage, Position pos):
+           uint8_t damage, Position pos, WeaponType type):
             id(id),
             name(name),
+            type(type),
             ammo(ammo),
             cicles_to_reshoot(cicles_to_reshoot),
             damage(damage),
