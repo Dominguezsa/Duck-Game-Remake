@@ -75,6 +75,28 @@ struct DuckState {
             vertical_velocity(0.0f),
             horizontal_velocity(0.0f),
             weapon(WeaponType::NoneType) {}
+
+    void update(const DuckState& new_state) {
+        name = new_state.name;
+        duck_id = new_state.duck_id;
+        life_points = new_state.life_points;
+        looking = new_state.looking;
+        position = new_state.position;
+        is_alive = new_state.is_alive;
+        is_running = new_state.is_running;
+        is_jumping = new_state.is_jumping;
+        is_gliding = new_state.is_gliding;
+        is_falling = new_state.is_falling;
+        is_ducking = new_state.is_ducking;
+        is_shooting = new_state.is_shooting;
+        is_sliding = new_state.is_sliding;
+        helmet_on = new_state.helmet_on;
+        armor_on = new_state.armor_on;
+        in_air = new_state.in_air;
+        vertical_velocity = new_state.vertical_velocity;
+        horizontal_velocity = new_state.horizontal_velocity;
+        weapon = new_state.weapon;
+    }
 };
 
 #endif  // DUCK_STATE_H

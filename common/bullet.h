@@ -24,6 +24,8 @@ public:
            uint8_t damage);
     Bullet(const Bullet& other);
     void move();
+
+    void update(const Bullet& other);
 };
 
 

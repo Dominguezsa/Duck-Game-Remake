@@ -137,7 +137,8 @@ void GameClient::updateDuckStates() {
 
     while (graphic_queue.try_pop(snapshot_from_queue)) {}
 
-    snapshot = snapshot_from_queue;
+    snapshot.updateSnapshot(snapshot_from_queue.ducks, snapshot_from_queue.bullets,
+                            snapshot_from_queue.weapons);
 }
 
 void GameClient::mainLoop(const int it) {

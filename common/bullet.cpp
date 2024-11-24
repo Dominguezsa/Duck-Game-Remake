@@ -38,3 +38,14 @@ void Bullet::move() {
     // Update the time
     time += 1.0f;  // Assuming each move call represents a time step of 1.0f
 }
+
+void Bullet::update(const Bullet& other) {
+    id = other.id;
+    x = other.x;
+    y = other.y;
+    angle = other.angle;
+    speed = other.speed;
+    time = other.time;
+    going_right = other.going_right;
+    damage = other.damage;
+}

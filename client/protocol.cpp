@@ -8,9 +8,9 @@
 
 #include "../common/common_position.h"
 #include "../common/duck.h"
+#include "../common/snapshot.h"
 #include "../common/types/duck_state.h"
 #include "../common/types/weapon_type.h"
-#include "../common/snapshot.h"
 
 ClientProtocol::ClientProtocol(Socket& socket): Protocol(socket) {}
 
@@ -98,10 +98,11 @@ void ClientProtocol::read_msg(void* msg) {
         recv_uint_8(id);
         recv_uint_32(x);
         recv_uint_32(y);
-        Weapon weapon(id, Position(x, y)); // este tipo de creacion de arma es lo minimo que necesito para saber el arma y la posicion del lado del cliente
+        Weapon weapon(id,
+                      Position(x, y));  // este tipo de creacion de arma es lo minimo que necesito
+                                        // para saber el arma y la posicion del lado del cliente
         snapsho->weapons.push_back(weapon);
     }
-
 }
 
 void ClientProtocol::send_msg(void* msg) {

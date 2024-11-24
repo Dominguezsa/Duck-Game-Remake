@@ -6,8 +6,8 @@
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
 #include "../common/duck.h"
-#include "../common/types/duck_state.h"
 #include "../common/snapshot.h"
+#include "../common/types/duck_state.h"
 
 #include "protocol.h"
 
@@ -18,8 +18,7 @@ private:
     Queue<Snapshot>& ducks_snapshots_queue;
 
 public:
-    explicit ThreadReceiver(ClientProtocol& protocol,
-                            Queue<Snapshot>& graphique_queue);
+    explicit ThreadReceiver(ClientProtocol& protocol, Queue<Snapshot>& graphique_queue);
 
     void run() override;
 

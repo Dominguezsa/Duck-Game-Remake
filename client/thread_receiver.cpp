@@ -2,8 +2,7 @@
 
 #include <string>
 
-ThreadReceiver::ThreadReceiver(ClientProtocol& protocol,
-                               Queue<Snapshot>& graphique_queue) :
+ThreadReceiver::ThreadReceiver(ClientProtocol& protocol, Queue<Snapshot>& graphique_queue):
         protocol(protocol), is_alive(true), ducks_snapshots_queue(graphique_queue) {}
 
 

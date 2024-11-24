@@ -4,9 +4,10 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "../common/snapshot.h"
 
 #include <SDL2/SDL_render.h>
+
+#include "../common/snapshot.h"
 
 #define DUCK_WIDTH 32
 #define DUCK_HEIGTH 32
@@ -131,7 +132,7 @@ void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     renderer.Clear();
     copyBackground();
     copyPlatforms();
-    copyDucks(snapshot.ducks, it); //aca tambien se copian las armas si las portan los patos
+    copyDucks(snapshot.ducks, it);  // aca tambien se copian las armas si las portan los patos
     copyDebugText(snapshot.ducks);
 
     // copyWeapons(snapshot.weapons); //aca se copian las armas que estan en el suelo para pickear

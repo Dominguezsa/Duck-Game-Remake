@@ -10,7 +10,7 @@
 
 class Weapon {
 public:
-    uint8_t id = 0; // id del arma 
+    uint8_t id = 0;  // id del arma
     std::string name = "None";
     WeaponType type = NoneType;
     uint8_t ammo = 0;
@@ -35,13 +35,22 @@ public:
             damage(damage),
             pos(pos) {}
 
-    Weapon(uint8_t id, Position pos):
-            id(id),
-            pos(pos) {}
+    Weapon(uint8_t id, Position pos): id(id), pos(pos) {}
 
     WeaponType getType() const { return type; }
 
     Weapon() = default;
+
+    void update(const Weapon& other) {
+        id = other.id;
+        name = other.name;
+        type = other.type;
+        ammo = other.ammo;
+        cicles_to_reshoot = other.cicles_to_reshoot;
+        actual_cicle = other.actual_cicle;
+        damage = other.damage;
+        pos = other.pos;
+    }
 };
 
 #endif  // COMMON_WEAPON_H
