@@ -27,7 +27,7 @@ enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
 #define MAX_HORIZONTAL_SPEED 5.0f
 
 Game::Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue):
-        weapons({Weapon(0, "ak47", 30, 15, 20,
+        weapons({Weapon(WeaponType::AK47, "ak47", 30, 15, 20,
                         {20, 20})}),  // las weapons deberian estar en el yaml
         message_queue(queue),
         is_running(false),

@@ -33,6 +33,7 @@ private:
     void copyDucks(const std::vector<DuckState>& ducks, const int it);
     void copyGun(const DuckState& duck);
     void copyDebugText(const std::vector<DuckState>& ducks);
+    void copyWeapons(const std::vector<Weapon>& weapons);
 
 public:
     ScreenRenderer(SDL2pp::Renderer& renderer, ResourceManager& resourceManager,

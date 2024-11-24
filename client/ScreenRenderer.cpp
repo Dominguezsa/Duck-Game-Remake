@@ -128,6 +128,18 @@ void ScreenRenderer::copyDebugText(const std::vector<DuckState>& ducks) {
     }
 }
 
+void ScreenRenderer::copyWeapons(const std::vector<Weapon>& weapons) {
+    for (int i = 0; i < (int)weapons.size(); i++) {
+        SDL2pp::Texture& weapon_texture = *resourceManager.getTexture(weapons_by_enum[weapons[i].id]);
+        //renderer.Copy(weapon_texture, SDL2pp::Rect(1, 19, 32, 32),
+         //             SDL2pp::Rect(weapons[i].pos.x, weapons[i].pos.y, 32, 32));
+        renderer.Copy(weapon_texture, SDL2pp::Rect(1, 19, 32, 32),
+                  SDL2pp::Rect(10, 200 + (DUCK_HEIGTH * DUCK_SCALE) / 2.2 - 7,
+                               DUCK_ARM_WIDTH * DUCK_SCALE + 10, DUCK_ARM_HEIGTH * DUCK_SCALE + 10),
+                  0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
+    }
+}
+
 void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     renderer.Clear();
     copyBackground();
@@ -135,7 +147,7 @@ void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     copyDucks(snapshot.ducks, it);  // aca tambien se copian las armas si las portan los patos
     copyDebugText(snapshot.ducks);
 
-    // copyWeapons(snapshot.weapons); //aca se copian las armas que estan en el suelo para pickear
+    copyWeapons(snapshot.weapons); //aca se copian las armas que estan en el suelo para pickear
 
     renderer.Present();
 }
