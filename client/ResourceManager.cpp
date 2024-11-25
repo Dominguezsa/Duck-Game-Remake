@@ -240,6 +240,36 @@ void ResourceManager::load_weapons_rect() {
     SDL2pp::Rect weaponFrame;
     weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
     weaponFrames.emplace("ak47", weaponFrame);
+    
+    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrames.emplace("grenade", weaponFrame);
+
+    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrames.emplace("banana", weaponFrame);
+
+    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrames.emplace("pewPewLaser", weaponFrame);
+
+    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrames.emplace("laserRifle", weaponFrame);
+
+    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrames.emplace("shotgun", weaponFrame);
+
+    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrames.emplace("sniper", weaponFrame);
+
+    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrames.emplace("duelingPistol", weaponFrame);
+
+    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrames.emplace("magnum", weaponFrame);
+
+    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrames.emplace("cowboyPistol", weaponFrame);
+
+    std::cout << "All weapons rects loaded correctly\n";q
+
 }
 
 SDL2pp::Rect ResourceManager::get_weapon_rect(const std::string& key) {
