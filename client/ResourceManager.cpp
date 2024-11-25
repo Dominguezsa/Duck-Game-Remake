@@ -97,7 +97,7 @@ void ResourceManager::loadSprites(uint8_t playerAmount) {
     textures.emplace(
             "ak47",
             std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/ak47.png")));
+                    renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/machineguns.png")));
 
     std::cout << "All textures loaded correctly\n";
 }
