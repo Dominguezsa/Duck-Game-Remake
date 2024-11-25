@@ -53,6 +53,46 @@ public:
         damage = other.damage;
         pos = other.pos;
     }
+
+    Weapon ak47() {
+        return Weapon(WEAPON_TYPE::AK47, "ak47", 30, 5, 10);
+    }
+
+    Weapon grenade() {
+        return Weapon(WEAPON_TYPE::Granade, "grenade", 5, 10, 100);
+    }
+
+    Weapon banana() {
+        return Weapon(WEAPON_TYPE::Banana, "banana", 5, 10, 0);
+    }
+
+    Weapon pewPewLaser() {
+        return Weapon(WEAPON_TYPE::PewPewLaser, "pewPewLaser", 5, 10, 50);
+    }
+
+    Weapon laserRifle() {
+        return Weapon(WEAPON_TYPE::LaserRifle, "laserRifle", 5, 10, 50);
+    }
+
+    Weapon shotgun() {
+        return Weapon(WEAPON_TYPE::Shotgun, "shotgun", 5, 10, 50);
+    }
+
+    Weapon sniper() {
+        return Weapon(WEAPON_TYPE::Sniper, "sniper", 3, 10, 100);
+    }
+
+    Weapon duelingPistol() {
+        return Weapon(WEAPON_TYPE::DuelPistol, "duelingPistol", 5, 10, 50);
+    }
+
+    Weapon magnum() {
+        return Weapon(WEAPON_TYPE::Magnum, "magnum", 5, 10, 50);
+    }
+
+    Weapon cowboyPistol() {
+        return Weapon(WEAPON_TYPE::CowboyPistol, "cowboyPistol", 5, 10, 50);
+    }
 };
 
 #endif  // COMMON_WEAPON_H
