@@ -99,6 +99,51 @@ void ResourceManager::loadSprites(uint8_t playerAmount) {
             std::make_shared<SDL2pp::Texture>(
                     renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/machineguns.png")));
 
+    textures.emplace(
+            "grenade",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/grenades.png")));
+
+    textures.emplace(
+            "banana",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/grenades.png")));
+
+    textures.emplace(
+            "pewPewLaser",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/laser.png")));
+
+    textures.emplace(
+            "laserRifle",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/laser.png")));
+
+    textures.emplace(
+            "shotgun",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/shotguns.png")));
+
+    textures.emplace(
+            "sniper",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/snipers.png")));
+
+    textures.emplace(
+        "duelingPistol",
+        std::make_shared<SDL2pp::Texture>(
+            renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/pistols.png")));
+
+    textures.emplace(
+        "magnum",
+        std::make_shared<SDL2pp::Texture>(
+            renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/pistols.png")));
+
+    textures.emplace(
+        "cowboyPistol",
+        std::make_shared<SDL2pp::Texture>(
+            renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/pistols.png")));
+
     std::cout << "All textures loaded correctly\n";
 }
 
