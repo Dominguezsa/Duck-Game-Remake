@@ -253,6 +253,7 @@ void ResourceManager::loadResources(uint8_t playerAmount) {
     loadMusic();
     loadFonts();
     loadSprites(playerAmount);
+    load_weapons_rect();
     loadAnimationFrames();
 }
 
