@@ -122,7 +122,7 @@ void Game::updateGameState() {
                 Bullet bullet(duck->weapon.id, duck->position.x + DUCK_WIDTH / 2,
                               duck->position.y + DUCK_HEIGHT / 1.2, duck->looking == 1 ? 0 : M_PI,
                               10.0f, 0.0f, duck->looking == 1, duck->weapon.damage);
-                bullet.addDuckHowShot(duck);
+                bullet.addDuckHowShot(duck->duck_id);
                 bullets_by_id.insert({{next_bullet_id, bullet.id}, bullet});
                 next_bullet_id++;
                 duck->weapon.ammo--;
@@ -233,13 +233,17 @@ void Game::updateGameState() {
 
         for (auto it = bullets_by_id.begin(); it != bullets_by_id.end();) {
             Bullet& bullet = it->second;
-
-            if (bullet.duck_how_shot->duck_id != duck->duck_id) {
+            bool errase = false;
+            if (bullet.duck_how_shot != duck->duck_id) {
                 if (duck->position.x < bullet.x + 10 && duck->position.x + DUCK_WIDTH > bullet.x &&
                     duck->position.y < bullet.y + 10 && duck->position.y + DUCK_HEIGHT > bullet.y) {
+
                     duck->life_points -= bullet.damage;
+                    std::cout << "bullet duck id: " << +bullet.duck_how_shot << " shot duck ";
+                    std::cout<< +duck->duck_id << " wit bullet\n";
                     std::cout << "Duck " << +duck->duck_id << " was hit by a bullet\n";
                     std::cout << "lifepoint" << +duck->life_points << std::endl;
+                    errase = true;
                 }
             }
 
@@ -248,7 +252,7 @@ void Game::updateGameState() {
 
 
             // So the bullets dont live forever
-            if (bullet.x < 0 || bullet.x > 1200 || bullet.y < 0 || bullet.y > 1200) {
+            if (bullet.x < 0 || bullet.x > 1200 || bullet.y < 0 || bullet.y > 1200 || errase) {
                 it = bullets_by_id.erase(it);
                 continue;
             } else {

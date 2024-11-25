@@ -20,7 +20,7 @@ public:
                        // resta la velocidad
     uint8_t damage;
 
-    Duck* duck_how_shot;
+    uint8_t duck_how_shot;
 
     Bullet(uint8_t id, float x, float y, float angle, float speed, float time, bool going_right,
            uint8_t damage);
@@ -29,7 +29,7 @@ public:
     Bullet();
     void move();
 
-    void addDuckHowShot(Duck* duck);
+    void addDuckHowShot(uint8_t duck_id);
 
     void update(const Bullet& other);
 };
