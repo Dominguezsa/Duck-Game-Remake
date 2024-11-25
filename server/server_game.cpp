@@ -235,7 +235,7 @@ void Game::updateGameState() {
             Bullet& bullet = it->second;
             bool errase = false;
             if (bullet.duck_how_shot != duck->duck_id) {
-                if (duck->position.x < bullet.x + 10 && duck->position.x + DUCK_WIDTH > bullet.x &&
+                if (duck->position.x == bullet.x &&
                     duck->position.y < bullet.y + 10 && duck->position.y + DUCK_HEIGHT > bullet.y) {
 
                     duck->receive_damage(bullet.damage);
