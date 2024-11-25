@@ -238,7 +238,7 @@ void Game::updateGameState() {
                 if (duck->position.x < bullet.x + 10 && duck->position.x + DUCK_WIDTH > bullet.x &&
                     duck->position.y < bullet.y + 10 && duck->position.y + DUCK_HEIGHT > bullet.y) {
 
-                    duck->life_points -= bullet.damage;
+                    duck->receive_damage(bullet.damage);
                     std::cout << "bullet duck id: " << +bullet.duck_how_shot << " shot duck ";
                     std::cout<< +duck->duck_id << " wit bullet\n";
                     std::cout << "Duck " << +duck->duck_id << " was hit by a bullet\n";
