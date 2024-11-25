@@ -116,20 +116,12 @@ void Game::updateGameState() {
             }
         }
 
-        // for (const auto& weapon: weapons) {
-        //     // std::cout << "The weaponType of the weapon is: " << weapon.getType() << std::endl;
-        //     for (const auto& duck: ducks) {
-        //         // std::cout << "Checking if the weapon intersects with a duck\n";
-        //         // Here i need to check if the duck is colliding with the weapon
-        //     }
-        // }
-
         if (duck->is_shooting && duck->weapon.ammo > 0) {
             // std::cout << "Trying to shoot\n";
             if (duck->weapon.actual_cicle == 0) {
-                Bullet bullet(duck->weapon.id, duck->position.x, duck->position.y + DUCK_HEIGHT / 2,
-                              duck->looking == 1 ? 0 : M_PI, 10.0f, 0.0f, duck->looking == 1,
-                              duck->weapon.damage);
+                Bullet bullet(duck->weapon.id, duck->position.x + DUCK_WIDTH / 2,
+                              duck->position.y + DUCK_HEIGHT / 1.2, duck->looking == 1 ? 0 : M_PI,
+                              10.0f, 0.0f, duck->looking == 1, duck->weapon.damage);
                 bullets_by_id.insert({{next_bullet_id, bullet.id}, bullet});
                 next_bullet_id++;
                 duck->weapon.ammo--;

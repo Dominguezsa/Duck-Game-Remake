@@ -64,6 +64,7 @@ void ScreenRenderer::copyGun(const DuckState& duck) {
     int flip = duck.looking == 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     int x_position = duck.looking == 0 ? duck.position.x + (DUCK_ARM_WIDTH * DUCK_SCALE) / 3.5 - 6 :
                                          duck.position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9;
+    // Refactor needed for the position of the weapons
     renderer.Copy(weapon_texture, SDL2pp::Rect(1, 19, 32, 32),
                   SDL2pp::Rect(x_position, duck.position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2 - 7,
                                DUCK_ARM_WIDTH * DUCK_SCALE + 10, DUCK_ARM_HEIGTH * DUCK_SCALE + 10),
@@ -136,11 +137,6 @@ void ScreenRenderer::copyWeapons(const std::vector<Weapon>& weapons) {
                 *resourceManager.getTexture(weapons_by_enum[weapons[i].id]);
         renderer.Copy(weapon_texture, SDL2pp::Rect(1, 19, 32, 32),
                       SDL2pp::Rect(weapons[i].pos.x, weapons[i].pos.y, 64, 64));
-        // renderer.Copy(weapon_texture, SDL2pp::Rect(1, 19, 32, 32),
-        //           SDL2pp::Rect(10, 200 + (DUCK_HEIGTH * DUCK_SCALE) / 2.2 - 7,
-        //                        DUCK_ARM_WIDTH * DUCK_SCALE + 10, DUCK_ARM_HEIGTH * DUCK_SCALE +
-        //                        10),
-        //           0.0, SDL2pp::NullOpt, SDL_FLIP_HORIZONTAL);
     }
 }
 
