@@ -8,6 +8,8 @@
 
 #include "../common/duck.h"
 
+#include "../common/types/weapon_type.h"
+
 #include "DuckGraphicData.h"
 #include "ResourceManager.h"
 
@@ -23,6 +25,8 @@ public:
     void update_animation_frame(int it);
     std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> get_animation_frames(int it);
     void loadDucks(std::vector<DuckState>& ducks);
+
+    SDL2pp::Rect get_weapon_rect(const std::string& key);
     // std::vector<SDL2pp::Rect> get_animation_arms(int it);
     ~AnimationHelper() = default;
 };

@@ -191,17 +191,6 @@ void ResourceManager::loadAnimationFrames() {
 
     animationFrames.emplace("duck_jumping_arms", duckFrames);
 
-    // duckFrames.clear();
-
-    // for (int i = 0; i < 1; i++) {
-    //     duckFrames.emplace_back(SDL2pp::Rect(1, 14,
-    //                                          16, 16));
-    // }
-
-    // weaponFrames.emplace("ak47", duckFrames);
-
-    // Loading ducking animation
-
     duckFrames.clear();
 
     duckFrames.emplace_back(
@@ -244,6 +233,17 @@ void ResourceManager::loadAnimationFrames() {
 
 
     std::cout << "All animation frames loaded correctly\n";
+}
+
+
+void ResourceManager::load_weapons_rect() {
+    SDL2pp::Rect weaponFrame;
+    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrames.emplace("ak47", weaponFrame);
+}
+
+SDL2pp::Rect ResourceManager::get_weapon_rect(const std::string& key) {
+    return weaponFrames[key];
 }
 
 void ResourceManager::loadResources(uint8_t playerAmount) {

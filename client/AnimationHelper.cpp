@@ -54,3 +54,7 @@ std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> AnimationHelper::get_animatio
 
     return frames;
 }
+
+SDL2pp::Rect AnimationHelper::get_weapon_rect(const std::string& key) {
+    return resourceManager.get_weapon_rect(key);
+}
