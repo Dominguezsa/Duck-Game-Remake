@@ -46,8 +46,12 @@ Bullet::Bullet():
 
 void Bullet::move() {
     // Update the position of the bullet based on its speed and angle
-    float delta_x = speed * cos(angle);
-    float delta_y = speed * sin(angle);
+    // If i use this, the deltas are always positive and the bullet always goes to the right
+    // float delta_x = speed * cos(angle);
+    // float delta_y = speed * sin(angle);
+
+    float delta_x = speed;
+    float delta_y = 0.0f;
 
     if (going_right) {
         x += delta_x;
