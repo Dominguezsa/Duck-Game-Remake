@@ -49,6 +49,8 @@ void ResourceManager::loadSFX() {
                 std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom2.wav"));
     sfx.emplace("boom3",
                 std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom3.wav"));
+    sfx.emplace("boom11",
+                std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom11.wav"));
     std::cout << "Every sfx loaded correctly\n";
 }
 

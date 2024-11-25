@@ -22,8 +22,8 @@
 #include "lobby.h"
 
 #define FPS 60
-#define OST_VOLUME 0
-#define SFX_VOLUME 20
+#define OST_VOLUME 10
+#define SFX_VOLUME 5
 
 #define GRAPHIC_QUEUE_SIZE 50
 
@@ -49,7 +49,7 @@ GameClient::GameClient(const int window_width, const int window_height,
         animationHelper(resourceManager),
         screenRenderer(renderer, resourceManager, animationHelper),
         keyboardState(std::make_shared<const uint8_t*>(SDL_GetKeyboardState(nullptr))),
-        commandCenter(messagesForServer, keyboardState, quit),
+        commandCenter(messagesForServer, keyboardState, quit, mixer, resourceManager),
         playerAmount(0) {}
 
 void GameClient::run() {

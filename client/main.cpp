@@ -9,7 +9,7 @@
 #define WINDOW_NAME "DuckGame"
 #define WINDOW_WIDTH 1200
 #define WINDOW_HEIGHT 700
-#define CHUNK_SIZE_AUDIO 1024
+#define CHUNK_SIZE_AUDIO 2048
 
 
 int main(int argc, char* argv[]) {
