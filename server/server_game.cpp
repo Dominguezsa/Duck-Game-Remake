@@ -119,7 +119,7 @@ void Game::updateGameState() {
         if (duck->is_shooting && duck->weapon.ammo > 0) {
             // std::cout << "Trying to shoot\n";
             if (duck->weapon.actual_cicle == 0) {
-                Bullet bullet(duck->weapon.id, duck->position.x + DUCK_WIDTH / 2,
+                Bullet bullet(duck->weapon.id, duck->position.x + DUCK_WIDTH,
                               duck->position.y + DUCK_HEIGHT / 1.2, duck->looking == 1 ? 0 : M_PI,
                               10.0f, 0.0f, duck->looking == 1, duck->weapon.damage);
                 bullet.addDuckHowShot(duck->duck_id);
