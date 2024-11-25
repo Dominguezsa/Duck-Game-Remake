@@ -253,8 +253,16 @@ void Game::updateGameState() {
 
     std::shared_ptr<std::vector<Bullet>> bullets_in_game = std::make_shared<std::vector<Bullet>>();
 
-    std::transform(bullets_by_id.begin(), bullets_by_id.end(), std::back_inserter(*bullets_in_game),
-                   [](const auto& pair) { return pair.second; });
+    for (auto& bullet_pair: bullets_by_id) {
+
+        Bullet& bullet = bullet_pair.second;
+        bullet.move();
+        bullets_in_game->push_back(bullet);
+    }
+
+    // std::transform(bullets_by_id.begin(), bullets_by_id.end(),
+    // std::back_inserter(*bullets_in_game),
+    //                [](const auto& pair) { return pair.second; });
 
     Snapshot snapshot(*duck_states, *bullets_in_game, weapons);
     monitor.push_to_all(std::make_shared<Snapshot>(snapshot));
