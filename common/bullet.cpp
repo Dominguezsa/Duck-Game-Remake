@@ -74,3 +74,7 @@ void Bullet::update(const Bullet& other) {
     going_right = other.going_right;
     damage = other.damage;
 }
+
+void Bullet::addDuckHowShot(Duck* duck) {
+    duck_how_shot = duck;
+}

@@ -122,6 +122,7 @@ void Game::updateGameState() {
                 Bullet bullet(duck->weapon.id, duck->position.x + DUCK_WIDTH / 2,
                               duck->position.y + DUCK_HEIGHT / 1.2, duck->looking == 1 ? 0 : M_PI,
                               10.0f, 0.0f, duck->looking == 1, duck->weapon.damage);
+                bullet.addDuckHowShot(duck);
                 bullets_by_id.insert({{next_bullet_id, bullet.id}, bullet});
                 next_bullet_id++;
                 duck->weapon.ammo--;
@@ -230,6 +231,32 @@ void Game::updateGameState() {
 
         duck->is_falling = duck->vertical_velocity > 0;
 
+        for (auto it = bullets_by_id.begin(); it != bullets_by_id.end();) {
+            Bullet& bullet = it->second;
+
+            if (bullet.duck_how_shot->duck_id != duck->duck_id) {
+                if (duck->position.x < bullet.x + 10 && duck->position.x + DUCK_WIDTH > bullet.x &&
+                    duck->position.y < bullet.y + 10 && duck->position.y + DUCK_HEIGHT > bullet.y) {
+                    duck->life_points -= bullet.damage;
+                    std::cout << "Duck " << +duck->duck_id << " was hit by a bullet\n";
+                    std::cout << "lifepoint" << +duck->life_points << std::endl;
+                }
+            }
+
+
+            bullet.move();
+
+
+            // So the bullets dont live forever
+            if (bullet.x < 0 || bullet.x > 1200 || bullet.y < 0 || bullet.y > 1200) {
+                it = bullets_by_id.erase(it);
+                continue;
+            } else {
+                it++;
+            }
+        }
+
+
         // Update duck state
         DuckState state(duck->name, duck->duck_id, duck->life_points, duck->looking, duck->position,
                         duck->is_alive ? 1 : 0, duck->is_running ? 1 : 0, duck->is_jumping ? 1 : 0,
@@ -244,18 +271,6 @@ void Game::updateGameState() {
     }
 
     std::shared_ptr<std::vector<Bullet>> bullets_in_game = std::make_shared<std::vector<Bullet>>();
-
-    for (auto it = bullets_by_id.begin(); it != bullets_by_id.end();) {
-        Bullet& bullet = it->second;
-        bullet.move();
-        // So the bullets dont live forever
-        if (bullet.x < 0 || bullet.x > 1200 || bullet.y < 0 || bullet.y > 1200) {
-            it = bullets_by_id.erase(it);
-            continue;
-        } else {
-            it++;
-        }
-    }
 
     std::transform(bullets_by_id.begin(), bullets_by_id.end(), std::back_inserter(*bullets_in_game),
                    [](const auto& pair) { return pair.second; });

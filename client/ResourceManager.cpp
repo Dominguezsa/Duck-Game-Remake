@@ -268,7 +268,7 @@ void ResourceManager::load_weapons_rect() {
     weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
     weaponFrames.emplace("cowboyPistol", weaponFrame);
 
-    std::cout << "All weapons rects loaded correctly\n";q
+    std::cout << "All weapons rects loaded correctly\n";
 
 }
 

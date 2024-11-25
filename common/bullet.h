@@ -2,7 +2,7 @@
 #define BULLET_H
 
 #include <cstdint>
-
+#include "duck.h"
 
 class Bullet {
 public:
@@ -20,12 +20,16 @@ public:
                        // resta la velocidad
     uint8_t damage;
 
+    Duck* duck_how_shot;
+
     Bullet(uint8_t id, float x, float y, float angle, float speed, float time, bool going_right,
            uint8_t damage);
     Bullet(uint8_t id, float x, float y, bool going_right);
     Bullet(const Bullet& other);
     Bullet();
     void move();
+
+    void addDuckHowShot(Duck* duck);
 
     void update(const Bullet& other);
 };
