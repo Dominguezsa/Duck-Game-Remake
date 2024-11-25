@@ -27,6 +27,7 @@ public:
     void loadDucks(std::vector<DuckState>& ducks);
 
     SDL2pp::Rect get_weapon_rect(const std::string& key);
+    SDL2pp::Rect get_bullet_rect(const std::string& key);
     // std::vector<SDL2pp::Rect> get_animation_arms(int it);
     ~AnimationHelper() = default;
 };

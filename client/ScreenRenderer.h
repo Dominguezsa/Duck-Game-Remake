@@ -27,6 +27,9 @@ private:
             "grenade", "banana", "pewPewLaser", "laserRifle", "ak47", "duelingPistol",
             "cowboyPistol", "magnum", "shotgun", "sniper"};
 
+    std::vector<std::string> bullets_by_enum = { "grenade", "banana", "pewPewLaser", "laserRifle", "ak47", "duelingPistol",
+            "cowboyPistol", "magnum", "shotgun", "sniper"};
+
 
     void copyBackground();
     void copyPlatforms();

@@ -147,8 +147,9 @@ void ScreenRenderer::copyBullets(const std::vector<Bullet>& bullets) {
     // std::cout << "I have to keep drawing " << bullets.size() << " bullets\n";
 
     for (const auto& bullet: bullets) {
-        SDL2pp::Texture& bullet_texture = *resourceManager.getTexture("ak47");
-        renderer.Copy(bullet_texture, SDL2pp::Rect(2, 205, 8, 8),
+        SDL2pp::Texture& bullet_texture = *resourceManager.getTexture(bullets_by_enum[bullet.id]);
+        SDL2pp::Rect bullet_frame = animationHelper.get_bullet_rect(bullets_by_enum[bullet.id]);
+        renderer.Copy(bullet_texture, bullet_frame,
                       SDL2pp::Rect(bullet.x, bullet.y, 16, 16), 0.0, SDL2pp::NullOpt,
                       bullet.going_right ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
     }

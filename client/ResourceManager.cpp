@@ -269,10 +269,20 @@ void ResourceManager::load_weapons_rect() {
     weaponFrames.emplace("cowboyPistol", weaponFrame);
 
     std::cout << "All weapons rects loaded correctly\n";
-
 }
 
+void ResourceManager::load_bullets_rect() {
+    SDL2pp::Rect bulletFrame;
+    bulletFrame =  SDL2pp::Rect(2, 205, 8, 8);
+    weaponFrames.emplace("ak47", bulletFrame);
+}
+
+
 SDL2pp::Rect ResourceManager::get_weapon_rect(const std::string& key) {
+    return weaponFrames[key];
+}
+
+SDL2pp::Rect ResourceManager::get_bullet_rect(const std::string& key) {
     return weaponFrames[key];
 }
 
@@ -284,6 +294,7 @@ void ResourceManager::loadResources(uint8_t playerAmount) {
     loadFonts();
     loadSprites(playerAmount);
     load_weapons_rect();
+    load_bullets_rect();
     loadAnimationFrames();
 }
 
