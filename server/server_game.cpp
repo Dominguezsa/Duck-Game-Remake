@@ -253,16 +253,22 @@ void Game::updateGameState() {
 
     std::shared_ptr<std::vector<Bullet>> bullets_in_game = std::make_shared<std::vector<Bullet>>();
 
-    for (auto& bullet_pair: bullets_by_id) {
-
-        Bullet& bullet = bullet_pair.second;
+    for (auto it = bullets_by_id.begin(); it != bullets_by_id.end();) {
+        Bullet& bullet = it->second;
         bullet.move();
-        bullets_in_game->push_back(bullet);
+        // So the bullets dont live forever
+        if (bullet.x < 0 || bullet.x > 1200 || bullet.y < 0 || bullet.y > 1200) {
+            it = bullets_by_id.erase(it);
+            continue;
+        } else {
+            it++;
+        }
     }
 
-    // std::transform(bullets_by_id.begin(), bullets_by_id.end(),
-    // std::back_inserter(*bullets_in_game),
-    //                [](const auto& pair) { return pair.second; });
+    std::transform(bullets_by_id.begin(), bullets_by_id.end(), std::back_inserter(*bullets_in_game),
+                   [](const auto& pair) { return pair.second; });
+
+    // std::cout << "Theres " << bullets_in_game->size() << " bullets in the game\n";
 
     Snapshot snapshot(*duck_states, *bullets_in_game, weapons);
     monitor.push_to_all(std::make_shared<Snapshot>(snapshot));

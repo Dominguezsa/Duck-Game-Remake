@@ -137,6 +137,8 @@ void GameClient::updateDuckStates() {
 
     while (graphic_queue.try_pop(snapshot_from_queue)) {}
 
+    // std::cout << "I received: " << snapshot_from_queue.bullets.size() << " bullets\n";
+
     snapshot.updateSnapshot(snapshot_from_queue.ducks, snapshot_from_queue.bullets,
                             snapshot_from_queue.weapons);
 }

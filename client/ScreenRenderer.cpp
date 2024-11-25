@@ -146,17 +146,13 @@ void ScreenRenderer::copyWeapons(const std::vector<Weapon>& weapons) {
 
 void ScreenRenderer::copyBullets(const std::vector<Bullet>& bullets) {
 
+    // std::cout << "I have to keep drawing " << bullets.size() << " bullets\n";
+
     for (const auto& bullet: bullets) {
         SDL2pp::Texture& bullet_texture = *resourceManager.getTexture("ak47");
         renderer.Copy(bullet_texture, SDL2pp::Rect(2, 205, 8, 8),
                       SDL2pp::Rect(bullet.x, bullet.y, 16, 16));
     }
-
-    // for (int i = 0; i < (int)bullets.size(); i++) {
-    //     SDL2pp::Texture& bullet_texture = *resourceManager.getTexture("ak57_bullet");
-    //     renderer.Copy(bullet_texture, SDL2pp::NullOpt,
-    //                   SDL2pp::Rect(bullets[i].position.x, bullets[i].position.y, 10, 10));
-    // }
 }
 
 void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
