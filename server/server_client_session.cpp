@@ -70,6 +70,7 @@ void ClientSession::run() {
 }
 
 void ClientSession::run_lobby_loop() {
+    // aprovechen syslog en vez de loggear por std::cout
     std::cout << "Entering lobby mode\n";
     bool success = false;
     try {
@@ -101,6 +102,7 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
     identity.name = player_name;
     duck_info.name = player_name;
 
+    // falta manejar el caso default (que pasa si recibo un codigo no esperado?)
     switch (action) {
         case CMD_CREATE: {
             // (2)
@@ -135,6 +137,8 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
         }
     }
     if (success) {
+        // coincido con este comentario, para el servidor el color del pato debería ser irrelevante
+
         // El atributo color podria no estar, y que se le asocie
         // un color del lado del cliente en base al id (que siempre
         // va a ser unico).

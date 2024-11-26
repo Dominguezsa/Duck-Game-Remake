@@ -42,7 +42,8 @@ ResourceManager::ResourceManager(SDL2pp::Renderer& renderer): renderer(renderer)
 }
 
 void ResourceManager::loadSFX() {
-
+    // utilicen una predefined macro para evitar hardcodear los paths
+    // ahora solo me va a funcionar si instalo el juego, pero capaz quiero compilarlo en modo debug para desarrollar
     sfx.emplace("boom1",
                 std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom1.wav"));
     sfx.emplace("boom2",

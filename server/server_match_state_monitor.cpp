@@ -13,7 +13,8 @@ MatchStateMonitor::MatchStateMonitor(uint8_t limit):
 
 void MatchStateMonitor::add_player(Queue<std::shared_ptr<Snapshot>>* q, uint8_t& id) {
     std::lock_guard<std::mutex> lock(data_mtx);
-
+    // siempre traten de dejar el cuerpo de las condiciones minimizado
+    // aca por ejemplo podrían manejar por la negativa y remover un nivel de indentacion
     if (accepting_players) {
         id = assigned_ids;
         requester_queues[id] = q;

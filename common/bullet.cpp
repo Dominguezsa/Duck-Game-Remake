@@ -10,8 +10,8 @@ Bullet::Bullet(uint8_t id, float x, float y, float angle, float speed, float tim
         angle(angle),
         speed(speed),
         time(time),
-        going_right(going_right),
-        damage(damage) {}
+        damage(damage),
+        going_right(going_right) {}
 
 Bullet::Bullet(const Bullet& other):
         id(other.id),

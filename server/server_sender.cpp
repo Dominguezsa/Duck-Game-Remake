@@ -12,12 +12,14 @@ void SenderThread::clear_queue() {
         } while (!is_empty);
     } catch (const ClosedQueue& e) {
         syslog(LOG_ERR, "%s", e.what());
+        // ojito con cerrar syslog varias veces
         closelog();
     }
 }
 
 void SenderThread::stop() {
     this->_is_alive = false;
+    // este clear_queue no hace falta
     clear_queue();
 }
 

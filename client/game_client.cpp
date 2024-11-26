@@ -93,6 +93,7 @@ void GameClient::run() {
 
     // bool quit = false;
 
+    // por que no utilizaron constantRateLoop que está definida en common?
     while (true) {
         updateDuckStates();
         mainLoop(iteration);

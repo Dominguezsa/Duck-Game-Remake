@@ -15,6 +15,7 @@
 
 #include "server_gameloop_message.h"
 
+// bien hecho. esto es lo que se conoce como table methods. como alternativa podrían haber hecho un patron command
 class PlayerActionHandler {
 
 private:

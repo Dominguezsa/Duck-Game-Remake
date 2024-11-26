@@ -73,6 +73,8 @@ bool Game::checkPlatformCollision(const Position& duck_pos, float duck_width, fl
 }
 
 void Game::updateGameState() {
+    // splittear este metodo en funciones mas pequeñas, es dificil de seguir con esta longitud
+
     // const float gravity = 0.5f;
     // const float FLUTTER_FORCE = -0.3f;
     // const float max_fall_speed = 15.0f;

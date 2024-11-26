@@ -23,6 +23,7 @@ int main(int argc, char* argv[]) {
         GameClient gameClient(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME, CHUNK_SIZE_AUDIO, hostname,
                               servname);
         while (true) {
+            // en algun momento podría querer salir de acá (sin reventar con una excepcion)
             gameClient.run_lobby();
             gameClient.run();
         }
