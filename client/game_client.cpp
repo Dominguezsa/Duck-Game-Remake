@@ -49,8 +49,9 @@ GameClient::GameClient(const int window_width, const int window_height,
         animationHelper(resourceManager),
         screenRenderer(renderer, resourceManager, animationHelper),
         keyboardState(std::make_shared<const uint8_t*>(SDL_GetKeyboardState(nullptr))),
-        commandCenter(messagesForServer, keyboardState, quit, mixer, resourceManager),
-        playerAmount(0) {}
+        commandCenter(messagesForServer, keyboardState, quit),
+        playerAmount(0),
+        audioEngine(snapshot.ducks, mixer, resourceManager) {}
 
 void GameClient::run() {
     ClientProtocol protocol(socket);
@@ -62,6 +63,9 @@ void GameClient::run() {
 
 
     // Muuuy feo, pero por ahora pruebo a ver si anda
+    // Acá estoy esperando a la primer snapshot existente que me indica información de como
+    // armar todo lo demás, por eso está acá y es bloqueante
+    // Se debería cambiar igual una vez que tengamos el lobby en condiciones
     Snapshot ducksStates = graphic_queue.pop();
 
     playerAmount = ducksStates.ducks.size();
@@ -137,8 +141,6 @@ void GameClient::updateDuckStates() {
 
     while (graphic_queue.try_pop(snapshot_from_queue)) {}
 
-    // std::cout << "I received: " << snapshot_from_queue.bullets.size() << " bullets\n";
-
     snapshot.updateSnapshot(snapshot_from_queue.ducks, snapshot_from_queue.bullets,
                             snapshot_from_queue.weapons);
 }
@@ -151,23 +153,16 @@ void GameClient::mainLoop(const int it) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN && event.key.repeat) {
-            // std::cout << "This is a repeated keydown" << std::endl;
-            // std::cout << "Key: " << event.key.keysym.sym << std::endl;
             continue;
         }
         if (event.type == SDL_KEYDOWN) {
             animationHelper.set_run_anim_start(it);
         }
-        // Por ahora, como estos son los únicos eventos que reciben algo
-        // los trato de forma separada
-        // if (event.type == SDL_QUIT ||
-        //     (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
-        //     quit = true;
-        // }
         commandCenter.processEvent(event);
     }
 
     screenRenderer.updateScreen(snapshot, it);
+    audioEngine.playAudio();
 }
 
 

@@ -8,13 +8,8 @@
 #include "../common/types/action_type.h"
 
 CommandCenter::CommandCenter(Queue<uint8_t>& messagesForServer,
-                             std::shared_ptr<const uint8_t*> keyboardState, bool& quit,
-                             SDL2pp::Mixer& mixer, ResourceManager& resourceManager):
-        messagesForServer(messagesForServer),
-        keyboardState(keyboardState),
-        quit(quit),
-        mixer(mixer),
-        resourceManager(resourceManager) {
+                             std::shared_ptr<const uint8_t*> keyboardState, bool& quit):
+        messagesForServer(messagesForServer), keyboardState(keyboardState), quit(quit) {
 
     init_handlers();
 }
@@ -71,10 +66,7 @@ void CommandCenter::handle_key_down_s() {
 
 void CommandCenter::handle_key_down_space() { messagesForServer.push(JUMP_KEY_DOWN); }
 
-void CommandCenter::handle_key_down_f() {
-    messagesForServer.push(SHOOT_KEY_DOWN);
-    mixer.PlayChannel(-1, *resourceManager.getSFX("boom11"), -1);
-}
+void CommandCenter::handle_key_down_f() { messagesForServer.push(SHOOT_KEY_DOWN); }
 
 void CommandCenter::handle_key_up_d() {
     if ((*keyboardState)[SDL_SCANCODE_A]) {
@@ -112,9 +104,6 @@ void CommandCenter::handle_key_up_s() {
 
 void CommandCenter::handle_key_up_space() { messagesForServer.push(JUMP_KEY_UP); }
 
-void CommandCenter::handle_key_up_f() {
-    messagesForServer.push(SHOOT_KEY_UP);
-    mixer.FadeOutChannel(-1, 200);
-}
+void CommandCenter::handle_key_up_f() { messagesForServer.push(SHOOT_KEY_UP); }
 
 CommandCenter::~CommandCenter() {}

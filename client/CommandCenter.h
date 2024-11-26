@@ -39,13 +39,9 @@ private:
             {std::make_pair(SDL_KEYUP, SDLK_SPACE), &CommandCenter::handle_key_up_space},
             {std::make_pair(SDL_KEYUP, SDLK_f), &CommandCenter::handle_key_up_f}};
 
-    SDL2pp::Mixer& mixer;
-    ResourceManager& resourceManager;
-
-
 public:
     CommandCenter(Queue<uint8_t>& messagesForServer, std::shared_ptr<const uint8_t*> keyboardState,
-                  bool& quit, SDL2pp::Mixer& mixer, ResourceManager& resourceManager);
+                  bool& quit);
     void add_handler(std::pair<SDL_EventType, SDL_Keycode>, void (CommandCenter::*handler)());
     void init_handlers();
     // Estos dos son medio especiales porque reciben algo, y los demás handlers no, así que ver

@@ -179,6 +179,9 @@ void Duck::duck(bool activar) {
 
 void Duck::shoot(bool activar) {
     if (activar) {
+        if (weapon.ammo == 0 || this->weapon.getType() == NoneType) {
+            return;
+        }
         is_shooting = true;
         this->weapon.actual_cicle = 0;
         // std::cout << "Duck is shooting" << std::endl;
@@ -198,14 +201,7 @@ void Duck::receive_damage(uint8_t danio) {
     }
 }
 
-void Duck::pick_up_weapon(const Weapon& weapon) {
-    // std::cout << "The weapon type of the picked up weapon is: " << weapon.getType() << std::endl;
-    // std::cout << "The weapon type of the duck's weapon is: " << this->weapon.getType() <<
-    // std::endl;
-    this->weapon.update(weapon);
-    // std::cout << "Now, the weapon type of the duck's weapon is: " << this->weapon.getType() <<
-    // std::endl;
-}
+void Duck::pick_up_weapon(const Weapon& weapon) { this->weapon.update(weapon); }
 
 void Duck::throw_weapon() { weapon = Weapon(); }
 

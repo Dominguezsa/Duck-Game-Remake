@@ -23,6 +23,7 @@
 #include "../common/types/duck_state.h"
 
 #include "AnimationHelper.h"
+#include "AudioEngine.h"
 #include "CommandCenter.h"
 #include "ResourceManager.h"
 #include "ScreenRenderer.h"
@@ -53,6 +54,7 @@ private:
     std::shared_ptr<const uint8_t*> keyboardState;
     CommandCenter commandCenter;
     uint8_t playerAmount;
+    AudioEngine audioEngine;
 
 
 public:
