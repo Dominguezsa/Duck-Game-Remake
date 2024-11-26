@@ -97,7 +97,8 @@ void ResourceManager::loadSprites(uint8_t playerAmount) {
     textures.emplace(
             "ak47",
             std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/machineguns.png")));
+                    renderer,
+                    SDL2pp::Surface("/var/duck_game/data/sprites/weapons/machineguns.png")));
 
     textures.emplace(
             "grenade",
@@ -130,19 +131,19 @@ void ResourceManager::loadSprites(uint8_t playerAmount) {
                     renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/snipers.png")));
 
     textures.emplace(
-        "duelingPistol",
-        std::make_shared<SDL2pp::Texture>(
-            renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/pistols.png")));
+            "duelingPistol",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/pistols.png")));
 
     textures.emplace(
-        "magnum",
-        std::make_shared<SDL2pp::Texture>(
-            renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/pistols.png")));
+            "magnum",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/pistols.png")));
 
     textures.emplace(
-        "cowboyPistol",
-        std::make_shared<SDL2pp::Texture>(
-            renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/pistols.png")));
+            "cowboyPistol",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/pistols.png")));
 
     std::cout << "All textures loaded correctly\n";
 }
@@ -240,7 +241,7 @@ void ResourceManager::load_weapons_rect() {
     SDL2pp::Rect weaponFrame;
     weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
     weaponFrames.emplace("ak47", weaponFrame);
-    
+
     weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
     weaponFrames.emplace("grenade", weaponFrame);
 
@@ -273,18 +274,14 @@ void ResourceManager::load_weapons_rect() {
 
 void ResourceManager::load_bullets_rect() {
     SDL2pp::Rect bulletFrame;
-    bulletFrame =  SDL2pp::Rect(2, 205, 8, 8);
-    weaponFrames.emplace("ak47", bulletFrame);
+    bulletFrame = SDL2pp::Rect(2, 205, 8, 8);
+    bulletFrames.emplace("ak47", bulletFrame);
 }
 
 
-SDL2pp::Rect ResourceManager::get_weapon_rect(const std::string& key) {
-    return weaponFrames[key];
-}
+SDL2pp::Rect ResourceManager::get_weapon_rect(const std::string& key) { return weaponFrames[key]; }
 
-SDL2pp::Rect ResourceManager::get_bullet_rect(const std::string& key) {
-    return weaponFrames[key];
-}
+SDL2pp::Rect ResourceManager::get_bullet_rect(const std::string& key) { return bulletFrames[key]; }
 
 void ResourceManager::loadResources(uint8_t playerAmount) {
     std::cout << "Trying to load the sfx\n";
