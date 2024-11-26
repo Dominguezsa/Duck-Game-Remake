@@ -119,11 +119,27 @@ void Game::updateGameState() {
         if (duck->is_shooting && duck->weapon.ammo > 0) {
             // std::cout << "Trying to shoot\n";
             if (duck->weapon.actual_cicle == 0) {
+                // std::cout << "Im creating a bullet with this duck_id: " << +duck->duck_id <<
+                // "\n";
                 Bullet bullet(duck->weapon.id, duck->position.x + DUCK_WIDTH,
                               duck->position.y + DUCK_HEIGHT / 1.2, duck->looking == 1 ? 0 : M_PI,
-                              10.0f, 0.0f, duck->looking == 1, duck->weapon.damage);
-                bullet.addDuckHowShot(duck->duck_id);
+                              2.0f, 0.0f, duck->looking == 1, duck->weapon.damage, duck->duck_id);
+                // bullet.addDuckHowShot(duck->duck_id);
+
+                // std::cout << "########\nThis duck: " << +duck->duck_id << " shot a bullet with
+                // this id " << +bullet.duck_how_shot << "\n" << "#########";
+
                 bullets_by_id.insert({{next_bullet_id, bullet.id}, bullet});
+                // No se por qué, no tengo ni la menor idea de por qué, pero antes de poner este
+                // print acá abajo, el duck_id de la bala se seteaba solo en 0, y ahora aunque esté
+                // comentado, no, funciona bien No creo que tenga que ver con alguna race condition
+                // porque este map está solo en este thread, nadie accede a esto en ningún otro lado
+                // Puede ser que tenga algo que ver con el compilador quizás, a lo mejor como nunca
+                // hicimos un clean o algo parecido para borrar todo y compilar de 0, quedó algo
+                // raro en el binario que nunca se cambiaba
+
+                // std::cout << "The bullet after being inserted has this duck_id: " <<
+                // +bullets_by_id[{next_bullet_id, bullet.id}].duck_how_shot << "\n";
                 next_bullet_id++;
                 duck->weapon.ammo--;
                 duck->weapon.actual_cicle++;
@@ -231,35 +247,6 @@ void Game::updateGameState() {
 
         duck->is_falling = duck->vertical_velocity > 0;
 
-        for (auto it = bullets_by_id.begin(); it != bullets_by_id.end();) {
-            Bullet& bullet = it->second;
-            bool errase = false;
-            if (bullet.duck_how_shot != duck->duck_id) {
-                if (duck->position.x < bullet.x + 10 && duck->position.x + DUCK_WIDTH > bullet.x &&
-                    duck->position.y < bullet.y + 10 && duck->position.y + DUCK_HEIGHT > bullet.y) {
-
-                    duck->receive_damage(bullet.damage);
-                    std::cout << "bullet duck id: " << +bullet.duck_how_shot << " shot duck ";
-                    std::cout<< +duck->duck_id << " wit bullet\n";
-                    std::cout << "Duck " << +duck->duck_id << " was hit by a bullet\n";
-                    std::cout << "lifepoint" << +duck->life_points << std::endl;
-                    errase = true;
-                }
-            }
-
-
-            bullet.move();
-
-
-            // So the bullets dont live forever
-            if (bullet.x < 0 || bullet.x > 1200 || bullet.y < 0 || bullet.y > 1200 || errase) {
-                it = bullets_by_id.erase(it);
-                continue;
-            } else {
-                it++;
-            }
-        }
-
 
         // Update duck state
         DuckState state(duck->name, duck->duck_id, duck->life_points, duck->looking, duck->position,
@@ -272,6 +259,65 @@ void Game::updateGameState() {
 
         duck->update_state(state);
         duck_states->push_back(state);
+    }
+
+
+    // Now updating the bullets
+    for (auto it = bullets_by_id.begin(); it != bullets_by_id.end();) {
+
+        Bullet& bullet = it->second;
+        // std::cout << "The duck that shot the bullet is: (just after taking it from the loop)" <<
+        // +bullet.duck_how_shot << "\n";
+        // // print all of the data from the bullet
+        // std::cout << "The bullet id is: " << +bullet.id << "\n";
+        // std::cout << "The bullet x is: " << bullet.x << "\n";
+        // std::cout << "The bullet y is: " << bullet.y << "\n";
+        // std::cout << "The bullet angle is: " << bullet.angle << "\n";
+        // std::cout << "The bullet speed is: " << bullet.speed << "\n";
+        // std::cout << "The bullet time is: " << bullet.time << "\n";
+        // std::cout << "The bullet going right is: " << bullet.going_right << "\n";
+        // std::cout << "The bullet damage is: " << +bullet.damage << "\n";
+
+
+        bool errase = false;
+
+        for (auto& duck_pair: ducks) {
+            Duck* duck = duck_pair.second.get();
+            // std::cout << "############\n Im checking the collision of the duck: " <<
+            // +duck->duck_id << " with the bullet shot by the duck: " << +bullet.duck_how_shot <<
+            // "\n" << "############";
+            if (bullet.duck_how_shot == duck->duck_id) {
+                // std::cout << "\nThey are the same, so i do nothing and check the next duck\n";
+                continue;
+            }
+
+            if (duck->position.x < bullet.x + 10 && duck->position.x + DUCK_WIDTH > bullet.x &&
+                duck->position.y < bullet.y + 10 && duck->position.y + DUCK_HEIGHT > bullet.y) {
+
+                duck->receive_damage(bullet.damage);
+
+                // std::cout << "So here the duck: " << +duck->duck_id << " was hit by the bullet
+                // shot by the duck: " << +bullet.duck_how_shot << "\n"; std::cout << "It's hp is
+                // now: " << +duck->life_points << "\n";
+
+                // std::cout << "bullet duck id: " << +bullet.duck_how_shot << " shot duck ";
+                // std::cout<< +duck->duck_id << " wit bullet\n";
+                // std::cout << "Duck " << +duck->duck_id << " was hit by a bullet\n";
+                // std::cout << "lifepoint" << +duck->life_points << std::endl;
+                errase = true;
+            }
+        }
+
+
+        // So the bullets dont live forever
+        if (bullet.x < 0 || bullet.x > 1200 || bullet.y < 0 || bullet.y > 1200 || errase) {
+            it = bullets_by_id.erase(it);
+            // std::cout << "Erased the bullet from the collision\n";
+            continue;
+        } else {
+            it++;
+            bullet.move();
+        }
     }
 
     std::shared_ptr<std::vector<Bullet>> bullets_in_game = std::make_shared<std::vector<Bullet>>();

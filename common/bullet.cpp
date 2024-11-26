@@ -3,7 +3,7 @@
 #include <cmath>
 
 Bullet::Bullet(uint8_t id, float x, float y, float angle, float speed, float time, bool going_right,
-               uint8_t damage):
+               uint8_t damage, uint8_t duck_how_shot):
         id(id),
         x(x),
         y(y),
@@ -11,7 +11,8 @@ Bullet::Bullet(uint8_t id, float x, float y, float angle, float speed, float tim
         speed(speed),
         time(time),
         going_right(going_right),
-        damage(damage) {}
+        damage(damage),
+        duck_how_shot(duck_how_shot) {}
 
 Bullet::Bullet(const Bullet& other):
         id(other.id),
@@ -21,7 +22,8 @@ Bullet::Bullet(const Bullet& other):
         speed(other.speed),
         time(other.time),
         going_right(other.going_right),
-        damage(other.damage) {}
+        damage(other.damage),
+        duck_how_shot(other.duck_how_shot) {}
 
 Bullet::Bullet(uint8_t id, float x, float y, bool going_right):
         id(id),
@@ -31,7 +33,8 @@ Bullet::Bullet(uint8_t id, float x, float y, bool going_right):
         speed(0.0f),
         time(0.0f),
         going_right(going_right),
-        damage(0) {}
+        damage(0),
+        duck_how_shot(0) {}
 
 
 Bullet::Bullet():
@@ -42,7 +45,8 @@ Bullet::Bullet():
         speed(0.0f),
         time(0.0f),
         going_right(false),
-        damage(0) {}
+        damage(0),
+        duck_how_shot(0) {}
 
 void Bullet::move() {
     // Update the position of the bullet based on its speed and angle
@@ -73,8 +77,7 @@ void Bullet::update(const Bullet& other) {
     time = other.time;
     going_right = other.going_right;
     damage = other.damage;
+    duck_how_shot = other.duck_how_shot;
 }
 
-void Bullet::addDuckHowShot(uint8_t duck) {
-    duck_how_shot = duck;
-}
+void Bullet::addDuckHowShot(uint8_t duck) { duck_how_shot = duck; }
