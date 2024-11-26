@@ -15,6 +15,7 @@
 
 class MatchStateMonitor {
 private:
+    // es necesario que esto esté lockeado? por lo que veo solo puede acceder un hilo a la vez (desde MatchesMonitor)
     std::mutex data_mtx;
     const uint8_t player_limit;
     uint8_t assigned_ids;

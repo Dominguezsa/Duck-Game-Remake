@@ -6,6 +6,7 @@
 #include "../common/common_position.h"
 #include "../common/common_weapon.h"
 
+// TODO: testear el protocolo
 void test_pato() {
     Duck pato(1, 100, 1, Position(0, 0), Weapon("ak47", 10));
 

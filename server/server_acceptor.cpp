@@ -21,6 +21,7 @@ void AcceptorThread::accept_connection() {
 }
 
 void AcceptorThread::check_unused_resources() {
+    // nit: std::remove_if
     for (auto it = clients.begin(); it != clients.end();) {
         ClientSession* client = *it;
         if (!client->is_alive()) {
@@ -57,6 +58,7 @@ void AcceptorThread::run() {
     } catch (const std::exception& err) {
         if (this->_is_alive) {
             syslog(LOG_ERR, "%s", "Unexpected exception: \n");
+            // nit: no es necesario cerrar syslog
             closelog();
         }
         this->_is_alive = false;

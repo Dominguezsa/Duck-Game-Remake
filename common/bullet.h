@@ -16,9 +16,9 @@ public:
 
     float time;  // posicion en el tiempo de la bala
 
+    uint8_t damage;
     bool going_right;  // si la bala va hacia la derecha o izquierda asi en la ecuacion se le suma o
                        // resta la velocidad
-    uint8_t damage;
 
     Bullet(uint8_t id, float x, float y, float angle, float speed, float time, bool going_right,
            uint8_t damage);

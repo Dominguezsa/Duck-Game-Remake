@@ -40,6 +40,7 @@ int LobbyProtocol::sendMatchCreation(uint8_t numPlayers, const std::string& matc
     vectorForSocket.push_back('C');
     vectorForSocket.push_back(numPlayers);
     uint16_t matchNameSize = matchName.size();
+    // usar htonx/ntohx
     vectorForSocket.push_back(matchNameSize >> 8);
     vectorForSocket.push_back(matchNameSize & 0xFF);
     vectorForSocket.insert(vectorForSocket.end(), matchName.begin(), matchName.end());
