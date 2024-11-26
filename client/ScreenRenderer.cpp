@@ -168,3 +168,11 @@ void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
 
     renderer.Present();
 }
+
+void ScreenRenderer::show_next_round() {
+    renderer.Clear();
+    copyBackground();
+    SDL2pp::Texture& next_round_texture = *resourceManager.getTexture("next_round");
+    renderer.Copy(next_round_texture, SDL2pp::NullOpt, SDL2pp::NullOpt);
+    renderer.Present();
+}

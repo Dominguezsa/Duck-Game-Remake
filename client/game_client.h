@@ -65,6 +65,7 @@ public:
     void run();
     void run_lobby();
     void updateDuckStates();
+    bool round_finished();
     void mainLoop(const int it);
 };
 

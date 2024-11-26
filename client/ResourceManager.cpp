@@ -95,6 +95,11 @@ void ResourceManager::loadSprites(uint8_t playerAmount) {
     }
 
     textures.emplace(
+            "next_round",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("/var/duck_game/data/next_round.png")));
+
+    textures.emplace(
             "ak47",
             std::make_shared<SDL2pp::Texture>(
                     renderer,

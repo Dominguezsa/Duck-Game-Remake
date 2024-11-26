@@ -43,6 +43,7 @@ public:
     ScreenRenderer(SDL2pp::Renderer& renderer, ResourceManager& resourceManager,
                    AnimationHelper& animHelp);
     void updateScreen(const Snapshot& snapshot, const int it);
+    void show_next_round();
 };
 
 

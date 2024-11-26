@@ -18,6 +18,7 @@
 // #include "../common/common_weapon.h"
 // #include "../common/types/action_type.h"
 #include "../common/types/duck_state.h"
+#include <iostream>
 
 #include "lobby.h"
 
@@ -99,6 +100,11 @@ void GameClient::run() {
     while (true) {
         updateDuckStates();
         mainLoop(iteration);
+        if (round_finished()) {
+            std::cout << "CLIENT: Round finished\n";
+            screenRenderer.show_next_round();
+            sleep(3);
+        }
 
         if (quit) {
             std::cout << "Exiting the game\n";
@@ -129,6 +135,16 @@ void GameClient::run() {
     threadSender.stop_thread();
     std::cout << "CLIENT: Closing the messages for server queue\n";
     messagesForServer.close();
+}
+
+bool GameClient::round_finished() {
+    int alive_ducks = 0;
+    for (const auto& duck: snapshot.ducks) {
+        if (duck.is_alive) {
+            alive_ducks++;
+        }
+    }
+    return alive_ducks <= 1;
 }
 
 void GameClient::run_lobby() { lobby.run(); }
