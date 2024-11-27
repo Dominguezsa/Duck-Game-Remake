@@ -166,9 +166,6 @@ void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     copyDebugText(snapshot.ducks);
     copyWeapons(snapshot.weapons);  // aca se copian las armas que estan en el suelo para pickear
     copyBullets(snapshot.bullets);
-    if (it%100 == 0 && snapshot.bullets.size() > 3) {
-        std::cout << "Bullet x: " << +snapshot.bullets.size() << std::endl;
-    }
     renderer.Present();
 }
 
