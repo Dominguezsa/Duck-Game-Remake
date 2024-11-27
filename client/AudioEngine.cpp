@@ -7,9 +7,12 @@ AudioEngine::AudioEngine(std::vector<DuckState>& ducks, SDL2pp::Mixer& mixer,
 void AudioEngine::playAudio() {
     for (const auto& duck: ducks) {
         if (duck.is_shooting) {
-            if (mixer.IsChannelPlaying(1) == 0) {
-                mixer.PlayChannel(1, *resourceManager.getSFX("boom11"), -1);
+            if (mixer.IsChannelPlaying(1) == 1) {
+                continue;
             }
+            mixer.PlayChannel(1, *resourceManager.getSFX("boom11"), -1);
+        } else if (!duck.is_alive) {
+            mixer.PlayChannel(2, *resourceManager.getSFX("boom3"), 0);
         } else {
             mixer.FadeOutChannel(1, 200);
         }
