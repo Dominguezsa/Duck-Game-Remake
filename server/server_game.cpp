@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "../common/snapshot.h"
+#include <unistd.h>
 
 #define GRAVITY 0.5f
 #define FLUTTER_FORCE -0.3f
@@ -314,6 +315,9 @@ void Game::checkRoundEnd() {
         if (alive_players == 1) {
             victories[last_alive_id]++;
         }
+        updateGameState();
+        sleep(1);
+        
         startNewRound();
     }
 }

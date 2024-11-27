@@ -103,7 +103,7 @@ void GameClient::run() {
         if (round_finished()) {
             std::cout << "CLIENT: Round finished\n";
             screenRenderer.show_next_round();
-            sleep(3);
+            sleep(1);
         }
 
         if (quit) {
