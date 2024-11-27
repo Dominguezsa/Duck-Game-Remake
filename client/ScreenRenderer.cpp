@@ -164,18 +164,8 @@ void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     copyPlatforms();
     copyDucks(snapshot.ducks, it);  // aca tambien se copian las armas si las portan los patos
     copyDebugText(snapshot.ducks);
-
-    if (it%100 ==0) {
-        std::cout << "Bullets list:" << std::endl;
-        for (const auto& bullet : snapshot.bullets) {
-            std::cout << "Bullet ID: " << bullet.id << ", Position: (" << bullet.x << ", " << bullet.y << "), Going Right: " << bullet.going_right << std::endl;
-        }
-    }
-
     copyWeapons(snapshot.weapons);  // aca se copian las armas que estan en el suelo para pickear
-    // std::cout << "The bullets are: " << snapshot.bullets.size() << std::endl;
     copyBullets(snapshot.bullets);
-
     renderer.Present();
 }
 
