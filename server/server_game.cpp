@@ -284,7 +284,9 @@ void Game::updateGameState() {
         }
 
         if (bullet.x < 0 || bullet.x > 1200 || bullet.y < 0 || bullet.y > 1200 || errase) {
-            it = bullets_by_id.erase(it);
+            // it = bullets_by_id.erase(it);
+            bullet = Bullet();
+            it++;
             continue;
         } else {
             it++;

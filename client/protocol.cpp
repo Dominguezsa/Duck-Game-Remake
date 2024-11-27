@@ -85,7 +85,9 @@ void ClientProtocol::read_msg(void* msg) {
 
     uint8_t bullet_amount;
     recv_uint_8(bullet_amount);
-
+    if (bullet_amount > 10) {
+        std::cout << "Bullet amount is: " << +bullet_amount << std::endl;
+    }
     for (int i = 0; i < bullet_amount; i++) {
         uint8_t bullet_id;
         uint32_t bullet_x;
