@@ -64,41 +64,7 @@ void ResourceManager::loadFonts() {
     fonts.emplace("vera", std::make_shared<SDL2pp::Font>("/var/duck_game/data/Vera.ttf", 12));
 }
 
-void ResourceManager::loadSprites(uint8_t playerAmount) {
-
-    textures.emplace("duck",
-                     std::make_shared<SDL2pp::Texture>(
-                             renderer, SDL2pp::Surface("/var/duck_game/data/imagenesDePatos.png")
-                                               .SetColorKey(true, 0)));
-
-    textures["duck"]->SetBlendMode(SDL_BLENDMODE_BLEND);
-
-    textures.emplace("background",
-                     std::make_shared<SDL2pp::Texture>(
-                             renderer, SDL2pp::Surface("/var/duck_game/data/fondo.png")));
-
-    textures.emplace("tablas",
-                     std::make_shared<SDL2pp::Texture>(
-                             renderer, SDL2pp::Surface("/var/duck_game/data/tablon1.png")));
-
-    std::vector<std::string> duck_colors = {"white_duck", "orange_duck", "grey_duck",
-                                            "yellow_duck"};
-
-    std::cout << "Now loading " << +playerAmount << " ducks\n";
-
-    for (int i = 0; i < playerAmount; i++) {
-
-        std::string path = "/var/duck_game/data/sprites/ducks/" + duck_colors[i] + ".png";
-
-        textures.emplace(duck_colors[i],
-                         std::make_shared<SDL2pp::Texture>(renderer, SDL2pp::Surface(path)));
-    }
-
-    textures.emplace(
-            "next_round",
-            std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("/var/duck_game/data/next_round.png")));
-
+void ResourceManager::loadWeaponSprites() {
     textures.emplace(
             "ak47",
             std::make_shared<SDL2pp::Texture>(
@@ -149,6 +115,49 @@ void ResourceManager::loadSprites(uint8_t playerAmount) {
             "cowboyPistol",
             std::make_shared<SDL2pp::Texture>(
                     renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/pistols.png")));
+}
+
+void ResourceManager::loadDuckSprites(uint8_t playerAmount) {
+    std::vector<std::string> duck_colors = {"white_duck", "orange_duck", "grey_duck",
+                                            "yellow_duck"};
+
+    std::cout << "Now loading " << +playerAmount << " ducks\n";
+
+    for (int i = 0; i < playerAmount; i++) {
+
+        std::string path = "/var/duck_game/data/sprites/ducks/" + duck_colors[i] + ".png";
+
+        textures.emplace(duck_colors[i],
+                         std::make_shared<SDL2pp::Texture>(renderer, SDL2pp::Surface(path)));
+    }
+}
+
+void ResourceManager::loadMiscSprites() {
+    textures.emplace("background",
+                     std::make_shared<SDL2pp::Texture>(
+                             renderer, SDL2pp::Surface("/var/duck_game/data/fondo.png")));
+
+    textures.emplace("tablas",
+                     std::make_shared<SDL2pp::Texture>(
+                             renderer, SDL2pp::Surface("/var/duck_game/data/tablon1.png")));
+
+    textures.emplace("next_round",
+                     std::make_shared<SDL2pp::Texture>(
+                             renderer, SDL2pp::Surface("/var/duck_game/data/next_round.png")));
+}
+
+void ResourceManager::loadSprites(uint8_t playerAmount) {
+
+    loadDuckSprites(playerAmount);
+    loadWeaponSprites();
+    loadMiscSprites();
+
+    // textures.emplace("duck",
+    //                  std::make_shared<SDL2pp::Texture>(
+    //                          renderer, SDL2pp::Surface("/var/duck_game/data/imagenesDePatos.png")
+    //                                            .SetColorKey(true, 0)));
+
+    // textures["duck"]->SetBlendMode(SDL_BLENDMODE_BLEND);
 
     std::cout << "All textures loaded correctly\n";
 }
@@ -223,70 +232,71 @@ void ResourceManager::loadAnimationFrames() {
     duckFrames.emplace_back(SDL2pp::Rect(0, 0, 0, 0));
 
     animationFrames.emplace("empty", duckFrames);
-    // duckFrames.clear();
-
-    // // This is for the guns
-    // for (int i = 0; i < 1; i++) {
-    //     duckFrames.emplace_back(SDL2pp::Rect(1, 14, DUCK_ARMS_WIDTH, DUCK_ARMS_HEIGHT));
-    // }
-
-    // animationFrames.emplace("ak47", duckFrames);
-
-    // duckFrames.clear();
-
-    // duckFrames.emplace_back(SDL2pp::Rect(2, 205, 8, 8));
-    // animationFrames.emplace("ak47_bullet", duckFrames);
-
 
     std::cout << "All animation frames loaded correctly\n";
 }
 
 
-void ResourceManager::load_weapons_rect() {
+void ResourceManager::loadWeaponsRect() {
     SDL2pp::Rect weaponFrame;
     weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
     weaponFrames.emplace("ak47", weaponFrame);
 
-    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrame = SDL2pp::Rect(1, 21, 16, 16);
     weaponFrames.emplace("grenade", weaponFrame);
 
-    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrame = SDL2pp::Rect(1, 51, 16, 16);
     weaponFrames.emplace("banana", weaponFrame);
 
-    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrame = SDL2pp::Rect(336, 94, 32, 32);
     weaponFrames.emplace("pewPewLaser", weaponFrame);
 
-    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrame = SDL2pp::Rect(1, 97, 32, 32);
     weaponFrames.emplace("laserRifle", weaponFrame);
 
-    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrame = SDL2pp::Rect(1, 69, 32, 32);
     weaponFrames.emplace("shotgun", weaponFrame);
 
-    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrame = SDL2pp::Rect(36, 237, 33, 9);
     weaponFrames.emplace("sniper", weaponFrame);
 
-    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrame = SDL2pp::Rect(1, 187, 32, 32);
     weaponFrames.emplace("duelingPistol", weaponFrame);
 
-    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrame = SDL2pp::Rect(0, 89, 16, 16);
     weaponFrames.emplace("magnum", weaponFrame);
 
-    weaponFrame = SDL2pp::Rect(1, 19, 32, 32);
+    weaponFrame = SDL2pp::Rect(1, 20, 22, 11);
     weaponFrames.emplace("cowboyPistol", weaponFrame);
 
     std::cout << "All weapons rects loaded correctly\n";
 }
 
-void ResourceManager::load_bullets_rect() {
+void ResourceManager::loadBulletsRect() {
     SDL2pp::Rect bulletFrame;
     bulletFrame = SDL2pp::Rect(2, 205, 8, 8);
     bulletFrames.emplace("ak47", bulletFrame);
+    bulletFrames.emplace("sniper", bulletFrame);
+
+    bulletFrame = SDL2pp::Rect(0, 89, 16, 16);
+    bulletFrames.emplace("magnum", bulletFrame);
+    bulletFrames.emplace("duelingPistol", bulletFrame);
+    bulletFrames.emplace("cowboyPistol", bulletFrame);
+
+    bulletFrame = SDL2pp::Rect(36, 121, 1, 8);
+    bulletFrames.emplace("pewPewLaser", bulletFrame);
+    bulletFrames.emplace("laserRifle", bulletFrame);
+
+    bulletFrame = SDL2pp::Rect(0, 119, 16, 16);
+    bulletFrames.emplace("shotgun", bulletFrame);
+
+    std::cout << "All bullets rects loaded correctly\n";
 }
 
 
-SDL2pp::Rect ResourceManager::get_weapon_rect(const std::string& key) { return weaponFrames[key]; }
+SDL2pp::Rect ResourceManager::getWeaponRect(const std::string& key) { return weaponFrames[key]; }
 
-SDL2pp::Rect ResourceManager::get_bullet_rect(const std::string& key) { return bulletFrames[key]; }
+SDL2pp::Rect ResourceManager::getBulletRect(const std::string& key) { return bulletFrames[key]; }
 
 void ResourceManager::loadResources(uint8_t playerAmount) {
     std::cout << "Trying to load the sfx\n";
@@ -295,8 +305,8 @@ void ResourceManager::loadResources(uint8_t playerAmount) {
     loadMusic();
     loadFonts();
     loadSprites(playerAmount);
-    load_weapons_rect();
-    load_bullets_rect();
+    loadWeaponsRect();
+    loadBulletsRect();
     loadAnimationFrames();
 }
 

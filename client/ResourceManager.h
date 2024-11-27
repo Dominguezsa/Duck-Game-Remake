@@ -5,13 +5,14 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "../common/types/weapon_type.h"
 
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Font.hh>
 #include <SDL2pp/Music.hh>
 #include <SDL2pp/Texture.hh>
 #include <unistd.h>
+
+#include "../common/types/weapon_type.h"
 
 class ResourceManager {
 private:
@@ -32,11 +33,14 @@ public:
     void loadMusic();
     void loadFonts();
     void loadSprites(uint8_t playerAmount);
+    void loadWeaponSprites();
+    void loadDuckSprites(uint8_t playerAmount);
+    void loadMiscSprites();
     void loadAnimationFrames();
-    void load_weapons_rect();
-    void load_bullets_rect();
-    SDL2pp::Rect get_weapon_rect(const std::string& key);
-    SDL2pp::Rect get_bullet_rect(const std::string& key);
+    void loadWeaponsRect();
+    void loadBulletsRect();
+    SDL2pp::Rect getWeaponRect(const std::string& key);
+    SDL2pp::Rect getBulletRect(const std::string& key);
     std::shared_ptr<SDL2pp::Music> getMusicTrack(const std::string& key);
     std::shared_ptr<SDL2pp::Font> getFont(const std::string& key);
     std::shared_ptr<SDL2pp::Chunk> getSFX(const std::string& key);
