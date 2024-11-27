@@ -95,7 +95,10 @@ void ScreenRenderer::copyPlatforms() {
 }
 
 void ScreenRenderer::copyBackground() {
-    renderer.Copy(*resourceManager.getTexture("background"), SDL2pp::NullOpt, SDL2pp::NullOpt);
+    SDL2pp::Texture& background_texture = *resourceManager.getTexture("background");
+    SDL_SetTextureBlendMode(background_texture.Get(), SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(background_texture.Get(), 128); // Adjust the alpha value for blurriness
+    renderer.Copy(background_texture, SDL2pp::NullOpt, SDL2pp::NullOpt);
 }
 
 void ScreenRenderer::copyDebugText(const std::vector<DuckState>& ducks) {
@@ -173,6 +176,6 @@ void ScreenRenderer::show_next_round() {
     renderer.Clear();
     copyBackground();
     SDL2pp::Texture& next_round_texture = *resourceManager.getTexture("next_round");
-    renderer.Copy(next_round_texture, SDL2pp::NullOpt, SDL2pp::NullOpt);
+    renderer.Copy(next_round_texture, SDL2pp::Rect(0, 0, 750, 750), SDL2pp::Rect(400, 150,400 , 400));
     renderer.Present();
 }
