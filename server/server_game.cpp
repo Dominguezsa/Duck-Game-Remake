@@ -97,9 +97,6 @@ void Game::updateGameState() {
         float previous_y = duck->position.y;
         float previous_x = duck->position.x;
 
-        // if (duck->duck_id == 1) {
-        //     std::cout << "Duck 1 vertical velocity: " << duck->vertical_velocity << std::endl;
-        // }
 
         // Now i should update all of the bullets positions, check if they hit a duck and if they
         // hit a duck, reduce the life points of the duck and remove the bullet from the game
@@ -121,27 +118,12 @@ void Game::updateGameState() {
         if (duck->is_shooting && duck->weapon.ammo > 0) {
             // std::cout << "Trying to shoot\n";
             if (duck->weapon.actual_cicle == 0) {
-                // std::cout << "Im creating a bullet with this duck_id: " << +duck->duck_id <<
-                // "\n";
+
                 Bullet bullet(duck->weapon.id, duck->position.x + DUCK_WIDTH,
                               duck->position.y + DUCK_HEIGHT / 1.2, duck->looking == 1 ? 0 : M_PI,
                               2.0f, 0.0f, duck->looking == 1, duck->weapon.damage, duck->duck_id);
-                // bullet.addDuckHowShot(duck->duck_id);
-
-                // std::cout << "########\nThis duck: " << +duck->duck_id << " shot a bullet with
-                // this id " << +bullet.duck_how_shot << "\n" << "#########";
 
                 bullets_by_id.insert({{next_bullet_id, bullet.id}, bullet});
-                // No se por qué, no tengo ni la menor idea de por qué, pero antes de poner este
-                // print acá abajo, el duck_id de la bala se seteaba solo en 0, y ahora aunque esté
-                // comentado, no, funciona bien No creo que tenga que ver con alguna race condition
-                // porque este map está solo en este thread, nadie accede a esto en ningún otro lado
-                // Puede ser que tenga algo que ver con el compilador quizás, a lo mejor como nunca
-                // hicimos un clean o algo parecido para borrar todo y compilar de 0, quedó algo
-                // raro en el binario que nunca se cambiaba
-
-                // std::cout << "The bullet after being inserted has this duck_id: " <<
-                // +bullets_by_id[{next_bullet_id, bullet.id}].duck_how_shot << "\n";
                 next_bullet_id++;
                 duck->weapon.ammo--;
                 duck->weapon.actual_cicle++;
@@ -398,13 +380,10 @@ void Game::run() {
         while (is_running) {
             double start_time = getCurrentTime();
 
-            // Process all pending messages
             GameloopMessage msg(0, 0);
             while (message_queue.try_pop(msg)) {
                 action_handler.process_player_action(msg);
-                // handlePlayerAction(msg);
             }
-            // std::cout << "Updating state\n";
             updateGameState();
             checkRoundEnd();
 

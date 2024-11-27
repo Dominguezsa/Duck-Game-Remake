@@ -1,5 +1,6 @@
 #include "game_client.h"
 
+#include <algorithm>
 #include <chrono>
 #include <memory>
 #include <thread>
@@ -17,8 +18,9 @@
 
 // #include "../common/common_weapon.h"
 // #include "../common/types/action_type.h"
-#include "../common/types/duck_state.h"
 #include <iostream>
+
+#include "../common/types/duck_state.h"
 
 #include "lobby.h"
 
@@ -139,12 +141,8 @@ void GameClient::run() {
 }
 
 bool GameClient::round_finished() {
-    int alive_ducks = 0;
-    for (const auto& duck: snapshot.ducks) {
-        if (duck.is_alive) {
-            alive_ducks++;
-        }
-    }
+    int alive_ducks = std::count_if(snapshot.ducks.begin(), snapshot.ducks.end(),
+                                    [](const Duck& duck) { return duck.is_alive; });
     return alive_ducks <= 1;
 }
 

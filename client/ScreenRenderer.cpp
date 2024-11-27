@@ -97,7 +97,7 @@ void ScreenRenderer::copyPlatforms() {
 void ScreenRenderer::copyBackground() {
     SDL2pp::Texture& background_texture = *resourceManager.getTexture("background");
     SDL_SetTextureBlendMode(background_texture.Get(), SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(background_texture.Get(), 128); // Adjust the alpha value for blurriness
+    SDL_SetTextureAlphaMod(background_texture.Get(), 128);  // Adjust the alpha value for blurriness
     renderer.Copy(background_texture, SDL2pp::NullOpt, SDL2pp::NullOpt);
 }
 
@@ -152,9 +152,8 @@ void ScreenRenderer::copyBullets(const std::vector<Bullet>& bullets) {
     for (const auto& bullet: bullets) {
         SDL2pp::Texture& bullet_texture = *resourceManager.getTexture(bullets_by_enum[bullet.id]);
         SDL2pp::Rect bullet_frame = animationHelper.get_bullet_rect(bullets_by_enum[bullet.id]);
-        renderer.Copy(bullet_texture, bullet_frame,
-                      SDL2pp::Rect(bullet.x, bullet.y, 16, 16), 0.0, SDL2pp::NullOpt,
-                      bullet.going_right ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
+        renderer.Copy(bullet_texture, bullet_frame, SDL2pp::Rect(bullet.x, bullet.y, 16, 16), 0.0,
+                      SDL2pp::NullOpt, bullet.going_right ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
     }
 }
 
@@ -173,6 +172,7 @@ void ScreenRenderer::show_next_round() {
     renderer.Clear();
     copyBackground();
     SDL2pp::Texture& next_round_texture = *resourceManager.getTexture("next_round");
-    renderer.Copy(next_round_texture, SDL2pp::Rect(0, 0, 750, 750), SDL2pp::Rect(400, 150,400 , 400));
+    renderer.Copy(next_round_texture, SDL2pp::Rect(0, 0, 750, 750),
+                  SDL2pp::Rect(400, 150, 400, 400));
     renderer.Present();
 }
