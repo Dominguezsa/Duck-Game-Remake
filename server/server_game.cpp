@@ -4,8 +4,9 @@
 #include <cstdint>
 #include <iostream>
 
-#include "../common/snapshot.h"
 #include <unistd.h>
+
+#include "../common/snapshot.h"
 
 #define GRAVITY 0.5f
 #define FLUTTER_FORCE -0.3f
@@ -29,8 +30,8 @@
 #define WEAPON_RECT 64
 
 Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue):
-        weapons({Weapon(WeaponType::AK47, "ak47", 30, 15, 20, {20, 320},
-                        WeaponType::AK47)}),  // las weapons deberian estar en el yaml
+        weapons({Weapon(WeaponType::LaserRifle, "laserRifle", 30, 15, 20, {20, 320},
+                        WeaponType::LaserRifle)}),  // las weapons deberian estar en el yaml
         message_queue(queue),
         is_running(false),
         next_player_id(0),
@@ -315,9 +316,10 @@ void Game::checkRoundEnd() {
         if (alive_players == 1) {
             victories[last_alive_id]++;
         }
-        updateGameState(); // si no pongo esto no le envia a los clientes los patos que tienen 0 de vida, muy raro, pero bueno
+        updateGameState();  // si no pongo esto no le envia a los clientes los patos que tienen 0 de
+                            // vida, muy raro, pero bueno
         sleep(1);
-        
+
         startNewRound();
     }
 }
