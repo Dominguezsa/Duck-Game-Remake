@@ -142,7 +142,7 @@ void GameClient::run() {
 
 bool GameClient::round_finished() {
     int alive_ducks = std::count_if(snapshot.ducks.begin(), snapshot.ducks.end(),
-                                    [](const Duck& duck) { return duck.is_alive; });
+                                    [](const DuckState& duck) { return duck.is_alive; });
     return alive_ducks <= 1;
 }
 
