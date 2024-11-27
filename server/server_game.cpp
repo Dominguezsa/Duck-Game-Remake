@@ -324,6 +324,8 @@ void Game::checkRoundEnd() {
 
 void Game::startNewRound() {
     round_number++;
+    bullets_by_id.clear();
+
 
     // Reset all ducks to initial positions
     for (auto& duck_pair: ducks) {
