@@ -32,9 +32,6 @@ public:
         while (this->bullets.size() < bullets.size()) {
             this->bullets.push_back(Bullet());
         }
-        if (this->bullets.size() > bullets.size()) {
-            this->bullets.erase(this->bullets.begin() + bullets.size(), this->bullets.end());
-        }
         for (int i = 0; i < (int)bullets.size(); i++) {
             this->bullets[i].update(bullets[i]);
         }
