@@ -315,7 +315,7 @@ void Game::checkRoundEnd() {
         if (alive_players == 1) {
             victories[last_alive_id]++;
         }
-        updateGameState();
+        updateGameState(); // si no pongo esto no le envia a los clientes los patos que tienen 0 de vida, muy raro, pero bueno
         sleep(1);
         
         startNewRound();
