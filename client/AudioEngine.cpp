@@ -11,8 +11,6 @@ void AudioEngine::playAudio() {
                 continue;
             }
             mixer.PlayChannel(1, *resourceManager.getSFX("boom11"), -1);
-        } else if (!duck.is_alive) {
-            mixer.PlayChannel(2, *resourceManager.getSFX("boom3"), 0);
         } else {
             mixer.FadeOutChannel(1, 200);
         }
