@@ -4,6 +4,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <SDL2pp/Chunk.hh>
@@ -22,7 +23,7 @@ private:
     std::map<std::string, std::shared_ptr<SDL2pp::Texture>> textures;
     std::map<std::string, std::vector<SDL2pp::Rect>> animationFrames;
     std::map<std::string, SDL2pp::Rect> weaponFrames;
-    std::map<std::string, SDL2pp::Rect> bulletFrames;
+    std::map<std::string, std::pair<SDL2pp::Rect, SDL2pp::Rect>> bulletFrames;
     SDL2pp::Renderer& renderer;
 
 public:
@@ -40,7 +41,7 @@ public:
     void loadWeaponsRect();
     void loadBulletsRect();
     SDL2pp::Rect getWeaponRect(const std::string& key);
-    SDL2pp::Rect getBulletRect(const std::string& key);
+    std::pair<SDL2pp::Rect, SDL2pp::Rect> getBulletRect(const std::string& key);
     std::shared_ptr<SDL2pp::Music> getMusicTrack(const std::string& key);
     std::shared_ptr<SDL2pp::Font> getFont(const std::string& key);
     std::shared_ptr<SDL2pp::Chunk> getSFX(const std::string& key);

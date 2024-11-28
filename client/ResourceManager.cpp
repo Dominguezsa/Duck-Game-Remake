@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 #include <SDL2pp/Rect.hh>
@@ -152,13 +153,6 @@ void ResourceManager::loadSprites(uint8_t playerAmount) {
     loadWeaponSprites();
     loadMiscSprites();
 
-    // textures.emplace("duck",
-    //                  std::make_shared<SDL2pp::Texture>(
-    //                          renderer, SDL2pp::Surface("/var/duck_game/data/imagenesDePatos.png")
-    //                                            .SetColorKey(true, 0)));
-
-    // textures["duck"]->SetBlendMode(SDL_BLENDMODE_BLEND);
-
     std::cout << "All textures loaded correctly\n";
 }
 
@@ -263,7 +257,7 @@ void ResourceManager::loadWeaponsRect() {
     weaponFrame = SDL2pp::Rect(1, 187, 32, 32);
     weaponFrames.emplace("duelingPistol", weaponFrame);
 
-    weaponFrame = SDL2pp::Rect(0, 89, 16, 16);
+    weaponFrame = SDL2pp::Rect(1, 47, 32, 32);
     weaponFrames.emplace("magnum", weaponFrame);
 
     weaponFrame = SDL2pp::Rect(1, 20, 22, 11);
@@ -274,21 +268,27 @@ void ResourceManager::loadWeaponsRect() {
 
 void ResourceManager::loadBulletsRect() {
     SDL2pp::Rect bulletFrame;
+    SDL2pp::Rect bulletRepresentation;
+
     bulletFrame = SDL2pp::Rect(2, 205, 8, 8);
-    bulletFrames.emplace("ak47", bulletFrame);
-    bulletFrames.emplace("sniper", bulletFrame);
+    bulletRepresentation = SDL2pp::Rect(0, 0, 16, 16);
+    bulletFrames.emplace("ak47", std::make_pair(bulletFrame, bulletRepresentation));
+    bulletFrames.emplace("sniper", std::make_pair(bulletFrame, bulletRepresentation));
 
     bulletFrame = SDL2pp::Rect(0, 89, 16, 16);
-    bulletFrames.emplace("magnum", bulletFrame);
-    bulletFrames.emplace("duelingPistol", bulletFrame);
-    bulletFrames.emplace("cowboyPistol", bulletFrame);
+    bulletRepresentation = SDL2pp::Rect(0, 0, 32, 32);
+    bulletFrames.emplace("magnum", std::make_pair(bulletFrame, bulletRepresentation));
+    bulletFrames.emplace("duelingPistol", std::make_pair(bulletFrame, bulletRepresentation));
+    bulletFrames.emplace("cowboyPistol", std::make_pair(bulletFrame, bulletRepresentation));
 
     bulletFrame = SDL2pp::Rect(36, 121, 1, 8);
-    bulletFrames.emplace("pewPewLaser", bulletFrame);
-    bulletFrames.emplace("laserRifle", bulletFrame);
+    bulletRepresentation = SDL2pp::Rect(0, 0, 16, 4);
+    bulletFrames.emplace("pewPewLaser", std::make_pair(bulletFrame, bulletRepresentation));
+    bulletFrames.emplace("laserRifle", std::make_pair(bulletFrame, bulletRepresentation));
 
     bulletFrame = SDL2pp::Rect(0, 119, 16, 16);
-    bulletFrames.emplace("shotgun", bulletFrame);
+    bulletRepresentation = SDL2pp::Rect(0, 0, 32, 32);
+    bulletFrames.emplace("shotgun", std::make_pair(bulletFrame, bulletRepresentation));
 
     std::cout << "All bullets rects loaded correctly\n";
 }
@@ -296,7 +296,9 @@ void ResourceManager::loadBulletsRect() {
 
 SDL2pp::Rect ResourceManager::getWeaponRect(const std::string& key) { return weaponFrames[key]; }
 
-SDL2pp::Rect ResourceManager::getBulletRect(const std::string& key) { return bulletFrames[key]; }
+std::pair<SDL2pp::Rect, SDL2pp::Rect> ResourceManager::getBulletRect(const std::string& key) {
+    return bulletFrames[key];
+}
 
 void ResourceManager::loadResources(uint8_t playerAmount) {
     std::cout << "Trying to load the sfx\n";

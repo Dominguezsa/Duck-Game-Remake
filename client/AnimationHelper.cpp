@@ -38,11 +38,6 @@ std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> AnimationHelper::get_animatio
 
     std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> frames;
 
-    // I prefer a normal for loop but cppcheck doesn't like it so whatever
-
-    // std::cout << "Trying to get animation frames\n";
-    // std::cout << "The size of the ducks animation data is: " << ducks_animation_data.size() <<
-    // std::endl;
     std::transform(ducks_animation_data.begin(), ducks_animation_data.end(),
                    std::back_inserter(frames), [this](const DuckGraphicData& duck) {
                        return std::make_pair(
@@ -60,6 +55,6 @@ SDL2pp::Rect AnimationHelper::get_weapon_rect(const std::string& key) {
     return resourceManager.getWeaponRect(key);
 }
 
-SDL2pp::Rect AnimationHelper::get_bullet_rect(const std::string& key) {
+std::pair<SDL2pp::Rect, SDL2pp::Rect> AnimationHelper::get_bullet_rect(const std::string& key) {
     return resourceManager.getBulletRect(key);
 }

@@ -141,7 +141,8 @@ void ScreenRenderer::copyWeapons(const std::vector<Weapon>& weapons) {
 
         SDL2pp::Rect weapon_frame = animationHelper.get_weapon_rect(weapons_by_enum[weapons[i].id]);
         renderer.Copy(weapon_texture, weapon_frame,
-                      SDL2pp::Rect(weapons[i].pos.x, weapons[i].pos.y, 64, 64));
+                      SDL2pp::Rect(weapons[i].pos.x, weapons[i].pos.y, weapon_frame.w * 2.5,
+                                   weapon_frame.h * 2.5));
     }
 }
 
@@ -150,9 +151,23 @@ void ScreenRenderer::copyBullets(const std::vector<Bullet>& bullets) {
     // std::cout << "I have to keep drawing " << bullets.size() << " bullets\n";
 
     for (const auto& bullet: bullets) {
-        SDL2pp::Texture& bullet_texture = *resourceManager.getTexture(bullets_by_enum[bullet.id]);
-        SDL2pp::Rect bullet_frame = animationHelper.get_bullet_rect(bullets_by_enum[bullet.id]);
-        renderer.Copy(bullet_texture, bullet_frame, SDL2pp::Rect(bullet.x, bullet.y, 16, 16), 0.0,
+        if (bullet.id == WeaponType::Sniper) {
+            continue;
+        }
+
+        SDL2pp::Texture& bullet_texture =
+                (bullet.id == WeaponType::Sniper) ?
+                        *resourceManager.getTexture("ak47") :
+                        *resourceManager.getTexture(bullets_by_enum[bullet.id]);
+
+        std::pair<SDL2pp::Rect, SDL2pp::Rect> bullet_info =
+                animationHelper.get_bullet_rect(bullets_by_enum[bullet.id]);
+
+        SDL2pp::Rect bullet_frame = bullet_info.first;
+        SDL2pp::Rect bullet_rect = bullet_info.second;
+
+        renderer.Copy(bullet_texture, bullet_frame,
+                      SDL2pp::Rect(bullet.x, bullet.y, bullet_rect.w, bullet_rect.h), 0.0,
                       SDL2pp::NullOpt, bullet.going_right ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
     }
 }
