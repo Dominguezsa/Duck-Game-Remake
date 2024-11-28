@@ -55,7 +55,8 @@ void Bullet::move() {
     // float delta_y = speed * sin(angle);
 
     float delta_x = speed;
-    float delta_y = speed * sin(angle);
+    // Para pasar de grados a radianes porque necesito los grados en el cliente
+    float delta_y = speed * sin(angle * (M_PI) / 180.0f);
 
     if (going_right) {
         x += delta_x;
