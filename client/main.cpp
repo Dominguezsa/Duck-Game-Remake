@@ -7,8 +7,8 @@
 #include "game_client.h"
 
 #define WINDOW_NAME "DuckGame"
-#define WINDOW_WIDTH 1200
-#define WINDOW_HEIGHT 700
+#define WINDOW_WIDTH 1250
+#define WINDOW_HEIGHT 750
 #define CHUNK_SIZE_AUDIO 2048
 
 
