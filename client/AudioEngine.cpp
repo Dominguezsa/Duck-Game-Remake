@@ -10,9 +10,7 @@ void AudioEngine::playAudio() {
             if (mixer.IsChannelPlaying(1) == 1) {
                 continue;
             }
-            mixer.PlayChannel(1, *resourceManager.getSFX("boom11"), -1);
-        } else {
-            mixer.FadeOutChannel(1, 200);
+            mixer.PlayChannel(1, *resourceManager.getSFXForWeapon(duck.weapon), 0);
         }
     }
 }

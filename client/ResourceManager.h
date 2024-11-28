@@ -18,6 +18,7 @@
 class ResourceManager {
 private:
     std::map<std::string, std::shared_ptr<SDL2pp::Chunk>> sfx;
+    std::map<WeaponType, std::shared_ptr<SDL2pp::Chunk>> sfxPerWeapon;
     std::map<std::string, std::shared_ptr<SDL2pp::Music>> music;
     std::map<std::string, std::shared_ptr<SDL2pp::Font>> fonts;
     std::map<std::string, std::shared_ptr<SDL2pp::Texture>> textures;
@@ -44,7 +45,7 @@ public:
     std::pair<SDL2pp::Rect, SDL2pp::Rect> getBulletRect(const std::string& key);
     std::shared_ptr<SDL2pp::Music> getMusicTrack(const std::string& key);
     std::shared_ptr<SDL2pp::Font> getFont(const std::string& key);
-    std::shared_ptr<SDL2pp::Chunk> getSFX(const std::string& key);
+    std::shared_ptr<SDL2pp::Chunk> getSFXForWeapon(const WeaponType& weapon);
     std::shared_ptr<SDL2pp::Texture> getTexture(const std::string& key);
     SDL2pp::Rect getAnimationFrame(const std::string& key, const int frame);
     void releaseResources();

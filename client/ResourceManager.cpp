@@ -44,14 +44,36 @@ ResourceManager::ResourceManager(SDL2pp::Renderer& renderer): renderer(renderer)
 
 void ResourceManager::loadSFX() {
 
-    sfx.emplace("boom1",
-                std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom1.wav"));
-    sfx.emplace("boom2",
-                std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom2.wav"));
-    sfx.emplace("boom3",
-                std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom3.wav"));
-    sfx.emplace("boom11",
-                std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom11.wav"));
+    // sfx.emplace("boom1",
+    //             std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom1.wav"));
+    // sfx.emplace("boom2",
+    //             std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom2.wav"));
+    // sfx.emplace("boom3",
+    //             std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom3.wav"));
+    // sfx.emplace("boom11",
+    //             std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom11.wav"));
+
+    sfxPerWeapon.emplace(WeaponType::AK47, std::make_shared<SDL2pp::Chunk>(
+                                                   "/var/duck_game/data/audio/sfx/boom11.wav"));
+    sfxPerWeapon.emplace(WeaponType::Shotgun, std::make_shared<SDL2pp::Chunk>(
+                                                      "/var/duck_game/data/audio/sfx/boom12.wav"));
+    sfxPerWeapon.emplace(WeaponType::Sniper, std::make_shared<SDL2pp::Chunk>(
+                                                     "/var/duck_game/data/audio/sfx/boom5.wav"));
+    sfxPerWeapon.emplace(
+            WeaponType::PewPewLaser,
+            std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom1.wav"));
+    sfxPerWeapon.emplace(
+            WeaponType::LaserRifle,
+            std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom14.wav"));
+    sfxPerWeapon.emplace(WeaponType::Magnum, std::make_shared<SDL2pp::Chunk>(
+                                                     "/var/duck_game/data/audio/sfx/boom9.wav"));
+    sfxPerWeapon.emplace(
+            WeaponType::DuelPistol,
+            std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom7.wav"));
+    sfxPerWeapon.emplace(
+            WeaponType::CowboyPistol,
+            std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom8.wav"));
+
     std::cout << "Every sfx loaded correctly\n";
 }
 
@@ -324,9 +346,9 @@ std::shared_ptr<SDL2pp::Font> ResourceManager::getFont(const std::string& key) {
     return it->second;
 }
 
-std::shared_ptr<SDL2pp::Chunk> ResourceManager::getSFX(const std::string& key) {
+std::shared_ptr<SDL2pp::Chunk> ResourceManager::getSFXForWeapon(const WeaponType& weapon) {
 
-    auto it = sfx.find(key);
+    auto it = sfxPerWeapon.find(weapon);
     return it->second;
 }
 
