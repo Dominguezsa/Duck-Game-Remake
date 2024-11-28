@@ -120,8 +120,8 @@ void Game::updateGameState() {
             if (duck->weapon.actual_cicle == 0) {
 
                 Bullet bullet(duck->weapon.id, duck->position.x + DUCK_WIDTH,
-                              duck->position.y + DUCK_HEIGHT / 1.2, duck->looking == 1 ? 0 : M_PI,
-                              2.0f, 0.0f, duck->looking == 1, duck->weapon.damage, duck->duck_id);
+                              duck->position.y + DUCK_HEIGHT / 1.2, 1, 2.0f, 0.0f,
+                              duck->looking == 1, duck->weapon.damage, duck->duck_id);
 
                 bullets_by_id.insert({{next_bullet_id, bullet.id}, bullet});
                 next_bullet_id++;

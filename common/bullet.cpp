@@ -25,11 +25,11 @@ Bullet::Bullet(const Bullet& other):
         damage(other.damage),
         duck_how_shot(other.duck_how_shot) {}
 
-Bullet::Bullet(uint8_t id, float x, float y, bool going_right):
+Bullet::Bullet(uint8_t id, float x, float y, bool going_right, uint8_t angle):
         id(id),
         x(x),
         y(y),
-        angle(0.0f),
+        angle(angle),
         speed(0.0f),
         time(0.0f),
         going_right(going_right),
@@ -55,7 +55,7 @@ void Bullet::move() {
     // float delta_y = speed * sin(angle);
 
     float delta_x = speed;
-    float delta_y = 0.0f;
+    float delta_y = speed * sin(angle);
 
     if (going_right) {
         x += delta_x;

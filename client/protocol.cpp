@@ -90,12 +90,14 @@ void ClientProtocol::read_msg(void* msg) {
         uint32_t bullet_x;
         uint32_t bullet_y;
         uint8_t going_right;
+        uint8_t angle;
         recv_uint_8(bullet_id);
         recv_uint_32(bullet_x);
         recv_uint_32(bullet_y);
         recv_uint_8(going_right);
+        recv_uint_8(angle);
 
-        Bullet bullet(bullet_id, bullet_x, bullet_y, static_cast<bool>(going_right));
+        Bullet bullet(bullet_id, bullet_x, bullet_y, static_cast<bool>(going_right), angle);
         snapsho->bullets.push_back(bullet);
     }
 

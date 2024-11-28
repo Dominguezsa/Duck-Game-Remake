@@ -47,6 +47,7 @@ void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
         send_data(&x, sizeof(uint32_t));
         send_data(&y, sizeof(uint32_t));
         send_data(&bullet.going_right, sizeof(uint8_t));
+        send_data(&bullet.angle, sizeof(uint8_t));
     }
 
 
