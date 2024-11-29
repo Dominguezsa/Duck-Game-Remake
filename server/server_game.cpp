@@ -118,9 +118,9 @@ void Game::updateGameState() {
         if (duck->is_shooting && duck->weapon.ammo > 0) {
             // std::cout << "Trying to shoot\n";
             if (duck->weapon.actual_cicle == 0) {
-
+                float angle = duck->looking == 1 ? 20 : 160;
                 Bullet bullet(duck->weapon.id, duck->position.x + DUCK_WIDTH,
-                              duck->position.y + DUCK_HEIGHT / 1.2, 20, 2.0f, 0.0f,
+                              duck->position.y + DUCK_HEIGHT / 1.2, angle, 2.0f, 0.0f,
                               duck->looking == 1, duck->weapon.damage, duck->duck_id);
 
                 bullets_by_id.insert({{next_bullet_id, bullet.id}, bullet});

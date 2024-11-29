@@ -95,6 +95,7 @@ void ClientProtocol::read_msg(void* msg) {
         recv_uint_32(bullet_x);
         recv_uint_32(bullet_y);
         recv_uint_8(going_right);
+        // recv_uint_16(angle);
         recv_uint_8(angle);
 
         float angle_float = (float)angle / 255.0f * 360.0f;
