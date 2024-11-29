@@ -140,6 +140,8 @@ void ScreenRenderer::copyWeapons(const std::vector<Weapon>& weapons) {
 
 void ScreenRenderer::copyBullets(const std::vector<Bullet>& bullets) {
 
+    std::cout << "bullet\n";
+
     // std::cout << "I have to keep drawing " << bullets.size() << " bullets\n";
 
     for (const auto& bullet: bullets) {
@@ -177,6 +179,7 @@ void ScreenRenderer::copy_lines() {
     for (int i = 0; i <= num_lines_x; ++i) {
         int x = i * line_spacing_x;
         SDL_RenderDrawLine(renderer.Get(), x, 0, x, screen_height);
+        std::cout << "Baklbalbla\n";
     }
 
     // Dibujar líneas horizontales

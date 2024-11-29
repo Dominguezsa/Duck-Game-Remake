@@ -115,6 +115,8 @@ void Game::updateGameState() {
             }
         }
 
+        std::cout << "alñskdjalksdj\n";
+
         if (duck->is_shooting && duck->weapon.ammo > 0) {
             // std::cout << "Trying to shoot\n";
             if (duck->weapon.actual_cicle == 0) {

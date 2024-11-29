@@ -10,7 +10,7 @@ CMAKE_ARGS := -S . -B ./build -DCMAKE_BUILD_TYPE=$(BUILD_TYPE)
 
 # Reglas para compilar dependiendo del BUILD_TYPE
 
-compile:
+compile: 
 	mkdir -p build/
 	cmake $(CMAKE_ARGS) $(EXTRA_GENERATE)
 	cmake --build build/ $(EXTRA_COMPILE)
@@ -18,12 +18,12 @@ compile:
 # Reglas específicas para el cliente y el servidor
 compile-server:
 	mkdir -p build/
-	cmake $(CMAKE_ARGS) -DTALLER_SERVER=ON -DTALLER_CLIENT=OFF -DTALLER_EDITOR=OFF $(EXTRA_GENERATE)
+	cmake $(CMAKE_ARGS) -DTALLER_SERVER=ON -DTALLER_EDITOR=OFF $(EXTRA_GENERATE)
 	cmake --build build/ $(EXTRA_COMPILE)
 
 compile-client:
 	mkdir -p build/
-	cmake $(CMAKE_ARGS) -DTALLER_SERVER=OFF -DTALLER_EDITOR=OFF$(EXTRA_GENERATE)
+	cmake $(CMAKE_ARGS) -DTALLER_EDITOR=OFF$ -DTALLER_CLIENT=ON $(EXTRA_GENERATE)
 	cmake --build build/ $(EXTRA_COMPILE)
 
 # Regla para ejecutar pruebas en modo debug
