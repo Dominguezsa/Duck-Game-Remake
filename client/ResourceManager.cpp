@@ -67,7 +67,7 @@ void ResourceManager::loadMusic() {
 }
 
 void ResourceManager::loadFonts() {
-    fonts.emplace("vera", std::make_shared<SDL2pp::Font>("/var/duck_game/fonts/Vera.ttf", 12));
+    fonts.emplace("vera", std::make_shared<SDL2pp::Font>("/var/duck_game/Vera.ttf", 12));
 }
 
 void ResourceManager::loadWeaponSprites() {
@@ -139,14 +139,14 @@ void ResourceManager::loadDuckSprites(uint8_t playerAmount) {
 
 void ResourceManager::loadMiscSprites() {
     textures.emplace("background", std::make_shared<SDL2pp::Texture>(
-                                           renderer, SDL2pp::Surface("/var/duck_game/general/fondo.png")));
+                                           renderer, SDL2pp::Surface("/var/duck_game/fondo.png")));
 
     textures.emplace("tablas", std::make_shared<SDL2pp::Texture>(
-                                       renderer, SDL2pp::Surface("/var/duck_game/general/tablon1.png")));
+                                       renderer, SDL2pp::Surface("/var/duck_game/tablon1.png")));
 
     textures.emplace("next_round",
                      std::make_shared<SDL2pp::Texture>(
-                             renderer, SDL2pp::Surface("/var/duck_game/general/next_round.png")));
+                             renderer, SDL2pp::Surface("/var/duck_game/next_round.png")));
 }
 
 void ResourceManager::loadSprites(uint8_t playerAmount) {
