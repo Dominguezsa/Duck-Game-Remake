@@ -118,8 +118,7 @@ void Game::updateGameState() {
         if (duck->is_shooting && duck->weapon.ammo > 0) {
             // std::cout << "Trying to shoot\n";
             if (duck->weapon.actual_cicle == 0) {
-                float temp = 20;
-                float angle = duck->looking == 1 ? temp : temp + 140;
+                float angle = -20.0f;
                 Bullet bullet(duck->weapon.id, duck->position.x + DUCK_WIDTH,
                               duck->position.y + DUCK_HEIGHT / 1.2, angle, 2.0f, 0.0f,
                               duck->looking == 1, duck->weapon.damage, duck->duck_id);
