@@ -28,7 +28,7 @@ void ClientSession::stop() {
 Queue<GameloopMessage>* ClientSession::get_match_queue() {
     return matches_monitor.get_match_queue(identity.joined_match_name);
 }
-
+/*
 void ClientSession::run_receiver_loop() {
     GameloopMessage msg;
     msg.player_id = this->identity.id;
@@ -43,7 +43,7 @@ void ClientSession::run_receiver_loop() {
         // has disconnected from the server or the match is finished.
         this->matches_monitor.disconnect_player(identity.joined_match_name, identity.id);
     }
-}
+}*/
 
 void ClientSession::run() {
     try {
@@ -55,10 +55,19 @@ void ClientSession::run() {
 
             // At this point, the client is in a match.
             SenderThread sender(protocol, client_queue);
+            ReceiverThread receiver(*get_match_queue(), protocol, identity.id);
             sender.start();
-            run_receiver_loop();
+            receiver.start();
+            //run_receiver_loop();
+            while(receiver.is_alive() && sender.is_alive()) {
+                std::this_thread::sleep_for(std::chrono::seconds(10));
+            }
+            this->matches_monitor.disconnect_player(identity.joined_match_name, identity.id);
+            std::cout << "Client disconnected\n";
             sender.stop();
             sender.join();
+            receiver.stop();
+            receiver.join();
         }
     } catch (const SocketWasCLosedException& e) {
         this->_is_alive = false;

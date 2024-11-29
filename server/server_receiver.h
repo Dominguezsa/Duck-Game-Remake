@@ -15,7 +15,7 @@ class ReceiverThread: public Thread {
 private:
     Queue<GameloopMessage>& gameloop_queue;
     ServerProtocol& protocol;
-    uint8_t session_id;
+    uint8_t client_id;
 
 public:
     explicit ReceiverThread(Queue<GameloopMessage>& q, ServerProtocol& p, uint8_t id);

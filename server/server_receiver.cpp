@@ -1,27 +1,22 @@
 #include "server_receiver.h"
 
 ReceiverThread::ReceiverThread(Queue<GameloopMessage>& q, ServerProtocol& p, uint8_t id):
-        gameloop_queue(q), protocol(p), session_id(id) {}
+        gameloop_queue(q), protocol(p), client_id(id) {}
 
 void ReceiverThread::run() {
+    GameloopMessage msg;
+    msg.player_id = client_id;
     try {
         while (this->_is_alive) {
-            GameloopMessage msg;
-            msg.player_id = this->session_id;
             protocol.recv_msg(msg.action);
-            this->gameloop_queue.push(msg);
+            gameloop_queue.push(msg);
         }
-    } catch (const SocketWasCLosedException& e) {
-        if (this->_is_alive) {
-            syslog(LOG_ERR, "%s", e.what());
-        }
-        this->_is_alive = false;
-    } catch (const std::exception& err) {
-        if (this->_is_alive) {
-            syslog(LOG_ERR, "%s", "Error ocurred (ReceiverThread)\n");
-        }
+    } catch (std::exception& e) {
+        // If an exception is thrown in this while loop, that means the client
+        // has disconnected from the server or the match is finished.
+        std::cout << "Client disconnected : Printed on receiverThread\n";
         this->_is_alive = false;
     }
 }
 
-void ReceiverThread::stop() { this->_is_alive = true; }
+void ReceiverThread::stop() { this->_is_alive = false; }
