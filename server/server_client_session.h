@@ -7,13 +7,13 @@
 #include <vector>
 
 #include "../common/common_socket.h"
-#include "server_receiver.h"
 #include "../common/common_thread.h"
 #include "../common/types/constants.h"
 #include "types/client_identity.h"
 
 #include "server_matches_monitor.h"
 #include "server_protocol.h"
+#include "server_receiver.h"
 #include "server_sender.h"
 
 /*

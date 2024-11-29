@@ -87,7 +87,6 @@ void GameClient::run() {
     animationHelper.loadDucks(snapshot.ducks);
 
     int64_t rate = 1000 / FPS;
-    int iteration = 0;
     auto t1 = std::chrono::high_resolution_clock::now();
     int64_t t1_ms =
             std::chrono::duration_cast<std::chrono::milliseconds>(t1.time_since_epoch()).count();
@@ -98,38 +97,40 @@ void GameClient::run() {
     mixer.PlayMusic(*musicTrack, -1);
 
     // bool quit = false;
-    try{
-    while (true) {
-        updateDuckStates();
-        mainLoop(iteration);
-        if (round_finished()) {
-            std::cout << "CLIENT: Round finished\n";
-            screenRenderer.show_next_round();
-            snapshot.bullets.clear();
-            sleep(1);
-        }
+    try {
+        int iteration = 0;
+        while (true) {
+            updateDuckStates();
+            mainLoop(iteration);
+            if (round_finished()) {
+                std::cout << "CLIENT: Round finished\n";
+                screenRenderer.show_next_round();
+                snapshot.bullets.clear();
+                sleep(1);
+            }
 
-        if (quit) {
-            std::cout << "Exiting the game\n";
-            break;
-        }
+            if (quit) {
+                std::cout << "Exiting the game\n";
+                break;
+            }
 
-        auto t2 = std::chrono::high_resolution_clock::now();
-        int64_t t2_ms = std::chrono::duration_cast<std::chrono::milliseconds>(t2.time_since_epoch())
-                                .count();
-        int64_t rest = rate - (t2_ms - t1_ms);
-        if (rest < 0) {
-            auto behind = -rest;
-            rest = rate - behind % rate;
-            auto lost = behind + rest;
-            t1_ms += lost;
-            iteration += lost / rate;
+            auto t2 = std::chrono::high_resolution_clock::now();
+            int64_t t2_ms =
+                    std::chrono::duration_cast<std::chrono::milliseconds>(t2.time_since_epoch())
+                            .count();
+            int64_t rest = rate - (t2_ms - t1_ms);
+            if (rest < 0) {
+                auto behind = -rest;
+                rest = rate - behind % rate;
+                auto lost = behind + rest;
+                t1_ms += lost;
+                iteration += lost / rate;
+            }
+            // SDL_Delay(rest);
+            std::this_thread::sleep_for(std::chrono::milliseconds(rest));
+            t1_ms += rate;
+            iteration += 1;
         }
-        // SDL_Delay(rest);
-        std::this_thread::sleep_for(std::chrono::milliseconds(rest));
-        t1_ms += rate;
-        iteration += 1;
-    }
     } catch (...) {
         std::cout << "Error in the main loop\n";
         std::cout << "exiting the game by error\n";
@@ -158,12 +159,12 @@ void GameClient::run_lobby() { lobby.run(); }
 void GameClient::updateDuckStates() {
 
     Snapshot snapshot_from_queue;
-    try{
+    try {
 
-    while (graphic_queue.try_pop(snapshot_from_queue)) {}
+        while (graphic_queue.try_pop(snapshot_from_queue)) {}
 
-    snapshot.updateSnapshot(snapshot_from_queue.ducks, snapshot_from_queue.bullets,
-                            snapshot_from_queue.weapons);
+        snapshot.updateSnapshot(snapshot_from_queue.ducks, snapshot_from_queue.bullets,
+                                snapshot_from_queue.weapons);
     } catch (...) {
         std::cout << "Error updating duck states\n";
         std::cout << "exiting the game by error\n";
@@ -193,5 +194,4 @@ void GameClient::mainLoop(const int it) {
 }
 
 
-GameClient::~GameClient() {
-}
+GameClient::~GameClient() {}

@@ -58,8 +58,8 @@ void ClientSession::run() {
             ReceiverThread receiver(*get_match_queue(), protocol, identity.id);
             sender.start();
             receiver.start();
-            //run_receiver_loop();
-            while(receiver.is_alive() && sender.is_alive()) {
+            // run_receiver_loop();
+            while (receiver.is_alive() && sender.is_alive()) {
                 std::this_thread::sleep_for(std::chrono::seconds(10));
             }
             this->matches_monitor.disconnect_player(identity.joined_match_name, identity.id);
