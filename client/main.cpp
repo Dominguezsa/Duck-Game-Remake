@@ -22,10 +22,9 @@ int main(int argc, char* argv[]) {
         std::string servname = std::string(argv[2]);
         GameClient gameClient(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME, CHUNK_SIZE_AUDIO, hostname,
                               servname);
-        while (true) {
-            gameClient.run_lobby();
-            gameClient.run();
-        }
+        gameClient.run_lobby();
+        gameClient.run();
+    
         return EXIT_SUCCESS;
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
