@@ -33,6 +33,7 @@ private:
 
 
     void copyBackground();
+    void copy_lines();
     void copyPlatforms();
     void copyDucks(const std::vector<DuckState>& ducks, const int it);
     void copyGun(const DuckState& duck);

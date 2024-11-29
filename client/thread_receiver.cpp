@@ -28,4 +28,4 @@ void ThreadReceiver::stop_thread() {
     std::cout << "RECEIVER: stop_thread function ended\n";
 }
 
-bool ThreadReceiver::is_still_alive() const { return is_alive; }
+bool ThreadReceiver::is_still_alive() const { return _is_alive; }
