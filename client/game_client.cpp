@@ -98,7 +98,7 @@ void GameClient::run() {
     mixer.PlayMusic(*musicTrack, -1);
 
     // bool quit = false;
-
+    try{
     while (true) {
         updateDuckStates();
         mainLoop(iteration);
@@ -130,6 +130,12 @@ void GameClient::run() {
         t1_ms += rate;
         iteration += 1;
     }
+    } catch (...) {
+        std::cout << "Error in the main loop\n";
+        std::cout << "exiting the game by error\n";
+        threadReceiver.stop_thread();
+        threadSender.stop_thread();
+    }
     std::cout << "CLIENT: Stopping the receiver thread\n";
     threadReceiver.stop_thread();
     std::cout << "CLIENT: Closing the graphic queue\n";
@@ -152,12 +158,18 @@ void GameClient::run_lobby() { lobby.run(); }
 void GameClient::updateDuckStates() {
 
     Snapshot snapshot_from_queue;
-
+    try{
 
     while (graphic_queue.try_pop(snapshot_from_queue)) {}
 
     snapshot.updateSnapshot(snapshot_from_queue.ducks, snapshot_from_queue.bullets,
                             snapshot_from_queue.weapons);
+    } catch (...) {
+        std::cout << "Error updating duck states\n";
+        std::cout << "exiting the game by error\n";
+
+        throw;
+    }
 }
 
 void GameClient::mainLoop(const int it) {
@@ -181,4 +193,5 @@ void GameClient::mainLoop(const int it) {
 }
 
 
-GameClient::~GameClient() {}
+GameClient::~GameClient() {
+}

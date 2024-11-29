@@ -19,6 +19,7 @@ void ThreadReceiver::run() {
         }
     } catch (const std::exception& e) {
         this->is_alive = false;
+        ducks_snapshots_queue.close();
     }
     std::cout << "RECEIVER: run function ended\n";
 }
