@@ -86,7 +86,6 @@ void ServerProtocol::send_game_map_list(const std::list<std::string>& map_names)
 
 void ServerProtocol::recv_match_info(std::string& map_name, std::string& match_name,
                                      uint8_t& number_of_players) {
-    // std::lock_guard<std::mutex> lock(this->mutex);
     uint8_t buf;
     recv_uint_8(buf);  // aca recibe el 'C' no se si sirve guardarlo/enviarlo
     recv_uint_8(number_of_players);
@@ -107,7 +106,6 @@ void ServerProtocol::send_match_list(const std::list<std::string>& match_names) 
 }
 
 void ServerProtocol::recv_action(char& action) {
-    // std::unique_lock<std::mutex> lock(this->mutex);
     uint8_t buf;
     recv_uint_8(buf);
     action = buf;
