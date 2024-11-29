@@ -8,7 +8,6 @@ void ThreadSender::run() {
     try {
         while (is_alive) {
             uint8_t message = clientQueue.pop();
-            // std::cout << "SENDER: I should only be unlocked after an event\n";
             this->protocol.send_msg(&message);
         }
     } catch (const std::exception& e) {
