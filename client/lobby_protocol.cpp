@@ -36,33 +36,22 @@ std::vector<std::string> LobbyProtocol::receiveMapList() {
 
 int LobbyProtocol::sendMatchCreation(uint8_t numPlayers, const std::string& matchName,
                                      const std::string& mapName) {
-    std::vector<char> vectorForSocket;
-    vectorForSocket.push_back('C');
-    vectorForSocket.push_back(numPlayers);
+
+    send_data(&CMD_CREATE, sizeof(CMD_CREATE));
+    send_data(&numPlayers, sizeof(numPlayers));
     uint16_t matchNameSize = matchName.size();
-    vectorForSocket.push_back(matchNameSize >> 8);
-    vectorForSocket.push_back(matchNameSize & 0xFF);
-    vectorForSocket.insert(vectorForSocket.end(), matchName.begin(), matchName.end());
+    matchNameSize = htons(matchNameSize);
+    send_data(&matchNameSize, sizeof(matchNameSize));
+    send_data(matchName.c_str(), matchName.size());
     uint16_t mapNameSize = mapName.size();
-    vectorForSocket.push_back(mapNameSize >> 8);
-    vectorForSocket.push_back(mapNameSize & 0xFF);
-
-    vectorForSocket.insert(vectorForSocket.end(), mapName.begin(), mapName.end());
-
-    send_data(vectorForSocket.data(), vectorForSocket.size());
+    mapNameSize = htons(mapNameSize);
+    send_data(&mapNameSize, sizeof(mapNameSize));
+    send_data(mapName.c_str(), mapName.size());
 
     // Receive confirmation byte
     uint8_t confirmation;
     recv_uint_8(confirmation);
     return confirmation;
-    /*
-    if (confirmation == SUCCESS) {
-        auto initialState = std::make_shared<MatchInitialState>();
-        initialState->duck_identities = std::make_shared<std::vector<DuckIdentity>>();
-        initialState->duck_identities->push_back(receiveDuckIdentity());
-        return initialState;
-    }
-    return nullptr;*/
 }
 
 std::vector<std::string> LobbyProtocol::receiveMatchList() {
@@ -84,27 +73,4 @@ int LobbyProtocol::sendMatchSelection(const std::string& matchName) {
     uint8_t confirmation;
     recv_uint_8(confirmation);
     return confirmation;
-    /*
-    if (confirmation == SUCCESS) {
-        auto initialState = std::make_shared<MatchInitialState>();
-        initialState->duck_identities = std::make_shared<std::vector<DuckIdentity>>();
-        initialState->duck_identities->push_back(receiveDuckIdentity());
-        return initialState;
-    }
-    return nullptr;*/
 }
-/*
-DuckIdentity LobbyProtocol::receiveDuckIdentity() {
-    DuckIdentity identity;
-    recv_string(identity.name);
-    recv_uint_8(identity.id);
-    uint8_t color;
-    recv_uint_8(color);
-    identity.color = static_cast<char>(color);
-    float pos_x, pos_y;
-    recv_float(pos_x);
-    recv_float(pos_y);
-    identity.initial_pos_x = pos_x;
-    identity.initial_pos_y = pos_y;
-    return identity;
-}*/

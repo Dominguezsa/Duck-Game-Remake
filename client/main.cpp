@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
                               servname);
         gameClient.run_lobby();
         gameClient.run();
-    
+
         return EXIT_SUCCESS;
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;

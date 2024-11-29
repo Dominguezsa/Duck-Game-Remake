@@ -137,7 +137,7 @@ void GameClient::run() {
     std::cout << "CLIENT: Stopping the sender thread\n";
     threadSender.stop_thread();
     std::cout << "CLIENT: Closing the messages for server queue\n";
-    //messagesForServer.close(); esto ya se encarga el destructor del sender
+    // messagesForServer.close(); esto ya se encarga el destructor del sender
 }
 
 bool GameClient::round_finished() {
