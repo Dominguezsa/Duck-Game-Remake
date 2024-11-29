@@ -134,13 +134,11 @@ void GameClient::run() {
     } catch (...) {
         std::cout << "Error in the main loop\n";
         std::cout << "exiting the game by error\n";
-        threadReceiver.stop_thread();
-        threadSender.stop_thread();
     }
     std::cout << "CLIENT: Stopping the receiver thread\n";
     threadReceiver.stop_thread();
     std::cout << "CLIENT: Closing the graphic queue\n";
-    graphic_queue.close();
+    // graphic_queue.close(); esto ya se encarga el destructor del receiver
     std::cout << "CLIENT: Stopping the sender thread\n";
     threadSender.stop_thread();
     std::cout << "CLIENT: Closing the messages for server queue\n";
