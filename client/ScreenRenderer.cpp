@@ -166,7 +166,7 @@ void ScreenRenderer::copyBullets(const std::vector<Bullet>& bullets) {
 
         renderer.Copy(bullet_texture, bullet_frame,
                       SDL2pp::Rect(bullet.x, bullet.y, bullet_rect.w, bullet_rect.h), angle,
-                      SDL2pp::NullOpt, bullet.going_right ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
+                      SDL2pp::NullOpt, SDL_FLIP_NONE);
     }
 }
 
