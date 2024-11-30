@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.13)
 
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
 endif()
+
+set(CMAKE_CXX_EXTENSIONS ON)
 
 if(POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
@@ -17,11 +19,12 @@ endif()
 # when compiling with PCH enabled
 set(CMAKE_CXX_EXTENSIONS ON)
 
-# Set the BUILD_MODE custom variable to allow choosing between 'release' or other modes (defaults to debug)
-set(BUILD_MODE "release" CACHE STRING "Defines if the build should be optimized or set to debug mode")
+if(POLICY CMP0100)
+    cmake_policy(SET CMP0100 NEW)
+endif()
 
 # Set compiler flags conditionally
-if(BUILD_MODE STREQUAL "release")
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
     # Release mode flags (optimizations enabled)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -pedantic -pedantic-errors -O3 -fno-inline -D _POSIX_C_SOURCE=200809L")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -pedantic -pedantic-errors -O3 -fno-inline -D _POSIX_C_SOURCE=200809L")
@@ -29,7 +32,7 @@ if(BUILD_MODE STREQUAL "release")
 else()
     # Debug mode flags (no optimization, debugging info)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -pedantic -pedantic-errors -O0 -ggdb -DDEBUG -fno-inline -D _POSIX_C_SOURCE=200809L")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -pedantic -pedantic-errors -O0 -ggdb -DDEBUG -fno-inline -D _POSIX_C_SOURCE=200809L")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -pedantic -pedantic-errors -O0 -g3 -ggdb -DDEBUG -fno-inline -D _POSIX_C_SOURCE=200809L")
     message("-- Compiling in debug mode (no optimizations, debugging info)")
 endif()
 
@@ -41,6 +44,10 @@ project(taller_tp
     LANGUAGES CXX
 )
 
+set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+find_package(Threads REQUIRED)
+
 option(TALLER_TESTS "Enable / disable tests." ON)
 option(TALLER_CLIENT "Enable / disable client program." ON)
 option(TALLER_SERVER "Enable / disable server program." ON)
@@ -48,6 +55,24 @@ option(TALLER_EDITOR "Enable / disable editor program." ON)
 option(TALLER_MAKE_WARNINGS_AS_ERRORS "Enable / disable warnings as errors." ON)
 
 
+# Find Qt5 package
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
+
+
+# Automatic generation of UI files from Qt turned on
+set(CMAKE_AUTOUIC ON)
+# Automatic generation of .moc (Meta-Object Compiler) files from Qt turned on
+set(CMAKE_AUTOMOC ON)
+# Automatic generation of resources (.qrc) from Qt turned on
+set(CMAKE_AUTORCC ON)
+
+# Find Qt neccesary packages
+find_package(QT NAMES Qt5 REQUIRED COMPONENTS Widgets Gui Multimedia)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia)
+find_package(yaml-cpp REQUIRED)
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
+
+# Set the output directory for the build executables
 message(CMAKE_CXX_COMPILER_ID= "${CMAKE_CXX_COMPILER_ID}")
 
 
@@ -71,13 +96,12 @@ target_include_directories(taller_common PUBLIC .)
 
 # Install libSDL2pp (for client or editor)
 # HEY!! TODO XXX: add more dependendies (either for client, server or editor)
-if(TALLER_CLIENT OR TALLER_EDITOR)
+if(TALLER_CLIENT)   
     include(FetchContent)
     FetchContent_Declare(
         libSDL2pp
         URL https://github.com/libSDL2pp/libSDL2pp/archive/cc198c9a5657048bee67ece82de620b2d5661084.zip
     )
-
 
     # set up SDL2pp library
     set(SDL2PP_WITH_IMAGE YES)
@@ -88,112 +112,135 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
     FetchContent_MakeAvailable(libSDL2pp)
 endif()
 
+if (TALLER_SERVER OR TALLER_CLIENT)
+    include(FetchContent)
+
+    FetchContent_Declare(
+    yaml-cpp
+    GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+    yaml-cpp-lib
+    )
+    FetchContent_GetProperties(yaml-cpp)
+
+    if(NOT yaml-cpp_POPULATED)
+        message(STATUS "Fetching yaml-cpp...")
+        FetchContent_Populate(yaml-cpp)
+        add_subdirectory(${yaml-cpp_SOURCE_DIR} ${yaml-cpp_BINARY_DIR})
+    endif()
+
+    #target_link_libraries(taller_client taller_server PUBLIC yaml-cpp::yaml-cpp) # The library or executable that require yaml-cpp library
+endif()
+
 
 # Program section
 # ---------------
+
+
+
+# Update Qt components
+find_package(QT NAMES Qt5 REQUIRED COMPONENTS Widgets Gui Multimedia Network)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia Network)
+
 if(TALLER_CLIENT)
-    # HEY!! TODO XXX: Change the name of the executable to the one you like!
     add_executable(taller_client)
-
-    # Make them depend on taller_common lib
     add_dependencies(taller_client taller_common SDL2pp::SDL2pp)
-
-    # Add source files and enable warnings
-    # HEY!! TODO XXX: add more subfolders here
+    
+    # Add client source files
     add_subdirectory(client)
 
-    set_project_warnings(taller_client ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
+    # Include MainWindow and other editor files
+    target_sources(taller_client
+        PRIVATE
+        editor/mainwindow.cpp
+        editor/mainwindow.h
+        editor/mainwindow.ui
+        editor/Tile.cpp
+        editor/Tile.h
+        editor/ImageWidget.cpp
+        editor/ImageWidget.h 
+    )
 
-    # add libSDL2pp's headers
+    set_project_warnings(taller_client ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
     target_include_directories(taller_client PRIVATE ${libSDL2pp_SOURCE_DIR})
 
-    # Link the taller_common lib target
-    target_link_libraries(taller_client taller_common SDL2pp::SDL2pp)
+    target_link_libraries(taller_client 
+        PRIVATE
+        taller_common
+        SDL2pp::SDL2pp
+        Qt${QT_VERSION_MAJOR}::Widgets
+        Qt${QT_VERSION_MAJOR}::Gui
+        Qt${QT_VERSION_MAJOR}::Multimedia
+        Qt${QT_VERSION_MAJOR}::Network
+        yaml-cpp::yaml-cpp
+        Threads::Threads
+    )
 endif()
 
 if(TALLER_SERVER)
-    # HEY!! TODO XXX: Change the name of the executable to the one you like!
     add_executable(taller_server)
-
-    # Make them depend on taller_common lib
     add_dependencies(taller_server taller_common)
+    add_subdirectory(server)
+    set_project_warnings(taller_server ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
+    # Link the taller_common lib target
+    target_link_libraries(taller_server taller_common yaml-cpp::yaml-cpp)
+endif()
+
+if(TALLER_EDITOR)
+    add_executable(taller_editor)
+    # Make them depend on taller_common lib
+    #add_dependencies(taller_editor taller_common SDL2pp::SDL2pp)
+
+    target_link_libraries(taller_editor 
+        PRIVATE
+        taller_common
+        Qt${QT_VERSION_MAJOR}::Widgets
+        Qt${QT_VERSION_MAJOR}::Gui
+        Qt${QT_VERSION_MAJOR}::Multimedia
+        Qt${QT_VERSION_MAJOR}::Network
+        yaml-cpp::yaml-cpp
+        Threads::Threads
+    )
 
     # Add source files and enable warnings
     # HEY!! TODO XXX: add more subfolders here
-    add_subdirectory(server)
-
-    set_project_warnings(taller_server ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
+    add_subdirectory(editor)
+    #target_include_directories(taller_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
+    set_project_warnings(taller_editor ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
+    # add libSDL2pp's headers
+    #target_include_directories(taller_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(taller_server taller_common)
+    #target_link_libraries(taller_editor taller_common SDL2pp::SDL2pp yaml-cpp::yaml-cpp)
 endif()
 
-# if(TALLER_EDITOR)
-#     # HEY!! TODO XXX: Change the name of the executable to the one you like!
-#     add_executable(taller_editor)
-#
-#     # Make them depend on taller_common lib
-#     add_dependencies(taller_editor taller_common SDL2pp::SDL2pp)
-#
-#     # Add source files and enable warnings
-#     # HEY!! TODO XXX: add more subfolders here
-#     add_subdirectory(editor)
-#
-#     set_project_warnings(taller_editor ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
-#
-#     # add libSDL2pp's headers
-#     target_include_directories(taller_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
-#
-#     # Link the taller_common lib target
-#     target_link_libraries(taller_editor taller_common SDL2pp::SDL2pp)
-# endif()
 
 
 # Testing section
 # ---------------
 
 if(TALLER_TESTS)
-    # Let's use google test
     include(FetchContent)
     FetchContent_Declare(
         googletest
         URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
     )
 
-    # For Windows: Prevent overriding the parent project's compiler/linker settings
-    # (borrowed from https://google.github.io/googletest/quickstart-cmake.html)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(googletest)
     include(GoogleTest)
 
-    # target for testing
-    # HEY!! TODO XXX: Change the name of the executable to the one you like!
     add_executable(taller_tests)
-
-    # HEY!! TODO XXX: I'm assuming that the code under testing is in taller_common
-    # Change this if you have to.
     add_dependencies(taller_tests taller_common)
-
-    # Say where to find the xoz headers
-    # HEY!! TODO XXX: add more subfolders here
     target_include_directories(taller_tests PUBLIC .)
-
-    # Add the source files to the taller_tests target
-    # HEY!! TODO XXX: add more subfolders here
     add_subdirectory(tests/)
-
-    # Set the compiler warnings to the tests target (but be a little lesser strict)
     set_project_warnings(taller_tests ${TALLER_MAKE_WARNINGS_AS_ERRORS} TRUE)
 
-    # Say where googletest headers can be found
     target_include_directories(taller_tests
         PUBLIC
         ${gtest_SOURCE_DIR}/include
         ${gmock_SOURCE_DIR}/include
     )
 
-    # HEY!! TODO XXX: I'm assuming that the code under testing is in taller_common
-    # Change this if you have to.
     target_link_libraries(taller_tests
         taller_common
         GTest::gtest_main
