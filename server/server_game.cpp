@@ -30,8 +30,8 @@
 #define WEAPON_RECT 64
 
 Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue):
-        weapons({Weapon(WeaponType::AK47, "laserRifle", 30, 15, 20, {20, 320},
-                        WeaponType::AK47)}),  // las weapons deberian estar en el yaml
+        weapons({Weapon(WeaponType::AK47, "laserRifle", 30, 15, 20, {20, 320}, WeaponType::AK47,
+                        6.0f, 0.0f)}),  // las weapons deberian estar en el yaml
         message_queue(queue),
         is_running(false),
         next_player_id(0),
@@ -96,13 +96,6 @@ void Game::updateGameState() {
         // Store previous position for collision resolution
         float previous_y = duck->position.y;
         float previous_x = duck->position.x;
-
-
-        // Now i should update all of the bullets positions, check if they hit a duck and if they
-        // hit a duck, reduce the life points of the duck and remove the bullet from the game
-        // Also, if the bullet is out of the screen, remove it from the game
-        // also, check if a weapon pickup is picked up by a duck and give it to the duck
-
         // Checking if a duck collides with a weapon to pick it up
 
         for (const auto& weapon: weapons) {
@@ -114,27 +107,12 @@ void Game::updateGameState() {
                 duck->pick_up_weapon(weapon);
             }
         }
-        if (duck->is_shooting && duck->weapon.ammo > 0) {
-            // std::cout << "Trying to shoot\n";
-            if (duck->weapon.actual_cicle == 0) {
-                int angle = 0;
-                // Esto me da una variación pseudo aleatoria entre -10:10 grados
-                angle += std::rand() % 20 - 10;
-                Bullet bullet(duck->weapon.id, duck->position.x + DUCK_WIDTH,
-                              duck->position.y + DUCK_HEIGHT / 1.2, angle, 6.0f, 0.0f,
-                              duck->looking == 1, duck->weapon.damage, duck->duck_id);
 
-                bullets_by_id.insert({{next_bullet_id, bullet.id}, bullet});
-                next_bullet_id++;
-                duck->weapon.ammo--;
-                duck->weapon.actual_cicle++;
-            } else {
-                if (duck->weapon.actual_cicle == duck->weapon.cicles_to_reshoot) {
-                    duck->weapon.actual_cicle = 0;
-                } else {
-                    duck->weapon.actual_cicle++;
-                }
-            }
+
+        if (duck->is_shooting && duck->weapon.ammo > 0) {
+            duck->weapon.shoot(duck->looking == 1, duck->position.x + DUCK_WIDTH / 2,
+                               duck->position.y + DUCK_HEIGHT / 2, bullets_by_id, next_bullet_id,
+                               duck->duck_id);
         }
 
         // Apply gravity if in air

@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "duck.h"
+// #include "duck.h"
 
 class Bullet {
 public:
