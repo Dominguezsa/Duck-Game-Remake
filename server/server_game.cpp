@@ -78,8 +78,136 @@ bool Game::checkPlatformCollision(const Position& duck_pos, float duck_width, fl
     return vertical_overlap && horizontal_overlap;
 }
 
-void Game::updateGameState() {
+void Game::updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_states) {
+
     const float ground_level = 700.0f - DUCK_HEIGHT;
+
+    // Store previous position for collision resolution
+    float previous_y = duck->position.y;
+    float previous_x = duck->position.x;
+    // Checking if a duck collides with a weapon to pick it up
+
+    for (const auto& weapon: weapons) {
+        if (duck->position.x < weapon.pos.x + WEAPON_RECT &&
+            duck->position.x + DUCK_WIDTH > weapon.pos.x &&
+            duck->position.y < weapon.pos.y + WEAPON_RECT &&
+            duck->position.y + DUCK_HEIGHT > weapon.pos.y) {
+            duck->pick_up_weapon(weapon);
+        }
+    }
+
+
+    if (duck->is_shooting && duck->weapon.ammo > 0) {
+        duck->weapon.shoot(duck->looking == 1, duck->position.x, DUCK_WIDTH, duck->position.y,
+                           DUCK_HEIGHT, bullets_by_id, next_bullet_id, duck->duck_id);
+    }
+
+    // Apply gravity if in air
+    if (duck->in_air) {
+        duck->vertical_velocity += GRAVITY;
+
+        // Apply flutter effect if jumping is held
+        if (duck->is_gliding) {
+            duck->vertical_velocity += FLUTTER_FORCE;
+            if (duck->vertical_velocity > MAX_FLUTTER_SPEED) {
+                duck->vertical_velocity = MAX_FLUTTER_SPEED;
+            }
+        }
+    }
+
+    // Limit fall speed
+    if (duck->vertical_velocity > MAX_FALL_SPEED) {
+        duck->vertical_velocity = MAX_FALL_SPEED;
+    }
+
+    // Update horizontal position
+    if (duck->is_running) {
+        // std::cout << "Duck be running\n";
+
+        duck->horizontal_velocity += MOVE_SPEED;
+        if (duck->horizontal_velocity > MAX_HORIZONTAL_SPEED) {
+            duck->horizontal_velocity = MAX_HORIZONTAL_SPEED;
+        }
+
+        if (duck->looking == 1) {
+            // duck->position.x += move_speed;
+            double actual_pos = duck->position.x;
+            double new_pos = actual_pos + duck->horizontal_velocity;
+            duck->position.x = new_pos;
+            // std::cout << "New position is: " << duck->position.x << std::endl;
+        } else if (duck->looking == 0) {
+            duck->position.x -= duck->horizontal_velocity;
+            // std::cout << "New position is: " << duck->position.x << std::endl;
+        }
+    } else if (duck->is_sliding) {
+        duck->horizontal_velocity -= STOP_SPEED;
+        if (duck->horizontal_velocity < 0) {
+            duck->horizontal_velocity = 0;
+        }
+
+        if (duck->looking == 1) {
+            duck->position.x += duck->horizontal_velocity;
+        } else if (duck->looking == 0) {
+            duck->position.x -= duck->horizontal_velocity;
+        }
+    }
+
+    // Apply vertical velocity
+    duck->position.y += duck->vertical_velocity;
+
+    // Check platform collisions
+    for (const auto& platform: platforms) {
+        if (checkPlatformCollision(duck->position, DUCK_WIDTH, DUCK_HEIGHT, platform)) {
+            if (duck->vertical_velocity > 0 && previous_y + DUCK_HEIGHT <= platform.y) {
+                // Landing on platform
+                // Small adjustment to avoid a horizontal collision with the platform
+                duck->position.y = platform.y - DUCK_HEIGHT - 2;
+                duck->vertical_velocity = 0;
+                duck->in_air = false;
+                duck->is_jumping = false;
+                duck->is_gliding = false;
+            } else if (duck->vertical_velocity < 0 && previous_y >= platform.y + platform.height) {
+                // Hitting platform from below
+                duck->position.y = platform.y + platform.height;
+                duck->vertical_velocity = 0;
+            } else {
+                // Side collision
+                duck->position.x = previous_x;
+                // std::cout << "Im detecting a collision\n";
+            }
+        }
+    }
+
+    // Ground collision
+    if (duck->position.y > ground_level) {
+        duck->position.y = ground_level;
+        duck->vertical_velocity = 0;
+        duck->in_air = false;
+    }
+
+    // Screen boundaries
+    if (duck->position.x < 0) {
+        duck->position.x = 0;
+    } else if (duck->position.x > 1200 - DUCK_WIDTH) {
+        duck->position.x = 1200 - DUCK_WIDTH;
+    }
+
+    duck->is_falling = duck->vertical_velocity > 0;
+
+
+    // Update duck state
+    DuckState state(duck->name, duck->duck_id, duck->life_points, duck->looking, duck->position,
+                    duck->is_alive ? 1 : 0, duck->is_running ? 1 : 0, duck->is_jumping ? 1 : 0,
+                    duck->is_gliding ? 1 : 0, duck->is_falling ? 1 : 0, duck->is_ducking ? 1 : 0,
+                    duck->is_shooting ? 1 : 0, duck->is_sliding ? 1 : 0, duck->helmet_on ? 1 : 0,
+                    duck->armor_on ? 1 : 0, duck->in_air ? 1 : 0, duck->vertical_velocity,
+                    duck->horizontal_velocity, duck->weapon.getType());
+
+    duck->update_state(state);
+    duck_states->push_back(state);
+}
+
+void Game::updateGameState() {
 
     std::shared_ptr<std::vector<DuckState>> duck_states =
             std::make_shared<std::vector<DuckState>>();
@@ -87,131 +215,7 @@ void Game::updateGameState() {
     for (auto& duck_pair: ducks) {
         Duck* duck = duck_pair.second.get();
 
-        // Store previous position for collision resolution
-        float previous_y = duck->position.y;
-        float previous_x = duck->position.x;
-        // Checking if a duck collides with a weapon to pick it up
-
-        for (const auto& weapon: weapons) {
-            if (duck->position.x < weapon.pos.x + WEAPON_RECT &&
-                duck->position.x + DUCK_WIDTH > weapon.pos.x &&
-                duck->position.y < weapon.pos.y + WEAPON_RECT &&
-                duck->position.y + DUCK_HEIGHT > weapon.pos.y) {
-                duck->pick_up_weapon(weapon);
-            }
-        }
-
-
-        if (duck->is_shooting && duck->weapon.ammo > 0) {
-            duck->weapon.shoot(duck->looking == 1, duck->position.x, DUCK_WIDTH, duck->position.y,
-                               DUCK_HEIGHT, bullets_by_id, next_bullet_id, duck->duck_id);
-        }
-
-        // Apply gravity if in air
-        if (duck->in_air) {
-            duck->vertical_velocity += GRAVITY;
-
-            // Apply flutter effect if jumping is held
-            if (duck->is_gliding) {
-                duck->vertical_velocity += FLUTTER_FORCE;
-                if (duck->vertical_velocity > MAX_FLUTTER_SPEED) {
-                    duck->vertical_velocity = MAX_FLUTTER_SPEED;
-                }
-            }
-        }
-
-        // Limit fall speed
-        if (duck->vertical_velocity > MAX_FALL_SPEED) {
-            duck->vertical_velocity = MAX_FALL_SPEED;
-        }
-
-        // Update horizontal position
-        if (duck->is_running) {
-            // std::cout << "Duck be running\n";
-
-            duck->horizontal_velocity += MOVE_SPEED;
-            if (duck->horizontal_velocity > MAX_HORIZONTAL_SPEED) {
-                duck->horizontal_velocity = MAX_HORIZONTAL_SPEED;
-            }
-
-            if (duck->looking == 1) {
-                // duck->position.x += move_speed;
-                double actual_pos = duck->position.x;
-                double new_pos = actual_pos + duck->horizontal_velocity;
-                duck->position.x = new_pos;
-                // std::cout << "New position is: " << duck->position.x << std::endl;
-            } else if (duck->looking == 0) {
-                duck->position.x -= duck->horizontal_velocity;
-                // std::cout << "New position is: " << duck->position.x << std::endl;
-            }
-        } else if (duck->is_sliding) {
-            duck->horizontal_velocity -= STOP_SPEED;
-            if (duck->horizontal_velocity < 0) {
-                duck->horizontal_velocity = 0;
-            }
-
-            if (duck->looking == 1) {
-                duck->position.x += duck->horizontal_velocity;
-            } else if (duck->looking == 0) {
-                duck->position.x -= duck->horizontal_velocity;
-            }
-        }
-
-        // Apply vertical velocity
-        duck->position.y += duck->vertical_velocity;
-
-        // Check platform collisions
-        for (const auto& platform: platforms) {
-            if (checkPlatformCollision(duck->position, DUCK_WIDTH, DUCK_HEIGHT, platform)) {
-                if (duck->vertical_velocity > 0 && previous_y + DUCK_HEIGHT <= platform.y) {
-                    // Landing on platform
-                    // Small adjustment to avoid a horizontal collision with the platform
-                    duck->position.y = platform.y - DUCK_HEIGHT - 2;
-                    duck->vertical_velocity = 0;
-                    duck->in_air = false;
-                    duck->is_jumping = false;
-                    duck->is_gliding = false;
-                } else if (duck->vertical_velocity < 0 &&
-                           previous_y >= platform.y + platform.height) {
-                    // Hitting platform from below
-                    duck->position.y = platform.y + platform.height;
-                    duck->vertical_velocity = 0;
-                } else {
-                    // Side collision
-                    duck->position.x = previous_x;
-                    // std::cout << "Im detecting a collision\n";
-                }
-            }
-        }
-
-        // Ground collision
-        if (duck->position.y > ground_level) {
-            duck->position.y = ground_level;
-            duck->vertical_velocity = 0;
-            duck->in_air = false;
-        }
-
-        // Screen boundaries
-        if (duck->position.x < 0) {
-            duck->position.x = 0;
-        } else if (duck->position.x > 1200 - DUCK_WIDTH) {
-            duck->position.x = 1200 - DUCK_WIDTH;
-        }
-
-        duck->is_falling = duck->vertical_velocity > 0;
-
-
-        // Update duck state
-        DuckState state(duck->name, duck->duck_id, duck->life_points, duck->looking, duck->position,
-                        duck->is_alive ? 1 : 0, duck->is_running ? 1 : 0, duck->is_jumping ? 1 : 0,
-                        duck->is_gliding ? 1 : 0, duck->is_falling ? 1 : 0,
-                        duck->is_ducking ? 1 : 0, duck->is_shooting ? 1 : 0,
-                        duck->is_sliding ? 1 : 0, duck->helmet_on ? 1 : 0, duck->armor_on ? 1 : 0,
-                        duck->in_air ? 1 : 0, duck->vertical_velocity, duck->horizontal_velocity,
-                        duck->weapon.getType());
-
-        duck->update_state(state);
-        duck_states->push_back(state);
+        updateDuck(duck, duck_states);
     }
 
 
