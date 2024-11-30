@@ -23,8 +23,9 @@ public:
     uint8_t actual_cicle = 0;
     uint8_t damage = 0;
     Position pos = Position(0, 0);
-    uint8_t bullet_speed = 0;
+    float bullet_speed = 0;
     uint8_t bullet_time = 0;
+    uint8_t spread_angle = 0;
 
 
 public:
@@ -39,8 +40,8 @@ public:
             bullet_time(0) {}
 
     Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint8_t cicles_to_reshoot,
-           uint8_t damage, Position pos, WeaponType type, uint8_t bullet_speed,
-           uint8_t bullet_time):
+           uint8_t damage, Position pos, WeaponType type, uint8_t bullet_speed, uint8_t bullet_time,
+           uint8_t spread_angle):
             id(id),
             name(name),
             type(type),
@@ -49,7 +50,8 @@ public:
             damage(damage),
             pos(pos),
             bullet_speed(bullet_speed),
-            bullet_time(bullet_time) {}
+            bullet_time(bullet_time),
+            spread_angle(spread_angle) {}
 
     Weapon(uint8_t id, Position pos):
             id(id),
@@ -71,8 +73,9 @@ public:
                uint32_t& next_bullet_id, uint8_t duck_id) {
         if (actual_cicle == 0) {
             int angle = 0;
-            // Esto me da una variación pseudo aleatoria entre -10:10 grados
-            // angle += std::rand() % 20 - 10;
+            if (spread_angle != 0) {
+                angle += std::rand() % (spread_angle * 2) - spread_angle;
+            }
             Bullet bullet(id, duck_pos_x, duck_pos_y, angle, bullet_speed, bullet_time, going_right,
                           damage, duck_id);
 
@@ -100,6 +103,7 @@ public:
         pos = other.pos;
         bullet_speed = other.bullet_speed;
         bullet_time = other.bullet_time;
+        spread_angle = other.spread_angle;
     }
 
     Weapon ak47() { return Weapon(WEAPON_TYPE::AK47, "ak47", 30, 5, 10); }

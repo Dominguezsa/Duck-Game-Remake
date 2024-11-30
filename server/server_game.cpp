@@ -31,7 +31,7 @@
 
 Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue):
         weapons({Weapon(WeaponType::AK47, "laserRifle", 30, 15, 20, {20, 320}, WeaponType::AK47,
-                        6.0f, 0.0f)}),  // las weapons deberian estar en el yaml
+                        5.0f, 0.0f, 10)}),  // las weapons deberian estar en el yaml
         message_queue(queue),
         is_running(false),
         next_player_id(0),
