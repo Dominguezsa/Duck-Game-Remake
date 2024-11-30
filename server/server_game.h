@@ -44,6 +44,8 @@ private:
     static constexpr uint16_t VICTORIES_TO_WIN = 10;
 
     void updateGameState();
+    void updateBullets();
+    void updateDucks(std::shared_ptr<std::vector<DuckState>>& duck_states);
     void updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_states);
     void checkRoundEnd();
     void startNewRound();

@@ -78,6 +78,47 @@ bool Game::checkPlatformCollision(const Position& duck_pos, float duck_width, fl
     return vertical_overlap && horizontal_overlap;
 }
 
+void Game::updateBullets() {
+    for (auto it = bullets_by_id.begin(); it != bullets_by_id.end();) {
+
+        Bullet& bullet = it->second;
+
+        bool errase = false;
+
+        for (auto& duck_pair: ducks) {
+            Duck* duck = duck_pair.second.get();
+            if (bullet.duck_how_shot == duck->duck_id) {
+                continue;
+            }
+
+            if (duck->position.x < bullet.x + 10 && duck->position.x + DUCK_WIDTH > bullet.x &&
+                duck->position.y < bullet.y + 10 && duck->position.y + DUCK_HEIGHT > bullet.y) {
+
+                duck->receive_damage(bullet.damage);
+                errase = true;
+            }
+        }
+
+        if (bullet.x < 0 || bullet.x > 1200 || bullet.y < 0 || bullet.y > 1200 || errase) {
+            // it = bullets_by_id.erase(it);
+            bullet.update(Bullet());
+            it++;
+            continue;
+        } else {
+            it++;
+            bullet.move();
+        }
+    }
+}
+
+void Game::updateDucks(std::shared_ptr<std::vector<DuckState>>& duck_states) {
+    for (auto& duck_pair: ducks) {
+        Duck* duck = duck_pair.second.get();
+
+        updateDuck(duck, duck_states);
+    }
+}
+
 void Game::updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_states) {
 
     const float ground_level = 700.0f - DUCK_HEIGHT;
@@ -211,47 +252,14 @@ void Game::updateGameState() {
 
     std::shared_ptr<std::vector<DuckState>> duck_states =
             std::make_shared<std::vector<DuckState>>();
-
-    for (auto& duck_pair: ducks) {
-        Duck* duck = duck_pair.second.get();
-
-        updateDuck(duck, duck_states);
-    }
-
-
-    // Now updating the bullets
-    for (auto it = bullets_by_id.begin(); it != bullets_by_id.end();) {
-
-        Bullet& bullet = it->second;
-
-        bool errase = false;
-
-        for (auto& duck_pair: ducks) {
-            Duck* duck = duck_pair.second.get();
-            if (bullet.duck_how_shot == duck->duck_id) {
-                continue;
-            }
-
-            if (duck->position.x < bullet.x + 10 && duck->position.x + DUCK_WIDTH > bullet.x &&
-                duck->position.y < bullet.y + 10 && duck->position.y + DUCK_HEIGHT > bullet.y) {
-
-                duck->receive_damage(bullet.damage);
-                errase = true;
-            }
-        }
-
-        if (bullet.x < 0 || bullet.x > 1200 || bullet.y < 0 || bullet.y > 1200 || errase) {
-            // it = bullets_by_id.erase(it);
-            bullet.update(Bullet());
-            it++;
-            continue;
-        } else {
-            it++;
-            bullet.move();
-        }
-    }
-
     std::shared_ptr<std::vector<Bullet>> bullets_in_game = std::make_shared<std::vector<Bullet>>();
+
+    // Updating the ducks
+    updateDucks(duck_states);
+
+    // Updating the bullets
+    updateBullets();
+
 
     std::transform(bullets_by_id.begin(), bullets_by_id.end(), std::back_inserter(*bullets_in_game),
                    [](const auto& pair) { return pair.second; });
