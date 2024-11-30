@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-Bullet::Bullet(uint8_t id, float x, float y, float angle, float speed, float time, bool going_right,
+Bullet::Bullet(uint8_t id, float x, float y, int angle, float speed, float time, bool going_right,
                uint8_t damage, uint8_t duck_how_shot):
         id(id),
         x(x),
@@ -25,7 +25,7 @@ Bullet::Bullet(const Bullet& other):
         damage(other.damage),
         duck_how_shot(other.duck_how_shot) {}
 
-Bullet::Bullet(uint8_t id, float x, float y, bool going_right, uint8_t angle):
+Bullet::Bullet(uint8_t id, float x, float y, bool going_right, int angle):
         id(id),
         x(x),
         y(y),
@@ -41,7 +41,7 @@ Bullet::Bullet():
         id(0),
         x(0.0f),
         y(0.0f),
-        angle(0.0f),
+        angle(0),
         speed(0.0f),
         time(0.0f),
         going_right(false),

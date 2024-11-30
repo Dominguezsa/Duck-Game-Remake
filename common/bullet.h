@@ -10,7 +10,7 @@ public:
     uint8_t id;  // esto es de que arma es la bala porque cambia la foto
     float x;
     float y;
-    float angle;
+    int angle;
     float speed;  // se tiene una ecuacion de la bala que es casi una linea recta entonces en cada
                   // itereacion se va actualizando su posicion, si fuese una granada es una
                   // parabola, etc
@@ -23,9 +23,9 @@ public:
 
     uint8_t duck_how_shot;
 
-    Bullet(uint8_t id, float x, float y, float angle, float speed, float time, bool going_right,
+    Bullet(uint8_t id, float x, float y, int angle, float speed, float time, bool going_right,
            uint8_t damage, uint8_t duck_how_shot);
-    Bullet(uint8_t id, float x, float y, bool going_right, uint8_t angle);
+    Bullet(uint8_t id, float x, float y, bool going_right, int angle);
     Bullet(const Bullet& other);
     Bullet();
     void move();

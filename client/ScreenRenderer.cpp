@@ -140,14 +140,12 @@ void ScreenRenderer::copyWeapons(const std::vector<Weapon>& weapons) {
 
 void ScreenRenderer::copyBullets(const std::vector<Bullet>& bullets) {
 
-    std::cout << "bullet\n";
-
     // std::cout << "I have to keep drawing " << bullets.size() << " bullets\n";
 
     for (const auto& bullet: bullets) {
-        if (bullet.id == WeaponType::Sniper) {
-            continue;
-        }
+        // if (bullet.id == WeaponType::Sniper) {
+        //     continue;
+        // }
 
         SDL2pp::Texture& bullet_texture =
                 (bullet.id == WeaponType::Sniper) ?
@@ -160,8 +158,14 @@ void ScreenRenderer::copyBullets(const std::vector<Bullet>& bullets) {
         SDL2pp::Rect bullet_frame = bullet_info.first;
         SDL2pp::Rect bullet_rect = bullet_info.second;
 
+        int angle = bullet.angle;
+
+        if (!bullet.going_right) {
+            angle = 180 - bullet.angle;
+        }
+
         renderer.Copy(bullet_texture, bullet_frame,
-                      SDL2pp::Rect(bullet.x, bullet.y, bullet_rect.w, bullet_rect.h), bullet.angle,
+                      SDL2pp::Rect(bullet.x, bullet.y, bullet_rect.w, bullet_rect.h), angle,
                       SDL2pp::NullOpt, bullet.going_right ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
     }
 }
@@ -179,7 +183,6 @@ void ScreenRenderer::copy_lines() {
     for (int i = 0; i <= num_lines_x; ++i) {
         int x = i * line_spacing_x;
         SDL_RenderDrawLine(renderer.Get(), x, 0, x, screen_height);
-        std::cout << "Baklbalbla\n";
     }
 
     // Dibujar líneas horizontales

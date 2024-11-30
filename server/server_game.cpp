@@ -30,8 +30,8 @@
 #define WEAPON_RECT 64
 
 Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue):
-        weapons({Weapon(WeaponType::LaserRifle, "laserRifle", 30, 15, 20, {20, 320},
-                        WeaponType::LaserRifle)}),  // las weapons deberian estar en el yaml
+        weapons({Weapon(WeaponType::AK47, "laserRifle", 30, 15, 20, {20, 320},
+                        WeaponType::AK47)}),  // las weapons deberian estar en el yaml
         message_queue(queue),
         is_running(false),
         next_player_id(0),
@@ -114,13 +114,10 @@ void Game::updateGameState() {
                 duck->pick_up_weapon(weapon);
             }
         }
-
-        std::cout << "alñskdjalksdj\n";
-
         if (duck->is_shooting && duck->weapon.ammo > 0) {
             // std::cout << "Trying to shoot\n";
             if (duck->weapon.actual_cicle == 0) {
-                float angle = -20.0f;
+                int angle = 20;
                 Bullet bullet(duck->weapon.id, duck->position.x + DUCK_WIDTH,
                               duck->position.y + DUCK_HEIGHT / 1.2, angle, 2.0f, 0.0f,
                               duck->looking == 1, duck->weapon.damage, duck->duck_id);

@@ -98,9 +98,13 @@ void ClientProtocol::read_msg(void* msg) {
         // recv_uint_16(angle);
         recv_uint_8(angle);
 
-        float angle_float = (float)angle / 255.0f * 360.0f;
+        // std::cout << "angle received uint8_t: " << +angle << std::endl;
 
-        Bullet bullet(bullet_id, bullet_x, bullet_y, static_cast<bool>(going_right), angle_float);
+        int true_angle = (int)angle - 128;
+
+        // std::cout << "angle received: " << true_angle << std::endl;
+
+        Bullet bullet(bullet_id, bullet_x, bullet_y, static_cast<bool>(going_right), true_angle);
         snapsho->bullets.push_back(bullet);
     }
 
