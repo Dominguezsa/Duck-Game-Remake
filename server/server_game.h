@@ -47,6 +47,11 @@ private:
     void updateBullets();
     void updateDucks(std::shared_ptr<std::vector<DuckState>>& duck_states);
     void updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_states);
+    void updateDuckState(Duck* duck);
+    void updateDuckVerticalPosition(Duck* duck);
+    void updateDuckHorizontalPosition(Duck* duck);
+    void checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons);
+    void checkShoot(Duck* duck);
     void checkRoundEnd();
     void startNewRound();
     bool checkGameEnd();

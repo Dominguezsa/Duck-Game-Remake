@@ -119,15 +119,7 @@ void Game::updateDucks(std::shared_ptr<std::vector<DuckState>>& duck_states) {
     }
 }
 
-void Game::updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_states) {
-
-    const float ground_level = 700.0f - DUCK_HEIGHT;
-
-    // Store previous position for collision resolution
-    float previous_y = duck->position.y;
-    float previous_x = duck->position.x;
-    // Checking if a duck collides with a weapon to pick it up
-
+void Game::checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons) {
     for (const auto& weapon: weapons) {
         if (duck->position.x < weapon.pos.x + WEAPON_RECT &&
             duck->position.x + DUCK_WIDTH > weapon.pos.x &&
@@ -136,13 +128,16 @@ void Game::updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_
             duck->pick_up_weapon(weapon);
         }
     }
+}
 
-
+void Game::checkShoot(Duck* duck) {
     if (duck->is_shooting && duck->weapon.ammo > 0) {
         duck->weapon.shoot(duck->looking == 1, duck->position.x, DUCK_WIDTH, duck->position.y,
                            DUCK_HEIGHT, bullets_by_id, next_bullet_id, duck->duck_id);
     }
+}
 
+void Game::updateDuckVerticalPosition(Duck* duck) {
     // Apply gravity if in air
     if (duck->in_air) {
         duck->vertical_velocity += GRAVITY;
@@ -161,40 +156,60 @@ void Game::updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_
         duck->vertical_velocity = MAX_FALL_SPEED;
     }
 
-    // Update horizontal position
-    if (duck->is_running) {
-        // std::cout << "Duck be running\n";
+    // Apply vertical velocity
+    duck->position.y += duck->vertical_velocity;
+}
 
+void Game::updateDuckHorizontalPosition(Duck* duck) {
+    if (duck->is_running) {
         duck->horizontal_velocity += MOVE_SPEED;
         if (duck->horizontal_velocity > MAX_HORIZONTAL_SPEED) {
             duck->horizontal_velocity = MAX_HORIZONTAL_SPEED;
         }
-
         if (duck->looking == 1) {
-            // duck->position.x += move_speed;
             double actual_pos = duck->position.x;
             double new_pos = actual_pos + duck->horizontal_velocity;
             duck->position.x = new_pos;
-            // std::cout << "New position is: " << duck->position.x << std::endl;
         } else if (duck->looking == 0) {
             duck->position.x -= duck->horizontal_velocity;
-            // std::cout << "New position is: " << duck->position.x << std::endl;
         }
+
     } else if (duck->is_sliding) {
         duck->horizontal_velocity -= STOP_SPEED;
         if (duck->horizontal_velocity < 0) {
             duck->horizontal_velocity = 0;
         }
-
         if (duck->looking == 1) {
             duck->position.x += duck->horizontal_velocity;
         } else if (duck->looking == 0) {
             duck->position.x -= duck->horizontal_velocity;
         }
     }
+}
 
-    // Apply vertical velocity
-    duck->position.y += duck->vertical_velocity;
+void Game::updateDuckState(Duck* duck) {
+
+    // Update vertical movement
+    updateDuckVerticalPosition(duck);
+
+    // Update horizontal position
+    updateDuckHorizontalPosition(duck);
+}
+
+void Game::updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_states) {
+
+
+    // Checking if a duck collides with a weapon to pick it up
+    checkWeaponPickupCollision(duck, weapons);
+
+    // Checking if it is shooting
+    checkShoot(duck);
+    // Store previous position for collision resolution
+    float previous_y = duck->position.y;
+    float previous_x = duck->position.x;
+
+    updateDuckState(duck);
+
 
     // Check platform collisions
     for (const auto& platform: platforms) {
@@ -218,6 +233,8 @@ void Game::updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_
             }
         }
     }
+
+    const float ground_level = 700.0f - DUCK_HEIGHT;
 
     // Ground collision
     if (duck->position.y > ground_level) {
