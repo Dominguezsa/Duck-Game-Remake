@@ -30,9 +30,8 @@
 #define WEAPON_RECT 64
 
 Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue):
-        weapons({Weapon(WeaponType::Shotgun, "laserRifle", 30, 15, 20, {20, 320},
-                        WeaponType::Shotgun, 5.0f, 0.0f, 10, 1.2,
-                        1.2)}),  // las weapons deberian estar en el yaml
+        weapons({Weapon(WeaponType::Shotgun, "shotgun", 2, 255, 15, {20, 320}, WeaponType::Shotgun,
+                        6.0f, 0.0f, 10, 1.3, 1.3)}),  // las weapons deberian estar en el yaml
         message_queue(queue),
         is_running(false),
         next_player_id(0),

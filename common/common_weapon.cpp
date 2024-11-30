@@ -41,17 +41,40 @@ void Weapon::shoot(bool going_right, float duck_pos_x, float duck_width, float d
                    float duck_height, std::map<std::pair<uint32_t, uint8_t>, Bullet>& bullets_by_id,
                    uint32_t& next_bullet_id, uint8_t duck_id) {
     if (actual_cicle == 0) {
-        int angle = 0;
-        if (spread_angle != 0) {
-            angle += std::rand() % (spread_angle * 2) - spread_angle;
-        }
-        Bullet bullet(id, duck_pos_x + duck_width / scale_x, duck_pos_y + duck_height / scale_y,
-                      angle, bullet_speed, bullet_time, going_right, damage, duck_id);
 
-        bullets_by_id.insert({{next_bullet_id, bullet.id}, bullet});
-        next_bullet_id++;
-        ammo--;
-        actual_cicle++;
+        if (id == WeaponType::Shotgun) {
+            // int horizontal_offset = 0;
+            // int vertical_offset = 0;
+
+
+            for (int i = 0; i < 5; i++) {
+                int angle = 0;
+                angle += std::rand() % (spread_angle * 2) - spread_angle;
+                int horizontal_offset = std::rand() % 14 - 7;
+                // vertical_offset = std::rand() % 10 - 5;
+                Bullet bullet(id, (duck_pos_x + duck_width / scale_x) + horizontal_offset,
+                              (duck_pos_y + duck_height / scale_y), angle, bullet_speed,
+                              bullet_time, going_right, damage, duck_id);
+
+                bullets_by_id.insert({{next_bullet_id, bullet.id}, bullet});
+                next_bullet_id++;
+            }
+            actual_cicle++;
+            ammo--;
+        } else {
+            int angle = 0;
+            if (spread_angle != 0) {
+                angle += std::rand() % (spread_angle * 2) - spread_angle;
+            }
+            Bullet bullet(id, duck_pos_x + duck_width / scale_x, duck_pos_y + duck_height / scale_y,
+                          angle, bullet_speed, bullet_time, going_right, damage, duck_id);
+
+            bullets_by_id.insert({{next_bullet_id, bullet.id}, bullet});
+            next_bullet_id++;
+            ammo--;
+            actual_cicle++;
+        }
+
     } else {
         if (actual_cicle == cicles_to_reshoot) {
             actual_cicle = 0;
