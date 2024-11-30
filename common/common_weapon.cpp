@@ -12,7 +12,7 @@ Weapon::Weapon::Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint8_
 
 Weapon::Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint8_t cicles_to_reshoot,
                uint8_t damage, Position pos, WeaponType type, uint8_t bullet_speed,
-               uint8_t bullet_time, uint8_t spread_angle):
+               uint8_t bullet_time, uint8_t spread_angle, float scale_x, float scale_y):
         id(id),
         name(name),
         type(type),
@@ -22,7 +22,9 @@ Weapon::Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint8_t cicles
         pos(pos),
         bullet_speed(bullet_speed),
         bullet_time(bullet_time),
-        spread_angle(spread_angle) {}
+        spread_angle(spread_angle),
+        scale_x(scale_x),
+        scale_y(scale_y) {}
 
 Weapon::Weapon(uint8_t id, Position pos):
         id(id),
@@ -35,16 +37,16 @@ Weapon::Weapon(uint8_t id, Position pos):
         bullet_speed(0),
         bullet_time(0) {}
 
-void Weapon::shoot(bool going_right, float duck_pos_x, float duck_pos_y,
-                   std::map<std::pair<uint32_t, uint8_t>, Bullet>& bullets_by_id,
+void Weapon::shoot(bool going_right, float duck_pos_x, float duck_width, float duck_pos_y,
+                   float duck_height, std::map<std::pair<uint32_t, uint8_t>, Bullet>& bullets_by_id,
                    uint32_t& next_bullet_id, uint8_t duck_id) {
     if (actual_cicle == 0) {
         int angle = 0;
         if (spread_angle != 0) {
             angle += std::rand() % (spread_angle * 2) - spread_angle;
         }
-        Bullet bullet(id, duck_pos_x, duck_pos_y, angle, bullet_speed, bullet_time, going_right,
-                      damage, duck_id);
+        Bullet bullet(id, duck_pos_x + duck_width / scale_x, duck_pos_y + duck_height / scale_y,
+                      angle, bullet_speed, bullet_time, going_right, damage, duck_id);
 
         bullets_by_id.insert({{next_bullet_id, bullet.id}, bullet});
         next_bullet_id++;
@@ -71,6 +73,8 @@ void Weapon::update(const Weapon& other) {
     bullet_speed = other.bullet_speed;
     bullet_time = other.bullet_time;
     spread_angle = other.spread_angle;
+    scale_x = other.scale_x;
+    scale_y = other.scale_y;
 }
 
 Weapon Weapon::ak47() { return Weapon(WEAPON_TYPE::AK47, "ak47", 30, 5, 10); }

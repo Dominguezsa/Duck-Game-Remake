@@ -26,6 +26,8 @@ public:
     float bullet_speed = 0;
     uint8_t bullet_time = 0;
     uint8_t spread_angle = 0;
+    float scale_x = 0;
+    float scale_y = 0;
 
 
 public:
@@ -34,15 +36,15 @@ public:
 
     Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint8_t cicles_to_reshoot,
            uint8_t damage, Position pos, WeaponType type, uint8_t bullet_speed, uint8_t bullet_time,
-           uint8_t spread_angle);
+           uint8_t spread_angle, float scale_x, float scale_y);
 
     Weapon(uint8_t id, Position pos);
 
     WeaponType getType() const { return type; }
     Weapon() = default;
 
-    void shoot(bool going_right, float duck_pos_x, float duck_pos_y,
-               std::map<std::pair<uint32_t, uint8_t>, Bullet>& bullets_by_id,
+    void shoot(bool going_right, float duck_pos_x, float duck_width, float duck_pos_y,
+               float duck_height, std::map<std::pair<uint32_t, uint8_t>, Bullet>& bullets_by_id,
                uint32_t& next_bullet_id, uint8_t duck_id);
 
     void update(const Weapon& other);

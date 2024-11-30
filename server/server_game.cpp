@@ -31,7 +31,7 @@
 
 Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue):
         weapons({Weapon(WeaponType::AK47, "laserRifle", 30, 15, 20, {20, 320}, WeaponType::AK47,
-                        5.0f, 0.0f, 10)}),  // las weapons deberian estar en el yaml
+                        5.0f, 0.0f, 10, 1.2, 1.2)}),  // las weapons deberian estar en el yaml
         message_queue(queue),
         is_running(false),
         next_player_id(0),
@@ -103,9 +103,8 @@ void Game::updateGameState() {
 
 
         if (duck->is_shooting && duck->weapon.ammo > 0) {
-            duck->weapon.shoot(duck->looking == 1, duck->position.x + DUCK_WIDTH / 2,
-                               duck->position.y + DUCK_HEIGHT / 2, bullets_by_id, next_bullet_id,
-                               duck->duck_id);
+            duck->weapon.shoot(duck->looking == 1, duck->position.x, DUCK_WIDTH, duck->position.y,
+                               DUCK_HEIGHT, bullets_by_id, next_bullet_id, duck->duck_id);
         }
 
         // Apply gravity if in air
