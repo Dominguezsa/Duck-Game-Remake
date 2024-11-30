@@ -26,7 +26,8 @@ fi
 echo "Installing SDL2 and additional libraries..."
 sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
 
-# echo "Installing QtCreator..."
-# sudo apt install qtbase5-dev qt5-qmake qttools5-dev-tools
+echo "Installing QtCreator..."
+sudo apt install qtbase5-dev qt5-qmake qttools5-dev-tools qtmultimedia5-dev
+sudo apt install libqt5widgets5-dev libqt5gui5-dev
 
 echo "All required dependencies have been installed."

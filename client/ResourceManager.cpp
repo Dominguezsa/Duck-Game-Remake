@@ -138,11 +138,13 @@ void ResourceManager::loadDuckSprites(uint8_t playerAmount) {
 }
 
 void ResourceManager::loadMiscSprites() {
-    textures.emplace("background", std::make_shared<SDL2pp::Texture>(
-                                           renderer, SDL2pp::Surface("/var/duck_game/general/fondo.png")));
+    textures.emplace("background",
+                     std::make_shared<SDL2pp::Texture>(
+                             renderer, SDL2pp::Surface("/var/duck_game/general/fondo.png")));
 
-    textures.emplace("tablas", std::make_shared<SDL2pp::Texture>(
-                                       renderer, SDL2pp::Surface("/var/duck_game/general/tablon1.png")));
+    textures.emplace("tablas",
+                     std::make_shared<SDL2pp::Texture>(
+                             renderer, SDL2pp::Surface("/var/duck_game/general/tablon1.png")));
 
     textures.emplace("next_round",
                      std::make_shared<SDL2pp::Texture>(
@@ -250,7 +252,7 @@ void ResourceManager::loadWeaponsRect() {
     weaponFrame = SDL2pp::Rect(1, 97, 32, 32);
     weaponFrames.emplace("laserRifle", weaponFrame);
 
-    weaponFrame = SDL2pp::Rect(1, 69, 32, 32);
+    weaponFrame = SDL2pp::Rect(1, 25, 32, 32);
     weaponFrames.emplace("shotgun", weaponFrame);
 
     weaponFrame = SDL2pp::Rect(36, 237, 33, 9);
