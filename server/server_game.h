@@ -51,6 +51,10 @@ private:
     void updateDuckVerticalPosition(Duck* duck);
     void updateDuckHorizontalPosition(Duck* duck);
     void checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons);
+    void checkPlatformsCollision(Duck* duck, const std::vector<Platform>& platforms,
+                                 float previous_x, float previous_y);
+    void checkCollisions(Duck* duck, const std::vector<Platform>& platforms, float previous_x,
+                         float previous_y);
     void checkShoot(Duck* duck);
     void checkRoundEnd();
     void startNewRound();
