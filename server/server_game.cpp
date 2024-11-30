@@ -79,13 +79,7 @@ bool Game::checkPlatformCollision(const Position& duck_pos, float duck_width, fl
 }
 
 void Game::updateGameState() {
-    // const float gravity = 0.5f;
-    // const float FLUTTER_FORCE = -0.3f;
-    // const float max_fall_speed = 15.0f;
-    // const float duck_width = 64.0f;
-    // const float duck_height = 64.0f;
     const float ground_level = 700.0f - DUCK_HEIGHT;
-    // const float move_speed = 5.0f;
 
     std::shared_ptr<std::vector<DuckState>> duck_states =
             std::make_shared<std::vector<DuckState>>();
@@ -103,7 +97,6 @@ void Game::updateGameState() {
                 duck->position.x + DUCK_WIDTH > weapon.pos.x &&
                 duck->position.y < weapon.pos.y + WEAPON_RECT &&
                 duck->position.y + DUCK_HEIGHT > weapon.pos.y) {
-                // std::cout << "Intersecting weapon with duck\n";
                 duck->pick_up_weapon(weapon);
             }
         }
