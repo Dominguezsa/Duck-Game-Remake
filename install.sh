@@ -46,6 +46,7 @@ echo " "
 
 cp build/taller_server /usr/bin
 cp build/taller_client /usr/bin
+cp build/taller_editor /usr/bin
 cp -r build/_deps /usr/bin
 
 echo "Binaries moved to /usr/bin directory successfully!"
