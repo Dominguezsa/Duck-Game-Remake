@@ -117,7 +117,9 @@ void Game::updateGameState() {
         if (duck->is_shooting && duck->weapon.ammo > 0) {
             // std::cout << "Trying to shoot\n";
             if (duck->weapon.actual_cicle == 0) {
-                int angle = 15;
+                int angle = 0;
+                // Esto me da una variación pseudo aleatoria entre -10:10 grados
+                angle += std::rand() % 20 - 10;
                 Bullet bullet(duck->weapon.id, duck->position.x + DUCK_WIDTH,
                               duck->position.y + DUCK_HEIGHT / 1.2, angle, 2.0f, 0.0f,
                               duck->looking == 1, duck->weapon.damage, duck->duck_id);
