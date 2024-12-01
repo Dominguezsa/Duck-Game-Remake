@@ -96,10 +96,9 @@ void ScreenRenderer::copyPlatforms() {
 
 void ScreenRenderer::copyBackground() {
     SDL2pp::Texture& background_texture = *resourceManager.getTexture("background");
-    SDL_SetTextureBlendMode(background_texture.Get(), SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(background_texture.Get(), 128);  // Adjust the alpha value for blurriness
     renderer.Copy(background_texture, SDL2pp::NullOpt, SDL2pp::NullOpt);
 }
+
 
 void ScreenRenderer::copyDebugText(const std::vector<DuckState>& ducks) {
     // Debug text
@@ -199,7 +198,7 @@ void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     copyPlatforms();
     copy_lines();
     copyDucks(snapshot.ducks, it);  // aca tambien se copian las armas si las portan los patos
-    copyDebugText(snapshot.ducks);
+    // copyDebugText(snapshot.ducks);
     copyWeapons(snapshot.weapons);  // aca se copian las armas que estan en el suelo para pickear
     copyBullets(snapshot.bullets);
     renderer.Present();
