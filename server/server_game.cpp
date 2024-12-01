@@ -136,6 +136,19 @@ void Game::updateDuckVerticalPosition(Duck* duck) {
             }
         }
     }
+    bool above_platform = false;
+    for (const auto& platform: map_info.platforms) {
+        if (duck->position.x < platform.x + platform.width &&
+            duck->position.x + DUCK_WIDTH > platform.x &&
+            duck->position.y < platform.y + platform.height &&
+            duck->position.y + DUCK_HEIGHT > platform.y) {
+            above_platform = true;
+        }
+    }
+    if (!above_platform) {
+        duck->in_air = true;
+        duck->vertical_velocity += GRAVITY;
+    }
 
     // Limit fall speed
     if (duck->vertical_velocity > MAX_FALL_SPEED) {
