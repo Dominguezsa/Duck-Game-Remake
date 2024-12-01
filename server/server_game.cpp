@@ -385,7 +385,7 @@ void Game::rateController(double start, double finish) {
 }
 
 void Game::run() {
-    weapons.clear();
+    // weapons.clear();
     is_running = true;
     try {
         while (is_running) {
