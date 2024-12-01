@@ -152,14 +152,14 @@ void ClientProtocol::recv_platforms(std::vector<Platform>& platforms) {
         recv_uint_32(width);
         recv_uint_32(height);
 
-        float x_f = static_cast<float>(x);
-        float y_f = static_cast<float>(y);
-
         Platform platform;
-        platform.x = x_f;
-        platform.y = y_f;
-        platform.width = static_cast<float>(width);
-        platform.height = static_cast<float>(height);
+        platform.x = x;
+        platform.y = y;
+        platform.width = width;
+        platform.height = height;
         platforms.push_back(platform);
+    }
+    for (auto& plat : platforms) {
+        std::cout << plat.x << " " << plat.y << " " << plat.width << " " << plat.height << std::endl;
     }
 }
