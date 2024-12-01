@@ -20,6 +20,7 @@
 #include "PlayerActionHandler.h"
 #include "server_gameloop_message.h"
 #include "server_match_state_monitor.h"
+#include "map_info.h"
 
 
 class Game: public Thread {
@@ -31,13 +32,13 @@ private:
     uint8_t next_player_id;
     uint16_t round_number;
     std::unordered_map<uint8_t, uint16_t> victories;
-    MapInfo map_info;
     MatchStateMonitor& monitor;
     PlayerActionHandler action_handler;
     std::map<std::pair<uint32_t, uint8_t>, Bullet> bullets_by_id;  // son las balas que están
     // vivas en el juego, se guardan por id de la bala específica y el id del arma que la
     // disparó para ver los sprites a usar
     uint32_t next_bullet_id;
+    MapInfo map_info;
 
     static constexpr double TICK_RATE = 100.0;
     static constexpr double TICK_DURATION = 1.0 / TICK_RATE;
@@ -67,7 +68,7 @@ private:
 
 
 public:
-    explicit Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue);
+    explicit Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue, MapInfo& map_info);
 
     /* Pos: Adds a player to the game and initializes its duck.
             The duck's initial position is set to the initial_pos_x and initial_pos_y

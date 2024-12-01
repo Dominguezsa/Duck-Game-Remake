@@ -29,7 +29,7 @@
 
 #define WEAPON_RECT 64
 
-Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue):
+Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue, MapInfo& _map_info):
         weapons({Weapon(WeaponType::Shotgun, "shotgun", 2, 255, 15, {20, 320}, WeaponType::Shotgun,
                         6.0f, 0.0f, 10, 1.3, 1.3)}),  // las weapons deberian estar en el yaml
         message_queue(queue),
@@ -38,8 +38,8 @@ Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue):
         round_number(0),
         monitor(_monitor),
         action_handler(ducks),
-        next_bullet_id(0) {}
-
+        next_bullet_id(0),
+        map_info(_map_info) {}
 
 
 void Game::addPlayer(DuckIdentity& duck_info) {
@@ -385,6 +385,7 @@ void Game::rateController(double start, double finish) {
 }
 
 void Game::run() {
+    weapons.clear();
     is_running = true;
     try {
         while (is_running) {

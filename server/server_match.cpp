@@ -6,7 +6,7 @@
 #define MAX_SIZE_QUEUE 50
 
 Match::Match(uint8_t limit, MapInfo map_info) :
-        gameloop_queue(MAX_SIZE_QUEUE), game(state_monitor, gameloop_queue), state_monitor(limit), map_info(map_info) {}
+        gameloop_queue(MAX_SIZE_QUEUE), game(state_monitor, gameloop_queue, map_info), state_monitor(limit), map_info(map_info) {}
 
 bool Match::remove_player_if_in_match(const uint8_t& id) {
     bool removed = state_monitor.remove_player_if_present(id);
