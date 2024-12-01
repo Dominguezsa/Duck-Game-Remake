@@ -40,7 +40,7 @@ void MainWindow::setSelectableImages() {
     
     // Platforms:
     int row = 0;
-    QPixmap originalPlatformsImage("/var/duck_game/data/map-stuff/forest/tileset-platforms-60x60.png");
+    QPixmap originalPlatformsImage("/var/duck_game/map-stuff/forest/tileset-platforms-60x60.png");
 
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 3; j++) {
@@ -55,7 +55,7 @@ void MainWindow::setSelectableImages() {
     }
 
     // Spawns/Boxes:
-    QPixmap originalItemsImage("/var/duck_game/data/map-stuff/items-75x75.png");
+    QPixmap originalItemsImage("/var/duck_game/map-stuff/items-75x75.png");
     row ++;
     for (int i = 0; i < 3; ++i) {
         ImageWidget* imageWidget = new ImageWidget();
@@ -69,7 +69,7 @@ void MainWindow::setSelectableImages() {
     // Collectibles:
     row ++;
     int col = 0;
-    QPixmap originalCollectiblesImage("/var/duck_game/data/map-stuff/collectibles_36x32.png");
+    QPixmap originalCollectiblesImage("/var/duck_game/map-stuff/collectibles_36x32.png");
     for (int i = 0; i < 12; ++i) {
         if (i > 0 && i%3 == 0) {
             row++;
