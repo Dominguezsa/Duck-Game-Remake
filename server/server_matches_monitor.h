@@ -10,6 +10,7 @@
 
 #include "../common/common_queue.h"
 
+#include "map_info.h"
 #include "server_match.h"
 
 class MatchesMonitor {
@@ -28,7 +29,7 @@ public:
 
     */
     bool create_match(std::string match_name, uint8_t player_limit, DuckIdentity& duck_info,
-                      Queue<std::shared_ptr<Snapshot>>* q);
+                      Queue<std::shared_ptr<Snapshot>>* q, MapInfo mapInfo);
 
     /* Pos: Returns true if the player was successfully added to the match.
             If that occurs, the player is added to the match and the created

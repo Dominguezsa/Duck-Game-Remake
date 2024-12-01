@@ -11,17 +11,17 @@
 
 #include "server_game.h"
 #include "server_match_state_monitor.h"
+#include "map_info.h"
 
 class Match {
 private:
     Queue<GameloopMessage> gameloop_queue;
     Game game;
     MatchStateMonitor state_monitor;
-    // Aún no formalizada la estructura del escenario.
-    // Scenary scenary;
+    MapInfo map_info;
 
 public:
-    explicit Match(uint8_t limit);
+    explicit Match(uint8_t limit, MapInfo map_info);
     bool remove_player_if_in_match(const uint8_t& id);
     void add_player(Queue<std::shared_ptr<Snapshot>>* q, DuckIdentity& duck_info);
     Queue<GameloopMessage>* get_gameloop_queue();

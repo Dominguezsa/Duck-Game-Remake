@@ -111,7 +111,7 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
             std::string map_name;
             this->protocol.recv_match_info(map_name, match_name, number_of_players);
             success = matches_monitor.create_match(match_name, number_of_players, duck_info,
-                                                   &client_queue);
+                                                   &client_queue, matches[map_name]);
 
             // (4)
             protocol.send_confirmation(success);

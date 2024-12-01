@@ -3,7 +3,7 @@
 MatchesMonitor::MatchesMonitor(): matches(), matches_mtx() {}
 
 bool MatchesMonitor::create_match(std::string match_name, uint8_t player_limit,
-                                  DuckIdentity& duck_info, Queue<std::shared_ptr<Snapshot>>* q) {
+                                  DuckIdentity& duck_info, Queue<std::shared_ptr<Snapshot>>* q, MapInfo mapInfo) {
     std::lock_guard<std::mutex> lock(matches_mtx);
 
     bool match_exists = matches.find(match_name) != matches.end();
@@ -11,7 +11,7 @@ bool MatchesMonitor::create_match(std::string match_name, uint8_t player_limit,
     if (match_exists || !player_limit_valid) {
         return false;
     }
-    matches[match_name] = std::make_shared<Match>(player_limit);
+    matches[match_name] = std::make_shared<Match>(player_limit, mapInfo);
     matches[match_name]->add_player(q, duck_info);
     return true;
 }
