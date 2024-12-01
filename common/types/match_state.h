@@ -11,6 +11,18 @@ struct Platform {
     float y;
     float width;
     float height;
+    uint8_t id;
+};
+
+struct Respawn {
+    float x;
+    float y;
+};
+
+struct weapons_in_map {
+    float x;
+    float y;
+    uint8_t id;
 };
 
 struct DuckIdentity {

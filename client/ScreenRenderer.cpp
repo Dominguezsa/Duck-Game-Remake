@@ -76,11 +76,11 @@ void ScreenRenderer::copyPlatforms() {
     int cell_width = renderer.GetOutputWidth() / 12;
     int cell_height = renderer.GetOutputHeight() / 14;
     Platform left_platform = {0, (float)renderer.GetOutputHeight() / 2,
-                              (float)renderer.GetOutputWidth() / 2, (float)cell_height};
+                              (float)renderer.GetOutputWidth() / 2, (float)cell_height, 0};
 
     Platform right_platform = {(float)renderer.GetOutputWidth() / 2,
                                (float)renderer.GetOutputHeight() / 2 + cell_height * 3,
-                               (float)renderer.GetOutputWidth() / 2, (float)cell_height};
+                               (float)renderer.GetOutputWidth() / 2, (float)cell_height, 0};
     for (int i = 0; i < 6; ++i) {
         renderer.Copy(*resourceManager.getTexture("tablas"), SDL2pp::NullOpt,
                       SDL2pp::Rect(i * cell_width, left_platform.y, cell_width, cell_height));

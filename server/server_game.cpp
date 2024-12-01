@@ -40,15 +40,17 @@ Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue):
         action_handler(ducks),
         next_bullet_id(0) {}
 
+
+
 void Game::addPlayer(DuckIdentity& duck_info) {
     Position initial_pos{100 + (duck_info.id * 100), 100};  // Example starting position
     Weapon initial_weapon;
     ducks[duck_info.id] = std::make_unique<Duck>(duck_info.id, 100, 1, initial_pos, initial_weapon,
                                                  duck_info.name);
 
-    platforms = {
-            {0.0f, 350.0f, 600.0f, 32.0f},   // Left platform
-            {600.0f, 450.0f, 600.0f, 32.0f}  // Right platform
+    map_info.platforms = {
+            {0.0f, 350.0f, 600.0f, 32.0f, 1},   // Left platform
+            {600.0f, 450.0f, 600.0f, 32.0f, 0}  // Right platform
     };
     duck_info.initial_pos_x = initial_pos.x;
     duck_info.initial_pos_y = initial_pos.y;
@@ -259,7 +261,7 @@ void Game::updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_
     updateDuckState(duck);
 
     // Check platform collisions
-    checkCollisions(duck, platforms, previous_x, previous_y);
+    checkCollisions(duck, map_info.platforms, previous_x, previous_y);
 
     // Update duck state
     DuckState state(duck->name, duck->duck_id, duck->life_points, duck->looking, duck->position,

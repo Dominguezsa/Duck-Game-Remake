@@ -15,6 +15,7 @@
 #include "../common/duck.h"
 #include "../common/types/action_type.h"
 #include "../common/types/match_state.h"
+#include "map_info.h"
 
 #include "PlayerActionHandler.h"
 #include "server_gameloop_message.h"
@@ -30,7 +31,7 @@ private:
     uint8_t next_player_id;
     uint16_t round_number;
     std::unordered_map<uint8_t, uint16_t> victories;
-    std::vector<Platform> platforms;
+    MapInfo map_info;
     MatchStateMonitor& monitor;
     PlayerActionHandler action_handler;
     std::map<std::pair<uint32_t, uint8_t>, Bullet> bullets_by_id;  // son las balas que están
