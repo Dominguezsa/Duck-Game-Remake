@@ -1,6 +1,6 @@
 #ifndef IMAGE_TYPE
 #define IMAGE_TYPE
-enum WeaponType {
+enum ImageType {
     left_simple_platform =1,
     middle_simple_platform,
     right_simple_platform,
@@ -23,7 +23,7 @@ enum WeaponType {
     shotgun,
     sniper,
     lasergun,
-    sniper,
+    sniper2,
     banana,
     grenade,
     helmet,
