@@ -303,18 +303,18 @@ void ResourceManager::loadPlatformsRect() {
     SDL2pp::Rect platformFrame;
 
     platformRect.emplace("uno", SDL2pp::Rect(0, 0, 60, 60));
-    platformRect.emplace("dos", SDL2pp::Rect(32, 0, 60, 60));
-    platformRect.emplace("tres", SDL2pp::Rect(64, 0, 60, 60));
-    platformRect.emplace("cuatro", SDL2pp::Rect(0, 32, 60, 60));
-    platformRect.emplace("cinco", SDL2pp::Rect(32, 32, 60, 60));
-    platformRect.emplace("seis", SDL2pp::Rect(64, 32, 60, 60));
-    platformRect.emplace("siete", SDL2pp::Rect(0, 64, 60, 60));
-    platformRect.emplace("ocho", SDL2pp::Rect(32, 64, 60, 60));
-    platformRect.emplace("nueve", SDL2pp::Rect(64, 64, 60, 60));
-    platformRect.emplace("diez", SDL2pp::Rect(0, 96, 60, 60));
-    platformRect.emplace("once", SDL2pp::Rect(32, 96, 60, 60));
-    platformRect.emplace("doce", SDL2pp::Rect(64, 96, 60, 60));
-    platformRect.emplace("trece", SDL2pp::Rect(0, 128, 60, 60));
+    platformRect.emplace("dos", SDL2pp::Rect(60, 0, 60, 60));
+    platformRect.emplace("tres", SDL2pp::Rect(120, 0, 60, 60));
+    platformRect.emplace("cuatro", SDL2pp::Rect(0, 60, 60, 60));
+    platformRect.emplace("cinco", SDL2pp::Rect(60, 60, 60, 60));
+    platformRect.emplace("seis", SDL2pp::Rect(120, 60, 60, 60));
+    platformRect.emplace("siete", SDL2pp::Rect(0, 120, 60, 60));
+    platformRect.emplace("ocho", SDL2pp::Rect(60, 120, 60, 60));
+    platformRect.emplace("nueve", SDL2pp::Rect(120, 120, 60, 60));
+    platformRect.emplace("diez", SDL2pp::Rect(0, 180, 60, 60));
+    platformRect.emplace("once", SDL2pp::Rect(60, 180, 60, 60));
+    platformRect.emplace("doce", SDL2pp::Rect(120, 180, 60, 60));
+    platformRect.emplace("trece", SDL2pp::Rect(0, 240, 60, 60));
 }
 
 
