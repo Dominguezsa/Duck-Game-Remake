@@ -19,7 +19,7 @@ private:
     std::vector<std::vector<uint8_t>> id_matrix;
 
 public:
-    explicit(QApplication& _app);
+    explicit MapEditor(QApplication& _app);
     int run();
     ~MapEditor() = default;
 };

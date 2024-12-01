@@ -28,7 +28,7 @@ class MainWindow: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit(QWidget* parent = nullptr);
+    explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
     int width = 25, height = 15;
     void initMapScene(const int& map_width, const int& map_height,
