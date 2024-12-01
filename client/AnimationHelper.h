@@ -28,7 +28,6 @@ public:
 
     SDL2pp::Rect get_weapon_rect(const std::string& key);
     std::pair<SDL2pp::Rect, SDL2pp::Rect> get_bullet_rect(const std::string& key);
-    // std::vector<SDL2pp::Rect> get_animation_arms(int it);
     ~AnimationHelper() = default;
 };
 

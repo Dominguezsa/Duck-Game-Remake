@@ -45,12 +45,9 @@ private:
     Lobby lobby;
     Queue<uint8_t> messagesForServer;
     Queue<Snapshot> graphic_queue;
-    // std::vector<Duck> ducks;  como el cliente no puede utilizar las funciones de duck seria mejor
-    // que utilice duckStates que tienen la misma info que duck pero no tienen las funciones
     Snapshot snapshot;
     AnimationHelper animationHelper;
     ScreenRenderer screenRenderer;
-    // Algo específico de SDL, no creo que está en la librería SDL2pp
     std::shared_ptr<const uint8_t*> keyboardState;
     CommandCenter commandCenter;
     uint8_t playerAmount;
