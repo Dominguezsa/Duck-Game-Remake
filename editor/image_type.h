@@ -15,7 +15,7 @@ enum WeaponType {
     middle_down_big_platform,
     right_down_big_platform,
     respawn_for_player,
-    mistery_box, //por el momento no sirve de nada
+    mistery_box,  // por el momento no sirve de nada
     coin,
     magnum,
     duelGun,
