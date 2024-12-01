@@ -383,9 +383,6 @@ void Game::run() {
         weapons.push_back(Weapon(WeaponType::Shotgun, "shotgun", 2, 255, 15, {static_cast<int>(weapon.x), static_cast<int>(weapon.y)}, WeaponType::Shotgun,
                 6.0f, 0.0f, 10, 1.3, 1.3));
     }
-    for (auto plat : map_info.platforms) {
-        map_info.platforms.push_back(Platform {plat.x, plat.y, plat.width, plat.height, 0});
-    }
     is_running = true;
     send_platforms_first_time();
     try {
