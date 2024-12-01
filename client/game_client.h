@@ -60,6 +60,7 @@ public:
                const std::string& port);
     ~GameClient();
     void run();
+    void receive_platforms_first_time();
     void run_lobby();
     void updateDuckStates();
     bool round_finished();

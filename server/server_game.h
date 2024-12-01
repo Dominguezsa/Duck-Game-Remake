@@ -61,6 +61,7 @@ private:
     void checkRoundEnd();
     void startNewRound();
     bool checkGameEnd();
+    void send_platforms_first_time();
     void rateController(double start, double finish);
     double getCurrentTime();
     bool checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height,

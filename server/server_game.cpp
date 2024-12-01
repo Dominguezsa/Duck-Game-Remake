@@ -380,13 +380,14 @@ void Game::rateController(double start, double finish) {
 
 void Game::run() {
     for (auto weapon : map_info.weapons) {
-        weapons.push_back(Weapon(WeaponType::Shotgun, "shotgun", 2, 255, 15, {weapon.x, weapon.y}, WeaponType::Shotgun,
-                        6.0f, 0.0f, 10, 1.3, 1.3));
+        weapons.push_back(Weapon(WeaponType::Shotgun, "shotgun", 2, 255, 15, {static_cast<int>(weapon.x), static_cast<int>(weapon.y)}, WeaponType::Shotgun,
+                6.0f, 0.0f, 10, 1.3, 1.3));
     }
     for (auto plat : map_info.platforms) {
         map_info.platforms.push_back(Platform {plat.x, plat.y, plat.width, plat.height, 0});
     }
     is_running = true;
+    send_platforms_first_time();
     try {
         while (is_running) {
             double start_time = getCurrentTime();
@@ -409,6 +410,15 @@ void Game::run() {
         std::cerr << "Error occurred during game loop: " << e.what() << std::endl;
         stop();
     }
+}
+
+void Game::send_platforms_first_time() {
+    std::vector<Platform> platforms = map_info.platforms;
+    Snapshot snapshot;
+    for (auto plat: platforms) {
+        snapshot.addPlatform(plat);
+    }
+    monitor.push_to_all(std::make_shared<Snapshot>(snapshot));
 }
 
 void Game::stop() { is_running = false; }

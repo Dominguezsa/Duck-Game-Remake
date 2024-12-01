@@ -8,6 +8,7 @@
 #include "../common/duck.h"
 #include "../common/snapshot.h"
 #include "../common/types/duck_state.h"
+#include "../common/types/match_state.h"
 
 #include "protocol.h"
 
@@ -20,6 +21,8 @@ public:
     explicit ThreadReceiver(ClientProtocol& protocol, Queue<Snapshot>& graphique_queue);
 
     void run() override;
+
+    void receivePlatforms(std::vector<Platform>& platforms);
 
     void stop_thread();
 

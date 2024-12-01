@@ -20,6 +20,14 @@ void ThreadReceiver::run() {
     std::cout << "RECEIVER: run function ended\n";
 }
 
+void ThreadReceiver::receivePlatforms(std::vector<Platform>& platforms) {
+    this->protocol.recv_platforms(platforms);
+    Snapshot snapshot;
+    for (auto plat: platforms) {
+        snapshot.addPlatform(plat);
+    }
+}
+
 
 void ThreadReceiver::stop_thread() {
     this->_is_alive = false;

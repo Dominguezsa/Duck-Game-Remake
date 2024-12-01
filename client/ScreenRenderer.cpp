@@ -72,25 +72,11 @@ void ScreenRenderer::copyGun(const DuckState& duck) {
 }
 
 
-void ScreenRenderer::copyPlatforms() {
-    int cell_width = renderer.GetOutputWidth() / 12;
-    int cell_height = renderer.GetOutputHeight() / 14;
-    Platform left_platform = {0, (float)renderer.GetOutputHeight() / 2,
-                              (float)renderer.GetOutputWidth() / 2, (float)cell_height, 0};
-
-    Platform right_platform = {(float)renderer.GetOutputWidth() / 2,
-                               (float)renderer.GetOutputHeight() / 2 + cell_height * 3,
-                               (float)renderer.GetOutputWidth() / 2, (float)cell_height, 0};
-    for (int i = 0; i < 6; ++i) {
-        renderer.Copy(*resourceManager.getTexture("tablas"), SDL2pp::NullOpt,
-                      SDL2pp::Rect(i * cell_width, left_platform.y, cell_width, cell_height));
-    }
-
-    // Right platform
-    for (int i = 0; i < 6; ++i) {
-        renderer.Copy(*resourceManager.getTexture("tablas"), SDL2pp::NullOpt,
-                      SDL2pp::Rect(i * cell_width + right_platform.x, right_platform.y, cell_width,
-                                   cell_height));
+void ScreenRenderer::copyPlatforms(std::vector<Platform> platforms) {
+    for (auto plat: platforms) {
+        SDL2pp::Texture& platform_texture = *resourceManager.getTexture("tablas");
+        renderer.Copy(platform_texture, SDL2pp::NullOpt,
+                      SDL2pp::Rect(plat.x, plat.y, plat.width, plat.height));
     }
 }
 
@@ -195,7 +181,7 @@ void ScreenRenderer::copy_lines() {
 void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     renderer.Clear();
     copyBackground();
-    copyPlatforms();
+    copyPlatforms(snapshot.platforms);
     copy_lines();
     copyDucks(snapshot.ducks, it);  // aca tambien se copian las armas si las portan los patos
     // copyDebugText(snapshot.ducks);

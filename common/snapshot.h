@@ -5,6 +5,7 @@
 
 #include "./weapons/common_weapon.h"
 #include "types/duck_state.h"
+#include "types/match_state.h"
 
 #include "bullet.h"
 
@@ -13,12 +14,19 @@ public:
     std::vector<DuckState> ducks;
     std::vector<Bullet> bullets;
     std::vector<Weapon> weapons;
+    std::vector<Platform> platforms;
+    bool first_message = false;
 
     Snapshot(std::vector<DuckState>& ducks, std::vector<Bullet>& bullets,
              std::vector<Weapon>& weapons):
             ducks(ducks), bullets(bullets), weapons(weapons) {}
 
     Snapshot() = default;
+
+    void addPlatform(Platform platform) {
+        first_message = true;
+        this->platforms.push_back(platform);
+    }
 
     void updateSnapshot(const std::vector<DuckState>& ducks, const std::vector<Bullet>& bullets,
                         const std::vector<Weapon>& weapons) {

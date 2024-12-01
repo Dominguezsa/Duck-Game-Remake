@@ -57,9 +57,12 @@ GameClient::GameClient(const int window_width, const int window_height,
         audioEngine(snapshot.ducks, mixer, resourceManager) {}
 
 void GameClient::run() {
+    std::vector<Platform> platforms;
     ClientProtocol protocol(socket);
     ThreadReceiver threadReceiver(protocol, graphic_queue);
     ThreadSender threadSender(protocol, messagesForServer);
+    threadReceiver.receivePlatforms(platforms);
+    snapshot.platforms = platforms;
     threadReceiver.start();
     threadSender.start();
     std::cout << "CLIENT: Starting the UI \n";

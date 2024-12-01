@@ -1,9 +1,20 @@
 #include "server_protocol.h"
-
+#include "../common/snapshot.h"
 void ServerProtocol::recv_msg(uint8_t& command) { recv_uint_8(command); }
 
 // Massive refactor needed, too many sends and recv are so bad for performance
 void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
+    if (snapshot->first_message) {
+        unsigned int platform_count = snapshot->platforms.size();
+        send_data(&platform_count, sizeof(uint8_t));
+        for (const auto& platform: snapshot->platforms) {
+            send_data(&platform.x, sizeof(float));
+            send_data(&platform.y, sizeof(float));
+            send_data(&platform.width, sizeof(float));
+            send_data(&platform.height, sizeof(float));
+        }
+        return;
+    }
     unsigned int state_count = snapshot->ducks.size();
     send_data(&state_count, sizeof(uint8_t));
     uint32_t x;

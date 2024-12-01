@@ -11,6 +11,7 @@
 #include "../common/snapshot.h"
 #include "../common/types/duck_state.h"
 #include "../common/types/weapon_type.h"
+#include "../common/types/match_state.h"
 
 ClientProtocol::ClientProtocol(Socket& socket): Protocol(socket) {}
 
@@ -134,4 +135,30 @@ void ClientProtocol::send_msg(void* msg) {
     // int int_msg = *static_cast<int*>(msg);
     send_data(&message, sizeof(uint8_t));
     // std::cout << "Sending message: " << std::hex << +message << std::endl;
+}
+
+void ClientProtocol::recv_platforms(std::vector<Platform>& platforms) {
+    uint8_t platform_amount;
+    recv_uint_8(platform_amount);
+    for (int i = 0; i < platform_amount; i++) {
+        uint32_t x;
+        uint32_t y;
+        uint32_t width;
+        uint32_t height;
+
+        recv_uint_32(x);
+        recv_uint_32(y);
+        recv_uint_32(width);
+        recv_uint_32(height);
+
+        float x_f = static_cast<float>(x);
+        float y_f = static_cast<float>(y);
+
+        Platform platform;
+        platform.x = x_f;
+        platform.y = y_f;
+        platform.width = static_cast<float>(width);
+        platform.height = static_cast<float>(height);
+        platforms.push_back(platform);
+    }
 }
