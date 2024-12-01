@@ -42,15 +42,15 @@ void ScreenRenderer::copyDucks(const std::vector<DuckState>& ducks, const int it
 
         // Rendering the duck
         renderer.Copy(duck_texture, duck_frame,
-                      SDL2pp::Rect(ducks[i].position.x, ducks[i].position.y,
+                      SDL2pp::Rect(ducks[i].position.x, ducks[i].position.y - 30,
                                    DUCK_WIDTH * DUCK_SCALE, DUCK_HEIGTH * DUCK_SCALE),
                       0.0, SDL2pp::NullOpt, flip);
 
         // Rendering it's arms
         if (ducks[i].weapon == WeaponType::NoneType) {
             renderer.Copy(duck_texture, arm_frame,
-                          SDL2pp::Rect(arm_position_x, arm_position_y, DUCK_ARM_WIDTH * DUCK_SCALE,
-                                       DUCK_ARM_HEIGTH * DUCK_SCALE),
+                          SDL2pp::Rect(arm_position_x, arm_position_y - 30,
+                                       DUCK_ARM_WIDTH * DUCK_SCALE, DUCK_ARM_HEIGTH * DUCK_SCALE),
                           0.0, SDL2pp::NullOpt, flip);
         } else {
             // std::cout << "Trying to render the weapon\n";
@@ -66,7 +66,7 @@ void ScreenRenderer::copyGun(const DuckState& duck) {
                                          duck.position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9;
     SDL2pp::Rect weapon_frame = animationHelper.get_weapon_rect(weapons_by_enum[duck.weapon]);
     renderer.Copy(weapon_texture, weapon_frame,
-                  SDL2pp::Rect(x_position, duck.position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2 - 7,
+                  SDL2pp::Rect(x_position, duck.position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2 - 37,
                                DUCK_ARM_WIDTH * DUCK_SCALE + 10, DUCK_ARM_HEIGTH * DUCK_SCALE + 10),
                   0.0, SDL2pp::NullOpt, flip);
 }
@@ -77,8 +77,8 @@ void ScreenRenderer::copyPlatforms(std::vector<Platform> platforms) {
         SDL2pp::Texture& platform_texture = *resourceManager.getTexture("tablas");
         SDL2pp::Rect platform_frame = resourceManager.getPlatformRect(platforms_by_enum[plat.id]);
         renderer.Copy(platform_texture, platform_frame,
-                  SDL2pp::Rect(static_cast<int>(plat.x), static_cast<int>(plat.y), 
-                       static_cast<int>(plat.width), static_cast<int>(plat.height)));
+                      SDL2pp::Rect(static_cast<int>(plat.x), static_cast<int>(plat.y),
+                                   static_cast<int>(plat.width), static_cast<int>(plat.height)));
     }
 }
 
