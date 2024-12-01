@@ -6,4 +6,6 @@ target_sources(taller_common
     ${CPP_FILES}
     PUBLIC
     ${H_FILES}
+    weapons/common_weapon.h
+    weapons/common_weapon.cpp
     )

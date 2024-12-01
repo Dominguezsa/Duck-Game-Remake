@@ -3,10 +3,10 @@
 
 #include <vector>
 
+#include "./weapons/common_weapon.h"
 #include "types/duck_state.h"
 
 #include "bullet.h"
-#include "common_weapon.h"
 
 struct Snapshot {
 public:

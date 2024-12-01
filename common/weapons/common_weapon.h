@@ -7,10 +7,9 @@
 #include <string>
 #include <utility>
 
-#include "types/weapon_type.h"
-
-#include "bullet.h"
-#include "common_position.h"
+#include "../bullet.h"
+#include "../common_position.h"
+#include "../types/weapon_type.h"
 
 class Weapon {
 public:

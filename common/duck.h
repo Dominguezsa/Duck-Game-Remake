@@ -4,11 +4,11 @@
 #include <cstdint>
 #include <string>
 
+#include "./weapons/common_weapon.h"
 #include "types/duck_state.h"
 #include "types/weapon_type.h"
 
 #include "common_position.h"
-#include "common_weapon.h"
 
 class Duck {
 public:

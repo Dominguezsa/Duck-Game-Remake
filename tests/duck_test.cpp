@@ -4,10 +4,10 @@
 #include <iostream>
 
 #include "../common/common_position.h"
-#include "../common/common_weapon.h"
+#include "../common/weapons/common_weapon.h"
 
 void test_pato() {
-    Duck pato(1, 100, 1, Position(0, 0), Weapon("ak47", 10));
+    Duck pato(1, 100, 1, Position(0, 0), Weapon(1, "ak47", 10, 15, 20));
 
     pato.move_to(0);
 
