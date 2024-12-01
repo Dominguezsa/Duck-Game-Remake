@@ -145,20 +145,21 @@ void ClientProtocol::recv_platforms(std::vector<Platform>& platforms) {
         uint32_t y;
         uint32_t width;
         uint32_t height;
+        uint8_t platform_id;
 
         recv_uint_32(x);
         recv_uint_32(y);
         recv_uint_32(width);
         recv_uint_32(height);
+        recv_uint_8(platform_id);
 
         Platform platform;
         platform.x = x;
         platform.y = y;
         platform.width = width;
         platform.height = height;
+        platform.id = platform_id;
+        std::cout << "Platform id: " << +platform_id << std::endl;
         platforms.push_back(platform);
-    }
-    for (auto& plat : platforms) {
-        std::cout << plat.x << " " << plat.y << " " << plat.width << " " << plat.height << std::endl;
     }
 }
