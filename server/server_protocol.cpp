@@ -139,7 +139,7 @@ void ServerProtocol::recv_player_name(std::string& player_name) { recv_string(pl
 void ServerProtocol::send_duck_unique_attributes(const DuckIdentity& attributes) {
     send_string(attributes.name);
     send_data(&attributes.id, sizeof(uint8_t));
-    send_data(&attributes.color, sizeof(char));
+    // send_data(&attributes.color, sizeof(char));
     send_data(&attributes.initial_pos_x, sizeof(uint32_t));
     send_data(&attributes.initial_pos_y, sizeof(uint32_t));
 }

@@ -135,7 +135,7 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
         // El atributo color podria no estar, y que se le asocie
         // un color del lado del cliente en base al id (que siempre
         // va a ser unico).
-        duck_info.color = static_cast<char>(duck_info.id);
+        // duck_info.color = static_cast<char>(duck_info.id);
 
         // protocol.send_duck_unique_attributes(duck_info);
 
@@ -148,7 +148,7 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
 void ClientSession::get_available_maps(std::list<std::string>& map_list) {
     // Ruta de la carpeta "maps"
     namespace fs = std::filesystem;
-    fs::path maps_path = "../maps/";
+    fs::path maps_path = "/var/duck_game/maps/";
 
     // Verificar si la carpeta existe
     if (!fs::exists(maps_path) || !fs::is_directory(maps_path)) {

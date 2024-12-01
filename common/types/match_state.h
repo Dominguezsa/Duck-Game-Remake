@@ -28,7 +28,7 @@ struct weapons_in_map {
 struct DuckIdentity {
     std::string name;
     uint8_t id;
-    char color;
+    // char color;
     float initial_pos_x;
     float initial_pos_y;
 };
