@@ -1,9 +1,16 @@
 #include "mainwindow.h"
+
 #include "./ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
-    , ui(new Ui::MainWindow), gameMapScene(this), tiles(), providers(), selectedPixmap(), map_id() {
-    
+MainWindow::MainWindow(QWidget* parent):
+        QMainWindow(parent),
+        ui(new Ui::MainWindow),
+        gameMapScene(this),
+        tiles(),
+        providers(),
+        selectedPixmap(),
+        map_id() {
+
     ui->setupUi(this);
     // Crear escena y vista
     ui->view->setScene(&gameMapScene);
@@ -11,7 +18,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
     connect(ui->pushButton, &QPushButton::clicked, this, [this]() { saveMap(mapData); });
 }
 
-void MainWindow::initMapScene(const int& map_width, const int& map_height, 
+void MainWindow::initMapScene(const int& map_width, const int& map_height,
                               std::vector<std::vector<uint8_t>>& ids_matrix) {
     for (int row = 0; row < map_height; ++row) {
         for (int col = 0; col < map_width; ++col) {
@@ -24,7 +31,7 @@ void MainWindow::initMapScene(const int& map_width, const int& map_height,
     }
     setSelectableImages();
     // Conectar la señal 'clicked' de los ImageWidget a un slot
-    for (ImageWidget* provider : providers) {
+    for (ImageWidget* provider: providers) {
         connect(provider, &ImageWidget::clicked, this, &MainWindow::onImageProviderClicked);
     }
 }
@@ -37,16 +44,17 @@ void MainWindow::saveMap(std::string mapData) {
 void MainWindow::setSelectableImages() {
     ui->gridLayout->setHorizontalSpacing(5);
     ui->gridLayout->setVerticalSpacing(5);
-    
+
     // Platforms:
     int row = 0;
-    QPixmap originalPlatformsImage("/var/duck_game/data/map-stuff/forest/tileset-platforms-60x60.png");
-    uint8_t id = 0;
+    QPixmap originalPlatformsImage(
+            "/var/duck_game/data/map-stuff/forest/tileset-platforms-60x60.png");
+    uint8_t id = 1;
 
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 3; j++) {
             ImageWidget* imageWidget = new ImageWidget();
-            QRect section(j*60, i*60, 60, 60);
+            QRect section(j * 60, i * 60, 60, 60);
             QPixmap sectionPixmap = originalPlatformsImage.copy(section);
             imageWidget->setImage(sectionPixmap);
             providers.push_back(imageWidget);
@@ -59,10 +67,10 @@ void MainWindow::setSelectableImages() {
 
     // Spawns/Boxes:
     QPixmap originalItemsImage("/var/duck_game/data/map-stuff/items-75x75.png");
-    row ++;
+    row++;
     for (int i = 0; i < 3; ++i) {
         ImageWidget* imageWidget = new ImageWidget();
-        QRect section(i*75, row, 75, 75);
+        QRect section(i * 75, row, 75, 75);
         QPixmap sectionPixmap = originalItemsImage.copy(section);
         imageWidget->setImage(sectionPixmap);
         providers.push_back(imageWidget);
@@ -72,15 +80,15 @@ void MainWindow::setSelectableImages() {
     }
 
     // Collectibles:
-    row ++;
+    row++;
     int col = 0;
     QPixmap originalCollectiblesImage("/var/duck_game/data/map-stuff/collectibles_36x32.png");
     for (int i = 0; i < 12; ++i) {
-        if (i > 0 && i%3 == 0) {
+        if (i > 0 && i % 3 == 0) {
             row++;
         }
         ImageWidget* imageWidget = new ImageWidget();
-        QRect section(i*36, row, 36, 32);
+        QRect section(i * 36, row, 36, 32);
         QPixmap sectionPixmap = originalCollectiblesImage.copy(section);
         imageWidget->setImage(sectionPixmap);
         providers.push_back(imageWidget);
@@ -95,10 +103,10 @@ void MainWindow::setSelectableImages() {
 
 void MainWindow::onImageProviderClicked(ImageWidget* sender) {
     // Lógica para manejar el clic en el proveedor de imágenes
-    for (ImageWidget* provider : providers) {
-        provider->select(false); // Deseleccionar todos los proveedores
+    for (ImageWidget* provider: providers) {
+        provider->select(false);  // Deseleccionar todos los proveedores
     }
-    sender->select(true); // Seleccionar el proveedor que fue clickeado
+    sender->select(true);  // Seleccionar el proveedor que fue clickeado
 
     // Asignar la imagen seleccionada al QPixmap
     selectedPixmap = sender->getImage();
@@ -107,7 +115,7 @@ void MainWindow::onImageProviderClicked(ImageWidget* sender) {
 void MainWindow::updateTileImage(int row, int col) {
     if (!selectedPixmap.isNull()) {
         // Buscar el Tile correspondiente a la fila y columna
-        for (auto* item : gameMapScene.items()) {
+        for (auto* item: gameMapScene.items()) {
             if (Tile* tile = dynamic_cast<Tile*>(item)) {
                 if (tile->getRow() == row && tile->getCol() == col) {
                     // Asignar la imagen seleccionada al Tile
@@ -119,13 +127,12 @@ void MainWindow::updateTileImage(int row, int col) {
     }
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
-    for (Tile* tile : tiles) {
+    for (Tile* tile: tiles) {
         delete tile;
     }
-    for (ImageWidget* provider : providers) {
+    for (ImageWidget* provider: providers) {
         delete provider;
     }
 }
