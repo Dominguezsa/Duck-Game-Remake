@@ -47,7 +47,7 @@ private:
     void setSelectableImages();
     void updateTileImage(int row, int col);
 
-
+    // cppcheck-suppress unknownMacro
 public slots:
     void saveMap(std::string mapData);
 
