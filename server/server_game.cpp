@@ -138,9 +138,9 @@ void Game::updateDuckVerticalPosition(Duck* duck) {
     }
     bool above_platform = false;
     for (const auto& platform: map_info.platforms) {
-        if (duck->position.x < platform.x + platform.width &&
-            duck->position.x + DUCK_WIDTH > platform.x &&
-            duck->position.y < platform.y + platform.height &&
+        if (duck->position.x + (DUCK_WIDTH * 0.25f) < platform.x + platform.width &&
+            duck->position.x + (DUCK_WIDTH * 0.75f) > platform.x &&
+            duck->position.y + (DUCK_HEIGHT * 0.25f) < platform.y + platform.height &&
             duck->position.y + DUCK_HEIGHT > platform.y - 5) {
             above_platform = true;
         }
