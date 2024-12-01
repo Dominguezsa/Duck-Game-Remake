@@ -30,8 +30,7 @@
 #define WEAPON_RECT 64
 
 Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue, MapInfo& _map_info):
-        weapons({Weapon(WeaponType::Shotgun, "shotgun", 2, 255, 15, {20, 320}, WeaponType::Shotgun,
-                        6.0f, 0.0f, 10, 1.3, 1.3)}),  // las weapons deberian estar en el yaml
+        weapons(),
         message_queue(queue),
         is_running(false),
         next_player_id(0),
@@ -47,11 +46,6 @@ void Game::addPlayer(DuckIdentity& duck_info) {
     Weapon initial_weapon;
     ducks[duck_info.id] = std::make_unique<Duck>(duck_info.id, 100, 1, initial_pos, initial_weapon,
                                                  duck_info.name);
-
-    map_info.platforms = {
-            {0.0f, 350.0f, 600.0f, 32.0f, 1},   // Left platform
-            {600.0f, 450.0f, 600.0f, 32.0f, 0}  // Right platform
-    };
     duck_info.initial_pos_x = initial_pos.x;
     duck_info.initial_pos_y = initial_pos.y;
 }
@@ -385,7 +379,13 @@ void Game::rateController(double start, double finish) {
 }
 
 void Game::run() {
-    // weapons.clear();
+    for (auto weapon : map_info.weapons) {
+        weapons.push_back(Weapon(WeaponType::Shotgun, "shotgun", 2, 255, 15, {weapon.x, weapon.y}, WeaponType::Shotgun,
+                        6.0f, 0.0f, 10, 1.3, 1.3));
+    }
+    for (auto plat : map_info.platforms) {
+        map_info.platforms.push_back(Platform {plat.x, plat.y, plat.width, plat.height, 0});
+    }
     is_running = true;
     try {
         while (is_running) {
