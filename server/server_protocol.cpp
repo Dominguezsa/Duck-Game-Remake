@@ -1,4 +1,5 @@
 #include "server_protocol.h"
+
 #include "../common/snapshot.h"
 void ServerProtocol::recv_msg(uint8_t& command) { recv_uint_8(command); }
 
@@ -7,11 +8,23 @@ void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
     if (snapshot->first_message) {
         unsigned int platform_count = snapshot->platforms.size();
         send_data(&platform_count, sizeof(uint8_t));
+        for (auto plat: snapshot->platforms) {
+            std::cout << "Platform: " << plat.x << " " << plat.y << " " << plat.width << " "
+                      << plat.height << std::endl;
+        }
+        uint32_t x;
+        uint32_t y;
+        uint32_t width;
+        uint32_t height;
         for (const auto& platform: snapshot->platforms) {
-            send_data(&platform.x, sizeof(float));
-            send_data(&platform.y, sizeof(float));
-            send_data(&platform.width, sizeof(float));
-            send_data(&platform.height, sizeof(float));
+            x = htonl(platform.x);
+            y = htonl(platform.y);
+            width = htonl(platform.width);
+            height = htonl(platform.height);
+            send_data(&x, sizeof(uint32_t));
+            send_data(&y, sizeof(uint32_t));
+            send_data(&width, sizeof(uint32_t));
+            send_data(&height, sizeof(uint32_t));
         }
         return;
     }
