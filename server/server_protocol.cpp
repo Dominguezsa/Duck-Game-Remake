@@ -8,10 +8,6 @@ void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
     if (snapshot->first_message) {
         unsigned int platform_count = snapshot->platforms.size();
         send_data(&platform_count, sizeof(uint8_t));
-        for (auto plat: snapshot->platforms) {
-            std::cout << "Platform: " << plat.x << " " << plat.y << " " << plat.width << " "
-                      << plat.height << std::endl;
-        }
         uint32_t x;
         uint32_t y;
         uint32_t width;

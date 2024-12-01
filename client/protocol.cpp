@@ -140,7 +140,6 @@ void ClientProtocol::send_msg(void* msg) {
 void ClientProtocol::recv_platforms(std::vector<Platform>& platforms) {
     uint8_t platform_amount;
     recv_uint_8(platform_amount);
-    std::cout << "Platform amount: " << +platform_amount << std::endl;
     for (int i = 0; i < platform_amount; i++) {
         uint32_t x;
         uint32_t y;
