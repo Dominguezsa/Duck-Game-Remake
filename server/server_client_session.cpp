@@ -1,6 +1,13 @@
 #include "server_client_session.h"
 
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <list>
+#include <string>
 #include <utility>
+
+#include <yaml-cpp/yaml.h>
 ClientSession::ClientSession(Socket _skt, MatchesMonitor& monitor):
         identity(),
         skt(std::move(_skt)),
@@ -28,22 +35,6 @@ void ClientSession::stop() {
 Queue<GameloopMessage>* ClientSession::get_match_queue() {
     return matches_monitor.get_match_queue(identity.joined_match_name);
 }
-/*
-void ClientSession::run_receiver_loop() {
-    GameloopMessage msg;
-    msg.player_id = this->identity.id;
-    Queue<GameloopMessage>* gameloop_queue = get_match_queue();
-    try {
-        while (this->_is_alive) {
-            protocol.recv_msg(msg.action);
-            gameloop_queue->push(msg);
-        }
-    } catch (std::exception& e) {
-        // If an exception is thrown in this while loop, that means the client
-        // has disconnected from the server or the match is finished.
-        this->matches_monitor.disconnect_player(identity.joined_match_name, identity.id);
-    }
-}*/
 
 void ClientSession::run() {
     try {
@@ -112,11 +103,8 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
 
     switch (action) {
         case CMD_CREATE: {
-            // (2)
-            // Lo correcto seria que los nombres de mapas
-            // sean provistos por alguna otra entidad.
             std::list<std::string> map_list;
-            map_list.push_back("Golden Grove Clash");
+            get_available_maps(map_list);
             protocol.send_game_map_list(map_list);
             // (3)
             uint8_t number_of_players;
@@ -154,5 +142,38 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
         identity.name = player_name;
         identity.joined_match_name = match_name;
         identity.id = duck_info.id;
+    }
+}
+
+void ClientSession::get_available_maps(std::list<std::string>& map_list) {
+    // Ruta de la carpeta "maps"
+    namespace fs = std::filesystem;
+    fs::path maps_path = "../maps/";
+
+    // Verificar si la carpeta existe
+    if (!fs::exists(maps_path) || !fs::is_directory(maps_path)) {
+        std::cerr << "Error: La carpeta 'maps' no existe o no es un directorio." << std::endl;
+        return;
+    }
+
+    // Iterar sobre los archivos en la carpeta "maps"
+    for (const auto& entry : fs::directory_iterator(maps_path)) {
+        // Solo procesar archivos con extensión .yaml
+        if (entry.is_regular_file() && entry.path().extension() == ".yaml") {
+            try {
+                // Abrir y parsear el archivo YAML
+                YAML::Node map_node = YAML::LoadFile(entry.path().string());
+
+                // Verificar si existe el campo "name"
+                if (map_node["name"]) {
+                    std::string map_name = map_node["name"].as<std::string>();
+                    map_list.push_back(map_name);
+                } else {
+                    std::cerr << "Advertencia: El archivo " << entry.path().filename() << " no contiene un campo 'name'." << std::endl;
+                }
+            } catch (const std::exception& e) {
+                std::cerr << "Error al procesar el archivo " << entry.path().filename() << ": " << e.what() << std::endl;
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
 #define SERVER_CLIENT_SESSION
 
 #include <list>
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -11,6 +12,7 @@
 #include "../common/types/constants.h"
 #include "types/client_identity.h"
 
+#include "map_info.h"
 #include "server_matches_monitor.h"
 #include "server_protocol.h"
 #include "server_receiver.h"
@@ -45,6 +47,8 @@ private:
     MatchesMonitor& matches_monitor;
     Queue<std::shared_ptr<Snapshot>> client_queue;
 
+    std::map<std::string, MapInfo> matches; //guarda el nombre del mapa, y su estructura
+
 public:
     ClientSession(Socket _skt, MatchesMonitor& monitor);
 
@@ -52,6 +56,8 @@ public:
 
     // Pos: Ends the communication between the server and the client.
     void end_communication();
+
+    void get_available_maps(std::list<std::string>& map_list);
 
     void run() override;
 
