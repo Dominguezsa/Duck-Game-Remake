@@ -157,22 +157,60 @@ void ClientSession::get_available_maps(std::list<std::string>& map_list) {
     }
 
     // Iterar sobre los archivos en la carpeta "maps"
-    for (const auto& entry : fs::directory_iterator(maps_path)) {
+    for (const auto& entry: fs::directory_iterator(maps_path)) {
         // Solo procesar archivos con extensión .yaml
         if (entry.is_regular_file() && entry.path().extension() == ".yaml") {
             try {
                 // Abrir y parsear el archivo YAML
                 YAML::Node map_node = YAML::LoadFile(entry.path().string());
 
-                // Verificar si existe el campo "name"
+                // Extraer el nombre del mapa
                 if (map_node["name"]) {
                     std::string map_name = map_node["name"].as<std::string>();
                     map_list.push_back(map_name);
                 } else {
-                    std::cerr << "Advertencia: El archivo " << entry.path().filename() << " no contiene un campo 'name'." << std::endl;
+                    std::cerr << "Advertencia: El archivo " << entry.path().filename()
+                              << " no contiene un campo 'name'." << std::endl;
+                    continue;
                 }
+
+                // Extraer las tiles
+                std::vector<Platform> platforms;
+                std::vector<Respawn> respawns;
+                std::vector<weapons_in_map> weapons;
+
+                if (map_node["tiles"]) {
+                    const auto& tiles = map_node["tiles"];
+                    for (size_t row = 0; row < tiles.size(); ++row) {
+                        for (size_t col = 0; col < tiles[row].size(); ++col) {
+                            int tile_value = tiles[row][col].as<int>();
+
+                            float x = col * 50.0f;
+                            float y = row * 50.0f;
+
+                            if (tile_value >= 1 && tile_value <= 12) {
+                                // Crear plataforma
+                                platforms.emplace_back(Platform{x, y, 50.0f, 50.0f,
+                                                                static_cast<uint8_t>(tile_value)});
+                            } else if (tile_value == 13) {
+                                // Crear punto de respawn
+                                respawns.emplace_back(Respawn{x, y});
+                            } else if (tile_value > 15 && tile_value <= 27) {
+                                // Crear arma
+                                weapons.emplace_back(
+                                        weapons_in_map{x, y, static_cast<uint8_t>(tile_value)});
+                            }
+                        }
+                    }
+                }
+
+                // Crear MapInfo con las plataformas, respawns y armas
+                MapInfo map_info(platforms, respawns, weapons);
+                matches[map_list.back()] = map_info;
+
             } catch (const std::exception& e) {
-                std::cerr << "Error al procesar el archivo " << entry.path().filename() << ": " << e.what() << std::endl;
+                std::cerr << "Error al procesar el archivo " << entry.path().filename() << ": "
+                          << e.what() << std::endl;
             }
         }
     }
