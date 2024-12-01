@@ -76,7 +76,8 @@ void ScreenRenderer::copyPlatforms(std::vector<Platform> platforms) {
     for (auto plat: platforms) {
         SDL2pp::Texture& platform_texture = *resourceManager.getTexture("tablas");
         renderer.Copy(platform_texture, SDL2pp::NullOpt,
-                      SDL2pp::Rect(plat.x, plat.y, plat.width, plat.height));
+                  SDL2pp::Rect(static_cast<int>(plat.x), static_cast<int>(plat.y), 
+                       static_cast<int>(plat.width), static_cast<int>(plat.height)));
     }
 }
 

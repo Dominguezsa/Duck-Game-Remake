@@ -206,6 +206,10 @@ void ClientSession::get_available_maps(std::list<std::string>& map_list) {
 
                 // Crear MapInfo con las plataformas, respawns y armas
                 std::cout << "cantidad platadormkas" << platforms.size() << std::endl;
+                for (auto& plat : platforms) {
+                    std::cout << plat.x << " " << plat.y << " " << plat.width << " " << plat.height
+                              << " " << std::endl;
+                }
                 MapInfo map_info(platforms, respawns, weapons);
                 matches[map_list.back()] = map_info;
 
