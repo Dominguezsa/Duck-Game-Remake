@@ -1,6 +1,7 @@
 #include "ImageWidget.h"
 
-ImageWidget::ImageWidget(QWidget* parent): QLabel(parent), isSelected(false) {
+ImageWidget::ImageWidget(QWidget* parent)
+    : QLabel(parent), isSelected(false) {
     setFixedSize(50, 50);
     setStyleSheet("border: 1px solid black; background-color: lightgray;");
 }
@@ -30,6 +31,6 @@ bool ImageWidget::isSelectedState() const { return isSelected; }
 
 
 void ImageWidget::mousePressEvent(QMouseEvent* event) {
-    emit clicked(this, pixmap);  // Emite la imagen seleccionada
+    emit clicked(this, pixmap); // Emite la imagen seleccionada
     QLabel::mousePressEvent(event);
 }

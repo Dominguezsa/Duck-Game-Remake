@@ -1,11 +1,10 @@
 #include "MapEditor.h"
-
 #include <iostream>
 
 MapEditor::MapEditor(QApplication& _app): window(), app(_app), id_matrix() {
-    window.setAutoFillBackground(true);  // Permitir que el fondo se pinte con el palette
+    window.setAutoFillBackground(true); // Permitir que el fondo se pinte con el palette
     QPalette palette = window.palette();
-    palette.setColor(QPalette::Window, Qt::gray);  // Establecer el fondo a negro
+    palette.setColor(QPalette::Window, Qt::gray); // Establecer el fondo a negro
     window.setPalette(palette);
 }
 

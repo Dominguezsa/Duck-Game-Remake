@@ -1,27 +1,27 @@
 #ifndef MAP_EDITOR_H
 #define MAP_EDITOR_H
 
-#include <QApplication>
-#include <QLocale>
-#include <QPalette>
-#include <QTranslator>
-#include <cstdint>
+#include "mainwindow.h"
+#include "MapParser.h"
 #include <string>
 #include <vector>
+#include <cstdint>
 
-#include "MapParser.h"
-#include "mainwindow.h"
+#include <QApplication>
+#include <QLocale>
+#include <QTranslator>
+#include <QPalette>
 
 class MapEditor {
-private:
-    MainWindow window;
-    QApplication& app;
-    std::vector<std::vector<uint8_t>> id_matrix;
+    private:
+        MainWindow window;
+        QApplication& app;
+        std::vector<std::vector<uint8_t>> id_matrix;
 
-public:
-    MapEditor(QApplication& _app);
-    int run();
-    ~MapEditor() = default;
+    public:
+        MapEditor(QApplication& _app);
+        int run();
+        ~MapEditor() = default;
 };
 
-#endif  // MAP_EDITOR_H
+#endif // MAP_EDITOR_H

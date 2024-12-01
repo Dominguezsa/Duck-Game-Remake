@@ -15,10 +15,10 @@ bool MapParser::parseMap(const std::string& name, const int& width, const int& h
 
         // Starts the tiles sequence
         emitter << YAML::Key << "tiles" << YAML::Value << YAML::BeginSeq;
-        for (const auto& row: tile_ids) {
+        for (const auto& row : tile_ids) {
             emitter << YAML::Flow << YAML::BeginSeq;
-            for (const auto& tile: row) {
-                emitter << static_cast<int>(tile);  // Cast to int to avoid ASCII conversion
+            for (const auto& tile : row) {
+                emitter << static_cast<int>(tile); // Cast to int to avoid ASCII conversion
             }
             emitter << YAML::EndSeq;
         }
