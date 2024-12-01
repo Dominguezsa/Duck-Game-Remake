@@ -75,7 +75,8 @@ void ScreenRenderer::copyGun(const DuckState& duck) {
 void ScreenRenderer::copyPlatforms(std::vector<Platform> platforms) {
     for (auto plat: platforms) {
         SDL2pp::Texture& platform_texture = *resourceManager.getTexture("tablas");
-        renderer.Copy(platform_texture, SDL2pp::NullOpt,
+        SDL2pp::Rect platform_frame = resourceManager.getPlatformRect(platforms_by_enum[plat.id]);
+        renderer.Copy(platform_texture, platform_frame,
                   SDL2pp::Rect(static_cast<int>(plat.x), static_cast<int>(plat.y), 
                        static_cast<int>(plat.width), static_cast<int>(plat.height)));
     }

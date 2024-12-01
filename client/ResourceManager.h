@@ -25,6 +25,8 @@ private:
     std::map<std::string, std::vector<SDL2pp::Rect>> animationFrames;
     std::map<std::string, SDL2pp::Rect> weaponFrames;
     std::map<std::string, std::pair<SDL2pp::Rect, SDL2pp::Rect>> bulletFrames;
+
+    std::map<std::string, SDL2pp::Rect> platformRect;
     SDL2pp::Renderer& renderer;
 
 public:
@@ -48,6 +50,7 @@ public:
     std::shared_ptr<SDL2pp::Font> getFont(const std::string& key);
     std::shared_ptr<SDL2pp::Chunk> getSFXForWeapon(const WeaponType& weapon);
     std::shared_ptr<SDL2pp::Texture> getTexture(const std::string& key);
+     SDL2pp::Rect getPlatformRect(const std::string& key);
     SDL2pp::Rect getAnimationFrame(const std::string& key, const int frame);
     void releaseResources();
 };

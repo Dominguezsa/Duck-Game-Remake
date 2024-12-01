@@ -31,6 +31,10 @@ private:
             "grenade",       "banana",       "pewPewLaser", "laserRifle", "ak47",
             "duelingPistol", "cowboyPistol", "magnum",      "shotgun",    "sniper"};
 
+    std::vector<std::string> platforms_by_enum = {"cero",  "uno",  "dos",   "tres", "cuatro",
+                                                  "cinco", "seis", "siete", "ocho", "nueve",
+                                                  "diez",  "once", "doce",  "trece"};
+
 
     void copyBackground();
     void copy_lines();
