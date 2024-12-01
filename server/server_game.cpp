@@ -9,15 +9,15 @@
 #include "../common/snapshot.h"
 #include "../editor/image_type.h"
 
-#define GRAVITY 0.5f
-#define FLUTTER_FORCE -0.3f
-#define MAX_FALL_SPEED 13.0f
-#define MAX_FLUTTER_SPEED 3.0f
-#define DUCK_WIDTH 64.0f
-#define DUCK_HEIGHT 64.0f
+// #define GRAVITY 0.2f
+// #define FLUTTER_FORCE -0.3f
+// #define MAX_FALL_SPEED 13.0f
+// #define MAX_FLUTTER_SPEED 3.0f
+// #define DUCK_WIDTH 64.0f
+// #define DUCK_HEIGHT 64.0f
 // #define MOVE_SPEED 5.0f
 
-#define GRAVITY 0.5f
+#define GRAVITY 0.3f
 #define FLUTTER_FORCE -0.3f
 #define MAX_FALL_SPEED 13.0f
 #define MAX_FLUTTER_SPEED 3.0f
@@ -141,11 +141,12 @@ void Game::updateDuckVerticalPosition(Duck* duck) {
         if (duck->position.x < platform.x + platform.width &&
             duck->position.x + DUCK_WIDTH > platform.x &&
             duck->position.y < platform.y + platform.height &&
-            duck->position.y + DUCK_HEIGHT > platform.y) {
+            duck->position.y + DUCK_HEIGHT > platform.y - 5) {
             above_platform = true;
         }
     }
     if (!above_platform) {
+        // std::cout << "The duck is not above a platform" << std::endl;
         duck->in_air = true;
         duck->vertical_velocity += GRAVITY;
     }
@@ -156,8 +157,8 @@ void Game::updateDuckVerticalPosition(Duck* duck) {
     }
 
     // Apply vertical velocity
-    duck->position.y += duck->vertical_velocity;
     duck->is_falling = duck->vertical_velocity > 0;
+    duck->position.y += duck->vertical_velocity;
 }
 
 void Game::updateDuckHorizontalPosition(Duck* duck) {
@@ -393,25 +394,31 @@ void Game::rateController(double start, double finish) {
 }
 
 void Game::run() {
-    for (auto weapon : map_info.weapons) {
-        if(weapon.id == ImageType::ak47) {
-            weapons.push_back(Weapon(WeaponType::AK47, "ak47", 30, 5, 10, {static_cast<int>(weapon.x), static_cast<int>(weapon.y)}, WeaponType::AK47,
-                3.0f, 0.0f, 0, 1.3, 1.3));
-        } else if(weapon.id == ImageType::sniper) {
-            weapons.push_back(Weapon(WeaponType::Sniper, "sniper", 3, 10, 100, {static_cast<int>(weapon.x), static_cast<int>(weapon.y)}, WeaponType::Sniper,
-                10.0f, 0.0f, 0, 1.3, 1.3));
-        } else if(weapon.id == ImageType::shotgun) {
-            weapons.push_back(Weapon(WeaponType::Shotgun, "shotgun", 5, 10, 50, {static_cast<int>(weapon.x), static_cast<int>(weapon.y)}, WeaponType::Shotgun,
-                6.0f, 0.0f, 10, 1.3, 1.3));
-        } else if(weapon.id == ImageType::duelGun) {
-            weapons.push_back(Weapon(WeaponType::DuelPistol, "duelingPistol", 5, 10, 50, {static_cast<int>(weapon.x), static_cast<int>(weapon.y)}, WeaponType::DuelPistol,
-                6.0f, 0.0f, 10, 1.3, 1.3));
-        } else if(weapon.id == ImageType::banana) {
-            weapons.push_back(Weapon(WeaponType::Banana, "banana", 5, 10, 0, {static_cast<int>(weapon.x), static_cast<int>(weapon.y)}, WeaponType::Banana,
-                0.0f, 0.0f, 0, 1.3, 1.3));
-        } else if(weapon.id == ImageType::grenade) {
-            weapons.push_back(Weapon(WeaponType::Granade, "grenade", 5, 10, 100, {static_cast<int>(weapon.x), static_cast<int>(weapon.y)}, WeaponType::Granade,
-                0.0f, 0.0f, 0, 1.3, 1.3));
+    for (auto weapon: map_info.weapons) {
+        if (weapon.id == ImageType::ak47) {
+            weapons.push_back(Weapon(WeaponType::AK47, "ak47", 30, 10, 10,
+                                     {static_cast<int>(weapon.x), static_cast<int>(weapon.y)},
+                                     WeaponType::AK47, 4.0f, 0.0f, 0, 1.3, 1.3));
+        } else if (weapon.id == ImageType::sniper) {
+            weapons.push_back(Weapon(WeaponType::Sniper, "sniper", 3, 10, 100,
+                                     {static_cast<int>(weapon.x), static_cast<int>(weapon.y)},
+                                     WeaponType::Sniper, 10.0f, 0.0f, 0, 1.3, 1.3));
+        } else if (weapon.id == ImageType::shotgun) {
+            weapons.push_back(Weapon(WeaponType::Shotgun, "shotgun", 5, 10, 50,
+                                     {static_cast<int>(weapon.x), static_cast<int>(weapon.y)},
+                                     WeaponType::Shotgun, 6.0f, 0.0f, 10, 1.3, 1.3));
+        } else if (weapon.id == ImageType::duelGun) {
+            weapons.push_back(Weapon(WeaponType::DuelPistol, "duelingPistol", 5, 10, 50,
+                                     {static_cast<int>(weapon.x), static_cast<int>(weapon.y)},
+                                     WeaponType::DuelPistol, 6.0f, 0.0f, 10, 1.3, 1.3));
+        } else if (weapon.id == ImageType::banana) {
+            weapons.push_back(Weapon(WeaponType::Banana, "banana", 5, 10, 0,
+                                     {static_cast<int>(weapon.x), static_cast<int>(weapon.y)},
+                                     WeaponType::Banana, 0.0f, 0.0f, 0, 1.3, 1.3));
+        } else if (weapon.id == ImageType::grenade) {
+            weapons.push_back(Weapon(WeaponType::Granade, "grenade", 5, 10, 100,
+                                     {static_cast<int>(weapon.x), static_cast<int>(weapon.y)},
+                                     WeaponType::Granade, 0.0f, 0.0f, 0, 1.3, 1.3));
         }
     }
     is_running = true;
@@ -443,7 +450,7 @@ void Game::run() {
 void Game::send_platforms_first_time() {
     std::vector<Platform> platforms = map_info.platforms;
     Snapshot snapshot;
-    for (auto plat: platforms) {
+    for (const auto& plat: platforms) {
         snapshot.addPlatform(plat);
     }
     monitor.push_to_all(std::make_shared<Snapshot>(snapshot));
