@@ -159,7 +159,6 @@ void ClientProtocol::recv_platforms(std::vector<Platform>& platforms) {
         platform.width = width;
         platform.height = height;
         platform.id = platform_id;
-        std::cout << "Platform id: " << +platform_id << std::endl;
         platforms.push_back(platform);
     }
 }

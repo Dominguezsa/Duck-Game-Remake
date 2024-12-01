@@ -297,6 +297,10 @@ void ResourceManager::loadBulletsRect() {
     std::cout << "All bullets rects loaded correctly\n";
 }
 
+void ResourceManager::loadPlatformsRect() {
+    return;
+}
+
 
 SDL2pp::Rect ResourceManager::getWeaponRect(const std::string& key) { return weaponFrames[key]; }
 
@@ -313,6 +317,7 @@ void ResourceManager::loadResources(uint8_t playerAmount) {
     loadSprites(playerAmount);
     loadWeaponsRect();
     loadBulletsRect();
+    loadPlatformsRect();
     loadAnimationFrames();
 }
 

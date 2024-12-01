@@ -41,6 +41,7 @@ public:
     void loadAnimationFrames();
     void loadWeaponsRect();
     void loadBulletsRect();
+    void loadPlatformsRect();
     SDL2pp::Rect getWeaponRect(const std::string& key);
     std::pair<SDL2pp::Rect, SDL2pp::Rect> getBulletRect(const std::string& key);
     std::shared_ptr<SDL2pp::Music> getMusicTrack(const std::string& key);
