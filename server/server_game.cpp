@@ -9,14 +9,6 @@
 #include "../common/snapshot.h"
 #include "../editor/image_type.h"
 
-// #define GRAVITY 0.2f
-// #define FLUTTER_FORCE -0.3f
-// #define MAX_FALL_SPEED 13.0f
-// #define MAX_FLUTTER_SPEED 3.0f
-// #define DUCK_WIDTH 64.0f
-// #define DUCK_HEIGHT 64.0f
-// #define MOVE_SPEED 5.0f
-
 #define GRAVITY 0.3f
 #define FLUTTER_FORCE -0.3f
 #define MAX_FALL_SPEED 13.0f
@@ -59,18 +51,27 @@ void Game::removePlayer(uint8_t player_id) {
     }
 }
 
+DuckHitbox Game::getDuckHitbox(const Duck* duck) {
+    DuckHitbox hitbox;
+    hitbox.leftX = duck->position.x * 0.25f;
+    hitbox.rightX = duck->position.x + DUCK_WIDTH * 0.75f;
+    hitbox.topY = duck->position.y + DUCK_HEIGHT * 0.25f;
+    hitbox.bottomY = duck->position.y + DUCK_HEIGHT;
+    return hitbox;
+}
+
 
 bool Game::checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height,
-                                  const Platform& platform) {
+                                  const Platform& platform, DuckHitbox hitbox) {
     // Define duck's collision box (slightly smaller than sprite for better gameplay)
-    float duck_collision_x = duck_pos.x + duck_width / 4;
-    float duck_collision_width = duck_width / 2;
+    // float duck_collision_x = duck_pos.x + duck_width / 4;
+    // float duck_collision_width = duck_width / 2;
 
     // Check for full collision box overlap
-    bool vertical_overlap = (duck_pos.y + duck_height >= platform.y) &&
-                            (duck_pos.y <= platform.y + platform.height);
-    bool horizontal_overlap = (duck_collision_x + duck_collision_width >= platform.x) &&
-                              (duck_collision_x <= platform.x + platform.width);
+    bool vertical_overlap =
+            (hitbox.bottomY >= platform.y) && (hitbox.topY <= platform.y + platform.height);
+    bool horizontal_overlap =
+            (hitbox.rightX >= platform.x) && (hitbox.leftX <= platform.x + platform.width);
 
     return vertical_overlap && horizontal_overlap;
 }
@@ -111,8 +112,9 @@ void Game::updateBullets() {
 void Game::updateDucks(std::shared_ptr<std::vector<DuckState>>& duck_states) {
     for (auto& duck_pair: ducks) {
         Duck* duck = duck_pair.second.get();
+        DuckHitbox hitbox = getDuckHitbox(duck);
 
-        updateDuck(duck, duck_states);
+        updateDuck(duck, duck_states, hitbox);
     }
 }
 
@@ -197,7 +199,8 @@ void Game::updateDuckState(Duck* duck) {
     updateDuckHorizontalPosition(duck);
 }
 
-void Game::checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons) {
+void Game::checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons,
+                                      DuckHitbox hitbox) {
     for (const auto& weapon: weapons) {
         if (duck->position.x < weapon.pos.x + WEAPON_RECT &&
             duck->position.x + DUCK_WIDTH > weapon.pos.x &&
@@ -209,9 +212,9 @@ void Game::checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& wea
 }
 
 void Game::checkPlatformsCollision(Duck* duck, const std::vector<Platform>& platforms,
-                                   float previous_x, float previous_y) {
+                                   float previous_x, float previous_y, DuckHitbox hitbox) {
     for (const auto& platform: platforms) {
-        if (checkPlatformCollision(duck->position, DUCK_WIDTH, DUCK_HEIGHT, platform)) {
+        if (checkPlatformCollision(duck->position, DUCK_WIDTH, DUCK_HEIGHT, platform, hitbox)) {
             if (duck->vertical_velocity > 0 && previous_y + DUCK_HEIGHT <= platform.y) {
                 // Landing on platform
                 // Small adjustment to avoid a horizontal collision with the platform
@@ -233,10 +236,10 @@ void Game::checkPlatformsCollision(Duck* duck, const std::vector<Platform>& plat
 }
 
 void Game::checkCollisions(Duck* duck, const std::vector<Platform>& platforms, float previous_x,
-                           float previous_y) {
+                           float previous_y, DuckHitbox hitbox) {
 
     // Check platform collisions
-    checkPlatformsCollision(duck, platforms, previous_x, previous_y);
+    checkPlatformsCollision(duck, platforms, previous_x, previous_y, hitbox);
 
     const float ground_level = 700.0f - DUCK_HEIGHT;
 
@@ -255,11 +258,12 @@ void Game::checkCollisions(Duck* duck, const std::vector<Platform>& platforms, f
     }
 }
 
-void Game::updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_states) {
+void Game::updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_states,
+                      DuckHitbox hitbox) {
 
 
     // Checking if a duck collides with a weapon to pick it up
-    checkWeaponPickupCollision(duck, weapons);
+    checkWeaponPickupCollision(duck, weapons, hitbox);
 
     // Checking if it is shooting
     checkShoot(duck);
@@ -270,7 +274,7 @@ void Game::updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_
     updateDuckState(duck);
 
     // Check platform collisions
-    checkCollisions(duck, map_info.platforms, previous_x, previous_y);
+    checkCollisions(duck, map_info.platforms, previous_x, previous_y, hitbox);
 
     // Update duck state
     DuckState state(duck->name, duck->duck_id, duck->life_points, duck->looking, duck->position,

@@ -9,19 +9,26 @@
 #include <utility>
 #include <vector>
 
+#include <SDL2pp/Rect.hh>
+
 #include "../common/bullet.h"
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
 #include "../common/duck.h"
 #include "../common/types/action_type.h"
 #include "../common/types/match_state.h"
-#include "map_info.h"
 
 #include "PlayerActionHandler.h"
+#include "map_info.h"
 #include "server_gameloop_message.h"
 #include "server_match_state_monitor.h"
-#include "map_info.h"
 
+struct DuckHitbox {
+    float leftX;
+    float rightX;
+    float topY;
+    float bottomY;
+};
 
 class Game: public Thread {
 private:
@@ -48,15 +55,17 @@ private:
     void updateGameState();
     void updateBullets();
     void updateDucks(std::shared_ptr<std::vector<DuckState>>& duck_states);
-    void updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_states);
+    void updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_states,
+                    DuckHitbox hitbox);
     void updateDuckState(Duck* duck);
     void updateDuckVerticalPosition(Duck* duck);
     void updateDuckHorizontalPosition(Duck* duck);
-    void checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons);
+    void checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons,
+                                    DuckHitbox hitbox);
     void checkPlatformsCollision(Duck* duck, const std::vector<Platform>& platforms,
-                                 float previous_x, float previous_y);
+                                 float previous_x, float previous_y, DuckHitbox hitbox);
     void checkCollisions(Duck* duck, const std::vector<Platform>& platforms, float previous_x,
-                         float previous_y);
+                         float previous_y, DuckHitbox hitbox);
     void checkShoot(Duck* duck);
     void checkRoundEnd();
     void startNewRound();
@@ -65,7 +74,8 @@ private:
     void rateController(double start, double finish);
     double getCurrentTime();
     bool checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height,
-                                const Platform& platform);
+                                const Platform& platform, DuckHitbox hitbox);
+    DuckHitbox getDuckHitbox(const Duck* duck);
 
 
 public:
