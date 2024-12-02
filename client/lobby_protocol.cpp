@@ -32,7 +32,7 @@ std::vector<std::string> LobbyProtocol::receiveMapList() {
     }
     return maps;
 }
-#include <iostream>
+
 
 int LobbyProtocol::sendMatchCreation(uint8_t numPlayers, const std::string& matchName,
                                      const std::string& mapName) {
