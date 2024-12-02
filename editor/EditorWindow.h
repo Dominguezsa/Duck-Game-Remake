@@ -28,7 +28,7 @@ class EditorWindow: public QMainWindow {
     Q_OBJECT
 
 public:
-    EditorWindow(QWidget* parent = nullptr);
+    explicit EditorWindow(QWidget* parent = nullptr);
     ~EditorWindow();
 
     void setMapInfo(std::vector<std::vector<uint8_t>>& ids_matrix, int& width, int& height,
