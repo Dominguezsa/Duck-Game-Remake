@@ -21,6 +21,13 @@
 #include "server_gameloop_message.h"
 #include "server_match_state_monitor.h"
 
+struct DuckHitbox {
+    float leftX;
+    float rightX;
+    float topY;
+    float bottomY;
+};
+
 
 class Game: public Thread {
 private:
@@ -48,8 +55,8 @@ private:
     void updateBullets();
     void updateDucks(std::shared_ptr<std::vector<DuckState>>& duck_states);
     void updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_states);
-    void updateDuckState(Duck* duck);
-    void updateDuckVerticalPosition(Duck* duck);
+    void updateDuckState(Duck* duck, DuckHitbox& hitbox);
+    void updateDuckVerticalPosition(Duck* duck, DuckHitbox& hitbox);
     void updateDuckHorizontalPosition(Duck* duck);
     void checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons);
     void checkPlatformsCollision(Duck* duck, const std::vector<Platform>& platforms,
@@ -65,6 +72,7 @@ private:
     double getCurrentTime();
     bool checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height,
                                 const Platform& platform);
+    DuckHitbox getDuckHitbox(const Duck* duck);
 
 
 public:
