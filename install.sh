@@ -57,6 +57,8 @@ echo "Binaries moved to /usr/bin directory successfully!"
 
 echo "Moving the game assets to /var/duck_game..."
 
+sudo chown $USER:$USER /var/duck_game/maps
+
 cp -r ./client/data /var/duck_game
 cp -r ./maps /var/duck_game
 

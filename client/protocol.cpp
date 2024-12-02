@@ -10,8 +10,8 @@
 #include "../common/duck.h"
 #include "../common/snapshot.h"
 #include "../common/types/duck_state.h"
-#include "../common/types/weapon_type.h"
 #include "../common/types/match_state.h"
+#include "../common/types/weapon_type.h"
 
 ClientProtocol::ClientProtocol(Socket& socket): Protocol(socket) {}
 

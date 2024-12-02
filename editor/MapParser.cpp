@@ -1,9 +1,15 @@
 #include "MapParser.h"
 
+#include <filesystem>
+
 bool MapParser::parseMap(const std::string& name, const int& width, const int& height,
                          const std::vector<std::vector<uint8_t>>& tile_ids) {
     try {
-        // Creates the YAML emitter
+        // Verifica que el directorio exista, si no, lo crea
+        const std::string output_dir = "/var/duck_game/maps/";
+        std::filesystem::create_directories(output_dir);
+
+        // Crea el emisor YAML
         YAML::Emitter emitter;
         emitter.SetIndent(2);
 
@@ -27,14 +33,14 @@ bool MapParser::parseMap(const std::string& name, const int& width, const int& h
         emitter << YAML::EndMap;
 
         // Saves the YAML document to a file
-        std::ofstream fout("maps/example_map.yaml");
+        std::ofstream fout(output_dir + name + ".yaml");
         if (!fout.is_open()) {
             throw std::ios_base::failure("No se pudo abrir el archivo para escribir.");
         }
         fout << emitter.c_str();  // Escribe el contenido generado
         fout.close();
-    } catch (const std::ios_base::failure& e) {
-        std::cerr << "Error de archivo: " << e.what() << std::endl;
+    } catch (const std::iostream::failure& e) {
+        std::cerr << "Error de archivo: se ejecuta con sudo! sudo ./taller_editor"<< std::endl;
         return false;
     } catch (const YAML::Exception& e) {
         std::cerr << "Error de YAML: " << e.what() << std::endl;

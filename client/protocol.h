@@ -9,7 +9,6 @@
 #include "../common/common_protocol.h"
 #include "../common/common_socket.h"
 #include "../common/duck.h"
-
 #include "../common/types/match_state.h"
 
 

@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef EditorWindow_H
+#define EditorWindow_H
 
 #include <QApplication>
 #include <QDir>
@@ -20,43 +20,51 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainWindow;
+class EditorWindow;
 }
 QT_END_NAMESPACE
 
-class MainWindow: public QMainWindow {
+class EditorWindow: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget* parent = nullptr);
-    ~MainWindow();
-    int width = 25, height = 15;
-    void initMapScene(const int& map_width, const int& map_height,
-                      std::vector<std::vector<uint8_t>>& ids_matrix);
+    explicit EditorWindow(QWidget* parent = nullptr);
+    ~EditorWindow();
+
+    void setMapInfo(std::vector<std::vector<uint8_t>>& ids_matrix, int& width, int& height,
+                    std::string& mapName, bool& map_saved);
 
 private:
-    Ui::MainWindow* ui;
+    Ui::EditorWindow* ui;
     QGraphicsScene gameMapScene;
     std::vector<Tile*> tiles;
     std::vector<ImageWidget*> providers;
     QPixmap selectedPixmap;
     std::string mapData;
     std::map<uint8_t, QPixmap> map_id;
+    QMessageBox mapCreatedMessageBox;
+
+    int* width;
+    int* height;
+    std::string* mapName;
+    bool* mapSaved;
+    std::vector<std::vector<uint8_t>>* matrix_ids;
 
 
     void setSelectableImages();
     void updateTileImage(int row, int col);
+    void validateInputs();
+    void goToCreateMapScene();
+    void initMapScene();
 
-    // cppcheck-suppress unknownMacro
 public slots:
     void saveMap(std::string mapData);
 
 private slots:
     void onImageProviderClicked(ImageWidget* sender);
-    // void onWidgetClicked(ImageWidget* widget);
 
 signals:
     void clicked(ImageWidget* widget);
     void mapCreated(const std::string& mapData);
 };
-#endif  // MAINWINDOW_H
+#endif  // EditorWindow_H

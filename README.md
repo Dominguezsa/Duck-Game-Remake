@@ -2,39 +2,37 @@
 
 ## Cómo correr el proyecto
 
-Para instalar el juego, correr
+Para instalar el juego, correr en el directorio raiz de este proyecto:
 ```bash
 
 sudo bash ./install.sh
 
 ```
 
-Que corre los scripts para descargar las dependencias necesarias y mueve los binarios a 
-/usr/bin y los recursos del juego a /var/duck_game/data
+Que corre los scripts para descargar las dependencias necesarias
 
 ## Ejecución
 
-Estando dentro del directorio /usr/bin/, correr:
+Dentro del repositorio principal, para ejecutar cliente y server 
 
 ```bash
 ./taller_server <puerto>
 ```
-para el server, y:
 
 ```bash
 ./taller_client <hostname> <puerto>
 ```
 
-para correr los clientes.
+Para correr el editor se necesita el comando de superusuario 'sudo', para que pueda guardar los mapas en el directorio /var/duck_game
+
+```bash
+sudo ./taller_editor
+```
 
 -------------------------------------------------------------
+### IMPORTANTE
 
-**Importante:** el primer commit de este repositorio tiene el setup
-básico para el TP Final que incluye la instalación de la lib
-`libSDL2pp` (el wrapper de C++).
-
-El resto de los commits son a modo de ejemplo de como se pueden
-agregar mas código fuente al proyecto.
+No probar las siguientes armas porque no estan implementadas y crashean el juego: granada, banana,
 
 Este ejemplo **no** incluye instalarse la librería `SDL2` ni tampoco
 instala otras librerías que puedan ser necesarias ni tampoco un

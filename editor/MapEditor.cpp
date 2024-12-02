@@ -2,7 +2,14 @@
 
 #include <iostream>
 
-MapEditor::MapEditor(QApplication& _app): window(), app(_app), id_matrix() {
+MapEditor::MapEditor(QApplication& _app):
+        window(),
+        app(_app),
+        id_matrix(),
+        map_width(0),
+        map_height(0),
+        map_name(""),
+        saved_map(false) {
     window.setAutoFillBackground(true);  // Permitir que el fondo se pinte con el palette
     QPalette palette = window.palette();
     palette.setColor(QPalette::Window, Qt::gray);  // Establecer el fondo a negro
@@ -10,14 +17,13 @@ MapEditor::MapEditor(QApplication& _app): window(), app(_app), id_matrix() {
 }
 
 int MapEditor::run() {
-    // Pedir al ususaio
-    std::string map_name = "Example name";
-    int width = 25, height = 15;
-
-    id_matrix.resize(height, std::vector<uint8_t>(width, 0));
-    window.initMapScene(width, height, id_matrix);
+    window.setMapInfo(id_matrix, map_width, map_height, map_name, saved_map);
     window.show();
-    int return_value = app.exec();
-    MapParser::parseMap(map_name, width, height, id_matrix);
-    return return_value;
+
+    int exitCode = app.exec();
+
+    if (saved_map) {
+        MapParser::parseMap(map_name, map_width, map_height, id_matrix);
+    }
+    return exitCode;
 }

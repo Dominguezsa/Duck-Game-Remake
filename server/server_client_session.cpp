@@ -51,10 +51,9 @@ void ClientSession::run() {
             receiver.start();
             // run_receiver_loop();
             while (receiver.is_alive() && sender.is_alive()) {
-                std::this_thread::sleep_for(std::chrono::seconds(10));
+                std::this_thread::sleep_for(std::chrono::seconds(1));
             }
             this->matches_monitor.disconnect_player(identity.joined_match_name, identity.id);
-            std::cout << "Client disconnected\n";
             sender.stop();
             sender.join();
             receiver.stop();
@@ -168,6 +167,7 @@ void ClientSession::get_available_maps(std::list<std::string>& map_list) {
                 if (map_node["name"]) {
                     std::string map_name = map_node["name"].as<std::string>();
                     map_list.push_back(map_name);
+                    std::cout << "Mapa cargado: " << map_name << std::endl;
                 } else {
                     std::cerr << "Advertencia: El archivo " << entry.path().filename()
                               << " no contiene un campo 'name'." << std::endl;
@@ -195,7 +195,7 @@ void ClientSession::get_available_maps(std::list<std::string>& map_list) {
                             } else if (tile_value == 13) {
                                 // Crear punto de respawn
                                 respawns.emplace_back(Respawn{x, y});
-                            } else if (tile_value > 15 && tile_value <= 27) {
+                            } else if (tile_value > 15 && tile_value <= 25) {
                                 // Crear arma
                                 weapons.emplace_back(
                                         weapons_in_map{x, y, static_cast<uint8_t>(tile_value)});

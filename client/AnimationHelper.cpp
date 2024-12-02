@@ -6,8 +6,7 @@
 #include "ResourceManager.h"
 
 AnimationHelper::AnimationHelper(ResourceManager& resourceManager):
-        ducks_animation_data(), resourceManager(resourceManager) {
-}
+        ducks_animation_data(), resourceManager(resourceManager) {}
 
 void AnimationHelper::loadDucks(std::vector<DuckState>& ducks) {
     std::transform(ducks.begin(), ducks.end(), std::back_inserter(ducks_animation_data),

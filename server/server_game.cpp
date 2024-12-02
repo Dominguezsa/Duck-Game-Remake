@@ -11,7 +11,15 @@
 
 #include "weapon_handler.h"
 
-#define GRAVITY 0.3f
+
+#define GRAVITY 0.5f
+#define FLUTTER_FORCE -0.3f
+#define MAX_FALL_SPEED 13.0f
+#define MAX_FLUTTER_SPEED 3.0f
+#define DUCK_WIDTH 64.0f
+#define DUCK_HEIGHT 64.0f
+// #define MOVE_SPEED 5.0f
+
 #define FLUTTER_FORCE -0.3f
 #define MAX_FALL_SPEED 13.0f
 #define MAX_FLUTTER_SPEED 3.0f
@@ -36,8 +44,16 @@ Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue, MapInfo& 
         map_info(_map_info) {}
 
 
-void Game::addPlayer(DuckIdentity& duck_info) {
+void Game::addPlayer(DuckIdentity& duck_info, const MapInfo& map_info) {
     Position initial_pos{100 + (duck_info.id * 100), 100};  // Example starting position
+    try {
+        int x = map_info.respawns[duck_info.id].x;
+        int y = map_info.respawns[duck_info.id].y -
+                20;  // el menos 20 es para evitar colision con plataforma
+        initial_pos = Position{x, y};
+    } catch (const std::exception& e) {
+        std::cout << "not enough respawns for all players" << std::endl;
+    }
     Weapon initial_weapon;
     ducks[duck_info.id] = std::make_unique<Duck>(duck_info.id, 100, 1, initial_pos, initial_weapon,
                                                  duck_info.name);
@@ -140,13 +156,14 @@ void Game::updateDuckVerticalPosition(Duck* duck, const DuckHitbox& hitbox) {
     }
     bool above_platform = false;
     for (const auto& platform: map_info.platforms) {
-        if (hitbox.leftX < platform.x + platform.width && hitbox.rightX > platform.x &&
-            hitbox.topY < platform.y + platform.height && hitbox.bottomY > platform.y - 5) {
+        if (duck->position.x < platform.x + platform.width &&
+            duck->position.x + DUCK_WIDTH > platform.x &&
+            duck->position.y < platform.y + platform.height &&
+            duck->position.y + DUCK_HEIGHT > platform.y) {
             above_platform = true;
         }
     }
     if (!above_platform) {
-        // std::cout << "The duck is not above a platform" << std::endl;
         duck->in_air = true;
         duck->vertical_velocity += GRAVITY;
     }
@@ -157,8 +174,8 @@ void Game::updateDuckVerticalPosition(Duck* duck, const DuckHitbox& hitbox) {
     }
 
     // Apply vertical velocity
-    duck->is_falling = duck->vertical_velocity > 0;
     duck->position.y += duck->vertical_velocity;
+    duck->is_falling = duck->vertical_velocity > 0;
 }
 
 void Game::updateDuckHorizontalPosition(Duck* duck) {
@@ -213,7 +230,8 @@ void Game::checkPlatformsCollision(Duck* duck, const std::vector<Platform>& plat
         if (checkPlatformCollision(duck->position, DUCK_WIDTH, DUCK_HEIGHT, platform)) {
             if (duck->vertical_velocity > 0 && previous_y + DUCK_HEIGHT <= platform.y) {
                 // Landing on platform
-                // Small adjustment to avoid a horizontal collision with the platform
+                // Small adjustment to avoid a horizontal
+                // collision with the platform
                 duck->position.y = platform.y - DUCK_HEIGHT - 2;
                 duck->vertical_velocity = 0;
                 duck->in_air = false;
@@ -230,7 +248,6 @@ void Game::checkPlatformsCollision(Duck* duck, const std::vector<Platform>& plat
         }
     }
 }
-
 
 void Game::checkCollisions(Duck* duck, const std::vector<Platform>& platforms, float previous_x,
                            float previous_y) {
@@ -260,7 +277,8 @@ void Game::updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_
 
     DuckHitbox hitbox = getDuckHitbox(duck);
 
-    // Checking if a duck collides with a weapon to pick it up
+    // Checking if a duck collides with a weapon to pick it
+    // up
     checkWeaponPickupCollision(duck, weapons, hitbox);
 
     // Checking if it is shooting
@@ -321,8 +339,10 @@ void Game::checkRoundEnd() {
         if (alive_players == 1) {
             victories[last_alive_id]++;
         }
-        updateGameState();  // si no pongo esto no le envia a los clientes los patos que tienen 0 de
-                            // vida, muy raro, pero bueno
+        updateGameState();  // si no pongo esto no le envia a
+                            // los clientes los patos que
+                            // tienen 0 de vida, muy raro,
+                            // pero bueno
         sleep(1);
 
         startNewRound();
@@ -352,10 +372,12 @@ void Game::startNewRound() {
 }
 
 bool Game::checkGameEnd() {
-    // No se y no entiendo por que mi cppcheck local se pone como loca de que debería usar
-    // algoritmos de la librería estándar para esto aunque haga que el código sea horrible,
-    // estoy hace horas tratando de que no pase pero ni idea por que carajo sigue igual, otro
-    // dia se verá
+    // No se y no entiendo por que mi cppcheck local se pone
+    // como loca de que debería usar algoritmos de la
+    // librería estándar para esto aunque haga que el código
+    // sea horrible, estoy hace horas tratando de que no pase
+    // pero ni idea por que carajo sigue igual, otro dia se
+    // verá
     auto max_victory = std::max_element(
             victories.cbegin(), victories.cend(),
             [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
@@ -419,8 +441,9 @@ void Game::run() {
             rateController(start_time, end_time);
         }
     } catch (ClosedQueue& e) {
-        std::cerr << "Server interrupts game loop\n";
-        stop();
+        stop();  // si se cierra la cola de mensajes se
+                 // termina el juego, la puede cerrar el
+                 // monitor_match legalmente
     } catch (const std::exception& e) {
         std::cerr << "Error occurred during game loop: " << e.what() << std::endl;
         stop();

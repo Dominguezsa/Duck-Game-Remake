@@ -5,8 +5,11 @@
 
 #define MAX_SIZE_QUEUE 50
 
-Match::Match(uint8_t limit, MapInfo map_info) :
-        gameloop_queue(MAX_SIZE_QUEUE), game(state_monitor, gameloop_queue, map_info), state_monitor(limit), map_info(map_info) {}
+Match::Match(uint8_t limit, MapInfo map_info):
+        gameloop_queue(MAX_SIZE_QUEUE),
+        game(state_monitor, gameloop_queue, map_info),
+        state_monitor(limit),
+        map_info(map_info) {}
 
 bool Match::remove_player_if_in_match(const uint8_t& id) {
     bool removed = state_monitor.remove_player_if_present(id);
@@ -20,7 +23,7 @@ bool Match::can_accept_players() { return !state_monitor.playing_status(); }
 
 void Match::add_player(Queue<std::shared_ptr<Snapshot>>* q, DuckIdentity& duck_info) {
     state_monitor.add_player(q, duck_info.id);
-    game.addPlayer(duck_info);
+    game.addPlayer(duck_info, map_info);
     if (state_monitor.playing_status()) {
         std::cout << "Match NOW PLAYING\n";
         initialize_game();

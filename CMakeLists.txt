@@ -151,9 +151,9 @@ if(TALLER_CLIENT)
     # Include MainWindow and other editor files
     target_sources(taller_client
         PRIVATE
-        editor/mainwindow.cpp
-        editor/mainwindow.h
-        editor/mainwindow.ui
+        editor/EditorWindow.cpp
+        editor/EditorWindow.h
+        editor/EditorWindow.ui
         editor/Tile.cpp
         editor/Tile.h
         editor/ImageWidget.cpp
