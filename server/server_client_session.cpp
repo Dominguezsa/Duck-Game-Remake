@@ -51,7 +51,7 @@ void ClientSession::run() {
             receiver.start();
             // run_receiver_loop();
             while (receiver.is_alive() && sender.is_alive()) {
-                std::this_thread::sleep_for(std::chrono::seconds(10));
+                std::this_thread::sleep_for(std::chrono::seconds(1));
             }
             this->matches_monitor.disconnect_player(identity.joined_match_name, identity.id);
             std::cout << "Client disconnected\n";
