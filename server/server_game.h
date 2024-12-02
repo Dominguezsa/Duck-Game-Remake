@@ -51,28 +51,37 @@ private:
     static constexpr uint16_t ROUNDS_PER_SET = 5;
     static constexpr uint16_t VICTORIES_TO_WIN = 10;
 
+    // State update methods
+
     void updateGameState();
     void updateBullets();
     void updateDucks(std::shared_ptr<std::vector<DuckState>>& duck_states);
     void updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_states);
-    void updateDuckState(Duck* duck, DuckHitbox& hitbox);
-    void updateDuckVerticalPosition(Duck* duck, DuckHitbox& hitbox);
+    void updateDuckState(Duck* duck, const DuckHitbox& hitbox);
+    void updateDuckVerticalPosition(Duck* duck, const DuckHitbox& hitbox);
     void updateDuckHorizontalPosition(Duck* duck);
-    void checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons);
+
+    // Collision methods
+    void checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons,
+                                    const DuckHitbox& hitbox);
     void checkPlatformsCollision(Duck* duck, const std::vector<Platform>& platforms,
                                  float previous_x, float previous_y);
     void checkCollisions(Duck* duck, const std::vector<Platform>& platforms, float previous_x,
                          float previous_y);
+    bool checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height,
+                                const Platform& platform);
+    DuckHitbox getDuckHitbox(const Duck* duck);
+
+    // Shooting
     void checkShoot(Duck* duck);
+
+    // Game logic
     void checkRoundEnd();
     void startNewRound();
     bool checkGameEnd();
     void send_platforms_first_time();
     void rateController(double start, double finish);
     double getCurrentTime();
-    bool checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height,
-                                const Platform& platform);
-    DuckHitbox getDuckHitbox(const Duck* duck);
 
 
 public:

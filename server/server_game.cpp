@@ -188,7 +188,7 @@ void Game::updateDuckHorizontalPosition(Duck* duck) {
     }
 }
 
-void Game::updateDuckState(Duck* duck, DuckHitbox& hitbox) {
+void Game::updateDuckState(Duck* duck, const DuckHitbox& hitbox) {
 
     // Update vertical movement
     updateDuckVerticalPosition(duck, hitbox);
@@ -197,12 +197,11 @@ void Game::updateDuckState(Duck* duck, DuckHitbox& hitbox) {
     updateDuckHorizontalPosition(duck);
 }
 
-void Game::checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons) {
+void Game::checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons,
+                                      const DuckHitbox& hitbox) {
     for (const auto& weapon: weapons) {
-        if (duck->position.x < weapon.pos.x + WEAPON_RECT &&
-            duck->position.x + DUCK_WIDTH > weapon.pos.x &&
-            duck->position.y < weapon.pos.y + WEAPON_RECT &&
-            duck->position.y + DUCK_HEIGHT > weapon.pos.y) {
+        if (hitbox.leftX < weapon.pos.x + WEAPON_RECT && hitbox.rightX > weapon.pos.x &&
+            hitbox.topY < weapon.pos.y + WEAPON_RECT && hitbox.bottomY > weapon.pos.y) {
             duck->pick_up_weapon(weapon);
         }
     }
@@ -262,7 +261,7 @@ void Game::updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_
     DuckHitbox hitbox = getDuckHitbox(duck);
 
     // Checking if a duck collides with a weapon to pick it up
-    checkWeaponPickupCollision(duck, weapons);
+    checkWeaponPickupCollision(duck, weapons, hitbox);
 
     // Checking if it is shooting
     checkShoot(duck);
