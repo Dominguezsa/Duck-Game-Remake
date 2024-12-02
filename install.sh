@@ -49,6 +49,10 @@ cp build/taller_client /usr/bin
 cp build/taller_editor /usr/bin
 cp -r build/_deps /usr/bin
 
+mv build/taller_server ./
+mv build/taller_client ./
+mv build/taller_editor ./ 
+
 echo "Binaries moved to /usr/bin directory successfully!"
 
 echo "Moving the game assets to /var/duck_game..."
