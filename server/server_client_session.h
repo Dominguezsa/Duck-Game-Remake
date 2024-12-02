@@ -47,7 +47,7 @@ private:
     MatchesMonitor& matches_monitor;
     Queue<std::shared_ptr<Snapshot>> client_queue;
 
-    std::map<std::string, MapInfo> matches; //guarda el nombre del mapa, y su estructura
+    std::map<std::string, MapInfo> matches;  // guarda el nombre del mapa, y su estructura
 
 public:
     ClientSession(Socket _skt, MatchesMonitor& monitor);

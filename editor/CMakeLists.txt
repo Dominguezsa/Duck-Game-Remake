@@ -6,7 +6,7 @@ target_sources(taller_editor
     ${CPP_FILES}
     PUBLIC
     ${H_FILES}
-    mainwindow.ui
+    EditorWindow.ui
     )
 
 # Buscar Qt

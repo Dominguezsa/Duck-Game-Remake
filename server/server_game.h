@@ -17,9 +17,9 @@
 #include "../common/types/match_state.h"
 
 #include "PlayerActionHandler.h"
+#include "map_info.h"
 #include "server_gameloop_message.h"
 #include "server_match_state_monitor.h"
-#include "map_info.h"
 
 struct DuckHitbox {
     float leftX;

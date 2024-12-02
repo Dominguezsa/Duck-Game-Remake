@@ -50,7 +50,7 @@ public:
     std::shared_ptr<SDL2pp::Font> getFont(const std::string& key);
     std::shared_ptr<SDL2pp::Chunk> getSFXForWeapon(const WeaponType& weapon);
     std::shared_ptr<SDL2pp::Texture> getTexture(const std::string& key);
-     SDL2pp::Rect getPlatformRect(const std::string& key);
+    SDL2pp::Rect getPlatformRect(const std::string& key);
     SDL2pp::Rect getAnimationFrame(const std::string& key, const int frame);
     void releaseResources();
 };

@@ -9,9 +9,9 @@
 #include "../common/types/match_state.h"
 #include "types/match_status.h"
 
+#include "map_info.h"
 #include "server_game.h"
 #include "server_match_state_monitor.h"
-#include "map_info.h"
 
 class Match {
 private:
