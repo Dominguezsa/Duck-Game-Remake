@@ -12,9 +12,6 @@ void ReceiverThread::run() {
             gameloop_queue.push(msg);
         }
     } catch (std::exception& e) {
-        // If an exception is thrown in this while loop, that means the client
-        // has disconnected from the server or the match is finished.
-        std::cout << "Client disconnected : Printed on receiverThread\n";
         this->_is_alive = false;
     }
 }

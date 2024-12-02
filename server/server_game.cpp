@@ -8,6 +8,7 @@
 
 #include "../common/snapshot.h"
 #include "../editor/image_type.h"
+
 #include "weapon_handler.h"
 
 
@@ -417,8 +418,8 @@ void Game::run() {
             rateController(start_time, end_time);
         }
     } catch (ClosedQueue& e) {
-        std::cerr << "Server interrupts game loop\n";
-        stop();
+        stop();  // si se cierra la cola de mensajes se termina el juego, la puede cerrar el
+                 // monitor_match legalmente
     } catch (const std::exception& e) {
         std::cerr << "Error occurred during game loop: " << e.what() << std::endl;
         stop();
