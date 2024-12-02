@@ -17,9 +17,9 @@
 #include "../common/types/match_state.h"
 
 #include "PlayerActionHandler.h"
-#include "map_info.h"
 #include "server_gameloop_message.h"
 #include "server_match_state_monitor.h"
+#include "map_info.h"
 
 struct DuckHitbox {
     float leftX;
@@ -70,8 +70,7 @@ private:
     void rateController(double start, double finish);
     double getCurrentTime();
     bool checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height,
-                                  const Platform& platform);
-    // DuckHitbox getDuckHitbox(const Duck* duck);
+                                const Platform& platform);
 
 
 public:

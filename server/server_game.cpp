@@ -10,7 +10,15 @@
 #include "../editor/image_type.h"
 #include "weapon_handler.h"
 
-#define GRAVITY 0.3f
+
+#define GRAVITY 0.5f
+#define FLUTTER_FORCE -0.3f
+#define MAX_FALL_SPEED 13.0f
+#define MAX_FLUTTER_SPEED 3.0f
+#define DUCK_WIDTH 64.0f
+#define DUCK_HEIGHT 64.0f
+// #define MOVE_SPEED 5.0f
+
 #define FLUTTER_FORCE -0.3f
 #define MAX_FALL_SPEED 13.0f
 #define MAX_FLUTTER_SPEED 3.0f
