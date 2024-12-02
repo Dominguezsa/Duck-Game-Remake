@@ -62,8 +62,7 @@ DuckHitbox Game::getDuckHitbox(const Duck* duck) {
 }
 
 
-bool Game::checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height,
-                                  const Platform& platform, DuckHitbox hitbox) {
+bool Game::checkPlatformCollision(const Platform& platform, DuckHitbox hitbox) {
     // Define duck's collision box (slightly smaller than sprite for better gameplay)
     // float duck_collision_x = duck_pos.x + duck_width / 4;
     // float duck_collision_width = duck_width / 2;
@@ -217,7 +216,7 @@ void Game::checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& wea
 void Game::checkPlatformsCollision(Duck* duck, const std::vector<Platform>& platforms,
                                    float previous_x, float previous_y, DuckHitbox hitbox) {
     for (const auto& platform: platforms) {
-        if (checkPlatformCollision(duck->position, DUCK_WIDTH, DUCK_HEIGHT, platform, hitbox)) {
+        if (checkPlatformCollision(platform, hitbox)) {
             if (duck->vertical_velocity > 0 && previous_y + DUCK_HEIGHT <= platform.y) {
                 // Landing on platform
                 // Small adjustment to avoid a horizontal collision with the platform

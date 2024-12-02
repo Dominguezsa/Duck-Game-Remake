@@ -9,8 +9,6 @@
 #include <utility>
 #include <vector>
 
-#include <SDL2pp/Rect.hh>
-
 #include "../common/bullet.h"
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
@@ -73,8 +71,7 @@ private:
     void send_platforms_first_time();
     void rateController(double start, double finish);
     double getCurrentTime();
-    bool checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height,
-                                const Platform& platform, DuckHitbox hitbox);
+    bool checkPlatformCollision(const Platform& platform, DuckHitbox hitbox);
     DuckHitbox getDuckHitbox(const Duck* duck);
 
 
