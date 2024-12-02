@@ -16,17 +16,17 @@ enum ImageType {
     respawn_for_player,
     mistery_box, //por el momento no sirve de nada
     coin,
+    cowboyGun,
+    duelingGun,
     magnum,
-    duelGun,
-    revolver,
     ak47,
     shotgun,
     sniper,
-    lasergun,
-    sniper2,
-    banana,
-    grenade,
-    helmet,
-    shield,
+    laserRifle,
+    PewPewLaser1,
+    banana1,
+    grenade1,
+    helmet, // not implemented
+    shield, // not implemented
 };
 #endif  // IMAGE_TYPE
