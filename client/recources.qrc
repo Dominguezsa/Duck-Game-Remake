@@ -1,0 +1,6 @@
+<RCC>
+ <qresource prefix="/images">
+  <file alias="fondo.png">data/fondo.png</file>
+  <file alias="duckGameLobby.png">data/duckGameLobby.png</file>
+ </qresource>
+</RCC>
