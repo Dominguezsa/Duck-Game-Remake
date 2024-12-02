@@ -85,12 +85,14 @@ void Game::updateBullets() {
 
         for (auto& duck_pair: ducks) {
             Duck* duck = duck_pair.second.get();
+            DuckHitbox hitbox = getDuckHitbox(duck);
+
             if (bullet.duck_how_shot == duck->duck_id) {
                 continue;
             }
 
-            if (duck->position.x < bullet.x + 10 && duck->position.x + DUCK_WIDTH > bullet.x &&
-                duck->position.y < bullet.y + 10 && duck->position.y + DUCK_HEIGHT > bullet.y) {
+            if (hitbox.leftX < bullet.x + 10 && hitbox.rightX > bullet.x &&
+                hitbox.topY < bullet.y + 10 && hitbox.bottomY > bullet.y) {
 
                 duck->receive_damage(bullet.damage);
                 errase = true;
@@ -202,10 +204,10 @@ void Game::updateDuckState(Duck* duck) {
 void Game::checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons,
                                       DuckHitbox hitbox) {
     for (const auto& weapon: weapons) {
-        if (duck->position.x < weapon.pos.x + WEAPON_RECT &&
-            duck->position.x + DUCK_WIDTH > weapon.pos.x &&
-            duck->position.y < weapon.pos.y + WEAPON_RECT &&
-            duck->position.y + DUCK_HEIGHT > weapon.pos.y) {
+        if (hitbox.leftX < weapon.pos.x + WEAPON_RECT && hitbox.rightX > weapon.pos.x &&
+            hitbox.topY < weapon.pos.y + WEAPON_RECT && hitbox.bottomY > weapon.pos.y) {
+            // Esto debería borrar también el arma del vector, y tmb respawnearla después
+            // de cierto tiempo, pero bueno
             duck->pick_up_weapon(weapon);
         }
     }
@@ -243,18 +245,19 @@ void Game::checkCollisions(Duck* duck, const std::vector<Platform>& platforms, f
 
     const float ground_level = 700.0f - DUCK_HEIGHT;
 
-    // Ground collision
+    // Ground collision, esto se debería ir porque debería morir si cae al vacío
     if (duck->position.y > ground_level) {
         duck->position.y = ground_level;
         duck->vertical_velocity = 0;
         duck->in_air = false;
     }
 
-    // Screen boundaries
-    if (duck->position.x < 0) {
+    // Screen boundaries, esto en teoría también debería volar, pero andá a hacer el tema de la
+    // cámara ahora
+    if (hitbox.leftX < 0) {
         duck->position.x = 0;
-    } else if (duck->position.x > 1200 - DUCK_WIDTH) {
-        duck->position.x = 1200 - DUCK_WIDTH;
+    } else if (hitbox.rightX > 1200) {
+        duck->position.x = 1200;
     }
 }
 
