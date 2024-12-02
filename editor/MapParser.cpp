@@ -33,7 +33,7 @@ bool MapParser::parseMap(const std::string& name, const int& width, const int& h
         emitter << YAML::EndMap;
 
         // Saves the YAML document to a file
-        std::ofstream fout(name + ".yaml");
+        std::ofstream fout(output_dir + name + ".yaml");
         if (!fout.is_open()) {
             throw std::ios_base::failure("No se pudo abrir el archivo para escribir.");
         }
