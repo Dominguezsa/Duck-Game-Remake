@@ -44,8 +44,15 @@ Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue, MapInfo& 
         map_info(_map_info) {}
 
 
-void Game::addPlayer(DuckIdentity& duck_info) {
+void Game::addPlayer(DuckIdentity& duck_info, MapInfo& map_info) {
     Position initial_pos{100 + (duck_info.id * 100), 100};  // Example starting position
+    try {
+        int x = map_info.respawns[duck_info.id].x;
+        int y = map_info.respawns[duck_info.id].y;
+        initial_pos = Position{x, y};
+    }catch (const std::exception& e) {
+        std::cout << "not enough respawns for all players" << std::endl;
+    }
     Weapon initial_weapon;
     ducks[duck_info.id] = std::make_unique<Duck>(duck_info.id, 100, 1, initial_pos, initial_weapon,
                                                  duck_info.name);
