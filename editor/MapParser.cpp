@@ -1,9 +1,15 @@
 #include "MapParser.h"
 
+#include <filesystem>
+
 bool MapParser::parseMap(const std::string& name, const int& width, const int& height,
                          const std::vector<std::vector<uint8_t>>& tile_ids) {
     try {
-        // Creates the YAML emitter
+        // Verifica que el directorio exista, si no, lo crea
+        const std::string output_dir = "/var/duck_game/maps/";
+        std::filesystem::create_directories(output_dir);
+
+        // Crea el emisor YAML
         YAML::Emitter emitter;
         emitter.SetIndent(2);
 
