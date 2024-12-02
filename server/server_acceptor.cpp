@@ -8,7 +8,6 @@ void AcceptorThread::stop() {
     this->acceptor_skt.shutdown(2);
     this->acceptor_skt.close();
     free_all_resources();
-    matches.remove_all_matches();
 }
 
 void AcceptorThread::accept_connection() {
