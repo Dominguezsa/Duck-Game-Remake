@@ -47,8 +47,8 @@ Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue, MapInfo& 
 void Game::addPlayer(DuckIdentity& duck_info, MapInfo& map_info) {
     Position initial_pos{100 + (duck_info.id * 100), 100};  // Example starting position
     try {
-        int x = map_info.respawns[duck_info.id].x;
-        int y = map_info.respawns[duck_info.id].y;
+        int x = map_info.respawns[duck_info.id].x; 
+        int y = map_info.respawns[duck_info.id].y -20; // el menos 20 es para evitar colision con plataforma
         initial_pos = Position{x, y};
     }catch (const std::exception& e) {
         std::cout << "not enough respawns for all players" << std::endl;
