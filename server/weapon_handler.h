@@ -81,6 +81,6 @@ public:
         if (it != weaponCreators.end()) {
             return it->second(weaponData);
         }
-        throw std::runtime_error("Weapon type not found in factory");
+        return Weapon();
     }
 };

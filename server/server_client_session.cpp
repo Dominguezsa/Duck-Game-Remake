@@ -195,7 +195,7 @@ void ClientSession::get_available_maps(std::list<std::string>& map_list) {
                             } else if (tile_value == 13) {
                                 // Crear punto de respawn
                                 respawns.emplace_back(Respawn{x, y});
-                            } else if (tile_value > 15 && tile_value <= 27) {
+                            } else if (tile_value > 15 && tile_value <= 25) {
                                 // Crear arma
                                 weapons.emplace_back(
                                         weapons_in_map{x, y, static_cast<uint8_t>(tile_value)});
