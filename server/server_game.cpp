@@ -78,21 +78,6 @@ DuckHitbox Game::getDuckHitbox(const Duck* duck) {
     return hitbox;
 }
 
-bool Game::checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height,
-                                  const Platform& platform) {
-    // Define duck's collision box (slightly smaller than sprite for better gameplay)
-    float duck_collision_x = duck_pos.x + duck_width / 4;
-    float duck_collision_width = duck_width / 2;
-
-    // Check for full collision box overlap
-    bool vertical_overlap = (duck_pos.y + duck_height >= platform.y) &&
-                            (duck_pos.y <= platform.y + platform.height);
-    bool horizontal_overlap = (duck_collision_x + duck_collision_width >= platform.x) &&
-                              (duck_collision_x <= platform.x + platform.width);
-
-    return vertical_overlap && horizontal_overlap;
-}
-
 void Game::updateBullets() {
     for (auto it = bullets_by_id.begin(); it != bullets_by_id.end();) {
 
@@ -141,7 +126,8 @@ void Game::checkShoot(Duck* duck) {
     }
 }
 
-void Game::updateDuckVerticalPosition(Duck* duck, const DuckHitbox& hitbox) {
+void Game::updateDuckVerticalPosition(Duck* duck) {
+
     // Apply gravity if in air
     if (duck->in_air) {
         duck->vertical_velocity += GRAVITY;
@@ -154,20 +140,6 @@ void Game::updateDuckVerticalPosition(Duck* duck, const DuckHitbox& hitbox) {
             }
         }
     }
-    bool above_platform = false;
-    for (const auto& platform: map_info.platforms) {
-        if (duck->position.x < platform.x + platform.width &&
-            duck->position.x + DUCK_WIDTH > platform.x &&
-            duck->position.y < platform.y + platform.height &&
-            duck->position.y + DUCK_HEIGHT > platform.y) {
-            above_platform = true;
-        }
-    }
-    if (!above_platform) {
-        duck->in_air = true;
-        duck->vertical_velocity += GRAVITY;
-    }
-
     // Limit fall speed
     if (duck->vertical_velocity > MAX_FALL_SPEED) {
         duck->vertical_velocity = MAX_FALL_SPEED;
@@ -177,6 +149,22 @@ void Game::updateDuckVerticalPosition(Duck* duck, const DuckHitbox& hitbox) {
     duck->position.y += duck->vertical_velocity;
     duck->is_falling = duck->vertical_velocity > 0;
 }
+
+bool Game::checkPlatformCollision(const Position& duck_pos, float duck_width, float duck_height,
+                                  const Platform& platform) {
+    // Define duck's collision box (slightly smaller than sprite for better gameplay)
+    float duck_collision_x = duck_pos.x + duck_width / 4;
+    float duck_collision_width = duck_width / 2;
+
+    // Check for full collision box overlap
+    bool vertical_overlap = (duck_pos.y + duck_height >= platform.y) &&
+                            (duck_pos.y <= platform.y + platform.height);
+    bool horizontal_overlap = (duck_collision_x + duck_collision_width >= platform.x) &&
+                              (duck_collision_x <= platform.x + platform.width);
+
+    return vertical_overlap && horizontal_overlap;
+}
+
 
 void Game::updateDuckHorizontalPosition(Duck* duck) {
     if (duck->is_running) {
@@ -205,10 +193,10 @@ void Game::updateDuckHorizontalPosition(Duck* duck) {
     }
 }
 
-void Game::updateDuckState(Duck* duck, const DuckHitbox& hitbox) {
+void Game::updateDuckState(Duck* duck) {
 
     // Update vertical movement
-    updateDuckVerticalPosition(duck, hitbox);
+    updateDuckVerticalPosition(duck);
 
     // Update horizontal position
     updateDuckHorizontalPosition(duck);
@@ -226,6 +214,22 @@ void Game::checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& wea
 
 void Game::checkPlatformsCollision(Duck* duck, const std::vector<Platform>& platforms,
                                    float previous_x, float previous_y) {
+
+    // bool above_platform = false;
+    // for (const auto& platform: map_info.platforms) {
+    //     if (duck->position.x < platform.x + platform.width &&
+    //         duck->position.x + DUCK_WIDTH > platform.x &&
+    //         duck->position.y < platform.y + platform.height &&
+    //         duck->position.y + DUCK_HEIGHT > platform.y) {
+    //         above_platform = true;
+    //     }
+    // }
+    // if (!above_platform) {
+    //     duck->in_air = true;
+    //     duck->vertical_velocity += GRAVITY;
+    // }
+
+
     for (const auto& platform: platforms) {
         if (checkPlatformCollision(duck->position, DUCK_WIDTH, DUCK_HEIGHT, platform)) {
             if (duck->vertical_velocity > 0 && previous_y + DUCK_HEIGHT <= platform.y) {
@@ -287,11 +291,11 @@ void Game::updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_
     float previous_y = duck->position.y;
     float previous_x = duck->position.x;
 
-    updateDuckState(duck, hitbox);
 
     // Check platform collisions
     checkCollisions(duck, map_info.platforms, previous_x, previous_y);
 
+    updateDuckState(duck);
     // Update duck state
     DuckState state(duck->name, duck->duck_id, duck->life_points, duck->looking, duck->position,
                     duck->is_alive ? 1 : 0, duck->is_running ? 1 : 0, duck->is_jumping ? 1 : 0,

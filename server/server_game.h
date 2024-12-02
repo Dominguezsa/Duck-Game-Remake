@@ -57,8 +57,8 @@ private:
     void updateBullets();
     void updateDucks(std::shared_ptr<std::vector<DuckState>>& duck_states);
     void updateDuck(Duck* duck, std::shared_ptr<std::vector<DuckState>>& duck_states);
-    void updateDuckState(Duck* duck, const DuckHitbox& hitbox);
-    void updateDuckVerticalPosition(Duck* duck, const DuckHitbox& hitbox);
+    void updateDuckState(Duck* duck);
+    void updateDuckVerticalPosition(Duck* duck);
     void updateDuckHorizontalPosition(Duck* duck);
 
     // Collision methods
