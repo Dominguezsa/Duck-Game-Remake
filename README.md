@@ -30,13 +30,9 @@ sudo ./taller_editor
 ```
 
 -------------------------------------------------------------
+### IMPORTANTE
 
-**Importante:** el primer commit de este repositorio tiene el setup
-básico para el TP Final que incluye la instalación de la lib
-`libSDL2pp` (el wrapper de C++).
-
-El resto de los commits son a modo de ejemplo de como se pueden
-agregar mas código fuente al proyecto.
+No probar las siguientes armas porque no estan implementadas y crashean el juego: granada, banana,
 
 Este ejemplo **no** incluye instalarse la librería `SDL2` ni tampoco
 instala otras librerías que puedan ser necesarias ni tampoco un
