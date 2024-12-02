@@ -12,6 +12,11 @@ build/
 debug/
 release/
 
+# Ignore generated files
+taller_client
+taller_server
+taller_editor
+
 # Ignore object files
 *.o
 *.obj
