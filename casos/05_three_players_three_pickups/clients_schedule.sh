@@ -22,3 +22,4 @@ echo '1' >> __client_2_pipe__
 
 echo 'Exit' >> __client_0_pipe__
 echo 'Exit' >> __client_1_pipe__
+echo 'Exit' >> __client_2_pipe__

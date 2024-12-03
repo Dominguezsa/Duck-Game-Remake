@@ -60,7 +60,7 @@ void GameClient::input_thread() {
     std::string input;
     while (!quit) {
         std::cin >> input;
-        if (input == "q") {
+        if (input == "Exit") {
             quit = true;
             break;
         }
