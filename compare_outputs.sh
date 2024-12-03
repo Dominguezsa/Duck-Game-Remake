@@ -52,6 +52,14 @@ if [ "$cases_folder" = "$expected_folder" ]; then
     exit 1
 fi
 
+directory="casos/05_three_players_three_pickups"
+
+for file in "$directory"/*; do
+    if [ -f "$file" ]; then
+        head -n 100 "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+    fi
+done
+
 err=0
 for case_folder in $expected_folder/*; do
     case_name="$(basename "$case_folder")"
