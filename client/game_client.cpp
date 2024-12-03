@@ -125,7 +125,7 @@ void GameClient::run() {
             }
 
             if (quit) {
-                std::cout << "Exiting the game nigggaaa\n";
+                std::cout << "Exiting the game\n";
                 input_thread.join();
                 break;
             }
