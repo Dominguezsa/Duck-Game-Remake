@@ -16,7 +16,7 @@ private:
 public:
     WeaponFactory() {
         weaponCreators[ImageType::ak47] = [](const weapons_in_map& data) {
-            return Weapon(WeaponType::AK47, "ak47", 30, 10, 25,
+            return Weapon(WeaponType::AK47, "ak47", 30, 10, 15,
                           {static_cast<int>(data.x), static_cast<int>(data.y)}, WeaponType::AK47,
                           7.0f, 0.0f, 10, 1.3, 1.3);
         };
@@ -58,7 +58,7 @@ public:
         };
 
         weaponCreators[ImageType::PewPewLaser1] = [](const weapons_in_map& data) {
-            return Weapon(WeaponType::PewPewLaser, "PewPewLaser", 5, 0, 25,
+            return Weapon(WeaponType::PewPewLaser, "PewPewLaser", 0, 0, 25,
                           {static_cast<int>(data.x), static_cast<int>(data.y)},
                           WeaponType::PewPewLaser, 3.0f, 0.0f, 5, 1.3, 1.3);
         };

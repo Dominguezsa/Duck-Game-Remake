@@ -7,10 +7,10 @@ AudioEngine::AudioEngine(std::vector<DuckState>& ducks, SDL2pp::Mixer& mixer,
 void AudioEngine::playAudio() {
     for (const auto& duck: ducks) {
         if (duck.is_shooting) {
-            if (mixer.IsChannelPlaying(1)) {
+            if (mixer.IsChannelPlaying(-1)) {
                 continue;
             }
-            mixer.PlayChannel(1, *resourceManager.getSFXForWeapon(duck.weapon), 0);
+            mixer.PlayChannel(-1, *resourceManager.getSFXForWeapon(duck.weapon), 0);
         }
     }
 }
