@@ -357,7 +357,6 @@ void Game::checkRoundEnd() {
 
 void Game::startNewRound() {
     round_number++;
-    std::cout << "Starting new round " << round_number << std::endl;
     next_bullet_id = 0;
     bullets_by_id.clear();
 

@@ -11,7 +11,7 @@ echo 'match_name' >> __client_0_pipe__
 sleep 1
 echo '3' >> __client_0_pipe__
 # Para asegurar que el orden de los pickups sea tal como esta escrito
-sleep 0.5
+sleep 1
 echo 'j' >> __client_1_pipe__
 sleep 1
 echo '1' >> __client_1_pipe__
