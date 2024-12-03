@@ -63,6 +63,7 @@ public:
     void receive_platforms_first_time();
     void run_lobby();
     void updateDuckStates();
+    void input_thread();
     bool round_finished();
     void mainLoop(const int it);
 };
