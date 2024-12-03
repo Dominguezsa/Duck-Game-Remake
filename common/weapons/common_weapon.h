@@ -17,9 +17,9 @@ public:
     std::string name = "None";
     WeaponType type = NoneType;
     uint8_t ammo = 0;
-    uint8_t cicles_to_reshoot = 0;  // esto seria que tan rapido es el arma disparando, osea cada
-                                    // cuantos ciclos de juego se puede disparar
-    uint8_t actual_cicle = 0;
+    uint16_t cicles_to_reshoot = 0;  // esto seria que tan rapido es el arma disparando, osea cada
+                                     // cuantos ciclos de juego se puede disparar
+    uint16_t actual_cicle = 0;
     uint8_t damage = 0;
     Position pos = Position(0, 0);
     float bullet_speed = 0;
@@ -30,10 +30,10 @@ public:
 
 
 public:
-    Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint8_t cicles_to_reshoot,
+    Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint16_t cicles_to_reshoot,
            uint8_t damage);
 
-    Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint8_t cicles_to_reshoot,
+    Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint16_t cicles_to_reshoot,
            uint8_t damage, Position pos, WeaponType type, uint8_t bullet_speed, uint8_t bullet_time,
            uint8_t spread_angle, float scale_x, float scale_y);
 

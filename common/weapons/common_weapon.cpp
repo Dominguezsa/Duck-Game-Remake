@@ -1,7 +1,7 @@
 #include "common_weapon.h"
 
-Weapon::Weapon::Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint8_t cicles_to_reshoot,
-                       uint8_t damage):
+Weapon::Weapon::Weapon(uint8_t id, const std::string& name, uint8_t ammo,
+                       uint16_t cicles_to_reshoot, uint8_t damage):
         id(id),
         name(name),
         ammo(ammo),
@@ -10,7 +10,7 @@ Weapon::Weapon::Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint8_
         bullet_speed(0),
         bullet_time(0) {}
 
-Weapon::Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint8_t cicles_to_reshoot,
+Weapon::Weapon(uint8_t id, const std::string& name, uint8_t ammo, uint16_t cicles_to_reshoot,
                uint8_t damage, Position pos, WeaponType type, uint8_t bullet_speed,
                uint8_t bullet_time, uint8_t spread_angle, float scale_x, float scale_y):
         id(id),

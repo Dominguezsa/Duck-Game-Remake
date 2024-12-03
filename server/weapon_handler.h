@@ -16,63 +16,63 @@ private:
 public:
     WeaponFactory() {
         weaponCreators[ImageType::ak47] = [](const weapons_in_map& data) {
-            return Weapon(WeaponType::AK47, "ak47", 30, 10, 10,
+            return Weapon(WeaponType::AK47, "ak47", 30, 10, 25,
                           {static_cast<int>(data.x), static_cast<int>(data.y)}, WeaponType::AK47,
-                          4.0f, 0.0f, 0, 1.3, 1.3);
+                          7.0f, 0.0f, 10, 1.3, 1.3);
         };
 
         weaponCreators[ImageType::sniper] = [](const weapons_in_map& data) {
-            return Weapon(WeaponType::Sniper, "sniper", 3, 10, 100,
+            return Weapon(WeaponType::Sniper, "sniper", 3, 10000, 80,
                           {static_cast<int>(data.x), static_cast<int>(data.y)}, WeaponType::Sniper,
-                          10.0f, 0.0f, 0, 1.3, 1.3);
+                          10.0f, 0.0f, 0, 1.3, 1.7);
         };
 
         weaponCreators[ImageType::shotgun] = [](const weapons_in_map& data) {
-            return Weapon(WeaponType::Shotgun, "shotgun", 5, 10, 50,
+            return Weapon(WeaponType::Shotgun, "shotgun", 3, 10000, 20,
                           {static_cast<int>(data.x), static_cast<int>(data.y)}, WeaponType::Shotgun,
-                          6.0f, 0.0f, 10, 1.3, 1.3);
+                          7.0f, 0.0f, 10, 1.3, 1.3);
         };
 
         weaponCreators[ImageType::duelingGun] = [](const weapons_in_map& data) {
-            return Weapon(WeaponType::DuelPistol, "duelingPistol", 5, 10, 50,
+            return Weapon(WeaponType::DuelPistol, "duelingPistol", 1, 10000, 50,
                           {static_cast<int>(data.x), static_cast<int>(data.y)},
-                          WeaponType::DuelPistol, 6.0f, 0.0f, 10, 1.3, 1.3);
+                          WeaponType::DuelPistol, 6.0f, 0.0f, 10, 1.3, 1.9);
         };
 
         weaponCreators[ImageType::banana1] = [](const weapons_in_map& data) {
-            return Weapon(WeaponType::Banana, "banana", 5, 10, 0,
+            return Weapon(WeaponType::Banana, "banana", 0, 10, 0,
                           {static_cast<int>(data.x), static_cast<int>(data.y)}, WeaponType::Banana,
                           0.0f, 0.0f, 0, 1.3, 1.3);
         };
 
         weaponCreators[ImageType::grenade1] = [](const weapons_in_map& data) {
-            return Weapon(WeaponType::Granade, "grenade", 5, 10, 100,
+            return Weapon(WeaponType::Granade, "grenade", 0, 10, 100,
                           {static_cast<int>(data.x), static_cast<int>(data.y)}, WeaponType::Granade,
                           0.0f, 0.0f, 0, 1.3, 1.3);
         };
 
         weaponCreators[ImageType::laserRifle] = [](const weapons_in_map& data) {
-            return Weapon(WeaponType::LaserRifle, "laserRifle", 5, 10, 100,
+            return Weapon(WeaponType::LaserRifle, "laserRifle", 30, 9, 15,
                           {static_cast<int>(data.x), static_cast<int>(data.y)},
-                          WeaponType::LaserRifle, 0.0f, 0.0f, 0, 1.3, 1.3);
+                          WeaponType::LaserRifle, 7.0f, 0.0f, 2, 1.3, 1.3);
         };
 
         weaponCreators[ImageType::PewPewLaser1] = [](const weapons_in_map& data) {
-            return Weapon(WeaponType::PewPewLaser, "PewPewLaser", 5, 10, 100,
+            return Weapon(WeaponType::PewPewLaser, "PewPewLaser", 5, 0, 25,
                           {static_cast<int>(data.x), static_cast<int>(data.y)},
-                          WeaponType::PewPewLaser, 0.0f, 0.0f, 0, 1.3, 1.3);
+                          WeaponType::PewPewLaser, 3.0f, 0.0f, 5, 1.3, 1.3);
         };
 
         weaponCreators[ImageType::cowboyGun] = [](const weapons_in_map& data) {
-            return Weapon(WeaponType::CowboyPistol, "cowboyGun", 5, 10, 100,
+            return Weapon(WeaponType::CowboyPistol, "cowboyGun", 5, 1000, 15,
                           {static_cast<int>(data.x), static_cast<int>(data.y)},
-                          WeaponType::CowboyPistol, 0.0f, 0.0f, 0, 1.3, 1.3);
+                          WeaponType::CowboyPistol, 6.0f, 0.0f, 0, 1.3, 1.3);
         };
 
         weaponCreators[ImageType::magnum] = [](const weapons_in_map& data) {
-            return Weapon(WeaponType::Magnum, "magnum", 5, 10, 100,
+            return Weapon(WeaponType::Magnum, "magnum", 5, 10, 70,
                           {static_cast<int>(data.x), static_cast<int>(data.y)}, WeaponType::Magnum,
-                          0.0f, 0.0f, 0, 1.3, 1.3);
+                          7.0f, 0.0f, 15, 1.3, 1.3);
         };
     }
 
