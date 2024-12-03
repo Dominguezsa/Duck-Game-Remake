@@ -67,7 +67,7 @@ void ScreenRenderer::copyGun(const DuckState& duck) {
     SDL2pp::Rect weapon_frame = animationHelper.get_weapon_rect(weapons_by_enum[duck.weapon]);
     renderer.Copy(weapon_texture, weapon_frame,
                   SDL2pp::Rect(x_position, duck.position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2 - 7,
-                               DUCK_ARM_WIDTH * DUCK_SCALE + 10, DUCK_ARM_HEIGTH * DUCK_SCALE + 10),
+                               weapon_frame.w * 2.5, weapon_frame.h * 2.5),
                   0.0, SDL2pp::NullOpt, flip);
 }
 
