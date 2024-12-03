@@ -189,10 +189,10 @@ if [ "$G_TESTING_MODEL" != "no-server" -a "$G_TESTING_MODEL" != "single-client" 
 fi
 
 if [ "$G_TESTING_MODEL" != "no-server" ]; then
-    assert_program_is_executable "$G_EXECUTABLES_FOLDER/server"
+    assert_program_is_executable "$G_EXECUTABLES_FOLDER/taller_server"
 fi
 
-assert_program_is_executable "$G_EXECUTABLES_FOLDER/client"
+assert_program_is_executable "$G_EXECUTABLES_FOLDER/taller_client"
 
 
 ######################################################
@@ -470,9 +470,9 @@ spawn_server () {
     cat "__server_args__" | sed "s/PORT[2]\?/$port/" > "__server_args"
 
     if [ "$G_VALGRIND_MODE" = "valgrind" ]; then
-        server_cmd=$(cmd_to_run_with_valgrind "./server" "__server_valgrind__")
+        server_cmd=$(cmd_to_run_with_valgrind "./taller_server" "__server_valgrind__")
     else
-        server_cmd="./server"
+        server_cmd="./taller_server"
     fi
 
     # Include the arguments to the program
@@ -541,9 +541,9 @@ spawn_tiburoncin_and_client () {
     cat "__client_${N}_args__" | sed "s/PORT[2]\?/$tiburoncin_port/" > "__client.$N.args"
 
     if [ "$G_VALGRIND_MODE" = "valgrind" ]; then
-        client_cmd=$(cmd_to_run_with_valgrind "./client" "__client_${N}_valgrind__")
+        client_cmd=$(cmd_to_run_with_valgrind "./taller_client" "__client_${N}_valgrind__")
     else
-        client_cmd="./client"
+        client_cmd="./taller_client"
     fi
 
     # Include the arguments to the command
@@ -615,9 +615,9 @@ for case_folder in $G_CASES_FOLDER/*; do
 
     # Create the links to the executables server and client in the current directory
     if [ "$G_TESTING_MODEL" != 'no-server' ]; then
-        create_link_to_executable "$G_EXECUTABLES_FOLDER/server"
+        create_link_to_executable "$G_EXECUTABLES_FOLDER/taller_server"
     fi
-    create_link_to_executable "$G_EXECUTABLES_FOLDER/client"
+    create_link_to_executable "$G_EXECUTABLES_FOLDER/taller_client"
 
     if [[ "$G_VALGRIND_MODE" = "valgrind" ]]; then
         echo "[=>] Ejecutando caso de prueba '$case_folder' usando valgrind"
