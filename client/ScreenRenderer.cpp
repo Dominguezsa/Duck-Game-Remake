@@ -66,7 +66,9 @@ void ScreenRenderer::copyGun(const DuckState& duck) {
                                          duck.position.x + (DUCK_WIDTH * DUCK_SCALE) / 2.9;
     SDL2pp::Rect weapon_frame = animationHelper.get_weapon_rect(weapons_by_enum[duck.weapon]);
     renderer.Copy(weapon_texture, weapon_frame,
-                  SDL2pp::Rect(x_position, duck.position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2 - 7,
+                  SDL2pp::Rect(x_position,
+                               duck.position.y + (DUCK_HEIGTH * DUCK_SCALE) / 2.2 -
+                                       (weapon_frame.h * 2.5) * 0.25,
                                weapon_frame.w * 2.5, weapon_frame.h * 2.5),
                   0.0, SDL2pp::NullOpt, flip);
 }
@@ -101,8 +103,10 @@ void ScreenRenderer::copyDebugText(const std::vector<DuckState>& ducks) {
                 " is jumping: " + std::to_string(ducks[i].is_jumping) + " Duck " +
                 std::to_string(i + 1) + " is falling: " + std::to_string(ducks[i].is_falling) +
                 " Duck " + std::to_string(i + 1) +
-                " is ducking: " + std::to_string(ducks[i].is_ducking) + " Duck " +
-                std::to_string(i + 1) + " is sliding: " + std::to_string(ducks[i].is_sliding) +
+                " is in air: " + std::to_string(ducks[i].in_air) + " Duck " +
+                std::to_string(i + 1) + " is ducking: " + std::to_string(ducks[i].is_ducking) +
+                " Duck " + std::to_string(i + 1) +
+                " is sliding: " + std::to_string(ducks[i].is_sliding) +
                 " Duck's Weapon is: " + std::to_string(ducks[i].weapon);
         SDL2pp::Texture text_sprite(renderer,
                                     resourceManager.getFont("vera")->RenderText_Blended(
@@ -186,7 +190,7 @@ void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     copyPlatforms(snapshot.platforms);
     // copy_lines();
     copyDucks(snapshot.ducks, it);  // aca tambien se copian las armas si las portan los patos
-    // copyDebugText(snapshot.ducks);
+    copyDebugText(snapshot.ducks);
     copyWeapons(snapshot.weapons);  // aca se copian las armas que estan en el suelo para pickear
     copyBullets(snapshot.bullets);
     renderer.Present();
