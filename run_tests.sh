@@ -149,7 +149,7 @@ if [ ! -d "$1" ]; then
     echo "Error: Argument 1 ($1) esta vacio, no existe o no es un directorio."
     abort_tests
 fi
-G_EXECUTABLES_FOLDER=$(realpath $1)
+G_EXECUTABLES_FOLDER=$(realpath build)
 G_CASES_FOLDER=$2
 G_TESTING_MODEL=${3}
 G_VALGRIND_MODE=$4
