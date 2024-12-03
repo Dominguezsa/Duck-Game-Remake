@@ -29,7 +29,6 @@ void AnimationHelper::update_animation_frame(int it) {
 // to sync both at the same time
 std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> AnimationHelper::get_animation_frames(int it) {
 
-    // set_run_anim_start(it);
     update_animation_frame(it);
 
     std::vector<std::pair<SDL2pp::Rect, SDL2pp::Rect>> frames;

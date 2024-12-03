@@ -30,8 +30,6 @@ void CommandCenter::add_handler(std::pair<SDL_EventType, SDL_Keycode> key,
 void CommandCenter::processEvent(const SDL_Event& event) {
 
     auto key = std::make_pair(static_cast<SDL_EventType>(event.type), event.key.keysym.sym);
-    // event_handlers.at(key)(*this);
-    // No se si hacerlo así para evitar las excepciones
     auto it = event_handlers.find(key);
     if (it != event_handlers.end()) {
         auto handler = it->second;
@@ -48,11 +46,6 @@ void CommandCenter::handle_key_down_d() { messagesForServer.push(MOVE_RIGHT_KEY_
 void CommandCenter::handle_key_down_a() { messagesForServer.push(MOVE_LEFT_KEY_DOWN); }
 
 void CommandCenter::handle_key_down_w() {
-    // if ((*keyboardState)[SDL_SCANCODE_SPACE] || (*keyboardState)[SDL_SCANCODE_A] ||
-    // (*keyboardState)[SDL_SCANCODE_D]) {
-    //     std::cout << "This should happen now\n";
-    //     return;
-    // }
     messagesForServer.push(LOOKING_UP_KEY_DOWN);
 }
 
@@ -60,7 +53,6 @@ void CommandCenter::handle_key_down_s() {
     if ((*keyboardState)[SDL_SCANCODE_SPACE]) {
         return;
     }
-    // std::cout << "Sending ducking\n";
     messagesForServer.push(LOOKING_DOWN_KEY_DOWN);
 }
 
@@ -85,11 +77,6 @@ void CommandCenter::handle_key_up_a() {
 }
 
 void CommandCenter::handle_key_up_w() {
-    // if ((*keyboardState)[SDL_SCANCODE_SPACE] || (*keyboardState)[SDL_SCANCODE_A] ||
-    // (*keyboardState)[SDL_SCANCODE_D]) {
-    //     std::cout << "This should happen now\n";
-    //     return;
-    // }
     messagesForServer.push(LOOKING_UP_KEY_UP);
 }
 

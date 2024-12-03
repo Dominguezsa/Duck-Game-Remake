@@ -17,7 +17,6 @@ void DuckGraphicData::update_current_frame(int it) {
         } else {
             current_frame = 0;
         }
-        // std::cout << "The frame I draw should be: " << current_frame << std::endl;
     } else if (current_animation == "duck_jumping") {
         if (my_duck.is_falling) {
             current_frame = 3;
@@ -28,14 +27,12 @@ void DuckGraphicData::update_current_frame(int it) {
                 current_frame = 1;
             }
         }
-        // std::cout << "The JUMPING frame i draw should be: " << current_frame << std::endl;
     } else {
         current_frame = 0;
     }
 }
 
 void DuckGraphicData::update_current_animation() {
-    // std::cout << "The duck is jumping: " << my_duck.is_jumping << std::endl;
     if (my_duck.in_air && my_duck.is_sliding) {
         current_animation = "duck_sliding_air";
         current_arm_animation = "empty";
@@ -52,7 +49,6 @@ void DuckGraphicData::update_current_animation() {
         current_animation = "duck_running";
         current_arm_animation = "duck_running_arms";
     }
-    // std::cout << "The current animation is: " << current_animation << std::endl;
 }
 
 void DuckGraphicData::set_animation_start(int it) {

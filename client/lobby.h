@@ -22,7 +22,6 @@ public:
 
     void run();
 
-    // Clean up resources
     void quit();
 
     void handle_create_party();

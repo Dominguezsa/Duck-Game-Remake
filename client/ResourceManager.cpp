@@ -174,7 +174,6 @@ void ResourceManager::loadAnimationFrames() {
 
     duckFrames.clear();
 
-    // This is for the running arms animation
     for (int i = 0; i < DUCK_RUNNING_ARMS_FRAMES; i++) {
         duckFrames.emplace_back(SDL2pp::Rect(DUCK_RUNNING_ARMS_X + i * DUCK_ARMS_WIDTH,
                                              DUCK_RUNNING_ARMS_Y, DUCK_ARMS_WIDTH,

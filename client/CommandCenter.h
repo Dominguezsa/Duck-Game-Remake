@@ -44,8 +44,6 @@ public:
                   bool& quit);
     void add_handler(std::pair<SDL_EventType, SDL_Keycode>, void (CommandCenter::*handler)());
     void init_handlers();
-    // Estos dos son medio especiales porque reciben algo, y los demás handlers no, así que ver
-    // después que hacer con esto
     void handle_quit();
     void handle_key_down_escape();
     void handle_key_down_d();

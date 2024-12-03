@@ -16,7 +16,6 @@
 ClientProtocol::ClientProtocol(Socket& socket): Protocol(socket) {}
 
 std::vector<Duck> ClientProtocol::receiveMessage() {
-    // Placeholder
     std::vector<Duck> snapsho;
     std::this_thread::sleep_for(std::chrono::seconds(1));
     return snapsho;
@@ -27,7 +26,6 @@ void ClientProtocol::recv_player_amount(uint8_t& player_amount) { recv_uint_8(pl
 void ClientProtocol::read_msg(void* msg) {
     uint8_t duck_amount;
     recv_uint_8(duck_amount);
-    // std::cout << "In my read_msg function, duck_amount is: " << +duck_amount << std::endl;
 
     Snapshot* snapsho = static_cast<Snapshot*>(msg);
     std::string name;
@@ -56,11 +54,8 @@ void ClientProtocol::read_msg(void* msg) {
         recv_uint_8(duck_id);
         recv_uint_8(life_points);
         recv_uint_8(looking);
-        // std::cout << "For duck " << +duck_id << std::endl;
         recv_uint_32(x);
-        // std::cout << "x: " << +x << std::endl;
         recv_uint_32(y);
-        // std::cout << "y: " << +y << std::endl;
         recv_uint_8(is_alive);
         recv_uint_8(is_running);
         recv_uint_8(is_jumping);
@@ -96,14 +91,10 @@ void ClientProtocol::read_msg(void* msg) {
         recv_uint_32(bullet_x);
         recv_uint_32(bullet_y);
         recv_uint_8(going_right);
-        // recv_uint_16(angle);
         recv_uint_8(angle);
-
-        // std::cout << "angle received uint8_t: " << +angle << std::endl;
 
         int true_angle = (int)angle - 128;
 
-        // std::cout << "angle received: " << true_angle << std::endl;
 
         Bullet bullet(bullet_id, bullet_x, bullet_y, static_cast<bool>(going_right), true_angle);
         snapsho->bullets.push_back(bullet);
@@ -124,17 +115,14 @@ void ClientProtocol::read_msg(void* msg) {
         Weapon weapon(
                 weapon_id,
                 Position(weapon_x,
-                         weapon_y));  // este tipo de creacion de arma es lo minimo que necesito
-                                      // para saber el arma y la posicion del lado del cliente
+                         weapon_y));
         snapsho->weapons.push_back(weapon);
     }
 }
 
 void ClientProtocol::send_msg(void* msg) {
     uint8_t message = *static_cast<uint8_t*>(msg);
-    // int int_msg = *static_cast<int*>(msg);
     send_data(&message, sizeof(uint8_t));
-    // std::cout << "Sending message: " << std::hex << +message << std::endl;
 }
 
 void ClientProtocol::recv_platforms(std::vector<Platform>& platforms) {

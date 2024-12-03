@@ -16,8 +16,6 @@
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Music.hh>
 
-// #include "../common/common_weapon.h"
-// #include "../common/types/action_type.h"
 #include <iostream>
 
 #include "../common/types/duck_state.h"
@@ -31,8 +29,6 @@
 #define GRAPHIC_QUEUE_SIZE 50
 
 
-// Loads the game client with all of the necessary main resources (in the future maybe it will be
-// even more)
 GameClient::GameClient(const int window_width, const int window_height,
                        const std::string& window_title, const int max_chunk_size_audio,
                        const std::string& server_ip, const std::string& port):
@@ -78,22 +74,12 @@ void GameClient::run() {
     threadSender.start();
     std::cout << "CLIENT: Starting the UI \n";
 
-
-    // Muuuy feo, pero por ahora pruebo a ver si anda
-    // Acá estoy esperando a la primer snapshot existente que me indica información de como
-    // armar todo lo demás, por eso está acá y es bloqueante
-    // Se debería cambiar igual una vez que tengamos el lobby en condiciones
-    Snapshot ducksStates = graphic_queue.pop();
+    Snapshot ducksStates = graphic_queue.pop(); // This is the first snapshot
 
     playerAmount = ducksStates.ducks.size();
 
-    // std::cout << "CLIENT: Player amount received: " << +playerAmount << std::endl;
-
-    // Load resources
     resourceManager.loadResources(playerAmount);
-
-    // Initialize the ducks
-    std::cout << "Now creating new " << +playerAmount << " ducks\n";
+  
     for (int i = 0; i < playerAmount; i++) {
         snapshot.ducks.push_back(DuckState());
     }
@@ -110,7 +96,6 @@ void GameClient::run() {
     auto musicTrack = resourceManager.getMusicTrack("back_music");
     mixer.PlayMusic(*musicTrack, -1);
 
-    // bool quit = false;
     try {
         int iteration = 0;
         std::thread input_thread(&GameClient::input_thread, this);
@@ -151,14 +136,8 @@ void GameClient::run() {
         std::cout << "Error in the main loop\n";
         std::cout << "exiting the game by error\n";
     }
-    std::cout << "CLIENT: Stopping the receiver thread\n";
     threadReceiver.stop_thread();
-    std::cout << "CLIENT: Closing the graphic queue\n";
-    // graphic_queue.close(); esto ya se encarga el destructor del receiver
-    std::cout << "CLIENT: Stopping the sender thread\n";
     threadSender.stop_thread();
-    std::cout << "CLIENT: Closing the messages for server queue\n";
-    // messagesForServer.close(); esto ya se encarga el destructor del sender
 }
 
 bool GameClient::round_finished() {
@@ -182,16 +161,11 @@ void GameClient::updateDuckStates() {
     } catch (...) {
         std::cout << "Error updating duck states\n";
         std::cout << "exiting the game by error\n";
-
         throw;
     }
 }
 
 void GameClient::mainLoop(const int it) {
-    // Now it should do everything that the game needs to do in one iteration, like play if it needs
-    // to play music, render sprites, etc.
-
-    // Now processing all of the events on this frame
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN && event.key.repeat) {

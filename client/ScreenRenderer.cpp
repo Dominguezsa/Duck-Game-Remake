@@ -53,7 +53,6 @@ void ScreenRenderer::copyDucks(const std::vector<DuckState>& ducks, const int it
                                        DUCK_ARM_HEIGTH * DUCK_SCALE),
                           0.0, SDL2pp::NullOpt, flip);
         } else {
-            // std::cout << "Trying to render the weapon\n";
             copyGun(ducks[i]);
         }
     }
@@ -130,14 +129,7 @@ void ScreenRenderer::copyWeapons(const std::vector<Weapon>& weapons) {
 }
 
 void ScreenRenderer::copyBullets(const std::vector<Bullet>& bullets) {
-
-    // std::cout << "I have to keep drawing " << bullets.size() << " bullets\n";
-
     for (const auto& bullet: bullets) {
-        // if (bullet.id == WeaponType::Sniper) {
-        //     continue;
-        // }
-
         SDL2pp::Texture& bullet_texture =
                 (bullet.id == WeaponType::Sniper) ?
                         *resourceManager.getTexture("ak47") :

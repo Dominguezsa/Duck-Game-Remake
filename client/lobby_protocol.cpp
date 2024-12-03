@@ -47,8 +47,6 @@ int LobbyProtocol::sendMatchCreation(uint8_t numPlayers, const std::string& matc
     mapNameSize = htons(mapNameSize);
     send_data(&mapNameSize, sizeof(mapNameSize));
     send_data(mapName.c_str(), mapName.size());
-
-    // Receive confirmation byte
     uint8_t confirmation;
     recv_uint_8(confirmation);
     return confirmation;
@@ -68,8 +66,6 @@ std::vector<std::string> LobbyProtocol::receiveMatchList() {
 
 int LobbyProtocol::sendMatchSelection(const std::string& matchName) {
     send_string(matchName);
-
-    // Receive confirmation byte
     uint8_t confirmation;
     recv_uint_8(confirmation);
     return confirmation;
