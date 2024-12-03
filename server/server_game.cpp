@@ -41,7 +41,8 @@ Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue, MapInfo& 
         monitor(_monitor),
         action_handler(ducks),
         next_bullet_id(0),
-        map_info(_map_info) {}
+        map_info(_map_info),
+        original_weapons() {}
 
 
 void Game::addPlayer(DuckIdentity& duck_info, const MapInfo& map_info) {
@@ -219,7 +220,6 @@ void Game::checkWeaponPickupCollision(Duck* duck, std::vector<Weapon>& weapons,
                                       const DuckHitbox& hitbox) {
 
     for (auto it = weapons.begin(); it != weapons.end();) {
-        std::cout << "Checking a weapon\n";
         if (hitbox.leftX < it->pos.x + WEAPON_RECT && hitbox.rightX > it->pos.x &&
             hitbox.topY < it->pos.y + WEAPON_RECT && hitbox.bottomY > it->pos.y) {
             duck->pick_up_weapon(*it);
@@ -370,6 +370,9 @@ void Game::startNewRound() {
                                                   initial_weapon, duck_pair.second->name);
     }
 
+    // Reset the weapons to the original ones
+    weapons = original_weapons;
+
     if (round_number % ROUNDS_PER_SET == 0) {
         if (checkGameEnd()) {
             stop();
@@ -428,6 +431,7 @@ void Game::run() {
     for (auto weapon: map_info.weapons) {
         Weapon new_weapon = weapon_factory.createWeapon(weapon);
         weapons.push_back(new_weapon);
+        original_weapons.push_back(new_weapon);
     }
     is_running = true;
     send_platforms_first_time();

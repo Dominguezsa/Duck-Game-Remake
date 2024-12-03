@@ -45,6 +45,7 @@ private:
     // disparó para ver los sprites a usar
     uint32_t next_bullet_id;
     MapInfo map_info;
+    std::vector<Weapon> original_weapons;
 
     static constexpr double TICK_RATE = 100.0;
     static constexpr double TICK_DURATION = 1.0 / TICK_RATE;
