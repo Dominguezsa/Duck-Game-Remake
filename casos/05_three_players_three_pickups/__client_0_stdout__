@@ -1,0 +1,30 @@
+What is your name?
+Do you wanna create ('c') or join a match ('j')?
+These are the available maps:
+1. probar_todas_las_armas
+2. Golden Grove Clash
+Enter the map you wanna play (select the number f.e: 1,2,3,...)
+Enter the match name
+Enter the number of players
+Match created successfully
+CLIENT: Starting the UI 
+Trying to load the sfx
+Every sfx loaded correctly
+Trying to load the music
+Now loading 3 ducks
+All textures loaded correctly
+All weapons rects loaded correctly
+All bullets rects loaded correctly
+All animation frames loaded correctly
+Now creating new 3 ducks
+RECEIVER: run function ended
+Error updating duck states
+exiting the game by error
+Error in the main loop
+exiting the game by error
+CLIENT: Stopping the receiver thread
+RECEIVER: stop_thread function ended
+CLIENT: Closing the graphic queue
+CLIENT: Stopping the sender thread
+SENDER: stop_thread function ended
+CLIENT: Closing the messages for server queue
