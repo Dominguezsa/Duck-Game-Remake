@@ -62,7 +62,7 @@ private:
     void updateDuckHorizontalPosition(Duck* duck);
 
     // Collision methods
-    void checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons,
+    void checkWeaponPickupCollision(Duck* duck, std::vector<Weapon>& weapons,
                                     const DuckHitbox& hitbox);
     void checkPlatformsCollision(Duck* duck, const std::vector<Platform>& platforms,
                                  float previous_x, float previous_y);

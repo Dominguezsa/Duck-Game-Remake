@@ -215,12 +215,17 @@ void Game::updateDuckState(Duck* duck) {
     updateDuckHorizontalPosition(duck);
 }
 
-void Game::checkWeaponPickupCollision(Duck* duck, const std::vector<Weapon>& weapons,
+void Game::checkWeaponPickupCollision(Duck* duck, std::vector<Weapon>& weapons,
                                       const DuckHitbox& hitbox) {
-    for (const auto& weapon: weapons) {
-        if (hitbox.leftX < weapon.pos.x + WEAPON_RECT && hitbox.rightX > weapon.pos.x &&
-            hitbox.topY < weapon.pos.y + WEAPON_RECT && hitbox.bottomY > weapon.pos.y) {
-            duck->pick_up_weapon(weapon);
+
+    for (auto it = weapons.begin(); it != weapons.end();) {
+        std::cout << "Checking a weapon\n";
+        if (hitbox.leftX < it->pos.x + WEAPON_RECT && hitbox.rightX > it->pos.x &&
+            hitbox.topY < it->pos.y + WEAPON_RECT && hitbox.bottomY > it->pos.y) {
+            duck->pick_up_weapon(*it);
+            it = weapons.erase(it);
+        } else {
+            it++;
         }
     }
 }
