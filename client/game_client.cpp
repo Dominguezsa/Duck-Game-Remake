@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <iostream>
 #include <memory>
 #include <thread>
 
@@ -16,14 +17,12 @@
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Music.hh>
 
-#include <iostream>
-
 #include "../common/types/duck_state.h"
 
 #include "lobby.h"
 
 #define FPS 60
-#define OST_VOLUME 0
+#define OST_VOLUME 2
 #define SFX_VOLUME 5
 
 #define GRAPHIC_QUEUE_SIZE 50
@@ -52,16 +51,17 @@ GameClient::GameClient(const int window_width, const int window_height,
         playerAmount(0),
         audioEngine(snapshot.ducks, mixer, resourceManager) {}
 
-void GameClient::input_thread() {
-    std::string input;
-    while (!quit) {
-        std::cin >> input;
-        if (input == "Exit") {
-            quit = true;
-            break;
-        }
-    }
-}
+// void GameClient::input_thread() {
+//     std::string input;
+//     while (!quit) {
+//         std::cin >> input;
+//         if (input == "Exit") {
+//             quit = true;
+//             break;
+//         }
+//     }
+//     std::cout << "This shi thread detected an exit\n";
+// }
 
 void GameClient::run() {
     std::vector<Platform> platforms;
@@ -74,12 +74,12 @@ void GameClient::run() {
     threadSender.start();
     std::cout << "CLIENT: Starting the UI \n";
 
-    Snapshot ducksStates = graphic_queue.pop(); // This is the first snapshot
+    Snapshot ducksStates = graphic_queue.pop();  // This is the first snapshot
 
     playerAmount = ducksStates.ducks.size();
 
     resourceManager.loadResources(playerAmount);
-  
+
     for (int i = 0; i < playerAmount; i++) {
         snapshot.ducks.push_back(DuckState());
     }
@@ -98,7 +98,7 @@ void GameClient::run() {
 
     try {
         int iteration = 0;
-        std::thread input_thread(&GameClient::input_thread, this);
+        // std::thread input_thread(&GameClient::input_thread, this);
         while (true) {
             updateDuckStates();
             mainLoop(iteration);
@@ -111,7 +111,8 @@ void GameClient::run() {
 
             if (quit) {
                 std::cout << "Exiting the game\n";
-                input_thread.join();
+                // input_thread.join();
+                std::cout << "Of fucking course this doesn't print\n";
                 break;
             }
 
