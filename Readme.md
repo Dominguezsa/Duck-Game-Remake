@@ -18,7 +18,7 @@ Que corre los scripts para descargar las dependencias necesarias
 Dentro del repositorio principal, para ejecutar cliente y server 
 
 ```bash
-./taller_server <puerto>
+./duck_game_server <puerto>
 ```
 
 ```bash
@@ -28,7 +28,7 @@ Dentro del repositorio principal, para ejecutar cliente y server
 Para correr el editor se necesita el comando de superusuario 'sudo', para que pueda guardar los mapas en el directorio /var/duck_game
 
 ```bash
-sudo ./taller_editor
+sudo ./map_editor
 ```
 
 -------------------------------------------------------------
@@ -55,7 +55,7 @@ Bien se puede mejorar (cambiando el cmakefile) agregando mas
 sub-carpetas.
 
 Asi tambien **deben** ser cambiados los *targets* del cmake (`taller_client`,
-`taller_server`, ...) por nombres mas acordes al TP que se este
+`duck_game_server`, ...) por nombres mas acordes al TP que se este
 haciendo.
 
 Tambien, por default solo se compila una version *debug* sin

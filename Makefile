@@ -18,12 +18,17 @@ compile:
 # Reglas específicas para el cliente y el servidor
 compile-server:
 	mkdir -p build/
-	cmake $(CMAKE_ARGS) -DTALLER_SERVER=ON -DTALLER_EDITOR=OFF $(EXTRA_GENERATE)
+	cmake $(CMAKE_ARGS) -DDUCK_GAME_SERVER=ON -DMAP_EDITOR=OFF -DDUCK_GAME=OFF $(EXTRA_GENERATE)
 	cmake --build build/ $(EXTRA_COMPILE)
 
 compile-client:
 	mkdir -p build/
-	cmake $(CMAKE_ARGS) -DTALLER_EDITOR=OFF$ -DTALLER_CLIENT=ON $(EXTRA_GENERATE)
+	cmake $(CMAKE_ARGS) -DMAP_EDITOR=OFF$ -DDUCK_GAME=ON -DDUCK_GAME_SERVER=OFF $(EXTRA_GENERATE)
+	cmake --build build/ $(EXTRA_COMPILE)
+
+compile-editor:
+	mkdir -p build/
+	cmake $(CMAKE_ARGS) -DDUCK_GAME_SERVER=OFF -DMAP_EDITOR=ON -DDUCK_GAME=OFF $(EXTRA_GENERATE)
 	cmake --build build/ $(EXTRA_COMPILE)
 
 # Regla para ejecutar pruebas en modo debug

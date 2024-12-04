@@ -49,9 +49,9 @@ set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads REQUIRED)
 
 option(TALLER_TESTS "Enable / disable tests." ON)
-option(TALLER_CLIENT "Enable / disable client program." ON)
-option(TALLER_SERVER "Enable / disable server program." ON)
-option(TALLER_EDITOR "Enable / disable editor program." ON)
+option(DUCK_GAME "Enable / disable client program." ON)
+option(DUCK_GAME_SERVER "Enable / disable server program." ON)
+option(MAP_EDITOR "Enable / disable editor program." ON)
 option(TALLER_MAKE_WARNINGS_AS_ERRORS "Enable / disable warnings as errors." ON)
 
 
@@ -78,7 +78,7 @@ message(CMAKE_CXX_COMPILER_ID= "${CMAKE_CXX_COMPILER_ID}")
 
 # Define target: lib common between client, server and editor programs
 # HEY TODO XXX: change the name to something that you like
-add_library(taller_common STATIC)
+add_library(common_libs STATIC)
 
 # add the source files that make the lib
 # HEY!! TODO XXX: add more subfolders here
@@ -87,16 +87,16 @@ add_subdirectory(common/)
 
 # set compiler warnings to the targets
 include(cmake/CompilerWarnings.cmake)
-set_project_warnings(taller_common ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
+set_project_warnings(common_libs ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
 # Say where the headers will be found required by library target
 # Make this PUBLIC so any dependant linking lib will inherit this
 # location (so our dependants will not have to explicitly request this)
-target_include_directories(taller_common PUBLIC .)
+target_include_directories(common_libs PUBLIC .)
 
 # Install libSDL2pp (for client or editor)
 # HEY!! TODO XXX: add more dependendies (either for client, server or editor)
-if(TALLER_CLIENT)   
+if(DUCK_GAME)   
     include(FetchContent)
     FetchContent_Declare(
         libSDL2pp
@@ -112,7 +112,7 @@ if(TALLER_CLIENT)
     FetchContent_MakeAvailable(libSDL2pp)
 endif()
 
-if (TALLER_SERVER OR TALLER_CLIENT)
+if (DUCK_GAME_SERVER OR DUCK_GAME)
     include(FetchContent)
 
     FetchContent_Declare(
@@ -128,7 +128,7 @@ if (TALLER_SERVER OR TALLER_CLIENT)
         add_subdirectory(${yaml-cpp_SOURCE_DIR} ${yaml-cpp_BINARY_DIR})
     endif()
 
-    #target_link_libraries(taller_client taller_server PUBLIC yaml-cpp::yaml-cpp) # The library or executable that require yaml-cpp library
+    #target_link_libraries(duck_game duck_game_server PUBLIC yaml-cpp::yaml-cpp) # The library or executable that require yaml-cpp library
 endif()
 
 
@@ -141,15 +141,15 @@ endif()
 find_package(QT NAMES Qt5 REQUIRED COMPONENTS Widgets Gui Multimedia Network)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia Network)
 
-if(TALLER_CLIENT)
-    add_executable(taller_client)
-    add_dependencies(taller_client taller_common SDL2pp::SDL2pp)
+if(DUCK_GAME)
+    add_executable(duck_game)
+    add_dependencies(duck_game common_libs SDL2pp::SDL2pp)
     
     # Add client source files
     add_subdirectory(client)
 
     # Include MainWindow and other editor files
-    target_sources(taller_client
+    target_sources(duck_game
         PRIVATE
         editor/EditorWindow.cpp
         editor/EditorWindow.h
@@ -160,12 +160,12 @@ if(TALLER_CLIENT)
         editor/ImageWidget.h 
     )
 
-    set_project_warnings(taller_client ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
-    target_include_directories(taller_client PRIVATE ${libSDL2pp_SOURCE_DIR})
+    set_project_warnings(duck_game ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
+    target_include_directories(duck_game PRIVATE ${libSDL2pp_SOURCE_DIR})
 
-    target_link_libraries(taller_client 
+    target_link_libraries(duck_game 
         PRIVATE
-        taller_common
+        common_libs
         SDL2pp::SDL2pp
         Qt${QT_VERSION_MAJOR}::Widgets
         Qt${QT_VERSION_MAJOR}::Gui
@@ -176,23 +176,23 @@ if(TALLER_CLIENT)
     )
 endif()
 
-if(TALLER_SERVER)
-    add_executable(taller_server)
-    add_dependencies(taller_server taller_common)
+if(DUCK_GAME_SERVER)
+    add_executable(duck_game_server)
+    add_dependencies(duck_game_server common_libs)
     add_subdirectory(server)
-    set_project_warnings(taller_server ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
-    # Link the taller_common lib target
-    target_link_libraries(taller_server taller_common yaml-cpp::yaml-cpp)
+    set_project_warnings(duck_game_server ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
+    # Link the common_libs lib target
+    target_link_libraries(duck_game_server common_libs yaml-cpp::yaml-cpp)
 endif()
 
-if(TALLER_EDITOR)
-    add_executable(taller_editor)
-    # Make them depend on taller_common lib
-    #add_dependencies(taller_editor taller_common SDL2pp::SDL2pp)
+if(MAP_EDITOR)
+    add_executable(map_editor)
+    # Make them depend on common_libs lib
+    #add_dependencies(map_editor common_libs SDL2pp::SDL2pp)
 
-    target_link_libraries(taller_editor 
+    target_link_libraries(map_editor 
         PRIVATE
-        taller_common
+        common_libs
         Qt${QT_VERSION_MAJOR}::Widgets
         Qt${QT_VERSION_MAJOR}::Gui
         Qt${QT_VERSION_MAJOR}::Multimedia
@@ -204,13 +204,13 @@ if(TALLER_EDITOR)
     # Add source files and enable warnings
     # HEY!! TODO XXX: add more subfolders here
     add_subdirectory(editor)
-    #target_include_directories(taller_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
-    set_project_warnings(taller_editor ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
+    #target_include_directories(map_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
+    set_project_warnings(map_editor ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
     # add libSDL2pp's headers
-    #target_include_directories(taller_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
+    #target_include_directories(map_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
-    # Link the taller_common lib target
-    #target_link_libraries(taller_editor taller_common SDL2pp::SDL2pp yaml-cpp::yaml-cpp)
+    # Link the common_libs lib target
+    #target_link_libraries(map_editor common_libs SDL2pp::SDL2pp yaml-cpp::yaml-cpp)
 endif()
 
 
@@ -230,7 +230,7 @@ if(TALLER_TESTS)
     include(GoogleTest)
 
     add_executable(taller_tests)
-    add_dependencies(taller_tests taller_common)
+    add_dependencies(taller_tests common_libs)
     target_include_directories(taller_tests PUBLIC .)
     add_subdirectory(tests/)
     set_project_warnings(taller_tests ${TALLER_MAKE_WARNINGS_AS_ERRORS} TRUE)
@@ -242,7 +242,7 @@ if(TALLER_TESTS)
     )
 
     target_link_libraries(taller_tests
-        taller_common
+        common_libs
         GTest::gtest_main
     )
 endif()

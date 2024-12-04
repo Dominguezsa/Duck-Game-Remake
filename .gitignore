@@ -14,8 +14,8 @@ release/
 
 # Ignore generated files
 taller_client
-taller_server
-taller_editor
+duck_game_server
+map_editor
 
 # Ignore object files
 *.o

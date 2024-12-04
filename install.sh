@@ -44,20 +44,14 @@ echo "#######################################################"
 echo " "
 echo " "
 
-cp build/taller_server /usr/bin
-cp build/taller_client /usr/bin
-cp build/taller_editor /usr/bin
+cp build/duck_game_server /usr/bin
+cp build/duck_game /usr/bin
+cp build/map_editor /usr/bin
 cp -r build/_deps /usr/bin
-
-mv build/taller_server ./
-mv build/taller_client ./
-mv build/taller_editor ./ 
 
 echo "Binaries moved to /usr/bin directory successfully!"
 
 echo "Moving the game assets to /var/duck_game..."
-
-sudo chown $USER:$USER /var/duck_game/maps
 
 cp -r ./client/data /var/duck_game
 cp -r ./maps /var/duck_game

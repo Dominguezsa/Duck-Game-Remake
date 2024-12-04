@@ -189,7 +189,7 @@ if [ "$G_TESTING_MODEL" != "no-server" -a "$G_TESTING_MODEL" != "single-client" 
 fi
 
 if [ "$G_TESTING_MODEL" != "no-server" ]; then
-    assert_program_is_executable "$G_EXECUTABLES_FOLDER/taller_server"
+    assert_program_is_executable "$G_EXECUTABLES_FOLDER/duck_game_server"
 fi
 
 assert_program_is_executable "$G_EXECUTABLES_FOLDER/taller_client"
@@ -470,9 +470,9 @@ spawn_server () {
     cat "__server_args__" | sed "s/PORT[2]\?/$port/" > "__server_args"
 
     if [ "$G_VALGRIND_MODE" = "valgrind" ]; then
-        server_cmd=$(cmd_to_run_with_valgrind "./taller_server" "__server_valgrind__")
+        server_cmd=$(cmd_to_run_with_valgrind "./duck_game_server" "__server_valgrind__")
     else
-        server_cmd="./taller_server"
+        server_cmd="./duck_game_server"
     fi
 
     # Include the arguments to the program
@@ -615,7 +615,7 @@ for case_folder in $G_CASES_FOLDER/*; do
 
     # Create the links to the executables server and client in the current directory
     if [ "$G_TESTING_MODEL" != 'no-server' ]; then
-        create_link_to_executable "$G_EXECUTABLES_FOLDER/taller_server"
+        create_link_to_executable "$G_EXECUTABLES_FOLDER/duck_game_server"
     fi
     create_link_to_executable "$G_EXECUTABLES_FOLDER/taller_client"
 

@@ -43,7 +43,6 @@ private:
     std::string mapData;
     std::map<uint8_t, QPixmap> map_id;
     QMessageBox mapCreatedMessageBox;
-
     int* width;
     int* height;
     std::string* mapName;
@@ -56,7 +55,7 @@ private:
     void validateInputs();
     void goToCreateMapScene();
     void initMapScene();
-
+    // cppcheck-suppress unknownMacro
 public slots:
     void saveMap(std::string mapData);
 

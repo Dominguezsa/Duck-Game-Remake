@@ -40,7 +40,7 @@ bool MapParser::parseMap(const std::string& name, const int& width, const int& h
         fout << emitter.c_str();  // Escribe el contenido generado
         fout.close();
     } catch (const std::iostream::failure& e) {
-        std::cerr << "Error de archivo: se ejecuta con sudo! sudo ./taller_editor"<< std::endl;
+        std::cerr << "Error de archivo: se ejecuta con sudo! sudo ./map_editor" << std::endl;
         return false;
     } catch (const YAML::Exception& e) {
         std::cerr << "Error de YAML: " << e.what() << std::endl;

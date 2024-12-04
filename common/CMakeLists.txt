@@ -3,7 +3,7 @@ file(GLOB H_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 file(GLOB WEAPON_FILES "${CMAKE_CURRENT_SOURCE_DIR}/weapons/*.cpp")
 file(GLOB WEAPON_H_FILES "${CMAKE_CURRENT_SOURCE_DIR}/weapons/*.h")
 
-target_sources(taller_common
+target_sources(common_libs
     PRIVATE
     ${CPP_FILES}
     PUBLIC

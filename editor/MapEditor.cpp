@@ -19,7 +19,6 @@ MapEditor::MapEditor(QApplication& _app):
 int MapEditor::run() {
     window.setMapInfo(id_matrix, map_width, map_height, map_name, saved_map);
     window.show();
-
     int exitCode = app.exec();
 
     if (saved_map) {
