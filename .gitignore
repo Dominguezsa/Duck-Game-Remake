@@ -13,7 +13,7 @@ debug/
 release/
 
 # Ignore generated files
-taller_client
+duck_game
 duck_game_server
 map_editor
 

@@ -192,7 +192,7 @@ if [ "$G_TESTING_MODEL" != "no-server" ]; then
     assert_program_is_executable "$G_EXECUTABLES_FOLDER/duck_game_server"
 fi
 
-assert_program_is_executable "$G_EXECUTABLES_FOLDER/taller_client"
+assert_program_is_executable "$G_EXECUTABLES_FOLDER/duck_game"
 
 
 ######################################################
@@ -541,9 +541,9 @@ spawn_tiburoncin_and_client () {
     cat "__client_${N}_args__" | sed "s/PORT[2]\?/$tiburoncin_port/" > "__client.$N.args"
 
     if [ "$G_VALGRIND_MODE" = "valgrind" ]; then
-        client_cmd=$(cmd_to_run_with_valgrind "./taller_client" "__client_${N}_valgrind__")
+        client_cmd=$(cmd_to_run_with_valgrind "./duck_game" "__client_${N}_valgrind__")
     else
-        client_cmd="./taller_client"
+        client_cmd="./duck_game"
     fi
 
     # Include the arguments to the command
@@ -617,7 +617,7 @@ for case_folder in $G_CASES_FOLDER/*; do
     if [ "$G_TESTING_MODEL" != 'no-server' ]; then
         create_link_to_executable "$G_EXECUTABLES_FOLDER/duck_game_server"
     fi
-    create_link_to_executable "$G_EXECUTABLES_FOLDER/taller_client"
+    create_link_to_executable "$G_EXECUTABLES_FOLDER/duck_game"
 
     if [[ "$G_VALGRIND_MODE" = "valgrind" ]]; then
         echo "[=>] Ejecutando caso de prueba '$case_folder' usando valgrind"

@@ -51,18 +51,6 @@ GameClient::GameClient(const int window_width, const int window_height,
         playerAmount(0),
         audioEngine(snapshot.ducks, mixer, resourceManager) {}
 
-// void GameClient::input_thread() {
-//     std::string input;
-//     while (!quit) {
-//         std::cin >> input;
-//         if (input == "Exit") {
-//             quit = true;
-//             break;
-//         }
-//     }
-//     std::cout << "This shi thread detected an exit\n";
-// }
-
 void GameClient::run() {
     std::vector<Platform> platforms;
     ClientProtocol protocol(socket);
@@ -98,7 +86,6 @@ void GameClient::run() {
 
     try {
         int iteration = 0;
-        // std::thread input_thread(&GameClient::input_thread, this);
         while (true) {
             updateDuckStates();
             mainLoop(iteration);
@@ -110,9 +97,6 @@ void GameClient::run() {
             }
 
             if (quit) {
-                std::cout << "Exiting the game\n";
-                // input_thread.join();
-                std::cout << "Of fucking course this doesn't print\n";
                 break;
             }
 
