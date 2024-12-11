@@ -10,8 +10,8 @@
 #include "../common/common_resolvererror.cpp"
 #include "../common/common_socket.cpp"
 #include "../common/common_thread.h"
-#include "../common/types/constants.h"
 #include "../common/snapshot.h"
+#include "../common/types/constants.h"
 #include "../server/server_protocol.cpp"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -41,7 +41,32 @@ protected:
 
 namespace {
 
-TEST_F(TestProtocol, CreateCommandCheck) {
+/* MESSAGES TESTED FOR SERVER:
+
+    * - recv_lobby_action (TestCreateCommandCheck, TestJoinCommandCheck)
+    * - recv_string (TestCreateCommandCheck, TestJoinCommandCheck)
+
+    * - send_game_map_list (TestReceiveMaps)
+    * - recv_match_info (TestMatchCreation)
+    * - send_confirmation (TestConfirmation)
+    * - send_match_list (TestMatchList)
+    * - recv_duck_action (TestDuckAction)
+    * - send_snapshot (TestSnapshot)
+*/
+
+/*MESSAGES TESTED FOR CLIENT:
+
+    * - sendCreateCommand (TestCreateCommandCheck)
+    * - sendJoinCommand (TestJoinCommandCheck)
+    * - receiveMapList (TestReceiveMaps)
+    * - sendMatchCreation (TestMatchCreation)
+    * - receiveConfirmation (TestConfirmation)
+    * - receiveMatchList (TestMatchList)
+    * - send_msg (TestDuckAction)
+    * - read_msg (TestSnapshot)
+*/
+
+TEST_F(TestProtocol, TestCreateCommandCheck) {
     lobbyProtocol.sendCreateCommand("Pedro");
     char lobby_action;
     std::string player_name;
@@ -52,7 +77,7 @@ TEST_F(TestProtocol, CreateCommandCheck) {
 }
 
 
-TEST_F(TestProtocol, JoinCommandCheck) {
+TEST_F(TestProtocol, TestJoinCommandCheck) {
     lobbyProtocol.sendJoinCommand("Pedro");
     char lobby_action;
     std::string player_name;
@@ -63,7 +88,7 @@ TEST_F(TestProtocol, JoinCommandCheck) {
 }
 
 
-TEST_F(TestProtocol, ReceiveMaps) {
+TEST_F(TestProtocol, TestReceiveMaps) {
     std::list<std::string> maps = {"mapa1", "mapa2", "mapa3"};
     serverProtocol.send_game_map_list(maps);
 
@@ -75,7 +100,7 @@ TEST_F(TestProtocol, ReceiveMaps) {
     EXPECT_EQ(received_maps[2], "mapa3");
 }
 
-TEST_F(TestProtocol, SendMatchCreation) {
+TEST_F(TestProtocol, TestMatchCreation) {
     lobbyProtocol.sendMatchCreation(2, "match_name_pedro", "map_name1");
 
     uint8_t number_of_players;
@@ -89,7 +114,7 @@ TEST_F(TestProtocol, SendMatchCreation) {
 }
 
 
-TEST_F(TestProtocol, ReceiveConfirmation) {
+TEST_F(TestProtocol, TestConfirmation) {
     serverProtocol.send_confirmation(true);
     uint8_t confirmation = lobbyProtocol.receiveConfirmation();
     EXPECT_EQ(confirmation, SUCCESS);
@@ -99,7 +124,7 @@ TEST_F(TestProtocol, ReceiveConfirmation) {
     EXPECT_EQ(confirmation, FAILURE);
 }
 
-TEST_F(TestProtocol, MATCH_LIST) {
+TEST_F(TestProtocol, TestMatchList) {
     serverProtocol.send_match_list({"match1", "match2", "match3"});
     std::vector<std::string> matches = lobbyProtocol.receiveMatchList();
 
@@ -109,14 +134,14 @@ TEST_F(TestProtocol, MATCH_LIST) {
     EXPECT_EQ(matches[2], "match3");
 }
 
-TEST_F(TestProtocol, RECV_LOBBY_ACTION) {
+TEST_F(TestProtocol, TestDuckAction) {
     clientProtocol.send_msg(static_cast<void*>(new char('c')));
     uint8_t action;
     serverProtocol.recv_duck_action(action);
     EXPECT_EQ(action, 'c');
 }
 
-TEST_F(TestProtocol, SEND_SNAPSHOT) {
+TEST_F(TestProtocol, TestSnapshot) {
     auto snapshot = std::make_shared<Snapshot>();
     snapshot->ducks.push_back(DuckState());
     snapshot->weapons.push_back(Weapon());
@@ -125,7 +150,7 @@ TEST_F(TestProtocol, SEND_SNAPSHOT) {
     serverProtocol.send_snapshot(snapshot);
     Snapshot received_snapshot;
     clientProtocol.read_msg(&received_snapshot);
-    
+
     EXPECT_EQ(received_snapshot.ducks.size(), 1);
     EXPECT_EQ(received_snapshot.weapons.size(), 1);
     EXPECT_EQ(received_snapshot.bullets.size(), 1);
