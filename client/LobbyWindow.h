@@ -61,6 +61,8 @@ class LobbyWindow : public QMainWindow {
         void showFailedConnectionMessage();
         void showCreateMatchMessage(bool success);
         void showJoinMatchMessage(bool success);
+
+        void setUpCreateMatchScene();
     
     public slots:
         void validateSelectedMatch(int index);

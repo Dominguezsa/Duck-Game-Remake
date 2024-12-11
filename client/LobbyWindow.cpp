@@ -28,10 +28,7 @@ void LobbyWindow::connectSignals() {
         this->receiveMatchList();
         ui->centralWidget->setCurrentWidget(ui->joinMatchScene);
         });
-    connect(ui->createMatchButton, &QPushButton::clicked, this, [this]() {
-        this->receiveMapList();
-        ui->centralWidget->setCurrentWidget(ui->createMatchScene);
-        });
+    connect(ui->createMatchButton, &QPushButton::clicked, this, &LobbyWindow::setUpCreateMatchScene);
     resetLoginWidgets();
 
     // Create match scene signals:
@@ -146,13 +143,24 @@ void LobbyWindow::validateCreateMatchInputs() {
 }
 
 void LobbyWindow::receiveMapList() {
-    // TO DO: receive map list from server
     ui->mapList->clear();
-
     ui->mapList->addItem("Select a map");
     ui->mapList->setCurrentIndex(0);
-    ui->mapList->addItem("Map 1");
-    ui->mapList->addItem("Map 2");
+
+    std::vector<std::string> map_list = lobbyProtocol->receiveStringVector();
+    for (const std::string& map : map_list) {
+        ui->mapList->addItem(QString::fromStdString(map));
+    }
+}
+
+void LobbyWindow::setUpCreateMatchScene() {
+    try {
+        this->lobbyProtocol->sendCreateCommand(this->player_name);
+        receiveMapList();
+    } catch (const std::exception& e) {
+        // TO DO: Disconnect from server
+    }
+    ui->centralWidget->setCurrentWidget(ui->createMatchScene);
 }
 
 void LobbyWindow::showCreateMatchMessage(bool success) {
