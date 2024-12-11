@@ -15,14 +15,13 @@
 #include "../server/server_protocol.cpp"
 
 
+Socket socketServer("8080");
+Socket socketCliente("localhost", "8080");
+Socket socket_accepted = socketServer.accept();
+ServerProtocol serverProtocol(socket_accepted);
+LobbyProtocol lobbyProtocol(socketCliente);
+
 void test_create_command() {
-    Socket socketServer("8080");
-    Socket socketCliente("localhost", "8080");
-    Socket socket_accepted = socketServer.accept();
-    ServerProtocol serverProtocol(socket_accepted);
-    LobbyProtocol lobbyProtocol(socketCliente);
-
-
     lobbyProtocol.sendCreateCommand("Pedro");
     char lobby_action;
     serverProtocol.recv_action(lobby_action);
@@ -31,13 +30,6 @@ void test_create_command() {
 }
 
 void test_join_command() {
-    Socket socketServer("8080");
-    Socket socketCliente("localhost", "8080");
-    Socket socket_accepted = socketServer.accept();
-    ServerProtocol serverProtocol(socket_accepted);
-    LobbyProtocol lobbyProtocol(socketCliente);
-
-
     lobbyProtocol.sendJoinCommand("Pedro");
     char lobby_action;
     serverProtocol.recv_action(lobby_action);
@@ -46,12 +38,6 @@ void test_join_command() {
 }
 
 void test_receive_maps() {
-    Socket socketServer("8080");
-    Socket socketCliente("localhost", "8080");
-    Socket socket_accepted = socketServer.accept();
-    ServerProtocol serverProtocol(socket_accepted);
-    LobbyProtocol lobbyProtocol(socketCliente);
-
 
     std::list<std::string> maps = {"mapa1", "mapa2", "mapa3"};
     serverProtocol.send_game_map_list(maps);
@@ -64,12 +50,6 @@ void test_receive_maps() {
 }
 
 void test_send_match_creation() {
-    Socket socketServer("8080");
-    Socket socketCliente("localhost", "8080");
-    Socket socket_accepted = socketServer.accept();
-    ServerProtocol serverProtocol(socket_accepted);
-    LobbyProtocol lobbyProtocol(socketCliente);
-
 
     lobbyProtocol.sendMatchCreation(2, "match_name_pedro", "map_name1");
     uint8_t number_of_players;
@@ -83,16 +63,12 @@ void test_send_match_creation() {
 }
 
 void test_receive_confirmation() {
-    Socket socketServer("8080");
-    Socket socketCliente("localhost", "8080");
-    Socket socket_accepted = socketServer.accept();
-    ServerProtocol serverProtocol(socket_accepted);
-    LobbyProtocol lobbyProtocol(socketCliente);
-
 
     serverProtocol.send_confirmation(true);
-    int confirmation = lobbyProtocol.receiveConfirmation();
+    uint8_t confirmation;
+    confirmation = lobbyProtocol.receiveConfirmation();
     assert(confirmation == SUCCESS);
+    confirmation++; // sino aparece como unused parameter
     serverProtocol.send_confirmation(false);
     confirmation = lobbyProtocol.receiveConfirmation();
     assert(confirmation == FAILURE);
