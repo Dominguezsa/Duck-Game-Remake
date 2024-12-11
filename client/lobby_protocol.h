@@ -19,8 +19,10 @@ public:
 
     void sendCreateCommand(const std::string& playerName);
     std::vector<std::string> receiveMapList();
-    int sendMatchCreation(uint8_t numPlayers, const std::string& matchName,
+    void sendMatchCreation(uint8_t numPlayers, const std::string& matchName,
                           const std::string& mapName);
+
+    int receiveConfirmation();
     void sendJoinCommand(const std::string& playerName);
     std::vector<std::string> receiveMatchList();
     int sendMatchSelection(const std::string& matchName);

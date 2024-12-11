@@ -34,7 +34,7 @@ std::vector<std::string> LobbyProtocol::receiveMapList() {
 }
 
 
-int LobbyProtocol::sendMatchCreation(uint8_t numPlayers, const std::string& matchName,
+void LobbyProtocol::sendMatchCreation(uint8_t numPlayers, const std::string& matchName,
                                      const std::string& mapName) {
 
     send_data(&CMD_CREATE, sizeof(CMD_CREATE));
@@ -47,6 +47,9 @@ int LobbyProtocol::sendMatchCreation(uint8_t numPlayers, const std::string& matc
     mapNameSize = htons(mapNameSize);
     send_data(&mapNameSize, sizeof(mapNameSize));
     send_data(mapName.c_str(), mapName.size());
+}
+
+int LobbyProtocol::receiveConfirmation() {
     uint8_t confirmation;
     recv_uint_8(confirmation);
     return confirmation;

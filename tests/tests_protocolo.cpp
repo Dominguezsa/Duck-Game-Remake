@@ -60,9 +60,32 @@ void test_receive_maps() {
     std::cout << "Test 3 passed" << std::endl;
 }
 
+void test_send_match_creation() {
+    Socket socketServer("8080");
+    Socket socketCliente("localhost", "8080");
+    Socket socket_accepted = socketServer.accept();
+    ServerProtocol serverProtocol(socket_accepted);
+    LobbyProtocol lobbyProtocol(socketCliente);
+  
+
+    lobbyProtocol.sendMatchCreation(2, "match_name_pedro", "map_name1");
+    
+    uint8_t number_of_players;
+    std::string map_name;
+    std::string match_name;
+    serverProtocol.recv_match_info(map_name, match_name, number_of_players);
+
+    assert(number_of_players == 2);
+    assert(map_name == "map_name1");
+    assert(match_name == "match_name_pedro");
+    std::cout << "Test 4 passed" << std::endl;
+}
+
+
 int main() {
     test_create_command();
     test_join_command();
     test_receive_maps();
+    test_send_match_creation();
     return 0;
 }

@@ -75,7 +75,8 @@ void Lobby::handle_create_party() {
         }
     }
     uint8_t numPlayersUint8 = static_cast<uint8_t>(numPlayers);
-    int confirmation = protocol.sendMatchCreation(numPlayersUint8, matchName, maps[mapIndex]);
+    protocol.sendMatchCreation(numPlayersUint8, matchName, maps[mapIndex]);
+    int confirmation = protocol.receiveConfirmation();
     if (confirmation == 1) {
         std::cout << "Match created successfully\n";
     } else {
