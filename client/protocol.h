@@ -16,8 +16,6 @@ class ClientProtocol: public Protocol {
 public:
     explicit ClientProtocol(Socket& socket);
 
-    void recv_player_amount(uint8_t& player_amount);
-
     void recv_platforms(std::vector<Platform>& platforms);
     void read_msg(void* msg) override;
 

@@ -14,17 +14,16 @@ class LobbyProtocol: public Protocol {
 public:
     explicit LobbyProtocol(Socket& socket);
 
-    void read_msg(void* msg) override;
-    void send_msg(void* msg) override;
+    void read_msg(void* msg) override; // no se usa
+    void send_msg(void* msg) override; // no se usa
 
     void sendCreateCommand(const std::string& playerName);
-    std::vector<std::string> receiveMapList();
+    std::vector<std::string> receiveStringVector();
     void sendMatchCreation(uint8_t numPlayers, const std::string& matchName,
                           const std::string& mapName);
 
     int receiveConfirmation();
     void sendJoinCommand(const std::string& playerName);
-    std::vector<std::string> receiveMatchList();
-    int sendMatchSelection(const std::string& matchName);
+    void sendMatchSelection(const std::string& matchName);
 };
 #endif

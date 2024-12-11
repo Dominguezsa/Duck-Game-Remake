@@ -21,7 +21,7 @@ void LobbyProtocol::sendJoinCommand(const std::string& playerName) {
     send_string(playerName);
 }
 
-std::vector<std::string> LobbyProtocol::receiveMapList() {
+std::vector<std::string> LobbyProtocol::receiveStringVector() {
     std::vector<std::string> maps;
     uint16_t count;
     recv_uint_16(count);
@@ -55,21 +55,6 @@ int LobbyProtocol::receiveConfirmation() {
     return confirmation;
 }
 
-std::vector<std::string> LobbyProtocol::receiveMatchList() {
-    std::vector<std::string> matches;
-    uint16_t count;
-    recv_uint_16(count);
-    for (uint16_t i = 0; i < count; i++) {
-        std::string matchName;
-        recv_string(matchName);
-        matches.push_back(matchName);
-    }
-    return matches;
-}
-
-int LobbyProtocol::sendMatchSelection(const std::string& matchName) {
+void LobbyProtocol::sendMatchSelection(const std::string& matchName) {
     send_string(matchName);
-    uint8_t confirmation;
-    recv_uint_8(confirmation);
-    return confirmation;
 }

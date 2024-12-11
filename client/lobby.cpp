@@ -37,7 +37,7 @@ void Lobby::run() {
 
 void Lobby::handle_create_party() {
     protocol.sendCreateCommand(playerName);
-    auto maps = protocol.receiveMapList();
+    auto maps = protocol.receiveStringVector();
     std::cout << "These are the available maps:\n";
     for (size_t i = 0; i < maps.size(); i++) {
         std::cout << i + 1 << ". " << maps[i] << '\n';
@@ -87,7 +87,7 @@ void Lobby::handle_create_party() {
 
 void Lobby::handle_join_party() {
     protocol.sendJoinCommand(playerName);
-    std::vector<std::string> matches = protocol.receiveMatchList();
+    std::vector<std::string> matches = protocol.receiveStringVector();
     for (size_t i = 0; i < matches.size(); i++) {
         std::cout << i + 1 << ". " << matches[i] << '\n';
     }
@@ -102,7 +102,8 @@ void Lobby::handle_join_party() {
         }
     }
     matchName = matches[std::stoi(matchName) - 1];
-    int confirmation = protocol.sendMatchSelection(matchName);
+    protocol.sendMatchSelection(matchName);
+    int confirmation = protocol.receiveConfirmation();
     if (confirmation == 1) {
         std::cout << "Match joined successfully\n";
     } else {

@@ -45,7 +45,6 @@ namespace {
 
     * - recv_lobby_action (TestCreateCommandCheck, TestJoinCommandCheck)
     * - recv_string (TestCreateCommandCheck, TestJoinCommandCheck)
-
     * - send_game_map_list (TestReceiveMaps)
     * - recv_match_info (TestMatchCreation)
     * - send_confirmation (TestConfirmation)
@@ -60,6 +59,7 @@ namespace {
     * - sendJoinCommand (TestJoinCommandCheck)
     * - receiveMapList (TestReceiveMaps)
     * - sendMatchCreation (TestMatchCreation)
+    * - semdMatchSelection (TestMatchSelection)
     * - receiveConfirmation (TestConfirmation)
     * - receiveMatchList (TestMatchList)
     * - send_msg (TestDuckAction)
@@ -92,7 +92,7 @@ TEST_F(TestProtocol, TestReceiveMaps) {
     std::list<std::string> maps = {"mapa1", "mapa2", "mapa3"};
     serverProtocol.send_game_map_list(maps);
 
-    std::vector<std::string> received_maps = lobbyProtocol.receiveMapList();
+    std::vector<std::string> received_maps = lobbyProtocol.receiveStringVector();
 
     ASSERT_EQ(received_maps.size(), 3);
     EXPECT_EQ(received_maps[0], "mapa1");
@@ -113,6 +113,14 @@ TEST_F(TestProtocol, TestMatchCreation) {
     EXPECT_EQ(match_name, "match_name_pedro");
 }
 
+TEST_F(TestProtocol, TestMatchSelection) {
+    lobbyProtocol.sendMatchSelection("match_name_pedro");
+    std::string match_name;
+    serverProtocol.recv_string(match_name);
+
+    EXPECT_EQ(match_name, "match_name_pedro");
+}
+
 
 TEST_F(TestProtocol, TestConfirmation) {
     serverProtocol.send_confirmation(true);
@@ -126,7 +134,7 @@ TEST_F(TestProtocol, TestConfirmation) {
 
 TEST_F(TestProtocol, TestMatchList) {
     serverProtocol.send_match_list({"match1", "match2", "match3"});
-    std::vector<std::string> matches = lobbyProtocol.receiveMatchList();
+    std::vector<std::string> matches = lobbyProtocol.receiveStringVector();
 
     ASSERT_EQ(matches.size(), 3);
     EXPECT_EQ(matches[0], "match1");
@@ -154,6 +162,18 @@ TEST_F(TestProtocol, TestSnapshot) {
     EXPECT_EQ(received_snapshot.ducks.size(), 1);
     EXPECT_EQ(received_snapshot.weapons.size(), 1);
     EXPECT_EQ(received_snapshot.bullets.size(), 1);
+}
+
+TEST_F(TestProtocol, TestReceivePlatforms) {
+    auto snapshot = std::make_shared<Snapshot>();
+    snapshot->addPlatform(Platform());
+    snapshot->addPlatform(Platform());
+
+    serverProtocol.send_snapshot(snapshot);
+    Snapshot received_snapshot;
+    clientProtocol.recv_platforms(received_snapshot.platforms);
+
+    EXPECT_EQ(received_snapshot.platforms.size(), 2);
 }
 
 
