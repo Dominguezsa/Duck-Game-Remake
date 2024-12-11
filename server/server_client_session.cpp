@@ -73,7 +73,7 @@ void ClientSession::run_lobby_loop() {
     try {
         while (true) {
             char lobby_action;
-            this->protocol.recv_action(lobby_action);
+            this->protocol.recv_lobby_action(lobby_action);
             if (lobby_action == EXIT) {
                 this->_is_alive = false;
                 break;
@@ -94,7 +94,7 @@ void ClientSession::run_lobby_loop() {
 
 void ClientSession::exec_lobby_action(char action, bool& success) {
     std::string player_name, match_name;
-    this->protocol.recv_player_name(player_name);
+    this->protocol.recv_string(player_name);
     DuckIdentity duck_info;
     identity.name = player_name;
     duck_info.name = player_name;
@@ -121,7 +121,7 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
 
             protocol.send_match_list(available_matches);
             // (3)
-            this->protocol.recv_match_name(match_name);
+            this->protocol.recv_string(match_name);
 
             // (4)
             success = matches_monitor.join_match(match_name, duck_info, &client_queue);

@@ -2,6 +2,7 @@
 #include <sstream>
 
 #include "../client/lobby_protocol.cpp"
+#include "../client/protocol.cpp"
 #include "../common/common_liberror.cpp"
 #include "../common/common_protocol.cpp"
 #include "../common/common_queue.h"
@@ -10,10 +11,10 @@
 #include "../common/common_socket.cpp"
 #include "../common/common_thread.h"
 #include "../common/types/constants.h"
+#include "../common/snapshot.h"
 #include "../server/server_protocol.cpp"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-
 #define port "8080"
 #define ip "localhost"
 
@@ -28,12 +29,14 @@ protected:
     Socket socket_accepted;
     ServerProtocol serverProtocol;
     LobbyProtocol lobbyProtocol;
+    ClientProtocol clientProtocol;
     TestProtocol():
             socketServer(port),
             socketCliente(ip, port),
             socket_accepted(socketServer.accept()),
             serverProtocol(socket_accepted),
-            lobbyProtocol(socketCliente) {}
+            lobbyProtocol(socketCliente),
+            clientProtocol(socketCliente) {}
 };
 
 namespace {
@@ -41,8 +44,11 @@ namespace {
 TEST_F(TestProtocol, CreateCommandCheck) {
     lobbyProtocol.sendCreateCommand("Pedro");
     char lobby_action;
-    serverProtocol.recv_action(lobby_action);
+    std::string player_name;
+    serverProtocol.recv_lobby_action(lobby_action);
+    serverProtocol.recv_string(player_name);
     EXPECT_EQ(lobby_action, CMD_CREATE);
+    EXPECT_EQ(player_name, "Pedro");
 }
 
 
@@ -50,8 +56,8 @@ TEST_F(TestProtocol, JoinCommandCheck) {
     lobbyProtocol.sendJoinCommand("Pedro");
     char lobby_action;
     std::string player_name;
-    serverProtocol.recv_action(lobby_action);
-    serverProtocol.recv_player_name(player_name);
+    serverProtocol.recv_lobby_action(lobby_action);
+    serverProtocol.recv_string(player_name);
     EXPECT_EQ(lobby_action, CMD_JOIN);
     EXPECT_EQ(player_name, "Pedro");
 }
@@ -93,4 +99,36 @@ TEST_F(TestProtocol, ReceiveConfirmation) {
     EXPECT_EQ(confirmation, FAILURE);
 }
 
+TEST_F(TestProtocol, MATCH_LIST) {
+    serverProtocol.send_match_list({"match1", "match2", "match3"});
+    std::vector<std::string> matches = lobbyProtocol.receiveMatchList();
+
+    ASSERT_EQ(matches.size(), 3);
+    EXPECT_EQ(matches[0], "match1");
+    EXPECT_EQ(matches[1], "match2");
+    EXPECT_EQ(matches[2], "match3");
+}
+
+TEST_F(TestProtocol, RECV_LOBBY_ACTION) {
+    clientProtocol.send_msg(static_cast<void*>(new char('c')));
+    uint8_t action;
+    serverProtocol.recv_duck_action(action);
+    EXPECT_EQ(action, 'c');
+}
+
+TEST_F(TestProtocol, SEND_SNAPSHOT) {
+    // Crear el snapshot en el heap
+    auto snapshot = std::make_shared<Snapshot>();
+    snapshot->ducks.push_back(DuckState());
+    snapshot->weapons.push_back(Weapon());
+    snapshot->bullets.push_back(Bullet());
+
+    serverProtocol.send_snapshot(snapshot); // No es necesario usar std::shared_ptr manualmente
+    Snapshot received_snapshot;
+    clientProtocol.read_msg(&received_snapshot);
+    
+    EXPECT_EQ(received_snapshot.ducks.size(), 1);
+    EXPECT_EQ(received_snapshot.weapons.size(), 1);
+    EXPECT_EQ(received_snapshot.bullets.size(), 1);
+}
 }  // namespace

@@ -16,8 +16,6 @@ class ClientProtocol: public Protocol {
 public:
     explicit ClientProtocol(Socket& socket);
 
-    std::vector<Duck> receiveMessage();
-
     void recv_player_amount(uint8_t& player_amount);
 
     void recv_platforms(std::vector<Platform>& platforms);

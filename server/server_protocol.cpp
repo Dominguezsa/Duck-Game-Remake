@@ -1,7 +1,7 @@
 #include "server_protocol.h"
 
 #include "../common/snapshot.h"
-void ServerProtocol::recv_msg(uint8_t& command) { recv_uint_8(command); }
+void ServerProtocol::recv_duck_action(uint8_t& command) { recv_uint_8(command); }
 
 // Massive refactor needed, too many sends and recv are so bad for performance
 void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
@@ -130,20 +130,9 @@ void ServerProtocol::send_match_list(const std::list<std::string>& match_names) 
     }
 }
 
-void ServerProtocol::recv_action(char& action) {
+void ServerProtocol::recv_lobby_action(char& action) {
     uint8_t buf;
     recv_uint_8(buf);
     action = buf;
 }
 
-void ServerProtocol::recv_match_name(std::string& match_name) { recv_string(match_name); }
-
-void ServerProtocol::recv_player_name(std::string& player_name) { recv_string(player_name); }
-
-void ServerProtocol::send_duck_unique_attributes(const DuckIdentity& attributes) {
-    send_string(attributes.name);
-    send_data(&attributes.id, sizeof(uint8_t));
-    // send_data(&attributes.color, sizeof(char));
-    send_data(&attributes.initial_pos_x, sizeof(uint32_t));
-    send_data(&attributes.initial_pos_y, sizeof(uint32_t));
-}

@@ -8,7 +8,7 @@ void ReceiverThread::run() {
     msg.player_id = client_id;
     try {
         while (this->_is_alive) {
-            protocol.recv_msg(msg.action);
+            protocol.recv_duck_action(msg.action);
             gameloop_queue.push(msg);
         }
     } catch (std::exception& e) {

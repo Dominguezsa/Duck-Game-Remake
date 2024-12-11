@@ -15,11 +15,6 @@
 
 ClientProtocol::ClientProtocol(Socket& socket): Protocol(socket) {}
 
-std::vector<Duck> ClientProtocol::receiveMessage() {
-    std::vector<Duck> snapsho;
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    return snapsho;
-}
 
 void ClientProtocol::recv_player_amount(uint8_t& player_amount) { recv_uint_8(player_amount); }
 
