@@ -16,6 +16,8 @@
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Window.hh>
 
+#include <QApplication>
+
 #include "../common/common_queue.h"
 #include "../common/common_socket.h"
 #include "../common/duck.h"
@@ -31,6 +33,8 @@
 #include "protocol.h"
 #include "thread_receiver.h"
 #include "thread_sender.h"
+#include "LobbyWindow.h"
+#include "WrapperLobbyApp.h"
 
 class GameClient {
 private:
@@ -41,8 +45,8 @@ private:
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
     ResourceManager resourceManager;
-    Socket socket;
-    Lobby lobby;
+    //Socket socket;
+    //Lobby lobby;
     Queue<uint8_t> messagesForServer;
     Queue<Snapshot> graphic_queue;
     Snapshot snapshot;
@@ -52,16 +56,18 @@ private:
     CommandCenter commandCenter;
     uint8_t playerAmount;
     AudioEngine audioEngine;
+    WrapperLobbyApp app;
+    LobbyWindow lobbyWindow;
 
 
 public:
     GameClient(const int window_width, const int window_height, const std::string& window_title,
                const int max_chunk_size_audio, const std::string& server_ip,
-               const std::string& port);
+               const std::string& port, int argc, char* argv[]);
     ~GameClient();
     void run();
     void receive_platforms_first_time();
-    void run_lobby();
+    int run_lobby();
     void updateDuckStates();
     void input_thread();
     bool round_finished();

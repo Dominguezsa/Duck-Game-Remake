@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
+#include "LobbyWindow.h"
 
 #include "game_client.h"
 
@@ -14,14 +15,17 @@
 
 int main(int argc, char* argv[]) {
     try {
+        /*
         if (argc != 3) {
             std::cout << "Usage: ./client <hostname> <servname>" << std::endl;
             return EXIT_FAILURE;
         }
         std::string hostname = std::string(argv[1]);
         std::string servname = std::string(argv[2]);
+        */
+        std::string hostname, servname;
         GameClient gameClient(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME, CHUNK_SIZE_AUDIO, hostname,
-                              servname);
+                              servname, argc, argv);
         gameClient.run_lobby();
         gameClient.run();
 

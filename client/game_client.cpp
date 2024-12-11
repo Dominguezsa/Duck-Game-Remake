@@ -30,7 +30,7 @@
 
 GameClient::GameClient(const int window_width, const int window_height,
                        const std::string& window_title, const int max_chunk_size_audio,
-                       const std::string& server_ip, const std::string& port):
+                       const std::string& server_ip[[maybe_unused]], const std::string& port[[maybe_unused]], int argc, char* argv[]):
         quit(false),
         sdl(SDL_INIT_VIDEO),
         ttf(),
@@ -40,8 +40,8 @@ GameClient::GameClient(const int window_width, const int window_height,
                window_height, SDL_WINDOW_SHOWN),
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
         resourceManager(renderer),
-        socket(server_ip.c_str(), port.c_str()),
-        lobby(socket),
+        //socket(server_ip.c_str(), port.c_str()),
+        //lobby(socket),
         messagesForServer(),
         graphic_queue(GRAPHIC_QUEUE_SIZE),
         animationHelper(resourceManager),
@@ -49,9 +49,12 @@ GameClient::GameClient(const int window_width, const int window_height,
         keyboardState(std::make_shared<const uint8_t*>(SDL_GetKeyboardState(nullptr))),
         commandCenter(messagesForServer, keyboardState, quit),
         playerAmount(0),
-        audioEngine(snapshot.ducks, mixer, resourceManager) {}
+        audioEngine(snapshot.ducks, mixer, resourceManager),
+        app(argc, argv),
+        lobbyWindow() {}
 
 void GameClient::run() {
+    /*
     std::vector<Platform> platforms;
     ClientProtocol protocol(socket);
     ThreadReceiver threadReceiver(protocol, graphic_queue);
@@ -60,6 +63,7 @@ void GameClient::run() {
     snapshot.platforms = platforms;
     threadReceiver.start();
     threadSender.start();
+    */
     std::cout << "CLIENT: Starting the UI \n";
 
     Snapshot ducksStates = graphic_queue.pop();  // This is the first snapshot
@@ -121,8 +125,10 @@ void GameClient::run() {
         std::cout << "Error in the main loop\n";
         std::cout << "exiting the game by error\n";
     }
+    /*
     threadReceiver.stop_thread();
     threadSender.stop_thread();
+    */
 }
 
 bool GameClient::round_finished() {
@@ -131,7 +137,11 @@ bool GameClient::round_finished() {
     return alive_ducks <= 1;
 }
 
-void GameClient::run_lobby() { lobby.run(); }
+int GameClient::run_lobby() {
+    this->lobbyWindow.show();
+    return this->app.exec();
+    //lobby.run();
+}
 
 
 void GameClient::updateDuckStates() {
