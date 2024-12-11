@@ -117,13 +117,12 @@ TEST_F(TestProtocol, RECV_LOBBY_ACTION) {
 }
 
 TEST_F(TestProtocol, SEND_SNAPSHOT) {
-    // Crear el snapshot en el heap
     auto snapshot = std::make_shared<Snapshot>();
     snapshot->ducks.push_back(DuckState());
     snapshot->weapons.push_back(Weapon());
     snapshot->bullets.push_back(Bullet());
 
-    serverProtocol.send_snapshot(snapshot); // No es necesario usar std::shared_ptr manualmente
+    serverProtocol.send_snapshot(snapshot);
     Snapshot received_snapshot;
     clientProtocol.read_msg(&received_snapshot);
     
@@ -131,4 +130,6 @@ TEST_F(TestProtocol, SEND_SNAPSHOT) {
     EXPECT_EQ(received_snapshot.weapons.size(), 1);
     EXPECT_EQ(received_snapshot.bullets.size(), 1);
 }
+
+
 }  // namespace
