@@ -24,10 +24,7 @@ void LobbyWindow::connectSignals() {
 
     connect(ui->confirmButton, &QPushButton::clicked, this, &LobbyWindow::confirmAction);
 
-    connect(ui->joinMatchButton, &QPushButton::clicked, this, [this]() {
-        this->receiveMatchList();
-        ui->centralWidget->setCurrentWidget(ui->joinMatchScene);
-        });
+    connect(ui->joinMatchButton, &QPushButton::clicked, this, &LobbyWindow::setUpJoinMatchScene);
     connect(ui->createMatchButton, &QPushButton::clicked, this, &LobbyWindow::setUpCreateMatchScene);
     resetLoginWidgets();
 
@@ -112,13 +109,16 @@ void LobbyWindow::resetLoginWidgets() {
 // --------------------- Create match scene logic ---------------------
 
 void LobbyWindow::createMatchAction() {
-    this->action = CREATE_MATCH_ACTION;
+    bool success;
+    try {
+        lobbyProtocol->sendMatchCreation(this->number_of_players, this->match_name,
+                                         ui->mapList->currentText().toStdString());
+        success = lobbyProtocol->receiveConfirmation();
+    } catch (const std::exception& e) {
+        // TO DO: Disconnect from server
+    }
 
-    // TO DO: Esta validacion deberia provenir del server al intentar
-    // crear una partida, pero por ahora la dejamos asi
-    bool success = true;
     showCreateMatchMessage(success);
-
     if (success)
         close();
 }
@@ -174,16 +174,27 @@ void LobbyWindow::showCreateMatchMessage(bool success) {
 // --------------------- Join match scene logic ---------------------
 
 void LobbyWindow::joinMatchAction() {
-    this->action = JOIN_MATCH_ACTION;
-    
-    // TO DO: Esta validacion deberia provenir del server
-    //        al intentar unirnos a una partida.
-    bool success = true;
+    bool success;
+    try {
+        lobbyProtocol->sendMatchSelection(ui->matchList->currentText().toStdString());
+        success = lobbyProtocol->receiveConfirmation();
+    } catch (const std::exception& e) {
+        // TO DO: Disconnect from server
+    }
 
     showJoinMatchMessage(success);
-
     if (success)
         close();
+}
+
+void LobbyWindow::setUpJoinMatchScene() {
+    try {
+        this->lobbyProtocol->sendJoinCommand(this->player_name);
+        receiveMatchList();
+    } catch (const std::exception& e) {
+        // TO DO: Disconnect from server
+    }
+    ui->centralWidget->setCurrentWidget(ui->joinMatchScene);
 }
 
 void LobbyWindow::validateSelectedMatch(int index[[maybe_unused]]) {
@@ -196,13 +207,15 @@ void LobbyWindow::validateSelectedMatch(int index[[maybe_unused]]) {
 }
 
 void LobbyWindow::receiveMatchList() {
-    // TO DO: receive match list from server
+    std::vector<std::string> match_list = lobbyProtocol->receiveStringVector();
+    
     ui->matchList->clear();
-
     ui->matchList->addItem("Select a match");
     ui->matchList->setCurrentIndex(0);
-    ui->matchList->addItem("Match 1");
-    ui->matchList->addItem("Match 2");
+    
+    for (const std::string& match : match_list) {
+        ui->matchList->addItem(QString::fromStdString(match));
+    }
 }
 
 void LobbyWindow::showJoinMatchMessage(bool success) {

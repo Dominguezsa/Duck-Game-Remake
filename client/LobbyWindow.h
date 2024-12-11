@@ -35,9 +35,6 @@ class LobbyWindow : public QMainWindow {
         std::string player_name;
         std::string host_name;
         std::string port;
-
-        // For create or join match action
-        char action;
         
         // For create match action
         std::string match_name;
@@ -63,6 +60,7 @@ class LobbyWindow : public QMainWindow {
         void showJoinMatchMessage(bool success);
 
         void setUpCreateMatchScene();
+        void setUpJoinMatchScene();
     
     public slots:
         void validateSelectedMatch(int index);

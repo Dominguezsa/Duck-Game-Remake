@@ -54,16 +54,14 @@ GameClient::GameClient(const int window_width, const int window_height,
         lobbyWindow(&this->socket) {}
 
 void GameClient::run() {
-    /*
     std::vector<Platform> platforms;
-    ClientProtocol protocol(socket);
+    ClientProtocol protocol(*socket);
     ThreadReceiver threadReceiver(protocol, graphic_queue);
     ThreadSender threadSender(protocol, messagesForServer);
     threadReceiver.receivePlatforms(platforms);
     snapshot.platforms = platforms;
     threadReceiver.start();
     threadSender.start();
-    */
     std::cout << "CLIENT: Starting the UI \n";
 
     Snapshot ducksStates = graphic_queue.pop();  // This is the first snapshot
@@ -125,10 +123,8 @@ void GameClient::run() {
         std::cout << "Error in the main loop\n";
         std::cout << "exiting the game by error\n";
     }
-    /*
     threadReceiver.stop_thread();
     threadSender.stop_thread();
-    */
 }
 
 bool GameClient::round_finished() {
@@ -140,7 +136,6 @@ bool GameClient::round_finished() {
 int GameClient::run_lobby() {
     this->lobbyWindow.show();
     return this->app.exec();
-    //lobby.run();
 }
 
 
