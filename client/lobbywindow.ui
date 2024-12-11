@@ -15,7 +15,7 @@
   </property>
   <widget class="QStackedWidget" name="centralWidget">
    <property name="currentIndex">
-    <number>1</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="firstLobbyScene">
     <widget class="QWidget" name="verticalLayoutWidget">
@@ -250,7 +250,7 @@ font: 700 10pt &quot;Ubuntu Mono&quot;;</string>
      <property name="geometry">
       <rect>
        <x>460</x>
-       <y>280</y>
+       <y>240</y>
        <width>341</width>
        <height>81</height>
       </rect>
@@ -324,6 +324,22 @@ font: 700 10pt &quot;Ubuntu Mono&quot;;</string>
      </property>
      <property name="text">
       <string>CREATE</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="mapList">
+     <property name="geometry">
+      <rect>
+       <x>460</x>
+       <y>350</y>
+       <width>341</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="editable">
+      <bool>false</bool>
+     </property>
+     <property name="placeholderText">
+      <string>Available maps</string>
      </property>
     </widget>
    </widget>

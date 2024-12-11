@@ -1,7 +1,8 @@
 #include "LobbyWindow.h"
 #include "./ui_lobbywindow.h"
 
-LobbyWindow::LobbyWindow(std::shared_ptr<Socket>* skt, QWidget *parent) : QMainWindow(parent), ui(new Ui::LobbyWindow), socket(skt) {
+LobbyWindow::LobbyWindow(std::shared_ptr<Socket>* skt, QWidget *parent) : QMainWindow(parent), ui(new Ui::LobbyWindow),
+                                                                          socket(skt), lobbyProtocol(nullptr) {
     ui->setupUi(this);
     ui->centralWidget->setCurrentWidget(ui->firstLobbyScene);
     
@@ -28,6 +29,7 @@ void LobbyWindow::connectSignals() {
         ui->centralWidget->setCurrentWidget(ui->joinMatchScene);
         });
     connect(ui->createMatchButton, &QPushButton::clicked, this, [this]() {
+        this->receiveMapList();
         ui->centralWidget->setCurrentWidget(ui->createMatchScene);
         });
     resetLoginWidgets();
@@ -37,6 +39,7 @@ void LobbyWindow::connectSignals() {
     connect(ui->createButton, &QPushButton::clicked, this, &LobbyWindow::createMatchAction);
     connect(ui->matchNameLineEdit, &QLineEdit::textChanged, this, &LobbyWindow::validateCreateMatchInputs);
     connect(ui->numberLineEdit, &QLineEdit::textChanged, this, &LobbyWindow::validateCreateMatchInputs);
+    connect(ui->mapList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LobbyWindow::validateCreateMatchInputs);
 
     // Join match scene signals:
     ui->joinButton->setEnabled(false);
@@ -70,6 +73,7 @@ void LobbyWindow::showFailedConnectionMessage() {
 bool LobbyWindow::tryConnectServer() {
     try {
         *this->socket = std::make_shared<Socket>(host_name.c_str(), port.c_str());
+        this->lobbyProtocol = std::make_unique<LobbyProtocol>(**socket);
     } catch (const std::exception& e) {
         return false;
     }
@@ -125,6 +129,7 @@ void LobbyWindow::createMatchAction() {
 void LobbyWindow::validateCreateMatchInputs() {
     bool valid1 = false;
     bool valid2 = false;
+    bool valid3 = ui->mapList->currentIndex() > 0; // A match must be selected
 
     if (!ui->matchNameLineEdit->text().isEmpty()) {
         valid1 = true;
@@ -137,7 +142,17 @@ void LobbyWindow::validateCreateMatchInputs() {
         valid2 = true;
         this->number_of_players = num;
     }
-    ui->createButton->setEnabled(valid1 && valid2);
+    ui->createButton->setEnabled(valid1 && valid2 && valid3);
+}
+
+void LobbyWindow::receiveMapList() {
+    // TO DO: receive map list from server
+    ui->mapList->clear();
+
+    ui->mapList->addItem("Select a map");
+    ui->mapList->setCurrentIndex(0);
+    ui->mapList->addItem("Map 1");
+    ui->mapList->addItem("Map 2");
 }
 
 void LobbyWindow::showCreateMatchMessage(bool success) {
@@ -178,8 +193,8 @@ void LobbyWindow::receiveMatchList() {
 
     ui->matchList->addItem("Select a match");
     ui->matchList->setCurrentIndex(0);
-    ui->matchList->addItem("Map 1");
-    ui->matchList->addItem("Map 2");
+    ui->matchList->addItem("Match 1");
+    ui->matchList->addItem("Match 2");
 }
 
 void LobbyWindow::showJoinMatchMessage(bool success) {

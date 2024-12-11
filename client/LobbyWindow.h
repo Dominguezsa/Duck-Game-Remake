@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "../common/common_socket.h"
+#include "lobby_protocol.h"
 
 const char JOIN_MATCH_ACTION = 'J';
 const char CREATE_MATCH_ACTION = 'C';
@@ -29,6 +30,7 @@ class LobbyWindow : public QMainWindow {
         Ui::LobbyWindow *ui;
 
         std::shared_ptr<Socket>* socket;
+        std::unique_ptr<LobbyProtocol> lobbyProtocol;
 
         std::string player_name;
         std::string host_name;
@@ -54,6 +56,7 @@ class LobbyWindow : public QMainWindow {
 
         bool tryConnectServer();
         void receiveMatchList();
+        void receiveMapList();
 
         void showFailedConnectionMessage();
         void showCreateMatchMessage(bool success);
