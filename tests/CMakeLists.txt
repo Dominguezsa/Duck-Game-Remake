@@ -1,9 +1,7 @@
-file(GLOB CPP_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
-file(GLOB H_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-
 target_sources(taller_tests
     PRIVATE
-    ${CPP_FILES}
+    # .cpp files
+    test_protocol.cpp
     PUBLIC
-    ${H_FILES}
+    # .h files
     )
