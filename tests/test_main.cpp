@@ -24,16 +24,22 @@ LobbyProtocol lobbyProtocol(socketCliente);
 void test_create_command() {
     lobbyProtocol.sendCreateCommand("Pedro");
     char lobby_action;
+    std::string player_name;
     serverProtocol.recv_action(lobby_action);
+    serverProtocol.recv_player_name(player_name);
     assert(lobby_action == CMD_CREATE);
+    assert(player_name == "Pedro");
     std::cout << "Test 1 passed" << std::endl;
 }
 
 void test_join_command() {
     lobbyProtocol.sendJoinCommand("Pedro");
     char lobby_action;
+    std::string player_name;
     serverProtocol.recv_action(lobby_action);
+    serverProtocol.recv_player_name(player_name);
     assert(lobby_action == CMD_JOIN);
+    assert(player_name == "Pedro");
     std::cout << "Test 2 passed" << std::endl;
 }
 
@@ -68,7 +74,7 @@ void test_receive_confirmation() {
     uint8_t confirmation;
     confirmation = lobbyProtocol.receiveConfirmation();
     assert(confirmation == SUCCESS);
-    confirmation++; // sino aparece como unused parameter
+    confirmation++;  // sino aparece como unused parameter
     serverProtocol.send_confirmation(false);
     confirmation = lobbyProtocol.receiveConfirmation();
     assert(confirmation == FAILURE);
