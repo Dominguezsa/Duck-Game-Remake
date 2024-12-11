@@ -69,7 +69,7 @@ void test_send_match_creation() {
   
 
     lobbyProtocol.sendMatchCreation(2, "match_name_pedro", "map_name1");
-    
+
     uint8_t number_of_players;
     std::string map_name;
     std::string match_name;
@@ -81,11 +81,28 @@ void test_send_match_creation() {
     std::cout << "Test 4 passed" << std::endl;
 }
 
+void test_receive_confirmation() {
+    Socket socketServer("8080");
+    Socket socketCliente("localhost", "8080");
+    Socket socket_accepted = socketServer.accept();
+    ServerProtocol serverProtocol(socket_accepted);
+    LobbyProtocol lobbyProtocol(socketCliente);
+  
+
+    serverProtocol.send_confirmation(true);
+    int confirmation = lobbyProtocol.receiveConfirmation();
+    assert(confirmation == SUCCESS);
+    serverProtocol.send_confirmation(false);
+    confirmation = lobbyProtocol.receiveConfirmation();
+    assert(confirmation == FAILURE);
+    std::cout << "Test 5 passed" << std::endl;
+}
 
 int main() {
     test_create_command();
     test_join_command();
     test_receive_maps();
     test_send_match_creation();
+    test_receive_confirmation();
     return 0;
 }
