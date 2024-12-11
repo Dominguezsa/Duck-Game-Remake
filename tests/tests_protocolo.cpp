@@ -11,8 +11,8 @@
 #include "../common/common_resolvererror.cpp"
 #include "../common/common_socket.cpp"
 #include "../common/common_thread.h"
-#include "../server/server_protocol.cpp"
 #include "../common/types/constants.h"
+#include "../server/server_protocol.cpp"
 
 
 void test_create_command() {
@@ -21,6 +21,8 @@ void test_create_command() {
     Socket socket_accepted = socketServer.accept();
     ServerProtocol serverProtocol(socket_accepted);
     LobbyProtocol lobbyProtocol(socketCliente);
+
+
     lobbyProtocol.sendCreateCommand("Pedro");
     char lobby_action;
     serverProtocol.recv_action(lobby_action);
@@ -34,6 +36,8 @@ void test_join_command() {
     Socket socket_accepted = socketServer.accept();
     ServerProtocol serverProtocol(socket_accepted);
     LobbyProtocol lobbyProtocol(socketCliente);
+
+
     lobbyProtocol.sendJoinCommand("Pedro");
     char lobby_action;
     serverProtocol.recv_action(lobby_action);
@@ -48,15 +52,14 @@ void test_receive_maps() {
     ServerProtocol serverProtocol(socket_accepted);
     LobbyProtocol lobbyProtocol(socketCliente);
 
+
     std::list<std::string> maps = {"mapa1", "mapa2", "mapa3"};
     serverProtocol.send_game_map_list(maps);
     std::vector<std::string> received_maps = lobbyProtocol.receiveMapList();
-
     assert(received_maps.size() == 3);
     assert(received_maps[0] == "mapa1");
     assert(received_maps[1] == "mapa2");
     assert(received_maps[2] == "mapa3");
-
     std::cout << "Test 3 passed" << std::endl;
 }
 
@@ -66,15 +69,13 @@ void test_send_match_creation() {
     Socket socket_accepted = socketServer.accept();
     ServerProtocol serverProtocol(socket_accepted);
     LobbyProtocol lobbyProtocol(socketCliente);
-  
+
 
     lobbyProtocol.sendMatchCreation(2, "match_name_pedro", "map_name1");
-
     uint8_t number_of_players;
     std::string map_name;
     std::string match_name;
     serverProtocol.recv_match_info(map_name, match_name, number_of_players);
-
     assert(number_of_players == 2);
     assert(map_name == "map_name1");
     assert(match_name == "match_name_pedro");
@@ -87,7 +88,7 @@ void test_receive_confirmation() {
     Socket socket_accepted = socketServer.accept();
     ServerProtocol serverProtocol(socket_accepted);
     LobbyProtocol lobbyProtocol(socketCliente);
-  
+
 
     serverProtocol.send_confirmation(true);
     int confirmation = lobbyProtocol.receiveConfirmation();
