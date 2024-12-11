@@ -1,7 +1,7 @@
 #include "LobbyWindow.h"
 #include "./ui_lobbywindow.h"
 
-LobbyWindow::LobbyWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::LobbyWindow) {
+LobbyWindow::LobbyWindow(std::shared_ptr<Socket>* skt, QWidget *parent) : QMainWindow(parent), ui(new Ui::LobbyWindow), socket(skt) {
     ui->setupUi(this);
     ui->centralWidget->setCurrentWidget(ui->firstLobbyScene);
     
@@ -68,7 +68,11 @@ void LobbyWindow::showFailedConnectionMessage() {
 }
 
 bool LobbyWindow::tryConnectServer() {
-    // TO DO: implement connection to server
+    try {
+        *this->socket = std::make_shared<Socket>(host_name.c_str(), port.c_str());
+    } catch (const std::exception& e) {
+        return false;
+    }
     return true;
 }
 

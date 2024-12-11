@@ -40,7 +40,7 @@ GameClient::GameClient(const int window_width, const int window_height,
                window_height, SDL_WINDOW_SHOWN),
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
         resourceManager(renderer),
-        //socket(server_ip.c_str(), port.c_str()),
+        socket(nullptr),
         //lobby(socket),
         messagesForServer(),
         graphic_queue(GRAPHIC_QUEUE_SIZE),
@@ -51,7 +51,7 @@ GameClient::GameClient(const int window_width, const int window_height,
         playerAmount(0),
         audioEngine(snapshot.ducks, mixer, resourceManager),
         app(argc, argv),
-        lobbyWindow() {}
+        lobbyWindow(&this->socket) {}
 
 void GameClient::run() {
     /*

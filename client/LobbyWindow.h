@@ -5,6 +5,9 @@
 #include <QMessageBox>
 
 #include <string>
+#include <memory>
+
+#include "../common/common_socket.h"
 
 const char JOIN_MATCH_ACTION = 'J';
 const char CREATE_MATCH_ACTION = 'C';
@@ -19,11 +22,13 @@ class LobbyWindow : public QMainWindow {
     Q_OBJECT
 
     public:
-        LobbyWindow(QWidget *parent = nullptr);
+        LobbyWindow(std::shared_ptr<Socket>* skt, QWidget *parent = nullptr);
         ~LobbyWindow();
 
     private:
         Ui::LobbyWindow *ui;
+
+        std::shared_ptr<Socket>* socket;
 
         std::string player_name;
         std::string host_name;

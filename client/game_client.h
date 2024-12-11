@@ -45,7 +45,7 @@ private:
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
     ResourceManager resourceManager;
-    //Socket socket;
+    std::shared_ptr<Socket> socket;
     //Lobby lobby;
     Queue<uint8_t> messagesForServer;
     Queue<Snapshot> graphic_queue;
