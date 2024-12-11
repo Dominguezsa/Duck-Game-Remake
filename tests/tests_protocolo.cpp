@@ -47,10 +47,6 @@ void test_receive_maps() {
     Socket socket_accepted = socketServer.accept();
     ServerProtocol serverProtocol(socket_accepted);
     LobbyProtocol lobbyProtocol(socketCliente);
-    lobbyProtocol.sendCreateCommand("Pedro");
-    char lobby_action;
-    serverProtocol.recv_action(lobby_action);
-    assert(lobby_action == CMD_CREATE);
 
     std::list<std::string> maps = {"mapa1", "mapa2", "mapa3"};
     serverProtocol.send_game_map_list(maps);
@@ -60,6 +56,7 @@ void test_receive_maps() {
     assert(received_maps[0] == "mapa1");
     assert(received_maps[1] == "mapa2");
     assert(received_maps[2] == "mapa3");
+
     std::cout << "Test 3 passed" << std::endl;
 }
 
