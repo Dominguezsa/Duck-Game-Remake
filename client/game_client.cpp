@@ -37,7 +37,7 @@ GameClient::GameClient(const int window_width, const int window_height,
         mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS,
               max_chunk_size_audio),
         window(window_title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width,
-               window_height, SDL_WINDOW_SHOWN),
+               window_height, SDL_WINDOW_HIDDEN),
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
         resourceManager(renderer),
         socket(nullptr),
@@ -49,10 +49,14 @@ GameClient::GameClient(const int window_width, const int window_height,
         commandCenter(messagesForServer, keyboardState, quit),
         playerAmount(0),
         audioEngine(snapshot.ducks, mixer, resourceManager),
+        client_action(LobbyAction::EXIT),
         app(argc, argv),
-        lobbyWindow(&this->socket) {}
+        lobbyWindow(&this->socket, client_action) {}
 
 void GameClient::run() {
+    if (client_action != LobbyAction::PLAY_MATCH) {
+        return;
+    }
     std::vector<Platform> platforms;
     ClientProtocol protocol(*socket);
     ThreadReceiver threadReceiver(protocol, graphic_queue);
@@ -61,6 +65,8 @@ void GameClient::run() {
     snapshot.platforms = platforms;
     threadReceiver.start();
     threadSender.start();
+
+    SDL_ShowWindow(window.Get());
     std::cout << "CLIENT: Starting the UI \n";
 
     Snapshot ducksStates = graphic_queue.pop();  // This is the first snapshot

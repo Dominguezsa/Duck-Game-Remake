@@ -1,8 +1,10 @@
 #include "LobbyWindow.h"
 #include "./ui_lobbywindow.h"
 
-LobbyWindow::LobbyWindow(std::shared_ptr<Socket>* skt, QWidget *parent) : QMainWindow(parent), ui(new Ui::LobbyWindow),
-                                                                          socket(skt), lobbyProtocol(nullptr) {
+LobbyWindow::LobbyWindow(std::shared_ptr<Socket>* skt, LobbyAction& action, QWidget *parent) : 
+             QMainWindow(parent), ui(new Ui::LobbyWindow), socket(skt),
+             lobbyProtocol(nullptr), action(action) 
+    {
     ui->setupUi(this);
     setFixedSize(this->size());
     ui->centralWidget->setCurrentWidget(ui->firstLobbyScene);
@@ -140,8 +142,10 @@ void LobbyWindow::createMatchAction() {
     }
 
     showCreateMatchMessage(success);
-    if (success)
+    if (success) {
+        this->action = LobbyAction::PLAY_MATCH;
         close();
+    }
 }
 
 void LobbyWindow::validateCreateMatchInputs() {
@@ -204,8 +208,10 @@ void LobbyWindow::joinMatchAction() {
     }
 
     showJoinMatchMessage(success);
-    if (success)
+    if (success) {
+        this->action = LobbyAction::PLAY_MATCH;
         close();
+    }
 }
 
 void LobbyWindow::setUpJoinMatchScene() {

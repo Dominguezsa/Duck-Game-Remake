@@ -9,9 +9,7 @@
 
 #include "../common/common_socket.h"
 #include "lobby_protocol.h"
-
-const char JOIN_MATCH_ACTION = 'J';
-const char CREATE_MATCH_ACTION = 'C';
+#include "types/lobby_actions.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,7 +21,7 @@ class LobbyWindow : public QMainWindow {
     Q_OBJECT
 
     public:
-        LobbyWindow(std::shared_ptr<Socket>* skt, QWidget *parent = nullptr);
+        LobbyWindow(std::shared_ptr<Socket>* skt, LobbyAction& action, QWidget *parent = nullptr);
         ~LobbyWindow();
 
     private:
@@ -31,6 +29,7 @@ class LobbyWindow : public QMainWindow {
 
         std::shared_ptr<Socket>* socket;
         std::unique_ptr<LobbyProtocol> lobbyProtocol;
+        LobbyAction& action;
 
         std::string player_name;
         std::string host_name;

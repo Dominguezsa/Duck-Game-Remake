@@ -35,6 +35,7 @@
 #include "thread_sender.h"
 #include "LobbyWindow.h"
 #include "WrapperLobbyApp.h"
+#include "types/lobby_actions.h"
 
 class GameClient {
 private:
@@ -46,7 +47,6 @@ private:
     SDL2pp::Renderer renderer;
     ResourceManager resourceManager;
     std::shared_ptr<Socket> socket;
-    //Lobby lobby;
     Queue<uint8_t> messagesForServer;
     Queue<Snapshot> graphic_queue;
     Snapshot snapshot;
@@ -56,6 +56,7 @@ private:
     CommandCenter commandCenter;
     uint8_t playerAmount;
     AudioEngine audioEngine;
+    LobbyAction client_action;
     WrapperLobbyApp app;
     LobbyWindow lobbyWindow;
 
