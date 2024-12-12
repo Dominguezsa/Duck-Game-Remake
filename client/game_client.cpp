@@ -19,7 +19,6 @@
 
 #include "../common/types/duck_state.h"
 
-#include "lobby.h"
 
 #define FPS 60
 #define OST_VOLUME 2

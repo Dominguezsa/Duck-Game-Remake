@@ -31,7 +31,6 @@
 #include "CommandCenter.h"
 #include "ResourceManager.h"
 #include "ScreenRenderer.h"
-#include "lobby.h"
 #include "protocol.h"
 #include "thread_receiver.h"
 #include "thread_sender.h"

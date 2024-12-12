@@ -135,7 +135,7 @@ void LobbyWindow::resetLoginWidgets() {
 // --------------------- Create match scene logic ---------------------
 
 void LobbyWindow::createMatchAction() {
-    bool success;
+    bool success = false;
     try {
         lobbyProtocol->sendMatchCreation(this->number_of_players, this->match_name,
                                          ui->mapList->currentText().toStdString());
@@ -202,7 +202,7 @@ void LobbyWindow::showCreateMatchMessage(bool success) {
 // --------------------- Join match scene logic ---------------------
 
 void LobbyWindow::joinMatchAction() {
-    bool success;
+    bool success = false;
     try {
         lobbyProtocol->sendMatchSelection(ui->matchList->currentText().toStdString());
         success = lobbyProtocol->receiveConfirmation();
