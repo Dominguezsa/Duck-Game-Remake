@@ -20,9 +20,11 @@ Este documento tiene como objetivo presentar la división de tareas a lo largo d
 
 
 
-#### Franco Valfré
+#### Franco Ariel Valfré
 
-
+- Planteo general de la estructura del cliente.
+- Implementación del movimiento del pato, las armas y sus balas.
+- Refactorizaciones varias del código de procesamiento de comandos del lado del server y el cliente
 
 ### Planeación del Trabajo Práctico
 
