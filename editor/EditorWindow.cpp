@@ -10,18 +10,18 @@ EditorWindow::EditorWindow(QWidget* parent):
         providers(),
         selectedPixmap(),
         map_id(),
-        mapCreatedMessageBox(this) {
-
+        mapCreatedMessageBox(this)
+    {
     ui->setupUi(this);
-    // Crear escena y vista
+
+    // Crear scene and set it to the graphics view
     ui->graphicsView->setScene(&gameMapScene);
+    setBackGroundImage();
 
-    // Escena del creador de mapas:
-
+    // Map creator scene signals:
     connect(ui->saveButton, &QPushButton::clicked, this, [this]() { saveMap(mapData); });
 
-    // Escena del menu de inputs:
-
+    // Menu scene signals:
     ui->centralWidget->setCurrentWidget(ui->dataInputScene);
 
     connect(ui->mapNameLineEdit, &QLineEdit::textChanged, this, &EditorWindow::validateInputs);
@@ -43,6 +43,16 @@ void EditorWindow::setMapInfo(std::vector<std::vector<uint8_t>>& ids_matrix, int
     this->mapSaved = &map_saved;
 }
 
+void EditorWindow::setBackGroundImage() {
+    QPixmap bkgnd("/var/duck_game/data/general/fondo.png");
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, bkgnd);
+
+    ui->dataInputScene->setAutoFillBackground(true);
+    ui->dataInputScene->setPalette(palette);
+}
+
 void EditorWindow::initMapScene() {
     matrix_ids->resize(*height, std::vector<uint8_t>(*width, 0));
     for (int row = 0; row < *height; ++row) {
@@ -55,7 +65,7 @@ void EditorWindow::initMapScene() {
         }
     }
     setSelectableImages();
-    // Conectar la señal 'clicked' de los ImageWidget a un slot
+    
     for (ImageWidget* provider: providers) {
         connect(provider, &ImageWidget::clicked, this, &EditorWindow::onImageProviderClicked);
     }
@@ -73,13 +83,10 @@ void EditorWindow::saveMap(std::string mapData) {
     mapCreatedMessageBox.setWindowTitle("Save Successful");
     mapCreatedMessageBox.setText("The map has been successfully saved!");
 
-    // Conectar el botón "OK" del QMessageBox a la acción de cerrar la ventana
     connect(&mapCreatedMessageBox, &QMessageBox::accepted, this, &QWidget::close);
-
-    // Mostrar el QMessageBox
     mapCreatedMessageBox.exec();
 
-    // Confirmamos que el mapa ha sido guardado
+    // Confirm that the map has been saved
     *mapSaved = true;
 }
 
@@ -89,7 +96,7 @@ void EditorWindow::setSelectableImages() {
 
     // Platforms:
     int row = 0;
-    QPixmap originalPlatformsImage("/var/duck_game/general/tileset-platforms-60x60.png");
+    QPixmap originalPlatformsImage("/var/duck_game/data/general/tileset-platforms-60x60.png");
     uint8_t id = 1;
 
     for (int i = 0; i < 4; i++) {
@@ -107,7 +114,7 @@ void EditorWindow::setSelectableImages() {
     }
 
     // Spawns/Boxes:
-    QPixmap originalItemsImage("/var/duck_game/general/items-75x75.png");
+    QPixmap originalItemsImage("/var/duck_game/data/general/items-75x75.png");
     row++;
     for (int i = 0; i < 3; ++i) {
         ImageWidget* imageWidget = new ImageWidget();
@@ -123,7 +130,7 @@ void EditorWindow::setSelectableImages() {
     // Collectibles:
     row++;
     int col = 0;
-    QPixmap originalCollectiblesImage("/var/duck_game/general/collectibles_36x32.png");
+    QPixmap originalCollectiblesImage("/var/duck_game/data/general/collectibles_36x32.png");
     for (int i = 0; i < 12; ++i) {
         if (i > 0 && i % 3 == 0) {
             row++;
@@ -143,23 +150,22 @@ void EditorWindow::setSelectableImages() {
 }
 
 void EditorWindow::onImageProviderClicked(ImageWidget* sender) {
-    // Lógica para manejar el clic en el proveedor de imágenes
+    // Logic to handle the selection of the image provider
     for (ImageWidget* provider: providers) {
-        provider->select(false);  // Deseleccionar todos los proveedores
+        provider->select(false);
     }
-    sender->select(true);  // Seleccionar el proveedor que fue clickeado
+    sender->select(true);
 
-    // Asignar la imagen seleccionada al QPixmap
     selectedPixmap = sender->getImage();
 }
 
 void EditorWindow::updateTileImage(int row, int col) {
     if (!selectedPixmap.isNull()) {
-        // Buscar el Tile correspondiente a la fila y columna
+        // Look for the tile that was clicked
         for (auto* item: gameMapScene.items()) {
             if (Tile* tile = dynamic_cast<Tile*>(item)) {
                 if (tile->getRow() == row && tile->getCol() == col) {
-                    // Asignar la imagen seleccionada al Tile
+                    // Assign the selected image to the tile
                     tile->setImage(selectedPixmap, map_id);
                     break;
                 }
@@ -185,12 +191,10 @@ void EditorWindow::validateInputs() {
         valid2 = true;
         *height = num2;
     }
-    // Validar tercer QLineEdit: no vacío
     if (!ui->mapNameLineEdit->text().isEmpty()) {
         valid3 = true;
         *mapName = ui->mapNameLineEdit->text().toStdString();
     }
-    // Habilitar el botón solo si todas las entradas son válidas
     ui->createMapButton->setEnabled(valid1 && valid2 && valid3);
 }
 

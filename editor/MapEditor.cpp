@@ -10,9 +10,9 @@ MapEditor::MapEditor(QApplication& _app):
         map_height(0),
         map_name(""),
         saved_map(false) {
-    window.setAutoFillBackground(true);  // Permitir que el fondo se pinte con el palette
+    window.setAutoFillBackground(true);
     QPalette palette = window.palette();
-    palette.setColor(QPalette::Window, Qt::gray);  // Establecer el fondo a negro
+    palette.setColor(QPalette::Window, Qt::gray);
     window.setPalette(palette);
 }
 

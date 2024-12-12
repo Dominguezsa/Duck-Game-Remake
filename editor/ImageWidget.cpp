@@ -30,6 +30,6 @@ bool ImageWidget::isSelectedState() const { return isSelected; }
 
 
 void ImageWidget::mousePressEvent(QMouseEvent* event) {
-    emit clicked(this, pixmap);  // Emite la imagen seleccionada
+    emit clicked(this, pixmap);
     QLabel::mousePressEvent(event);
 }

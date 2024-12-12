@@ -15,7 +15,7 @@
   </property>
   <widget class="QStackedWidget" name="centralWidget">
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="mapCreatorScene">
     <widget class="QWidget" name="gridLayoutWidget_2">
