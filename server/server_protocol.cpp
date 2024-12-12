@@ -135,4 +135,3 @@ void ServerProtocol::recv_lobby_action(char& action) {
     recv_uint_8(buf);
     action = buf;
 }
-

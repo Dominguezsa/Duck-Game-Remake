@@ -104,10 +104,7 @@ void ClientProtocol::read_msg(void* msg) {
         recv_uint_8(weapon_id);
         recv_uint_32(weapon_x);
         recv_uint_32(weapon_y);
-        Weapon weapon(
-                weapon_id,
-                Position(weapon_x,
-                         weapon_y));
+        Weapon weapon(weapon_id, Position(weapon_x, weapon_y));
         snapsho->weapons.push_back(weapon);
     }
 }

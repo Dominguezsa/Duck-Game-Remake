@@ -40,22 +40,26 @@ ResourceManager::ResourceManager(SDL2pp::Renderer& renderer): renderer(renderer)
 
 void ResourceManager::loadSFX() {
 
-    sfxPerWeapon.emplace(WeaponType::AK47,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom11.wav"));
-    sfxPerWeapon.emplace(WeaponType::Shotgun,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom12.wav"));
-    sfxPerWeapon.emplace(WeaponType::Sniper,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom5.wav"));
-    sfxPerWeapon.emplace(WeaponType::PewPewLaser,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom1.wav"));
-    sfxPerWeapon.emplace(WeaponType::LaserRifle,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom14.wav"));
-    sfxPerWeapon.emplace(WeaponType::Magnum,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom9.wav"));
-    sfxPerWeapon.emplace(WeaponType::DuelPistol,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom7.wav"));
-    sfxPerWeapon.emplace(WeaponType::CowboyPistol,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom8.wav"));
+    sfxPerWeapon.emplace(WeaponType::AK47, std::make_shared<SDL2pp::Chunk>(
+                                                   "/var/duck_game/data/audio/sfx/boom11.wav"));
+    sfxPerWeapon.emplace(WeaponType::Shotgun, std::make_shared<SDL2pp::Chunk>(
+                                                      "/var/duck_game/data/audio/sfx/boom12.wav"));
+    sfxPerWeapon.emplace(WeaponType::Sniper, std::make_shared<SDL2pp::Chunk>(
+                                                     "/var/duck_game/data/audio/sfx/boom5.wav"));
+    sfxPerWeapon.emplace(
+            WeaponType::PewPewLaser,
+            std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom1.wav"));
+    sfxPerWeapon.emplace(
+            WeaponType::LaserRifle,
+            std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom14.wav"));
+    sfxPerWeapon.emplace(WeaponType::Magnum, std::make_shared<SDL2pp::Chunk>(
+                                                     "/var/duck_game/data/audio/sfx/boom9.wav"));
+    sfxPerWeapon.emplace(
+            WeaponType::DuelPistol,
+            std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom7.wav"));
+    sfxPerWeapon.emplace(
+            WeaponType::CowboyPistol,
+            std::make_shared<SDL2pp::Chunk>("/var/duck_game/data/audio/sfx/boom8.wav"));
 
     std::cout << "Every sfx loaded correctly\n";
 }
@@ -67,14 +71,16 @@ void ResourceManager::loadMusic() {
 }
 
 void ResourceManager::loadFonts() {
-    fonts.emplace("vera", std::make_shared<SDL2pp::Font>("/var/duck_game/data/general/Vera.ttf", 12));
+    fonts.emplace("vera",
+                  std::make_shared<SDL2pp::Font>("/var/duck_game/data/general/Vera.ttf", 12));
 }
 
 void ResourceManager::loadWeaponSprites() {
     textures.emplace(
             "ak47",
             std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("/var/duck_game/data/sprites/weapons/machineguns.png")));
+                    renderer,
+                    SDL2pp::Surface("/var/duck_game/data/sprites/weapons/machineguns.png")));
 
     textures.emplace(
             "grenade",
@@ -146,9 +152,14 @@ void ResourceManager::loadMiscSprites() {
                      std::make_shared<SDL2pp::Texture>(
                              renderer, SDL2pp::Surface("/var/duck_game/data/general/tablon1.png")));
 
-    textures.emplace("next_round",
+    textures.emplace(
+            "next_round",
+            std::make_shared<SDL2pp::Texture>(
+                    renderer, SDL2pp::Surface("/var/duck_game/data/general/next_round.png")));
+
+    textures.emplace("disconnected",
                      std::make_shared<SDL2pp::Texture>(
-                             renderer, SDL2pp::Surface("/var/duck_game/data/general/next_round.png")));
+                             renderer, SDL2pp::Surface("/var/duck_game/general/disconnected.png")));
 }
 
 void ResourceManager::loadSprites(uint8_t playerAmount) {

@@ -3,8 +3,8 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
-#include "LobbyWindow.h"
 
+#include "LobbyWindow.h"
 #include "game_client.h"
 
 #define WINDOW_NAME "DuckGame"

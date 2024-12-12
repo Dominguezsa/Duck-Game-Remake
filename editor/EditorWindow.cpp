@@ -10,8 +10,7 @@ EditorWindow::EditorWindow(QWidget* parent):
         providers(),
         selectedPixmap(),
         map_id(),
-        mapCreatedMessageBox(this)
-    {
+        mapCreatedMessageBox(this) {
     ui->setupUi(this);
 
     // Crear scene and set it to the graphics view
@@ -65,7 +64,7 @@ void EditorWindow::initMapScene() {
         }
     }
     setSelectableImages();
-    
+
     for (ImageWidget* provider: providers) {
         connect(provider, &ImageWidget::clicked, this, &EditorWindow::onImageProviderClicked);
     }
@@ -96,7 +95,8 @@ void EditorWindow::setSelectableImages() {
 
     // Platforms:
     int row = 0;
-    QPixmap originalPlatformsImage("/var/duck_game/data/map-stuff/forest/tileset-platforms-60x60.png");
+    QPixmap originalPlatformsImage(
+            "/var/duck_game/data/map-stuff/forest/tileset-platforms-60x60.png");
     uint8_t id = 1;
 
     for (int i = 0; i < 4; i++) {

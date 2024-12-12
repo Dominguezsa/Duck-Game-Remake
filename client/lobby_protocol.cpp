@@ -35,7 +35,7 @@ std::vector<std::string> LobbyProtocol::receiveStringVector() {
 
 
 void LobbyProtocol::sendMatchCreation(uint8_t numPlayers, const std::string& matchName,
-                                     const std::string& mapName) {
+                                      const std::string& mapName) {
 
     send_data(&CMD_CREATE, sizeof(CMD_CREATE));
     send_data(&numPlayers, sizeof(numPlayers));
@@ -55,6 +55,4 @@ int LobbyProtocol::receiveConfirmation() {
     return confirmation;
 }
 
-void LobbyProtocol::sendMatchSelection(const std::string& matchName) {
-    send_string(matchName);
-}
+void LobbyProtocol::sendMatchSelection(const std::string& matchName) { send_string(matchName); }

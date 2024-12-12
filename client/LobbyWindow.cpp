@@ -1,14 +1,17 @@
 #include "LobbyWindow.h"
+
 #include "./ui_lobbywindow.h"
 
-LobbyWindow::LobbyWindow(std::shared_ptr<Socket>* skt, LobbyAction& action, QWidget *parent) : 
-             QMainWindow(parent), ui(new Ui::LobbyWindow), socket(skt),
-             lobbyProtocol(nullptr), action(action) 
-    {
+LobbyWindow::LobbyWindow(std::shared_ptr<Socket>* skt, LobbyAction& action, QWidget* parent):
+        QMainWindow(parent),
+        ui(new Ui::LobbyWindow),
+        socket(skt),
+        lobbyProtocol(nullptr),
+        action(action) {
     ui->setupUi(this);
     setFixedSize(this->size());
     ui->centralWidget->setCurrentWidget(ui->firstLobbyScene);
-    
+
     connectSignals();
     setBackgroundImage();
 }
@@ -37,34 +40,41 @@ void LobbyWindow::connectSignals() {
     connect(ui->playMatchButton, &QPushButton::clicked, this, [this]() {
         resetLoginWidgets();
         ui->centralWidget->setCurrentWidget(ui->loginScene);
-        });
+    });
 
     connect(ui->createMapButton, &QPushButton::clicked, this, [this]() {
         this->action = LobbyAction::CREATE_MAP;
         close();
-        });
+    });
 
     // Login scene signals:
     connect(ui->hostNameLineEdit, &QLineEdit::textChanged, this, &LobbyWindow::validateLoginInputs);
-    connect(ui->serverPortLineEdit, &QLineEdit::textChanged, this, &LobbyWindow::validateLoginInputs);
-    connect(ui->playerNameLineEdit, &QLineEdit::textChanged, this, &LobbyWindow::validateLoginInputs);
+    connect(ui->serverPortLineEdit, &QLineEdit::textChanged, this,
+            &LobbyWindow::validateLoginInputs);
+    connect(ui->playerNameLineEdit, &QLineEdit::textChanged, this,
+            &LobbyWindow::validateLoginInputs);
 
     connect(ui->confirmButton, &QPushButton::clicked, this, &LobbyWindow::confirmAction);
 
     connect(ui->joinMatchButton, &QPushButton::clicked, this, &LobbyWindow::setUpJoinMatchScene);
-    connect(ui->createMatchButton, &QPushButton::clicked, this, &LobbyWindow::setUpCreateMatchScene);
+    connect(ui->createMatchButton, &QPushButton::clicked, this,
+            &LobbyWindow::setUpCreateMatchScene);
 
     // Create match scene signals:
     ui->createButton->setEnabled(false);
     connect(ui->createButton, &QPushButton::clicked, this, &LobbyWindow::createMatchAction);
-    connect(ui->matchNameLineEdit, &QLineEdit::textChanged, this, &LobbyWindow::validateCreateMatchInputs);
-    connect(ui->numberLineEdit, &QLineEdit::textChanged, this, &LobbyWindow::validateCreateMatchInputs);
-    connect(ui->mapList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LobbyWindow::validateCreateMatchInputs);
+    connect(ui->matchNameLineEdit, &QLineEdit::textChanged, this,
+            &LobbyWindow::validateCreateMatchInputs);
+    connect(ui->numberLineEdit, &QLineEdit::textChanged, this,
+            &LobbyWindow::validateCreateMatchInputs);
+    connect(ui->mapList, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+            &LobbyWindow::validateCreateMatchInputs);
 
     // Join match scene signals:
     ui->joinButton->setEnabled(false);
     connect(ui->joinButton, &QPushButton::clicked, this, &LobbyWindow::joinMatchAction);
-    connect(ui->matchList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LobbyWindow::validateSelectedMatch);
+    connect(ui->matchList, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+            &LobbyWindow::validateSelectedMatch);
 }
 
 // --------------------- Login scene logic ---------------------
@@ -85,9 +95,10 @@ void LobbyWindow::confirmAction() {
 }
 
 void LobbyWindow::showFailedConnectionMessage() {
-    QMessageBox::warning(nullptr, "Connection failed", "Please note the following and try again:\n\n"
-                                  "- Make sure to enter a valid host name. (e.g. 'localhost')\n"
-                                  "- Make sure to enter the correct port for an active server.\n");
+    QMessageBox::warning(nullptr, "Connection failed",
+                         "Please note the following and try again:\n\n"
+                         "- Make sure to enter a valid host name. (e.g. 'localhost')\n"
+                         "- Make sure to enter the correct port for an active server.\n");
 }
 
 bool LobbyWindow::tryConnectServer() {
@@ -154,7 +165,7 @@ void LobbyWindow::createMatchAction() {
 void LobbyWindow::validateCreateMatchInputs() {
     bool valid1 = false;
     bool valid2 = false;
-    bool valid3 = ui->mapList->currentIndex() > 0; // A match must be selected
+    bool valid3 = ui->mapList->currentIndex() > 0;  // A match must be selected
 
     if (!ui->matchNameLineEdit->text().isEmpty()) {
         valid1 = true;
@@ -176,7 +187,7 @@ void LobbyWindow::receiveMapList() {
     ui->mapList->setCurrentIndex(0);
 
     std::vector<std::string> map_list = lobbyProtocol->receiveStringVector();
-    for (const std::string& map : map_list) {
+    for (const std::string& map: map_list) {
         ui->mapList->addItem(QString::fromStdString(map));
     }
 }
@@ -195,7 +206,8 @@ void LobbyWindow::showCreateMatchMessage(bool success) {
     if (success) {
         QMessageBox::information(nullptr, "Match created", "The match was created successfully.");
     } else {
-        QMessageBox::warning(nullptr, "Match creation failed", "The match could not be created. Please try again.");
+        QMessageBox::warning(nullptr, "Match creation failed",
+                             "The match could not be created. Please try again.");
     }
 }
 
@@ -227,7 +239,7 @@ void LobbyWindow::setUpJoinMatchScene() {
     ui->centralWidget->setCurrentWidget(ui->joinMatchScene);
 }
 
-void LobbyWindow::validateSelectedMatch(int index[[maybe_unused]]) {
+void LobbyWindow::validateSelectedMatch(int index [[maybe_unused]]) {
     if (ui->matchList->currentIndex() != 0) {
         ui->joinButton->setEnabled(true);
     } else {
@@ -238,27 +250,27 @@ void LobbyWindow::validateSelectedMatch(int index[[maybe_unused]]) {
 
 void LobbyWindow::receiveMatchList() {
     std::vector<std::string> match_list = lobbyProtocol->receiveStringVector();
-    
+
     ui->matchList->clear();
     ui->matchList->addItem("Select a match");
     ui->matchList->setCurrentIndex(0);
-    
-    for (const std::string& match : match_list) {
+
+    for (const std::string& match: match_list) {
         ui->matchList->addItem(QString::fromStdString(match));
     }
 }
 
 void LobbyWindow::showJoinMatchMessage(bool success) {
     if (success) {
-        QMessageBox::information(nullptr, "Match joined", "You have joined the match successfully.");
+        QMessageBox::information(nullptr, "Match joined",
+                                 "You have joined the match successfully.");
     } else {
-        QMessageBox::warning(nullptr, "Match join failed", "The match could not be joined. Please try again.");
+        QMessageBox::warning(nullptr, "Match join failed",
+                             "The match could not be joined. Please try again.");
         ui->matchList->setCurrentIndex(0);
     }
 }
 
 // --------------------- Destructor ---------------------
 
-LobbyWindow::~LobbyWindow() {
-    delete ui;
-}
+LobbyWindow::~LobbyWindow() { delete ui; }

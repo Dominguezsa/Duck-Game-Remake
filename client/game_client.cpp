@@ -30,7 +30,8 @@
 
 GameClient::GameClient(const int window_width, const int window_height,
                        const std::string& window_title, const int max_chunk_size_audio,
-                       const std::string& server_ip[[maybe_unused]], const std::string& port[[maybe_unused]], int argc, char* argv[]):
+                       const std::string& server_ip [[maybe_unused]],
+                       const std::string& port [[maybe_unused]], int argc, char* argv[]):
         quit(false),
         sdl(SDL_INIT_VIDEO),
         ttf(),
@@ -94,8 +95,13 @@ void GameClient::run() {
     try {
         int iteration = 0;
         while (true) {
-            updateDuckStates();
-            mainLoop(iteration);
+            if (updateDuckStates() == 0) {
+                screenRenderer.show_disconnected();
+                sleep(2);
+                break;
+            } else {
+                mainLoop(iteration);
+            }
             if (round_finished()) {
                 std::cout << "CLIENT: Round finished\n";
                 screenRenderer.show_next_round();
@@ -124,6 +130,8 @@ void GameClient::run() {
             t1_ms += rate;
             iteration += 1;
         }
+    } catch (const std::runtime_error& e) {
+        std::cout << "exiting the game party is over\n";
     } catch (...) {
         std::cout << "Error in the main loop\n";
         std::cout << "exiting the game by error\n";
@@ -142,8 +150,8 @@ void GameClient::run_lobby() {
     do {
         client_action = LobbyAction::EXIT;
         this->lobbyWindow.show();
-        
-        // Check exit code value to know if a QT error ocurred 
+
+        // Check exit code value to know if a QT error ocurred
         if (this->app.exec() != 0) {
             client_action = LobbyAction::EXIT;
             break;
@@ -172,15 +180,18 @@ int GameClient::exec_map_editor() {
     return process.exitCode();
 }
 
-void GameClient::updateDuckStates() {
+int GameClient::updateDuckStates() {
 
     Snapshot snapshot_from_queue;
     try {
-
+        if (!graphic_queue.try_pop(snapshot_from_queue)) {
+            return 0;
+        }
         while (graphic_queue.try_pop(snapshot_from_queue)) {}
 
         snapshot.updateSnapshot(snapshot_from_queue.ducks, snapshot_from_queue.bullets,
                                 snapshot_from_queue.weapons);
+        return 1;
     } catch (...) {
         std::cout << "Error updating duck states\n";
         std::cout << "exiting the game by error\n";

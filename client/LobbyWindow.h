@@ -3,66 +3,66 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
-
-#include <string>
 #include <memory>
+#include <string>
 
 #include "../common/common_socket.h"
-#include "lobby_protocol.h"
 #include "types/lobby_actions.h"
+
+#include "lobby_protocol.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-    class LobbyWindow;
+class LobbyWindow;
 }
 QT_END_NAMESPACE
 
-class LobbyWindow : public QMainWindow {
+class LobbyWindow: public QMainWindow {
     Q_OBJECT
 
-    public:
-        LobbyWindow(std::shared_ptr<Socket>* skt, LobbyAction& action, QWidget *parent = nullptr);
-        ~LobbyWindow();
+public:
+    LobbyWindow(std::shared_ptr<Socket>* skt, LobbyAction& action, QWidget* parent = nullptr);
+    ~LobbyWindow();
 
-    private:
-        Ui::LobbyWindow *ui;
+private:
+    Ui::LobbyWindow* ui;
 
-        std::shared_ptr<Socket>* socket;
-        std::unique_ptr<LobbyProtocol> lobbyProtocol;
-        LobbyAction& action;
+    std::shared_ptr<Socket>* socket;
+    std::unique_ptr<LobbyProtocol> lobbyProtocol;
+    LobbyAction& action;
 
-        std::string player_name;
-        std::string host_name;
-        std::string port;
-        
-        // For create match action
-        std::string match_name;
-        int number_of_players;
-    
-    private:
-        void validateLoginInputs();
-        void validateCreateMatchInputs();
+    std::string player_name;
+    std::string host_name;
+    std::string port;
 
-        void confirmAction();
-        void createMatchAction();
-        void joinMatchAction();
-        void connectSignals();
+    // For create match action
+    std::string match_name;
+    int number_of_players;
 
-        void resetLoginWidgets();
+private:
+    void validateLoginInputs();
+    void validateCreateMatchInputs();
 
-        bool tryConnectServer();
-        void receiveMatchList();
-        void receiveMapList();
+    void confirmAction();
+    void createMatchAction();
+    void joinMatchAction();
+    void connectSignals();
 
-        void showFailedConnectionMessage();
-        void showCreateMatchMessage(bool success);
-        void showJoinMatchMessage(bool success);
+    void resetLoginWidgets();
 
-        void setUpCreateMatchScene();
-        void setUpJoinMatchScene();
-        void setBackgroundImage();
-    
-    public slots:
-        void validateSelectedMatch(int index);
+    bool tryConnectServer();
+    void receiveMatchList();
+    void receiveMapList();
+
+    void showFailedConnectionMessage();
+    void showCreateMatchMessage(bool success);
+    void showJoinMatchMessage(bool success);
+
+    void setUpCreateMatchScene();
+    void setUpJoinMatchScene();
+    void setBackgroundImage();
+
+public slots:
+    void validateSelectedMatch(int index);
 };
-#endif // LOBBYWINDOW_H
+#endif  // LOBBYWINDOW_H
