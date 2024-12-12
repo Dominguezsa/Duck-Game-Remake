@@ -2,17 +2,14 @@
 
 ## Cómo correr el proyecto
 
-Para instalar el juego, correr dentro de la carpeta "/instalador" el script install.sh de la siguiente forma:
+Para instalar el juego, una vez clonado el repositorio, correr en el directorio raíz:
 
 ```bash
-chmod +x install.sh
+sudo bash ./install.sh
 ```
 
-```bash
-sh install.sh
-```
+Que corre los scripts para descargar las dependencias necesarias. Ante posibles causas de errores, hacer lo siguiente:
 
-Que corre los scripts para descargar las dependencias necesarias
 
 ## Ejecución
 
@@ -33,6 +30,27 @@ sudo map_editor
 ```
 
 -------------------------------------------------------------
-### IMPORTANTE
+### Manejo del editor de mapas
 
-No probar las siguientes armas porque no estan implementadas y crashean el juego: granada, banana,
+A continuación se detallan las referencias de las imagenes que se utilizan en el editor de mapas:
+
+
+| Imagen                           | Utilización                  |
+|----------------------------------|------------------------------|
+| <img src="img/respawn.png" width="100"/> | Respawn del jugador |
+| <img src="img/ak47.png" width="100"/> | AK47 |
+| <img src="img/shotgun.png" width="100"/> | Escopeta |
+| <img src="img/sniper.png" width="100"/> | Francotirador |
+| <img src="img/cowboy.png" width="100"/> | CowboyGun |
+| <img src="img/duelingGun.png" width="100"/> | DuelingGun |
+| <img src="img/laserGun.png" width="100"/> | LaserGun |
+| <img src="img/laserRifle.png" width="100"/> | LaserRifle |
+| <img src="img/magnum.png" width="100"/> | Magnum |
+| <img src="img/helmet.png" width="100"/> | Casco (en desarrollo) |
+| <img src="img/armor.png" width="100"/> | Armadura (en desarrollo) |
+| <img src="img/banana.png" width="100"/> | Banana (en desarrollo) |
+| <img src="img/grenade.png" width="100"/> | Grenade(en desarrollo) |
+
+
+
+
