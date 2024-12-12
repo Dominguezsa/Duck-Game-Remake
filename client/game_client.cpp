@@ -31,7 +31,7 @@
 GameClient::GameClient(const int window_width, const int window_height,
                        const std::string& window_title, const int max_chunk_size_audio,
                        const std::string& server_ip [[maybe_unused]],
-                       const std::string& port [[maybe_unused]], int argc, char* argv[]):
+                       const std::string& port [[maybe_unused]], int& argc, char** argv):
         quit(false),
         sdl(SDL_INIT_VIDEO),
         ttf(),
