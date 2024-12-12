@@ -4,9 +4,30 @@
 LobbyWindow::LobbyWindow(std::shared_ptr<Socket>* skt, QWidget *parent) : QMainWindow(parent), ui(new Ui::LobbyWindow),
                                                                           socket(skt), lobbyProtocol(nullptr) {
     ui->setupUi(this);
+    setFixedSize(this->size());
     ui->centralWidget->setCurrentWidget(ui->firstLobbyScene);
     
     connectSignals();
+    setBackgroundImage();
+}
+
+void LobbyWindow::setBackgroundImage() {
+    QPixmap bkgnd("/var/duck_game/data/general/fondo.png");
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, bkgnd);
+
+    ui->createMatchScene->setAutoFillBackground(true);
+    ui->createMatchScene->setPalette(palette);
+
+    ui->joinMatchScene->setAutoFillBackground(true);
+    ui->joinMatchScene->setPalette(palette);
+
+    ui->firstLobbyScene->setAutoFillBackground(true);
+    ui->firstLobbyScene->setPalette(palette);
+
+    ui->loginScene->setAutoFillBackground(true);
+    ui->loginScene->setPalette(palette);
 }
 
 void LobbyWindow::connectSignals() {

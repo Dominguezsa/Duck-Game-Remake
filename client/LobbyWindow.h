@@ -61,6 +61,7 @@ class LobbyWindow : public QMainWindow {
 
         void setUpCreateMatchScene();
         void setUpJoinMatchScene();
+        void setBackgroundImage();
     
     public slots:
         void validateSelectedMatch(int index);
