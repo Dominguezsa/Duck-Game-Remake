@@ -24,7 +24,7 @@ void Tile::setImage(const QPixmap& pixmap, std::map<uint8_t, QPixmap>& map_id) {
     } else {
         // Si la imagen es distinta o si actualmente no hay imagen, la configuramos
         imagePixmap = pixmap;
-        // cpp-check-suppress unassignedVariable
+        // cppcheck-suppress unassignedVariable
         for (auto& [id, image]: map_id) {
             if (image.cacheKey() == pixmap.cacheKey()) {
                 image_id = id;
