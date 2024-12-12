@@ -21,7 +21,7 @@ private:
     MapInfo map_info;
 
 public:
-    explicit Match(uint8_t limit, MapInfo map_info);
+    explicit Match(uint8_t limit, const MapInfo& map_info);
     bool remove_player_if_in_match(const uint8_t& id);
     void add_player(Queue<std::shared_ptr<Snapshot>>* q, DuckIdentity& duck_info);
     Queue<GameloopMessage>* get_gameloop_queue();

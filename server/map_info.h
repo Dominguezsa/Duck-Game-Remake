@@ -10,17 +10,17 @@ public:
     std::vector<Respawn> respawns;
     std::vector<weapons_in_map> weapons;
 
-    MapInfo(std::vector<Platform> platforms, std::vector<Respawn> respawns,
+    MapInfo(const std::vector<Platform>& platforms, const std::vector<Respawn>& respawns,
             const std::vector<weapons_in_map>& weapons):
             platforms(platforms), respawns(respawns), weapons(weapons) {}
 
     MapInfo() {}
 
-    void addPlatform(Platform platform) { platforms.push_back(platform); }
+    void addPlatform(const Platform& platform) { platforms.push_back(platform); }
 
-    void addRespawn(Respawn respawn) { respawns.push_back(respawn); }
+    void addRespawn(const Respawn& respawn) { respawns.push_back(respawn); }
 
-    void addWeapon(weapons_in_map weapon) { weapons.push_back(weapon); }
+    void addWeapon(const weapons_in_map& weapon) { weapons.push_back(weapon); }
 };
 
 #endif  // MAP_INFO_H

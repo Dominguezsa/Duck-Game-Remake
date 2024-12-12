@@ -5,7 +5,7 @@
 
 #define MAX_SIZE_QUEUE 50
 
-Match::Match(uint8_t limit, MapInfo map_info):
+Match::Match(uint8_t limit, const MapInfo& map_info):
         gameloop_queue(MAX_SIZE_QUEUE),
         game(state_monitor, gameloop_queue, map_info),
         state_monitor(limit),

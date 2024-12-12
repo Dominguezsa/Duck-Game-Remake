@@ -86,7 +86,8 @@ private:
 
 
 public:
-    explicit Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue, MapInfo& map_info);
+    explicit Game(MatchStateMonitor& monitor, Queue<GameloopMessage>& queue,
+                  const MapInfo& map_info);
 
     /* Pos: Adds a player to the game and initializes its duck.
             The duck's initial position is set to the initial_pos_x and initial_pos_y

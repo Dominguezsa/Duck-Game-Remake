@@ -32,7 +32,7 @@
 
 #define WEAPON_RECT 64
 
-Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue, MapInfo& _map_info):
+Game::Game(MatchStateMonitor& _monitor, Queue<GameloopMessage>& queue, const MapInfo& _map_info):
         weapons(),
         message_queue(queue),
         is_running(false),
@@ -162,6 +162,7 @@ void Game::updateDuckVerticalPosition(Duck* duck) {
             duck->position.x + DUCK_WIDTH > platform.x &&
             duck->position.y < platform.y + platform.height &&
             duck->position.y + DUCK_HEIGHT > platform.y - 5) {
+            // cppcheck-suppress useStlAlgorithm
             above_platform = true;
         }
     }

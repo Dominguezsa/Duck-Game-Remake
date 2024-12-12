@@ -11,7 +11,7 @@ void ReceiverThread::run() {
             protocol.recv_duck_action(msg.action);
             gameloop_queue.push(msg);
         }
-    } catch (std::exception& e) {
+    } catch (const std::exception& e) {
         this->_is_alive = false;
     }
 }
