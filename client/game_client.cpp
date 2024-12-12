@@ -156,6 +156,7 @@ void GameClient::run_lobby() {
             client_action = LobbyAction::EXIT;
             break;
         }
+        // cppcheck-suppress knownConditionTrueFalse
         if (client_action == LobbyAction::CREATE_MAP) {
             // Check if the map editor was closed by an error
             if (exec_map_editor() != 0) {

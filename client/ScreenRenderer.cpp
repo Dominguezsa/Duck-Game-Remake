@@ -152,7 +152,7 @@ void ScreenRenderer::copyBullets(const std::vector<Bullet>& bullets) {
                       SDL2pp::NullOpt, SDL_FLIP_NONE);
     }
 }
-
+/*
 void ScreenRenderer::copy_lines() {
     int screen_width = 1250;
     int screen_height = 750;
@@ -174,7 +174,7 @@ void ScreenRenderer::copy_lines() {
         SDL_RenderDrawLine(renderer.Get(), 0, y, screen_width, y);
     }
 }
-
+*/
 
 void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     renderer.Clear();

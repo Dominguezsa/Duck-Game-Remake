@@ -1,5 +1,7 @@
 #include "LobbyWindow.h"
 
+#include <vector>
+
 #include "./ui_lobbywindow.h"
 
 LobbyWindow::LobbyWindow(std::shared_ptr<Socket>* skt, LobbyAction& action, QWidget* parent):

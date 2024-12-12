@@ -75,7 +75,7 @@ TEST_F(TestProtocol, TestCreateCommandCheck) {
     EXPECT_EQ(player_name, "Pedro");
 }
 
-
+// cpp-check-suppress syntaxError
 TEST_F(TestProtocol, TestJoinCommandCheck) {
     lobbyProtocol.sendJoinCommand("Pedro");
     char lobby_action;

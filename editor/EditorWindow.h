@@ -56,9 +56,8 @@ private:
     void goToCreateMapScene();
     void initMapScene();
     void setBackGroundImage();
-    // cppcheck-suppress unknownMacro
 public slots:
-    void saveMap(std::string mapData);
+    void saveMap(const std::string& mapData);
 
 private slots:
     void onImageProviderClicked(ImageWidget* sender);

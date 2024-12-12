@@ -75,7 +75,7 @@ void EditorWindow::goToCreateMapScene() {
     ui->centralWidget->setCurrentWidget(ui->mapCreatorScene);
 }
 
-void EditorWindow::saveMap(std::string mapData) {
+void EditorWindow::saveMap(const std::string& mapData) {
     emit mapCreated(mapData);
 
     mapCreatedMessageBox.setIcon(QMessageBox::Information);
