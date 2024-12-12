@@ -24,6 +24,7 @@
 #define FPS 60
 #define OST_VOLUME 2
 #define SFX_VOLUME 5
+#define UNDEFINED_WAITING_TIME -1
 
 #define GRAPHIC_QUEUE_SIZE 50
 
@@ -138,11 +139,39 @@ bool GameClient::round_finished() {
     return alive_ducks <= 1;
 }
 
-int GameClient::run_lobby() {
-    this->lobbyWindow.show();
-    return this->app.exec();
+void GameClient::run_lobby() {
+    do {
+        client_action = LobbyAction::EXIT;
+        this->lobbyWindow.show();
+        
+        // Check exit code value to know if a QT error ocurred 
+        if (this->app.exec() != 0) {
+            client_action = LobbyAction::EXIT;
+            break;
+        }
+        if (client_action == LobbyAction::CREATE_MAP) {
+            // Check if the map editor was closed by an error
+            if (exec_map_editor() != 0) {
+                client_action = LobbyAction::EXIT;
+                break;
+            }
+        }
+    } while (client_action != LobbyAction::PLAY_MATCH && client_action != LobbyAction::EXIT);
 }
 
+int GameClient::exec_map_editor() {
+    QString program = "build/map_editor";
+    this->process.start(program, QStringList(), QIODevice::ReadWrite);
+    if (!this->process.waitForStarted()) {
+        std::cerr << "Editor program process failed to start" << std::endl;
+        return -1;
+    }
+    if (!this->process.waitForFinished(UNDEFINED_WAITING_TIME)) {
+        std::cerr << "Editor program process failed to finish" << std::endl;
+        return -1;
+    }
+    return process.exitCode();
+}
 
 void GameClient::updateDuckStates() {
 

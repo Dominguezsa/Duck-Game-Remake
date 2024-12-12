@@ -17,6 +17,8 @@
 #include <SDL2pp/Window.hh>
 
 #include <QApplication>
+#include <QProcess>
+#include <QString>
 
 #include "../common/common_queue.h"
 #include "../common/common_socket.h"
@@ -59,6 +61,7 @@ private:
     LobbyAction client_action;
     WrapperLobbyApp app;
     LobbyWindow lobbyWindow;
+    QProcess process;
 
 
 public:
@@ -68,11 +71,12 @@ public:
     ~GameClient();
     void run();
     void receive_platforms_first_time();
-    int run_lobby();
+    void run_lobby();
     void updateDuckStates();
     void input_thread();
     bool round_finished();
     void mainLoop(const int it);
+    int exec_map_editor();
 };
 
 #endif

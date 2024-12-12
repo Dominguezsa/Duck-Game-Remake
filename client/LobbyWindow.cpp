@@ -35,10 +35,14 @@ void LobbyWindow::setBackgroundImage() {
 void LobbyWindow::connectSignals() {
     // First lobby scene signals:
     connect(ui->playMatchButton, &QPushButton::clicked, this, [this]() {
+        resetLoginWidgets();
         ui->centralWidget->setCurrentWidget(ui->loginScene);
         });
 
-    // TO DO: createMapButton signals
+    connect(ui->createMapButton, &QPushButton::clicked, this, [this]() {
+        this->action = LobbyAction::CREATE_MAP;
+        close();
+        });
 
     // Login scene signals:
     connect(ui->hostNameLineEdit, &QLineEdit::textChanged, this, &LobbyWindow::validateLoginInputs);
@@ -49,7 +53,6 @@ void LobbyWindow::connectSignals() {
 
     connect(ui->joinMatchButton, &QPushButton::clicked, this, &LobbyWindow::setUpJoinMatchScene);
     connect(ui->createMatchButton, &QPushButton::clicked, this, &LobbyWindow::setUpCreateMatchScene);
-    resetLoginWidgets();
 
     // Create match scene signals:
     ui->createButton->setEnabled(false);
