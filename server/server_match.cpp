@@ -1,6 +1,8 @@
 #include "server_match.h"
 
+#include <chrono>
 #include <memory>
+#include <thread>
 #include <vector>
 
 #define MAX_SIZE_QUEUE 50
@@ -19,22 +21,31 @@ bool Match::remove_player_if_in_match(const uint8_t& id) {
     return removed;
 }
 
-bool Match::can_accept_players() { return !state_monitor.playing_status(); }
+bool Match::can_accept_players() { return state_monitor.status != MatchStatus::Playing;}
 
 void Match::add_player(Queue<std::shared_ptr<Snapshot>>* q, DuckIdentity& duck_info) {
     state_monitor.add_player(q, duck_info.id);
     game.addPlayer(duck_info, map_info);
-    if (state_monitor.playing_status()) {
+    if (state_monitor.status == MatchStatus::Playing) {
         std::cout << "Match NOW PLAYING\n";
         initialize_game();
     }
 }
 
-void Match::initialize_game() { game.start(); }
+void Match::initialize_game() {
+    game.start();
+
+    // state_monitor.end_game();
+}
 
 Queue<GameloopMessage>* Match::get_gameloop_queue() { return &gameloop_queue; }
 
-bool Match::is_finished() { return state_monitor.finished_status(); }
+bool Match::is_finished() { 
+    if (!game.is_alive()) {
+        state_monitor.status = MatchStatus::Finished;
+        state_monitor.killed = true;
+    }
+    return game.is_alive(); }
 
 void Match::stop_game() {
     game.stop();

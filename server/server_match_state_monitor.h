@@ -21,9 +21,10 @@ private:
     std::unordered_map<uint8_t, Queue<std::shared_ptr<Snapshot>>*> requester_queues;
     std::atomic<bool> accepting_players;
     std::atomic<uint8_t> player_count;
-    std::atomic<MatchStatus> status;
 
 public:
+    bool killed = false;
+    std::atomic<MatchStatus> status;
     explicit MatchStateMonitor(uint8_t limit);
 
     /* Pos: Adds a player to the queue and increments the player count.
@@ -37,10 +38,6 @@ public:
 
     // Pos: Broadcasts the current state of the duck to all players.
     void push_to_all(std::shared_ptr<Snapshot> duck_snapshot);
-
-    bool playing_status();
-
-    bool finished_status();
 
     void stop_match();
 };

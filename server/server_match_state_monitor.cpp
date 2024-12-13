@@ -29,15 +29,12 @@ void MatchStateMonitor::add_player(Queue<std::shared_ptr<Snapshot>>* q, uint8_t&
     }
 }
 
-bool MatchStateMonitor::playing_status() { return status == MatchStatus::Playing; }
-
-bool MatchStateMonitor::finished_status() { return status == MatchStatus::Finished; }
-
 void MatchStateMonitor::stop_match() {
     std::lock_guard<std::mutex> lock(data_mtx);
     status = MatchStatus::Finished;
     accepting_players = false;
     requester_queues.clear();
+    killed = true;
 }
 
 bool MatchStateMonitor::remove_player_if_present(const uint8_t& id) {
