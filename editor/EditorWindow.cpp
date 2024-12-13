@@ -95,8 +95,7 @@ void EditorWindow::setSelectableImages() {
 
     // Platforms:
     int row = 0;
-    QPixmap originalPlatformsImage(
-            "/var/duck_game/map-stuff/forest/tileset-platforms-60x60.png");
+    QPixmap originalPlatformsImage("/var/duck_game/map-stuff/forest/tileset-platforms-60x60.png");
     uint8_t id = 1;
 
     for (int i = 0; i < 4; i++) {

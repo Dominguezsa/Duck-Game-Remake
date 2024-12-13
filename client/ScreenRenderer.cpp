@@ -88,7 +88,7 @@ void ScreenRenderer::copyBackground() {
     renderer.Copy(background_texture, SDL2pp::NullOpt, SDL2pp::NullOpt);
 }
 
-
+/*
 void ScreenRenderer::copyDebugText(const std::vector<DuckState>& ducks) {
     // Debug text
     for (int i = 0; i < (int)ducks.size(); ++i) {
@@ -115,7 +115,7 @@ void ScreenRenderer::copyDebugText(const std::vector<DuckState>& ducks) {
                       SDL2pp::Rect(0, i * 20, text_sprite.GetWidth(), text_sprite.GetHeight()));
     }
 }
-
+*/
 void ScreenRenderer::copyWeapons(const std::vector<Weapon>& weapons) {
     for (int i = 0; i < (int)weapons.size(); i++) {
         SDL2pp::Texture& weapon_texture =
@@ -182,7 +182,7 @@ void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     copyPlatforms(snapshot.platforms);
     // copy_lines();
     copyDucks(snapshot.ducks, it);  // aca tambien se copian las armas si las portan los patos
-    copyDebugText(snapshot.ducks);
+    // copyDebugText(snapshot.ducks);
     copyWeapons(snapshot.weapons);  // aca se copian las armas que estan en el suelo para pickear
     copyBullets(snapshot.bullets);
     renderer.Present();
@@ -201,6 +201,7 @@ void ScreenRenderer::show_disconnected() {
     renderer.Clear();
     copyBackground();
     SDL2pp::Texture& disconnected_texture = *resourceManager.getTexture("disconnected");
-    renderer.Copy(disconnected_texture, SDL2pp::Rect(0, 0, 406, 187), SDL2pp::Rect(422, 281, 406, 187));
+    renderer.Copy(disconnected_texture, SDL2pp::Rect(0, 0, 406, 187),
+                  SDL2pp::Rect(422, 281, 406, 187));
     renderer.Present();
 }
