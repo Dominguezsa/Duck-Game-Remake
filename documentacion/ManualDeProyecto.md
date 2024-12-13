@@ -16,9 +16,11 @@ Este documento tiene como objetivo presentar la división de tareas a lo largo d
 - Planteo inicial de la implementación gráfica del lobby.
 
 
-#### Franco Rodriguez
+#### Franco Agustin Rodriguez
 
-
+- Estructura inicial del servidor.
+- Implementación del editor de mapas.
+- Diseño final del lobby gráfico.
 
 #### Franco Ariel Valfré
 
