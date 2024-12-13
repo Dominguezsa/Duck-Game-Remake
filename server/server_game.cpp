@@ -365,6 +365,14 @@ void Game::startNewRound() {
     // Reset all ducks to initial positions
     for (auto& duck_pair: ducks) {
         Position initial_pos{100 + (duck_pair.first * 100), 100};
+        try {
+            int x = map_info.respawns[duck_pair.first].x;
+            int y = map_info.respawns[duck_pair.first].y -
+                    20;  // el menos 20 es para evitar colision con plataforma
+            initial_pos = Position{x, y};
+        } catch (const std::exception& e) {
+            std::cout << "not enough respawns for all players" << std::endl;
+        }
         Weapon initial_weapon;
         duck_pair.second = std::make_unique<Duck>(duck_pair.first, 100, 1, initial_pos,
                                                   initial_weapon, duck_pair.second->name);
