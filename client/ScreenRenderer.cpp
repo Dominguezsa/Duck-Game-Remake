@@ -201,6 +201,6 @@ void ScreenRenderer::show_disconnected() {
     renderer.Clear();
     copyBackground();
     SDL2pp::Texture& disconnected_texture = *resourceManager.getTexture("disconnected");
-    renderer.Copy(disconnected_texture, SDL2pp::NullOpt, SDL2pp::Rect(200, 150, 606, 337));
+    renderer.Copy(disconnected_texture, SDL2pp::Rect(0, 0, 406, 187), SDL2pp::Rect(422, 281, 406, 187));
     renderer.Present();
 }

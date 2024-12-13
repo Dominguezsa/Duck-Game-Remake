@@ -70,7 +70,7 @@ public:
     void run();
     void receive_platforms_first_time();
     void run_lobby();
-    int updateDuckStates();
+    void updateDuckStates(int& it);
     void input_thread();
     bool round_finished();
     void mainLoop(const int it);

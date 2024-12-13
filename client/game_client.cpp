@@ -94,8 +94,10 @@ void GameClient::run() {
 
     try {
         int iteration = 0;
+        int it = 0;
         while (true) {
-            if (updateDuckStates() == 0) {
+            updateDuckStates(it);
+            if (it > 10) {
                 screenRenderer.show_disconnected();
                 sleep(2);
                 break;
@@ -181,15 +183,19 @@ int GameClient::exec_map_editor() {
     return process.exitCode();
 }
 
-int GameClient::updateDuckStates() {
+void GameClient::updateDuckStates(int& it) {
 
     Snapshot snapshot_from_queue;
     try {
+        if (!graphic_queue.try_pop(snapshot_from_queue)) {
+            it++;
+            return;
+        }
         while (graphic_queue.try_pop(snapshot_from_queue)) {}
 
         snapshot.updateSnapshot(snapshot_from_queue.ducks, snapshot_from_queue.bullets,
                                 snapshot_from_queue.weapons);
-        return 1;
+        it = 0;
     } catch (...) {
         std::cout << "Error updating duck states\n";
         std::cout << "exiting the game by error\n";
