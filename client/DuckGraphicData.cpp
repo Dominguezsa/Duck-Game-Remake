@@ -33,6 +33,11 @@ void DuckGraphicData::update_current_frame(int it) {
 }
 
 void DuckGraphicData::update_current_animation() {
+    if (!my_duck.is_alive) {
+        current_animation = "duck_sliding";
+        current_arm_animation = "empty";
+        return;
+    }
     if (my_duck.in_air && my_duck.is_sliding) {
         current_animation = "duck_sliding_air";
         current_arm_animation = "empty";

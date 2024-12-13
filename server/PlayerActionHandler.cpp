@@ -34,6 +34,9 @@ void PlayerActionHandler::process_player_action(const GameloopMessage& msg) {
         return;
 
     Duck* duck = it->second.get();
+    if (!duck->is_alive) {
+        return;
+    }
 
     // action_handlers.at(key)(*this);
     // No se si hacerlo así para evitar las excepciones
