@@ -43,7 +43,7 @@ void EditorWindow::setMapInfo(std::vector<std::vector<uint8_t>>& ids_matrix, int
 }
 
 void EditorWindow::setBackGroundImage() {
-    QPixmap bkgnd("/var/duck_game/data/general/fondo.png");
+    QPixmap bkgnd("/var/duck_game/general/fondo.png");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Window, bkgnd);
@@ -96,7 +96,7 @@ void EditorWindow::setSelectableImages() {
     // Platforms:
     int row = 0;
     QPixmap originalPlatformsImage(
-            "/var/duck_game/data/map-stuff/forest/tileset-platforms-60x60.png");
+            "/var/duck_game/map-stuff/forest/tileset-platforms-60x60.png");
     uint8_t id = 1;
 
     for (int i = 0; i < 4; i++) {
@@ -114,7 +114,7 @@ void EditorWindow::setSelectableImages() {
     }
 
     // Spawns/Boxes:
-    QPixmap originalItemsImage("/var/duck_game/data/map-stuff/items-75x75.png");
+    QPixmap originalItemsImage("/var/duck_game/map-stuff/items-75x75.png");
     row++;
     for (int i = 0; i < 3; ++i) {
         ImageWidget* imageWidget = new ImageWidget();
@@ -130,7 +130,7 @@ void EditorWindow::setSelectableImages() {
     // Collectibles:
     row++;
     int col = 0;
-    QPixmap originalCollectiblesImage("/var/duck_game/data/map-stuff/collectibles_36x32.png");
+    QPixmap originalCollectiblesImage("/var/duck_game/map-stuff/collectibles_36x32.png");
     for (int i = 0; i < 12; ++i) {
         if (i > 0 && i % 3 == 0) {
             row++;
