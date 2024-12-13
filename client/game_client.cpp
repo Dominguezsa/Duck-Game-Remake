@@ -185,9 +185,6 @@ int GameClient::updateDuckStates() {
 
     Snapshot snapshot_from_queue;
     try {
-        if (!graphic_queue.try_pop(snapshot_from_queue)) {
-            return 0;
-        }
         while (graphic_queue.try_pop(snapshot_from_queue)) {}
 
         snapshot.updateSnapshot(snapshot_from_queue.ducks, snapshot_from_queue.bullets,
