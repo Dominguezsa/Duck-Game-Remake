@@ -8,6 +8,12 @@ Para instalar el juego, una vez clonado el repositorio, correr en el directorio 
 sudo bash ./install.sh
 ```
 
+```bash
+sudo chown $USER:$USER /var/duck_game/maps
+```
+Este último comando sirve para que el cliente, al abrir el editor desde el programa del cliente, pueda utilizar el editor y el mapa creado se pueda guardar correctamente.
+
+
 Que corre los scripts para descargar las dependencias necesarias. Ante posibles causas de errores, hacer lo siguiente:
 
 
