@@ -52,7 +52,9 @@ void AcceptorThread::run() {
     try {
         while (this->_is_alive) {
             accept_connection();
+            std::cout << "accept here 1\n";
             check_unused_resources();
+            std::cout << "This should appear after creating or joining 1\n";
         }
     } catch (const std::exception& err) {
         if (this->_is_alive) {

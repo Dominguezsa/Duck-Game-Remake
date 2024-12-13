@@ -166,7 +166,6 @@ void ClientSession::get_available_maps(std::list<std::string>& map_list) {
                 if (map_node["name"]) {
                     std::string map_name = map_node["name"].as<std::string>();
                     map_list.push_back(map_name);
-                    std::cout << "Mapa cargado: " << map_name << std::endl;
                 } else {
                     std::cerr << "Advertencia: El archivo " << entry.path().filename()
                               << " no contiene un campo 'name'." << std::endl;
