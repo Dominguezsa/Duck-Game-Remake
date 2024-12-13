@@ -60,3 +60,7 @@ https://github.com/eldipa/sockets-en-cpp
 Para garantizar el correcto uso de las bibliotecas SDL2 y Qt, se utilizó como principal referencia la documentación oficial de ambas. Estas fuentes proporcionaron información detallada y ejemplos claros que resultaron fundamentales para comprender las funcionalidades disponibles y aplicarlas de manera adecuada en el proyecto.
 
 Además, los tutoriales de YouTube fueron un recurso complementario fundamental, ya que ofrecieron explicaciones visuales y ejemplos prácticos que facilitaron la comprensión de conceptos más complejos. Por su parte, StackOverflow fue de gran ayuda para resolver problemas puntuales, al ofrecer soluciones específicas basadas en las experiencias de otros desarrolladores.
+
+Manual de usuario en edición:
+
+https://docs.google.com/document/d/1V5UZ_gHsVZze0pYgTNupbXK2LnTRmFHtHnsHsVNlCiI/edit?usp=sharing
