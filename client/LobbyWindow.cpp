@@ -19,7 +19,7 @@ LobbyWindow::LobbyWindow(std::shared_ptr<Socket>* skt, LobbyAction& action, QWid
 }
 
 void LobbyWindow::setBackgroundImage() {
-    QPixmap bkgnd("/var/duck_game/data/general/fondo.png");
+    QPixmap bkgnd("/var/duck_game/general/fondo.png");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Window, bkgnd);
