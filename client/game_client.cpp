@@ -58,6 +58,9 @@ void GameClient::run() {
     if (client_action != LobbyAction::PLAY_MATCH) {
         return;
     }
+    SDL_ShowWindow(window.Get());
+    screenRenderer.show_waiting();
+
     std::vector<Platform> platforms;
     ClientProtocol protocol(*socket);
     ThreadReceiver threadReceiver(protocol, graphic_queue);
@@ -67,7 +70,6 @@ void GameClient::run() {
     threadReceiver.start();
     threadSender.start();
 
-    SDL_ShowWindow(window.Get());
     std::cout << "CLIENT: Starting the UI \n";
 
     Snapshot ducksStates = graphic_queue.pop();  // This is the first snapshot

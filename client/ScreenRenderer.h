@@ -51,6 +51,7 @@ public:
     void updateScreen(const Snapshot& snapshot, const int it);
     void show_next_round();
     void show_disconnected();
+    void show_waiting();
 };
 
 

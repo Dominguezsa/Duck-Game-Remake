@@ -36,7 +36,9 @@
 #define DUCK_SLIDING_AIR_X 161
 #define DUCK_SLIDING_AIR_Y 39
 
-ResourceManager::ResourceManager(SDL2pp::Renderer& renderer): renderer(renderer) {}
+ResourceManager::ResourceManager(SDL2pp::Renderer& renderer): renderer(renderer) {
+    loadWaitingTexture();
+}
 
 void ResourceManager::loadSFX() {
 
@@ -58,6 +60,12 @@ void ResourceManager::loadSFX() {
                          std::make_shared<SDL2pp::Chunk>("/var/duck_game/audio/sfx/boom8.wav"));
 
     std::cout << "Every sfx loaded correctly\n";
+}
+
+void ResourceManager::loadWaitingTexture() {
+    textures.emplace("waiting",
+                     std::make_shared<SDL2pp::Texture>(
+                             renderer, SDL2pp::Surface("/var/duck_game/general/waiting.png")));
 }
 
 void ResourceManager::loadMusic() {

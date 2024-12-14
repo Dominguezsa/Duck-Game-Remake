@@ -53,6 +53,8 @@ public:
     SDL2pp::Rect getPlatformRect(const std::string& key);
     SDL2pp::Rect getAnimationFrame(const std::string& key, const int frame);
     void releaseResources();
+private:
+    void loadWaitingTexture();
 };
 
 #endif
