@@ -459,7 +459,7 @@ void Game::run() {
             rateController(start_time, end_time);
         }
 
-    _is_alive = false;
+        _is_alive = false;
     } catch (ClosedQueue& e) {
         stop();  // si se cierra la cola de mensajes se
                  // termina el juego, la puede cerrar el
