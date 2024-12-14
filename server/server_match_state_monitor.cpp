@@ -59,12 +59,15 @@ bool MatchStateMonitor::remove_player_if_present(const uint8_t& id) {
 
 void MatchStateMonitor::push_to_all(std::shared_ptr<Snapshot> duck_snapshot) {
     std::lock_guard<std::mutex> lock(data_mtx);
-    for (auto& pair: requester_queues) {
+    for (auto it = requester_queues.begin(); it != requester_queues.end();) {
         try {
-            pair.second->push(duck_snapshot);
+            it->second->push(duck_snapshot);
+            it++;
         } catch (const ClosedQueue& e)  {
-            std::cerr << "Queue closed, removing player " << int(+pair.first) << "\n";
-            remove_player_if_present(pair.first);
+            std::cerr << "Queue closed, removing player " << int(it->first) << "\n";
+            it = requester_queues.erase(it);
+            player_count--;
+            status = (player_count < 2) ? MatchStatus::Finished : MatchStatus::Playing;
         }
     }
 }

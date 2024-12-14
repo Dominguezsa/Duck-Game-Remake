@@ -76,8 +76,11 @@ void MatchesMonitor::remove_finished_matches() {
 
 void MatchesMonitor::remove_all_matches() {
     std::lock_guard<std::mutex> lock(matches_mtx);
+    std::cout << "Removing all matches\n";
     for (auto& match: matches) {
+        std::cout << "Stopping match \n";
         match.second->stop_game();
+        std::cout << "end Stopping match\n";
     }
     matches.clear();
 }
