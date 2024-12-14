@@ -40,17 +40,28 @@ void Match::initialize_game() {
 
 Queue<GameloopMessage>* Match::get_gameloop_queue() { return &gameloop_queue; }
 
-bool Match::is_finished() { 
-    if (!game.is_alive() && state_monitor.status == MatchStatus::Playing) {
-        std::cout << "MATCH DIEEDD\n";
-        state_monitor.status = MatchStatus::Finished;
-        state_monitor.killed = true;
-    }
-    return game.is_alive(); }
 
+bool Match::is_finished() {
+    if (state_monitor.status == MatchStatus::Finished) {
+        return true;
+    }if (state_monitor.status == MatchStatus::Playing && !game.is_alive()) {
+        return true;
+    }
+    return false;
+}
+/*
 void Match::stop_game() {
     game.stop();
     game.join();
     gameloop_queue.close();
     state_monitor.stop_match();
+}
+*/
+void Match::stop_game() {
+    std::cout << "Stopping game 0 \n";
+    std::cout << "Stopping game 2 \n";
+    gameloop_queue.close();
+    std::cout << "Stopping game 3 \n";
+    state_monitor.stop_match();
+    std::cout << "Stopping game 4 \n";
 }
