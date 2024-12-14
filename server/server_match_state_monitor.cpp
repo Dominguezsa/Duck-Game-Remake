@@ -31,10 +31,11 @@ void MatchStateMonitor::add_player(Queue<std::shared_ptr<Snapshot>>* q, uint8_t&
 
 void MatchStateMonitor::stop_match() {
     std::lock_guard<std::mutex> lock(data_mtx);
+    std::cout << "MatchStateMonitor::stop_match\n";
     status = MatchStatus::Finished;
     accepting_players = false;
     requester_queues.clear();
-    killed = true;
+    std::cout << "end MatchStateMonitor::stop_match\n";
 }
 
 bool MatchStateMonitor::remove_player_if_present(const uint8_t& id) {
@@ -48,7 +49,9 @@ bool MatchStateMonitor::remove_player_if_present(const uint8_t& id) {
     player_count--;
 
     // If last player leaves, match is finished.
-    if (status != MatchStatus::Finished && player_count == 0) {
+    if (status != MatchStatus::Waiting && player_count == 0) {
+        status = MatchStatus::Finished;
+    } else if (status == MatchStatus::Playing && player_count < 2) {
         status = MatchStatus::Finished;
     }
     return true;
@@ -57,6 +60,34 @@ bool MatchStateMonitor::remove_player_if_present(const uint8_t& id) {
 void MatchStateMonitor::push_to_all(std::shared_ptr<Snapshot> duck_snapshot) {
     std::lock_guard<std::mutex> lock(data_mtx);
     for (auto& pair: requester_queues) {
-        pair.second->push(duck_snapshot);
+        try {
+            pair.second->push(duck_snapshot);
+        } catch (const ClosedQueue& e)  {
+            std::cerr << "Queue closed, removing player " << int(+pair.first) << "\n";
+            remove_player_if_present(pair.first);
+        }
     }
+}
+
+bool MatchStateMonitor::match_is_finished() {
+    std::cout << "MatchStateMonitor::match_is_finished\n";
+    std::lock_guard<std::mutex> lock(data_mtx);
+    std::cout << "MatchStateMonitor:: lock adquirido para el status\n";
+    return status == MatchStatus::Finished;
+}
+
+bool MatchStateMonitor::match_is_playing() {
+    std::lock_guard<std::mutex> lock(data_mtx);
+    return status == MatchStatus::Playing;
+}
+
+bool MatchStateMonitor::waiting_for_players() {
+    std::lock_guard<std::mutex> lock(data_mtx);
+    return status == MatchStatus::Waiting;
+}
+
+void MatchStateMonitor::set_finished_status() {
+    std::lock_guard<std::mutex> lock(data_mtx);
+    std::cout << "MatchStateMonitor::set_finished_status\n";
+    status = MatchStatus::Finished;
 }
