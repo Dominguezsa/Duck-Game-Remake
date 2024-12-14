@@ -21,12 +21,12 @@ bool Match::remove_player_if_in_match(const uint8_t& id) {
     return removed;
 }
 
-bool Match::can_accept_players() { return state_monitor.status == MatchStatus::Waiting; }
+bool Match::can_accept_players() { return state_monitor.waiting_for_players(); }
 
 void Match::add_player(Queue<std::shared_ptr<Snapshot>>* q, DuckIdentity& duck_info) {
     state_monitor.add_player(q, duck_info.id);
     game.addPlayer(duck_info, map_info);
-    if (state_monitor.status == MatchStatus::Playing) {
+    if (state_monitor.match_is_playing()) {
         std::cout << "Match NOW PLAYING\n";
         initialize_game();
     }
@@ -40,15 +40,16 @@ void Match::initialize_game() {
 
 Queue<GameloopMessage>* Match::get_gameloop_queue() { return &gameloop_queue; }
 
+bool Match::is_finished() { 
+    //if (!game.is_alive() && state_monitor.status == MatchStatus::Playing) {
+    std::cout << "Match:: is finished?\n";
+    bool finished = (!game.is_alive() && !state_monitor.waiting_for_players()) ||
+                    state_monitor.match_is_finished();
 
-bool Match::is_finished() {
-    if (state_monitor.status == MatchStatus::Finished) {
-        return true;
+    if (finished) {
+        std::cout << "MATCH DIEEDD\n";
     }
-    if (state_monitor.status == MatchStatus::Playing && !game.is_alive()) {
-        return true;
-    }
-    return false;
+    return finished;
 }
 
 void Match::stop_game() {

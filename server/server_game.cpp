@@ -458,7 +458,6 @@ void Game::run() {
             double end_time = getCurrentTime();
             rateController(start_time, end_time);
         }
-
         _is_alive = false;
     } catch (ClosedQueue& e) {
         stop();  // si se cierra la cola de mensajes se
@@ -468,6 +467,7 @@ void Game::run() {
         std::cerr << "Error occurred during game loop: " << e.what() << std::endl;
         stop();
     }
+    std::cout << "Game loop ended\n";
 }
 
 void Game::send_platforms_first_time() {
@@ -479,6 +479,10 @@ void Game::send_platforms_first_time() {
     monitor.push_to_all(std::make_shared<Snapshot>(snapshot));
 }
 
-void Game::stop() { is_running = false; }
+void Game::stop() {
+    is_running = false;
+    _is_alive = false;
+    monitor.set_finished_status();
+}
 
 bool Game::isRunning() const { return is_running; }

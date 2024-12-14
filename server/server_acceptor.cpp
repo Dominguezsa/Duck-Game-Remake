@@ -21,7 +21,7 @@ void AcceptorThread::accept_connection() {
 }
 
 void AcceptorThread::check_unused_resources() {
-    std::cout << "Got a problem clients\n";
+    std::cout << "checking unused resources\n";
     for (auto it = clients.begin(); it != clients.end();) {
         ClientSession* client = *it;
         if (!client->is_alive()) {
@@ -33,9 +33,9 @@ void AcceptorThread::check_unused_resources() {
             it++;
         }
     }
-    std::cout << "Clients ok. Got a problem in matches\n";
+    std::cout << "are there any matches to remove?\n";
     matches.remove_finished_matches();
-    std::cout << "no problem in matches \n";
+    std::cout << "checking unused resources done\n";
 }
 
 void AcceptorThread::free_all_resources() {

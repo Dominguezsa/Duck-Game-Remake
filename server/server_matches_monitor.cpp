@@ -54,16 +54,24 @@ void MatchesMonitor::disconnect_player(const std::string& match_name, const uint
 }
 
 void MatchesMonitor::remove_finished_matches() {
+    std::cout << "Removing finished matches\n";
     std::lock_guard<std::mutex> lock(matches_mtx);
+    std::cout << "Total matches: " << matches.size() << std::endl;
     for (auto it = matches.begin(); it != matches.end();) {
         Match* match = it->second.get();
+        std::string name = it->first;
+        std::cout << "Checking " << name << "match\n";
         if (match->is_finished()) {
+            std::cout << "Stopping match\n";
             match->stop_game();
-            matches.erase(it);
+            it = matches.erase(it);
+            std::cout << "end Stopping match\n";
         } else {
             it++;
         }
     }
+    std::cout << "after end ->  total matches: " << matches.size() << std::endl;
+    std::cout << "Done remove matches\n";
 }
 
 void MatchesMonitor::remove_all_matches() {
