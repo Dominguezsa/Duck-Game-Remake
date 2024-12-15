@@ -58,8 +58,6 @@ void ResourceManager::loadSFX() {
                          std::make_shared<SDL2pp::Chunk>("/var/duck_game/audio/sfx/boom7.wav"));
     sfxPerWeapon.emplace(WeaponType::CowboyPistol,
                          std::make_shared<SDL2pp::Chunk>("/var/duck_game/audio/sfx/boom8.wav"));
-
-    std::cout << "Every sfx loaded correctly\n";
 }
 
 void ResourceManager::loadWaitingTexture() {
@@ -134,7 +132,6 @@ void ResourceManager::loadDuckSprites(uint8_t playerAmount) {
     std::vector<std::string> duck_colors = {"white_duck", "orange_duck", "grey_duck",
                                             "yellow_duck"};
 
-    std::cout << "Now loading " << +playerAmount << " ducks\n";
 
     for (int i = 0; i < playerAmount; i++) {
 
@@ -168,8 +165,6 @@ void ResourceManager::loadSprites(uint8_t playerAmount) {
     loadDuckSprites(playerAmount);
     loadWeaponSprites();
     loadMiscSprites();
-
-    std::cout << "All textures loaded correctly\n";
 }
 
 void ResourceManager::loadAnimationFrames() {
@@ -241,8 +236,6 @@ void ResourceManager::loadAnimationFrames() {
     duckFrames.emplace_back(SDL2pp::Rect(0, 0, 0, 0));
 
     animationFrames.emplace("empty", duckFrames);
-
-    std::cout << "All animation frames loaded correctly\n";
 }
 
 
@@ -277,8 +270,6 @@ void ResourceManager::loadWeaponsRect() {
 
     weaponFrame = SDL2pp::Rect(1, 20, 22, 11);
     weaponFrames.emplace("cowboyPistol", weaponFrame);
-
-    std::cout << "All weapons rects loaded correctly\n";
 }
 
 void ResourceManager::loadBulletsRect() {
@@ -304,8 +295,6 @@ void ResourceManager::loadBulletsRect() {
     bulletFrame = SDL2pp::Rect(0, 119, 16, 16);
     bulletRepresentation = SDL2pp::Rect(0, 0, 32, 32);
     bulletFrames.emplace("shotgun", std::make_pair(bulletFrame, bulletRepresentation));
-
-    std::cout << "All bullets rects loaded correctly\n";
 }
 
 SDL2pp::Rect ResourceManager::getPlatformRect(const std::string& key) { return platformRect[key]; }
@@ -336,9 +325,7 @@ std::pair<SDL2pp::Rect, SDL2pp::Rect> ResourceManager::getBulletRect(const std::
 }
 
 void ResourceManager::loadResources(uint8_t playerAmount) {
-    std::cout << "Trying to load the sfx\n";
     loadSFX();
-    std::cout << "Trying to load the music\n";
     loadMusic();
     loadFonts();
     loadSprites(playerAmount);

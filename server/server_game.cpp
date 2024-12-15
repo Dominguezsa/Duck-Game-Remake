@@ -53,7 +53,7 @@ void Game::addPlayer(DuckIdentity& duck_info, const MapInfo& map_info) {
                 20;  // el menos 20 es para evitar colision con plataforma
         initial_pos = Position{x, y};
     } catch (const std::exception& e) {
-        std::cout << "not enough respawns for all players" << std::endl;
+        std::cerr << "not enough respawns for all players" << std::endl;
     }
     Weapon initial_weapon;
     ducks[duck_info.id] = std::make_unique<Duck>(duck_info.id, 100, 1, initial_pos, initial_weapon,
@@ -371,7 +371,7 @@ void Game::startNewRound() {
                     20;  // el menos 20 es para evitar colision con plataforma
             initial_pos = Position{x, y};
         } catch (const std::exception& e) {
-            std::cout << "not enough respawns for all players" << std::endl;
+            std::cerr << "not enough respawns for all players" << std::endl;
         }
         Weapon initial_weapon;
         duck_pair.second = std::make_unique<Duck>(duck_pair.first, 100, 1, initial_pos,
@@ -467,7 +467,6 @@ void Game::run() {
         std::cerr << "Error occurred during game loop: " << e.what() << std::endl;
         stop();
     }
-    std::cout << "Game loop ended\n";
 }
 
 void Game::send_platforms_first_time() {

@@ -18,11 +18,8 @@ void MatchStateMonitor::add_player(Queue<std::shared_ptr<Snapshot>>* q, uint8_t&
         id = assigned_ids;
         requester_queues[id] = q;
         player_count++;
-        std::cout << +player_count << " players in match\n";
-        std::cout << +player_limit << " players limit\n";
         this->accepting_players = status == MatchStatus::Waiting && player_count < player_limit;
         if (!accepting_players) {
-            std::cout << "Match is now playing\n";
             status = MatchStatus::Playing;
         }
         assigned_ids++;
@@ -31,11 +28,9 @@ void MatchStateMonitor::add_player(Queue<std::shared_ptr<Snapshot>>* q, uint8_t&
 
 void MatchStateMonitor::stop_match() {
     std::lock_guard<std::mutex> lock(data_mtx);
-    std::cout << "MatchStateMonitor::stop_match\n";
     status = MatchStatus::Finished;
     accepting_players = false;
     requester_queues.clear();
-    std::cout << "end MatchStateMonitor::stop_match\n";
 }
 
 bool MatchStateMonitor::remove_player_if_present(const uint8_t& id) {
@@ -64,7 +59,6 @@ void MatchStateMonitor::push_to_all(std::shared_ptr<Snapshot> duck_snapshot) {
             it->second->push(duck_snapshot);
             it++;
         } catch (const ClosedQueue& e) {
-            std::cerr << "Queue closed, removing player " << int(it->first) << "\n";
             it = requester_queues.erase(it);
             player_count--;
             status = (player_count < 2) ? MatchStatus::Finished : MatchStatus::Playing;
@@ -73,9 +67,7 @@ void MatchStateMonitor::push_to_all(std::shared_ptr<Snapshot> duck_snapshot) {
 }
 
 bool MatchStateMonitor::match_is_finished() {
-    std::cout << "MatchStateMonitor::match_is_finished\n";
     std::lock_guard<std::mutex> lock(data_mtx);
-    std::cout << "MatchStateMonitor:: lock adquirido para el status\n";
     return status == MatchStatus::Finished;
 }
 
@@ -91,6 +83,5 @@ bool MatchStateMonitor::waiting_for_players() {
 
 void MatchStateMonitor::set_finished_status() {
     std::lock_guard<std::mutex> lock(data_mtx);
-    std::cout << "MatchStateMonitor::set_finished_status\n";
     status = MatchStatus::Finished;
 }

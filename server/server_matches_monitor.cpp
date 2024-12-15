@@ -24,11 +24,9 @@ bool MatchesMonitor::join_match(std::string match_name, DuckIdentity& duck_info,
     bool match_exists = matches.find(match_name) != matches.end();
     bool player_limit_reached = !matches[match_name]->can_accept_players();
     if (!match_exists || player_limit_reached) {
-        std::cout << "Match does not exist or is full\n";
         return false;
     }
     matches[match_name]->add_player(q, duck_info);
-    std::cout << "Player added to match\n";
     return true;
 }
 
@@ -54,33 +52,24 @@ void MatchesMonitor::disconnect_player(const std::string& match_name, const uint
 }
 
 void MatchesMonitor::remove_finished_matches() {
-    std::cout << "Removing finished matches\n";
     std::lock_guard<std::mutex> lock(matches_mtx);
-    std::cout << "Total matches: " << matches.size() << std::endl;
     for (auto it = matches.begin(); it != matches.end();) {
         Match* match = it->second.get();
         std::string name = it->first;
-        std::cout << "Checking " << name << "match\n";
         if (match->is_finished()) {
-            std::cout << "Stopping match\n";
             match->stop_game();
             it = matches.erase(it);
-            std::cout << "end Stopping match\n";
         } else {
             it++;
         }
     }
-    std::cout << "after end ->  total matches: " << matches.size() << std::endl;
-    std::cout << "Done remove matches\n";
 }
 
 void MatchesMonitor::remove_all_matches() {
     std::lock_guard<std::mutex> lock(matches_mtx);
-    std::cout << "Removing all matches\n";
+
     for (auto& match: matches) {
-        std::cout << "Stopping match \n";
         match.second->stop_game();
-        std::cout << "end Stopping match\n";
     }
     matches.clear();
 }

@@ -27,7 +27,6 @@ void Match::add_player(Queue<std::shared_ptr<Snapshot>>* q, DuckIdentity& duck_i
     state_monitor.add_player(q, duck_info.id);
     game.addPlayer(duck_info, map_info);
     if (state_monitor.match_is_playing()) {
-        std::cout << "Match NOW PLAYING\n";
         initialize_game();
     }
 }
@@ -42,13 +41,9 @@ Queue<GameloopMessage>* Match::get_gameloop_queue() { return &gameloop_queue; }
 
 bool Match::is_finished() {
     // if (!game.is_alive() && state_monitor.status == MatchStatus::Playing) {
-    std::cout << "Match:: is finished?\n";
     bool finished = (!game.is_alive() && !state_monitor.waiting_for_players()) ||
                     state_monitor.match_is_finished();
 
-    if (finished) {
-        std::cout << "MATCH DIEEDD\n";
-    }
     return finished;
 }
 

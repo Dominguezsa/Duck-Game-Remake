@@ -70,7 +70,6 @@ void GameClient::run() {
     threadReceiver.start();
     threadSender.start();
 
-    std::cout << "CLIENT: Starting the UI \n";
 
     Snapshot ducksStates = graphic_queue.pop();  // This is the first snapshot
 
@@ -107,7 +106,6 @@ void GameClient::run() {
                 mainLoop(iteration);
             }
             if (round_finished()) {
-                std::cout << "CLIENT: Round finished\n";
                 screenRenderer.show_next_round();
                 snapshot.bullets.clear();
                 sleep(1);
@@ -135,7 +133,7 @@ void GameClient::run() {
             iteration += 1;
         }
     } catch (...) {
-        std::cerr << "One game ended\n";
+        // std::cerr << "One game ended\n";
     }
     threadReceiver.stop_thread();
     threadSender.stop_thread();
@@ -196,8 +194,6 @@ void GameClient::updateDuckStates(int& it) {
                                 snapshot_from_queue.weapons);
         it = 0;
     } catch (...) {
-        std::cout << "Error updating duck states\n";
-        std::cout << "exiting the game by error\n";
         throw;
     }
 }

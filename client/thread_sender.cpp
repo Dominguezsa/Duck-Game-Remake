@@ -13,7 +13,6 @@ void ThreadSender::run() {
     } catch (const std::exception& e) {
         return;
     }
-    std::cout << "SENDER: run function ended\n";
 }
 
 
@@ -21,7 +20,6 @@ void ThreadSender::stop_thread() {
     this->is_alive = false;
     clientQueue.close();
     this->join();
-    std::cout << "SENDER: stop_thread function ended\n";
 }
 
 
