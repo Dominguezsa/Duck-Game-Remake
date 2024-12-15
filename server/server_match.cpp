@@ -40,8 +40,8 @@ void Match::initialize_game() {
 
 Queue<GameloopMessage>* Match::get_gameloop_queue() { return &gameloop_queue; }
 
-bool Match::is_finished() { 
-    //if (!game.is_alive() && state_monitor.status == MatchStatus::Playing) {
+bool Match::is_finished() {
+    // if (!game.is_alive() && state_monitor.status == MatchStatus::Playing) {
     std::cout << "Match:: is finished?\n";
     bool finished = (!game.is_alive() && !state_monitor.waiting_for_players()) ||
                     state_monitor.match_is_finished();

@@ -63,7 +63,7 @@ void MatchStateMonitor::push_to_all(std::shared_ptr<Snapshot> duck_snapshot) {
         try {
             it->second->push(duck_snapshot);
             it++;
-        } catch (const ClosedQueue& e)  {
+        } catch (const ClosedQueue& e) {
             std::cerr << "Queue closed, removing player " << int(it->first) << "\n";
             it = requester_queues.erase(it);
             player_count--;

@@ -134,11 +134,8 @@ void GameClient::run() {
             t1_ms += rate;
             iteration += 1;
         }
-    } catch (const std::runtime_error& e) {
-        std::cout << "exiting the game party is over\n";
     } catch (...) {
-        std::cout << "Error in the main loop\n";
-        std::cout << "exiting the game by error\n";
+        std::cerr << "One game ended\n";
     }
     threadReceiver.stop_thread();
     threadSender.stop_thread();
