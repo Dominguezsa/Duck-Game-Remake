@@ -44,7 +44,7 @@ bool MatchStateMonitor::remove_player_if_present(const uint8_t& id) {
     player_count--;
 
     // If last player leaves, match is finished.
-    if (status != MatchStatus::Waiting && player_count == 0) {
+    if (status != MatchStatus::Finished && player_count == 0) {
         status = MatchStatus::Finished;
     } else if (status == MatchStatus::Playing && player_count < 2) {
         status = MatchStatus::Finished;

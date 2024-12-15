@@ -65,7 +65,7 @@ void Game::addPlayer(DuckIdentity& duck_info, const MapInfo& map_info) {
 
 void Game::removePlayer(uint8_t player_id) {
     ducks.erase(player_id);
-    if (ducks.empty()) {
+    if (ducks.empty() && (_is_alive || is_running)) {
         stop();
     }
 }

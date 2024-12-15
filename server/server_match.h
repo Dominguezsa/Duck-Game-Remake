@@ -19,6 +19,7 @@ private:
     Game game;
     MatchStateMonitor state_monitor;
     MapInfo map_info;
+    bool initialized;
 
 public:
     explicit Match(uint8_t limit, const MapInfo& map_info);
