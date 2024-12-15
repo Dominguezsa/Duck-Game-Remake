@@ -6,7 +6,7 @@ bool MapParser::parseMap(const std::string& name, const int& width, const int& h
                          const std::vector<std::vector<uint8_t>>& tile_ids) {
     try {
         // Verifica que el directorio exista, si no, lo crea
-        const std::string output_dir = "/var/duck_game/maps/";
+        const std::string output_dir = RESOURCE_PATH "/maps/";
         std::filesystem::create_directories(output_dir);
 
         // Crea el emisor YAML

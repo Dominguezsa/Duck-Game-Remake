@@ -53,9 +53,8 @@ echo "Binaries moved to /usr/bin directory successfully!"
 
 echo "Moving the game assets to /var/duck_game..."
 
-cp -r ./client/data /var/duck_game
-cp -r ./client/data/* /var/duck_game/
-cp -r ./maps /var/duck_game
+mkdir -p /var/duck_game
+cp -r ./resources/* /var/duck_game
 
 echo "Game assets moved to /var/duck_game directory successfully!"
 echo " "

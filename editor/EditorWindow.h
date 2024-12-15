@@ -56,6 +56,7 @@ private:
     void goToCreateMapScene();
     void initMapScene();
     void setBackGroundImage();
+    // cppcheck-suppress unknownMacro
 public slots:
     void saveMap(const std::string& mapData);
 

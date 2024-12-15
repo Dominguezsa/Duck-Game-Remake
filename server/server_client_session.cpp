@@ -146,7 +146,7 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
 void ClientSession::get_available_maps(std::list<std::string>& map_list) {
     // Ruta de la carpeta "maps"
     namespace fs = std::filesystem;
-    fs::path maps_path = "/var/duck_game/maps/";
+    fs::path maps_path = RESOURCE_PATH "/maps/";
 
     // Verificar si la carpeta existe
     if (!fs::exists(maps_path) || !fs::is_directory(maps_path)) {

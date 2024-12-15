@@ -43,89 +43,86 @@ ResourceManager::ResourceManager(SDL2pp::Renderer& renderer): renderer(renderer)
 void ResourceManager::loadSFX() {
 
     sfxPerWeapon.emplace(WeaponType::AK47,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/audio/sfx/boom11.wav"));
+                         std::make_shared<SDL2pp::Chunk>(RESOURCE_PATH "/audio/sfx/boom11.wav"));
     sfxPerWeapon.emplace(WeaponType::Shotgun,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/audio/sfx/boom12.wav"));
+                         std::make_shared<SDL2pp::Chunk>(RESOURCE_PATH "/audio/sfx/boom12.wav"));
     sfxPerWeapon.emplace(WeaponType::Sniper,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/audio/sfx/boom5.wav"));
+                         std::make_shared<SDL2pp::Chunk>(RESOURCE_PATH "/audio/sfx/boom5.wav"));
     sfxPerWeapon.emplace(WeaponType::PewPewLaser,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/audio/sfx/boom1.wav"));
+                         std::make_shared<SDL2pp::Chunk>(RESOURCE_PATH "/audio/sfx/boom1.wav"));
     sfxPerWeapon.emplace(WeaponType::LaserRifle,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/audio/sfx/boom14.wav"));
+                         std::make_shared<SDL2pp::Chunk>(RESOURCE_PATH "/audio/sfx/boom14.wav"));
     sfxPerWeapon.emplace(WeaponType::Magnum,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/audio/sfx/boom9.wav"));
+                         std::make_shared<SDL2pp::Chunk>(RESOURCE_PATH "/audio/sfx/boom9.wav"));
     sfxPerWeapon.emplace(WeaponType::DuelPistol,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/audio/sfx/boom7.wav"));
+                         std::make_shared<SDL2pp::Chunk>(RESOURCE_PATH "/audio/sfx/boom7.wav"));
     sfxPerWeapon.emplace(WeaponType::CowboyPistol,
-                         std::make_shared<SDL2pp::Chunk>("/var/duck_game/audio/sfx/boom8.wav"));
+                         std::make_shared<SDL2pp::Chunk>(RESOURCE_PATH "/audio/sfx/boom8.wav"));
 }
 
 void ResourceManager::loadWaitingTexture() {
     textures.emplace("waiting",
                      std::make_shared<SDL2pp::Texture>(
-                             renderer, SDL2pp::Surface("/var/duck_game/general/waiting.png")));
+                             renderer, SDL2pp::Surface(RESOURCE_PATH "/general/waiting.png")));
 }
 
 void ResourceManager::loadMusic() {
     music.emplace("back_music",
-                  std::make_shared<SDL2pp::Music>(
-                          "/var/duck_game/audio/ost/back_music_space_mystery_out.ogg"));
+                  std::make_shared<SDL2pp::Music>(RESOURCE_PATH
+                                                  "/audio/ost/back_music_space_mystery_out.ogg"));
 }
 
 void ResourceManager::loadFonts() {
-    fonts.emplace("vera", std::make_shared<SDL2pp::Font>("/var/duck_game/general/Vera.ttf", 12));
+    fonts.emplace("vera", std::make_shared<SDL2pp::Font>(RESOURCE_PATH "/general/Vera.ttf", 12));
 }
 
 void ResourceManager::loadWeaponSprites() {
     textures.emplace(
             "ak47",
             std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("/var/duck_game/sprites/weapons/machineguns.png")));
+                    renderer, SDL2pp::Surface(RESOURCE_PATH "/sprites/weapons/machineguns.png")));
 
     textures.emplace(
             "grenade",
             std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("/var/duck_game/sprites/weapons/grenades.png")));
+                    renderer, SDL2pp::Surface(RESOURCE_PATH "/sprites/weapons/grenades.png")));
 
-    textures.emplace(
-            "banana",
-            std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("/var/duck_game/sprites/weapons/grenades.png")));
+    textures.emplace("banana", std::make_shared<SDL2pp::Texture>(
+                                       renderer, SDL2pp::Surface(RESOURCE_PATH
+                                                                 "/sprites/weapons/grenades.png")));
 
     textures.emplace(
             "pewPewLaser",
             std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("/var/duck_game/sprites/weapons/laser.png")));
+                    renderer, SDL2pp::Surface(RESOURCE_PATH "/sprites/weapons/laser.png")));
 
     textures.emplace(
             "laserRifle",
             std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("/var/duck_game/sprites/weapons/laser.png")));
+                    renderer, SDL2pp::Surface(RESOURCE_PATH "/sprites/weapons/laser.png")));
 
     textures.emplace(
             "shotgun",
             std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("/var/duck_game/sprites/weapons/shotguns.png")));
+                    renderer, SDL2pp::Surface(RESOURCE_PATH "/sprites/weapons/shotguns.png")));
 
-    textures.emplace(
-            "sniper",
-            std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("/var/duck_game/sprites/weapons/snipers.png")));
+    textures.emplace("sniper", std::make_shared<SDL2pp::Texture>(
+                                       renderer, SDL2pp::Surface(RESOURCE_PATH
+                                                                 "/sprites/weapons/snipers.png")));
 
     textures.emplace(
             "duelingPistol",
             std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("/var/duck_game/sprites/weapons/pistols.png")));
+                    renderer, SDL2pp::Surface(RESOURCE_PATH "/sprites/weapons/pistols.png")));
 
-    textures.emplace(
-            "magnum",
-            std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("/var/duck_game/sprites/weapons/pistols.png")));
+    textures.emplace("magnum", std::make_shared<SDL2pp::Texture>(
+                                       renderer, SDL2pp::Surface(RESOURCE_PATH
+                                                                 "/sprites/weapons/pistols.png")));
 
     textures.emplace(
             "cowboyPistol",
             std::make_shared<SDL2pp::Texture>(
-                    renderer, SDL2pp::Surface("/var/duck_game/sprites/weapons/pistols.png")));
+                    renderer, SDL2pp::Surface(RESOURCE_PATH "/sprites/weapons/pistols.png")));
 }
 
 void ResourceManager::loadDuckSprites(uint8_t playerAmount) {
@@ -135,7 +132,7 @@ void ResourceManager::loadDuckSprites(uint8_t playerAmount) {
 
     for (int i = 0; i < playerAmount; i++) {
 
-        std::string path = "/var/duck_game/sprites/ducks/" + duck_colors[i] + ".png";
+        std::string path = RESOURCE_PATH "/sprites/ducks/" + duck_colors[i] + ".png";
 
         textures.emplace(duck_colors[i],
                          std::make_shared<SDL2pp::Texture>(renderer, SDL2pp::Surface(path)));
@@ -145,19 +142,19 @@ void ResourceManager::loadDuckSprites(uint8_t playerAmount) {
 void ResourceManager::loadMiscSprites() {
     textures.emplace("background",
                      std::make_shared<SDL2pp::Texture>(
-                             renderer, SDL2pp::Surface("/var/duck_game/general/fondo.png")));
+                             renderer, SDL2pp::Surface(RESOURCE_PATH "/general/fondo.png")));
 
     textures.emplace("tablas",
                      std::make_shared<SDL2pp::Texture>(
-                             renderer, SDL2pp::Surface("/var/duck_game/general/tablon1.png")));
+                             renderer, SDL2pp::Surface(RESOURCE_PATH "/general/tablon1.png")));
 
     textures.emplace("next_round",
                      std::make_shared<SDL2pp::Texture>(
-                             renderer, SDL2pp::Surface("/var/duck_game/general/next_round.png")));
+                             renderer, SDL2pp::Surface(RESOURCE_PATH "/general/next_round.png")));
 
     textures.emplace("disconnected",
                      std::make_shared<SDL2pp::Texture>(
-                             renderer, SDL2pp::Surface("/var/duck_game/general/disconnected.png")));
+                             renderer, SDL2pp::Surface(RESOURCE_PATH "/general/disconnected.png")));
 }
 
 void ResourceManager::loadSprites(uint8_t playerAmount) {
