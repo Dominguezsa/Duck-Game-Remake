@@ -262,20 +262,11 @@ void Game::checkCollisions(Duck* duck, const std::vector<Platform>& platforms, f
     // Check platform collisions
     checkPlatformsCollision(duck, platforms, previous_x, previous_y);
 
-    const float ground_level = 700.0f - DUCK_HEIGHT;
+    const float ground_level = 1200.0f;
 
     // Ground collision
     if (duck->position.y > ground_level) {
-        duck->position.y = ground_level;
-        duck->vertical_velocity = 0;
-        duck->in_air = false;
-    }
-
-    // Screen boundaries
-    if (duck->position.x < 0) {
-        duck->position.x = 0;
-    } else if (duck->position.x > 1200 - DUCK_WIDTH) {
-        duck->position.x = 1200 - DUCK_WIDTH;
+        duck->is_alive = false;
     }
 }
 
