@@ -1,6 +1,5 @@
 #include "Tile.h"
 
-
 Tile::Tile(int row, int col, uint8_t& id, QGraphicsItem* parent):
         QObject(), QGraphicsRectItem(parent), imagePixmap(), row(row), col(col), image_id(id) {
     setRect(0, 0, TILE_SIZE, TILE_SIZE);
@@ -15,6 +14,8 @@ int Tile::getRow() const { return row; }
 int Tile::getCol() const { return col; }
 
 int Tile::getSize() const { return TILE_SIZE; }
+
+uint8_t Tile::getImageId() { return image_id; }
 
 void Tile::setImage(const QPixmap& pixmap, std::map<uint8_t, QPixmap>& map_id) {
     if (!pixmap.isNull() && !imagePixmap.isNull() && imagePixmap.cacheKey() == pixmap.cacheKey()) {
@@ -50,7 +51,7 @@ void Tile::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsI
     QRectF innerRect = boundingRect().adjusted(TILE_BORDER_WIDTH, TILE_BORDER_WIDTH,
                                                -TILE_BORDER_WIDTH, -TILE_BORDER_WIDTH);
 
-    // Si la imagen está definida, dibújala dentro del área interna
+    // Si la imagen está definida, se dibuja dentro del área interna
     if (!imagePixmap.isNull()) {
         // Escala la imagen para que se ajuste al área disponible del Tile sin distorsionarse
         QPixmap scaledPixmap = imagePixmap.scaled(innerRect.size().toSize(), Qt::KeepAspectRatio,

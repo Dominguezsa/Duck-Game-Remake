@@ -76,17 +76,33 @@ void EditorWindow::goToCreateMapScene() {
 }
 
 void EditorWindow::saveMap(const std::string& mapData) {
-    emit mapCreated(mapData);
+    if (!validMap()) {
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Warning);  // Warning icon
+        msgBox.setWindowTitle("Warning: Map Not Playable");
+        msgBox.setText("The map created is not playable. To be playable, it needs at least:");
+        msgBox.setInformativeText(
+        "- A duck respawn\n"
+        "- A platform\n"
+        "- A weapon\n\n"
+        "Make sure to fulfill these requirements and try again."
+        );
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
+    } else {
+        emit mapCreated(mapData);
 
-    mapCreatedMessageBox.setIcon(QMessageBox::Information);
-    mapCreatedMessageBox.setWindowTitle("Save Successful");
-    mapCreatedMessageBox.setText("The map has been successfully saved!");
+        mapCreatedMessageBox.setIcon(QMessageBox::Information);
+        mapCreatedMessageBox.setWindowTitle("Save Successful");
+        mapCreatedMessageBox.setText("The map has been successfully saved!");
 
-    connect(&mapCreatedMessageBox, &QMessageBox::accepted, this, &QWidget::close);
-    mapCreatedMessageBox.exec();
+        connect(&mapCreatedMessageBox, &QMessageBox::accepted, this, &QWidget::close);
+        mapCreatedMessageBox.exec();
 
-    // Confirm that the map has been saved
-    *mapSaved = true;
+        // Confirm that the map has been saved
+        *mapSaved = true;
+    }
 }
 
 void EditorWindow::setSelectableImages() {
@@ -182,19 +198,42 @@ void EditorWindow::validateInputs() {
     int num1 = ui->mapWidthLineEdit->text().toInt(&ok1);
     if (ok1 && num1 >= 25) {
         valid1 = true;
-        *width = num1;
+        *width = MIN_WIDTH; // Default map width value in this project.
     }
     bool ok2;
     int num2 = ui->mapHeightLineEdit->text().toInt(&ok2);
     if (ok2 && num2 >= 15) {
         valid2 = true;
-        *height = num2;
+        *height = MIN_HEIGHT; // Default map height value in this project.
     }
     if (!ui->mapNameLineEdit->text().isEmpty()) {
         valid3 = true;
         *mapName = ui->mapNameLineEdit->text().toStdString();
     }
     ui->createMapButton->setEnabled(valid1 && valid2 && valid3);
+}
+
+bool EditorWindow::validMap() {
+    bool platform_found = false;
+    bool weapon_found = false;
+    bool duck_respawn_found = false;
+
+    for (Tile* tile: tiles) {
+        uint8_t tile_value = tile->getImageId();
+
+        if (tile_value >= 1 && tile_value <= 12)
+            platform_found = true;
+        else if (tile_value == 13)
+            duck_respawn_found = true;
+        else if (tile_value > 15 && tile_value <= 25)
+            weapon_found = true;
+        else
+            continue;
+
+        if (platform_found && weapon_found && duck_respawn_found)
+            break;
+    }
+    return platform_found && weapon_found && duck_respawn_found;
 }
 
 EditorWindow::~EditorWindow() {

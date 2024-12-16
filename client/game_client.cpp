@@ -168,7 +168,7 @@ void GameClient::run_lobby() {
 }
 
 int GameClient::exec_map_editor() {
-    QString program = "build/map_editor";
+    QString program = "map_editor";
     this->process.start(program, QStringList(), QIODevice::ReadWrite);
     if (!this->process.waitForStarted()) {
         std::cerr << "Editor program process failed to start" << std::endl;

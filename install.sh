@@ -55,6 +55,8 @@ echo "Moving the game assets to /var/duck_game..."
 
 mkdir -p /var/duck_game
 cp -r ./resources/* /var/duck_game
+chmod 700 /var/duck_game/
+chmod 777 /var/duck_game/maps/
 
 echo "Game assets moved to /var/duck_game directory successfully!"
 echo " "

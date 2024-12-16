@@ -18,6 +18,9 @@
 #include "ImageWidget.h"
 #include "Tile.h"
 
+#define MIN_WIDTH 25
+#define MIN_HEIGHT 15
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class EditorWindow;
@@ -56,6 +59,7 @@ private:
     void goToCreateMapScene();
     void initMapScene();
     void setBackGroundImage();
+    bool validMap();
 public slots:
     void saveMap(const std::string& mapData);
 

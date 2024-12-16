@@ -30,6 +30,7 @@ public:
     int getRow() const;
     int getCol() const;
     int getSize() const;
+    uint8_t getImageId();
     void setImage(const QPixmap& pixmap, std::map<uint8_t, QPixmap>& map_id);
 
 protected:
