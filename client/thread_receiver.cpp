@@ -8,7 +8,7 @@ ThreadReceiver::ThreadReceiver(ClientProtocol& protocol, Queue<Snapshot>& graphi
 
 void ThreadReceiver::run() {
     try {
-        while (_is_alive) {
+        while (_keep_running) {
             Snapshot snapShot;
             this->protocol.read_msg(&snapShot);
             ducks_snapshots_queue.push(snapShot);
