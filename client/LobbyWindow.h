@@ -61,7 +61,6 @@ private:
     void setUpCreateMatchScene();
     void setUpJoinMatchScene();
     void setBackgroundImage();
-    // cppcheck-suppress unknownMacro
 public slots:
     void validateSelectedMatch(int index);
 };
