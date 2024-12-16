@@ -30,13 +30,11 @@ void SenderThread::run() {
     } catch (const SocketWasCLosedException& e) {
         if (this->_is_alive) {
             syslog(LOG_ERR, "%s", e.what());
-            closelog();
         }
         this->_is_alive = false;
     } catch (const std::exception& err) {
         if (this->_is_alive) {
             syslog(LOG_ERR, "%s", "Error occurred (SenderThread)\n");
-            closelog();
         }
         this->_is_alive = false;
     }
