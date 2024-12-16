@@ -81,12 +81,10 @@ void EditorWindow::saveMap(const std::string& mapData) {
         msgBox.setIcon(QMessageBox::Warning);  // Warning icon
         msgBox.setWindowTitle("Warning: Map Not Playable");
         msgBox.setText("The map created is not playable. To be playable, it needs at least:");
-        msgBox.setInformativeText(
-        "- A duck respawn\n"
-        "- A platform\n"
-        "- A weapon\n\n"
-        "Make sure to fulfill these requirements and try again."
-        );
+        msgBox.setInformativeText("- A duck respawn\n"
+                                  "- A platform\n"
+                                  "- A weapon\n\n"
+                                  "Make sure to fulfill these requirements and try again.");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.exec();
@@ -198,13 +196,13 @@ void EditorWindow::validateInputs() {
     int num1 = ui->mapWidthLineEdit->text().toInt(&ok1);
     if (ok1 && num1 >= 25) {
         valid1 = true;
-        *width = MIN_WIDTH; // Default map width value in this project.
+        *width = MIN_WIDTH;  // Default map width value in this project.
     }
     bool ok2;
     int num2 = ui->mapHeightLineEdit->text().toInt(&ok2);
     if (ok2 && num2 >= 15) {
         valid2 = true;
-        *height = MIN_HEIGHT; // Default map height value in this project.
+        *height = MIN_HEIGHT;  // Default map height value in this project.
     }
     if (!ui->mapNameLineEdit->text().isEmpty()) {
         valid3 = true;

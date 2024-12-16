@@ -6,6 +6,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+
 #include <syslog.h>
 
 #include "../common/common_socket.h"

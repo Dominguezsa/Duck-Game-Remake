@@ -22,7 +22,8 @@ void ClientSession::end_communication() {
         // Closing the communication channel.
         protocol.end_communication();
     } catch (...) {
-        std::string err_msg = "Something went wrong closing communication with " + identity.name + ".\n";
+        std::string err_msg =
+                "Something went wrong closing communication with " + identity.name + ".\n";
         syslog(LOG_ERR, "%s", err_msg.c_str());
     }
 }
@@ -33,7 +34,8 @@ void ClientSession::stop() {
         end_communication();
         this->client_queue.close();
     } catch (...) {
-        std::string err_msg = "Something went wrong stopping communication with " + identity.name + ".\n";
+        std::string err_msg =
+                "Something went wrong stopping communication with " + identity.name + ".\n";
         syslog(LOG_ERR, "%s", err_msg.c_str());
     }
 }
