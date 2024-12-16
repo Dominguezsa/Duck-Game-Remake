@@ -51,7 +51,7 @@ public:
     // Note: it is up to the subclass to make something meaningful to
     // really stop the thread. The Thread::run() may be blocked and/or
     // it may not read _keep_running.
-    void stop() override { _keep_running = false; }
+    void stop() override { _keep_running = false; _is_alive = false; }
 
     // Note: asking for is_alive is well defined *only if* the thread
     // was started (you called Thread::start())

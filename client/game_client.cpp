@@ -99,6 +99,7 @@ void GameClient::run() {
         while (true) {
             updateDuckStates(it);
             if (it > 10) {
+                threadReceiver.stop();
                 screenRenderer.show_disconnected();
                 sleep(2);
                 break;
