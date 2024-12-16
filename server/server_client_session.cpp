@@ -18,8 +18,13 @@ ClientSession::ClientSession(Socket _skt, MatchesMonitor& monitor):
 uint8_t ClientSession::get_id() const { return identity.id; }
 
 void ClientSession::end_communication() {
-    // Closes the communication channel.
-    protocol.end_communication();
+    try {
+        // Closing the communication channel.
+        protocol.end_communication();
+    } catch (...) {
+        std::string err_msg = "Something went wrong closing communication with " + identity.name + ".\n";
+        syslog(LOG_ERR, "%s", err_msg.c_str());
+    }
 }
 
 void ClientSession::stop() {
@@ -27,8 +32,9 @@ void ClientSession::stop() {
         this->_is_alive = false;
         end_communication();
         this->client_queue.close();
-    } catch (const std::exception& e) {
-        // Disconnecting the client.
+    } catch (...) {
+        std::string err_msg = "Something went wrong stopping communication with " + identity.name + ".\n";
+        syslog(LOG_ERR, "%s", err_msg.c_str());
     }
 }
 

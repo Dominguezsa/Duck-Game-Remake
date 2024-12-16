@@ -66,7 +66,7 @@ void Game::addPlayer(DuckIdentity& duck_info, const MapInfo& map_info) {
 void Game::removePlayer(uint8_t player_id) {
     ducks.erase(player_id);
     if (ducks.empty() && (_is_alive || is_running)) {
-        stop();
+        is_running = false;
     }
 }
 
@@ -449,7 +449,7 @@ void Game::run() {
             double end_time = getCurrentTime();
             rateController(start_time, end_time);
         }
-        _is_alive = false;
+        stop();
     } catch (ClosedQueue& e) {
         stop();  // si se cierra la cola de mensajes se
                  // termina el juego, la puede cerrar el
