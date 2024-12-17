@@ -3,7 +3,6 @@
 #include "../common/snapshot.h"
 void ServerProtocol::recv_duck_action(uint8_t& command) { recv_uint_8(command); }
 
-// Massive refactor needed, too many sends and recv are so bad for performance
 void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
     if (snapshot->first_message) {
         unsigned int platform_count = snapshot->platforms.size();
@@ -73,7 +72,6 @@ void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
         send_data(&bullet.going_right, sizeof(uint8_t));
         uint8_t angle = (uint8_t)bullet.angle + 128;
         send_data(&angle, sizeof(uint8_t));
-        // send_data(&angle, sizeof(uint8_t));
     }
 
 
@@ -88,7 +86,6 @@ void ServerProtocol::send_snapshot(std::shared_ptr<Snapshot> snapshot) {
         send_data(&y, sizeof(uint32_t));
     }
 }
-// Solo para compilar, esto no se usa se tiene que ir:
 
 void ServerProtocol::read_msg(void* msg) { std::cout << msg << std::endl; }
 
@@ -112,7 +109,7 @@ void ServerProtocol::send_game_map_list(const std::list<std::string>& map_names)
 void ServerProtocol::recv_match_info(std::string& map_name, std::string& match_name,
                                      uint8_t& number_of_players) {
     uint8_t buf;
-    recv_uint_8(buf);  // aca recibe el 'C' no se si sirve guardarlo/enviarlo
+    recv_uint_8(buf);
     recv_uint_8(number_of_players);
     recv_string(match_name);
     recv_string(map_name);

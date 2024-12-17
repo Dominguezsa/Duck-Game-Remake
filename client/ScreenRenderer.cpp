@@ -88,34 +88,6 @@ void ScreenRenderer::copyBackground() {
     renderer.Copy(background_texture, SDL2pp::NullOpt, SDL2pp::NullOpt);
 }
 
-/*
-void ScreenRenderer::copyDebugText(const std::vector<DuckState>& ducks) {
-    // Debug text
-    for (int i = 0; i < (int)ducks.size(); ++i) {
-        std::string duck_position_text =
-                "Position of duck_" + std::to_string(i + 1) + ": " +
-                std::to_string((int)ducks[i].position.x) + ", " +
-                std::to_string((int)ducks[i].position.y) + " Duck " + std::to_string(i + 1) +
-                " is running: " + std::to_string(ducks[i].is_running) + " Duck " +
-                std::to_string(i + 1) + " is facing: " + std::to_string(ducks[i].looking) +
-                " Duck " + std::to_string(i + 1) +
-                " is jumping: " + std::to_string(ducks[i].is_jumping) + " Duck " +
-                std::to_string(i + 1) + " is falling: " + std::to_string(ducks[i].is_falling) +
-                " Duck " + std::to_string(i + 1) +
-                " is in air: " + std::to_string(ducks[i].in_air) + " Duck " +
-                std::to_string(i + 1) + " is ducking: " + std::to_string(ducks[i].is_ducking) +
-                " Duck " + std::to_string(i + 1) +
-                " is sliding: " + std::to_string(ducks[i].is_sliding) +
-                " Duck's Weapon is: " + std::to_string(ducks[i].weapon);
-        SDL2pp::Texture text_sprite(renderer,
-                                    resourceManager.getFont("vera")->RenderText_Blended(
-                                            duck_position_text, SDL_Color{255, 255, 255, 255}));
-
-        renderer.Copy(text_sprite, SDL2pp::NullOpt,
-                      SDL2pp::Rect(0, i * 20, text_sprite.GetWidth(), text_sprite.GetHeight()));
-    }
-}
-*/
 void ScreenRenderer::copyWeapons(const std::vector<Weapon>& weapons) {
     for (int i = 0; i < (int)weapons.size(); i++) {
         SDL2pp::Texture& weapon_texture =
@@ -152,37 +124,13 @@ void ScreenRenderer::copyBullets(const std::vector<Bullet>& bullets) {
                       SDL2pp::NullOpt, SDL_FLIP_NONE);
     }
 }
-/*
-void ScreenRenderer::copy_lines() {
-    int screen_width = 1250;
-    int screen_height = 750;
-    int num_lines_x = 25;
-    int num_lines_y = 15;
 
-    int line_spacing_x = screen_width / num_lines_x;
-    int line_spacing_y = screen_height / num_lines_y;
-
-    // Dibujar líneas verticales
-    for (int i = 0; i <= num_lines_x; ++i) {
-        int x = i * line_spacing_x;
-        SDL_RenderDrawLine(renderer.Get(), x, 0, x, screen_height);
-    }
-
-    // Dibujar líneas horizontales
-    for (int i = 0; i <= num_lines_y; ++i) {
-        int y = i * line_spacing_y;
-        SDL_RenderDrawLine(renderer.Get(), 0, y, screen_width, y);
-    }
-}
-*/
 
 void ScreenRenderer::updateScreen(const Snapshot& snapshot, const int it) {
     renderer.Clear();
     copyBackground();
     copyPlatforms(snapshot.platforms);
-    // copy_lines();
     copyDucks(snapshot.ducks, it);  // aca tambien se copian las armas si las portan los patos
-    // copyDebugText(snapshot.ducks);
     copyWeapons(snapshot.weapons);  // aca se copian las armas que estan en el suelo para pickear
     copyBullets(snapshot.bullets);
     renderer.Present();

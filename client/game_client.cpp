@@ -128,13 +128,12 @@ void GameClient::run() {
                 t1_ms += lost;
                 iteration += lost / rate;
             }
-            // SDL_Delay(rest);
             std::this_thread::sleep_for(std::chrono::milliseconds(rest));
             t1_ms += rate;
             iteration += 1;
         }
     } catch (...) {
-        // std::cerr << "One game ended\n";
+        // std::cerr << "Exception encountered and handled correctly\n";
     }
     threadReceiver.stop_thread();
     threadSender.stop_thread();

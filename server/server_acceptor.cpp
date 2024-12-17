@@ -11,7 +11,6 @@ void AcceptorThread::stop() {
 }
 
 void AcceptorThread::accept_connection() {
-    // Debug message
 
     Socket peer = this->acceptor_skt.accept();
     ClientSession* client = new ClientSession(std::move(peer), this->matches);

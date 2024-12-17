@@ -3,8 +3,6 @@
 
 #include <cstdint>
 
-// #include "duck.h"
-
 class Bullet {
 public:
     uint8_t id;  // esto es de que arma es la bala porque cambia la foto

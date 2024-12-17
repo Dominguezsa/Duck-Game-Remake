@@ -78,12 +78,9 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 message(CMAKE_CXX_COMPILER_ID= "${CMAKE_CXX_COMPILER_ID}")
 
 
-# Define target: lib common between client, server and editor programs
-# HEY TODO XXX: change the name to something that you like
 add_library(common_libs STATIC)
 
-# add the source files that make the lib
-# HEY!! TODO XXX: add more subfolders here
+
 add_subdirectory(common/)
 
 
@@ -96,8 +93,7 @@ set_project_warnings(common_libs ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
 # location (so our dependants will not have to explicitly request this)
 target_include_directories(common_libs PUBLIC .)
 
-# Install libSDL2pp (for client or editor)
-# HEY!! TODO XXX: add more dependendies (either for client, server or editor)
+
 if(DUCK_GAME)   
     include(FetchContent)
     FetchContent_Declare(
@@ -129,8 +125,6 @@ if (DUCK_GAME_SERVER OR DUCK_GAME)
         FetchContent_Populate(yaml-cpp)
         add_subdirectory(${yaml-cpp_SOURCE_DIR} ${yaml-cpp_BINARY_DIR})
     endif()
-
-    #target_link_libraries(duck_game duck_game_server PUBLIC yaml-cpp::yaml-cpp) # The library or executable that require yaml-cpp library
 endif()
 
 
@@ -183,14 +177,11 @@ if(DUCK_GAME_SERVER)
     add_dependencies(duck_game_server common_libs)
     add_subdirectory(server)
     set_project_warnings(duck_game_server ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
-    # Link the common_libs lib target
     target_link_libraries(duck_game_server common_libs yaml-cpp::yaml-cpp)
 endif()
 
 if(MAP_EDITOR)
     add_executable(map_editor)
-    # Make them depend on common_libs lib
-    #add_dependencies(map_editor common_libs SDL2pp::SDL2pp)
 
     target_link_libraries(map_editor 
         PRIVATE
@@ -203,16 +194,8 @@ if(MAP_EDITOR)
         Threads::Threads
     )
 
-    # Add source files and enable warnings
-    # HEY!! TODO XXX: add more subfolders here
     add_subdirectory(editor)
-    #target_include_directories(map_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
     set_project_warnings(map_editor ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
-    # add libSDL2pp's headers
-    #target_include_directories(map_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
-
-    # Link the common_libs lib target
-    #target_link_libraries(map_editor common_libs SDL2pp::SDL2pp yaml-cpp::yaml-cpp)
 endif()
 
 

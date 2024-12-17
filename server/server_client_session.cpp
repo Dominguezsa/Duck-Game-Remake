@@ -57,7 +57,6 @@ void ClientSession::run() {
             ReceiverThread receiver(*get_match_queue(), protocol, identity.id);
             sender.start();
             receiver.start();
-            // run_receiver_loop();
             while (receiver.is_alive() && sender.is_alive()) {
                 std::this_thread::sleep_for(std::chrono::seconds(1));
             }
@@ -112,39 +111,28 @@ void ClientSession::exec_lobby_action(char action, bool& success) {
             std::list<std::string> map_list;
             get_available_maps(map_list);
             protocol.send_game_map_list(map_list);
-            // (3)
+
             uint8_t number_of_players;
             std::string map_name;
             this->protocol.recv_match_info(map_name, match_name, number_of_players);
             success = matches_monitor.create_match(match_name, number_of_players, duck_info,
                                                    &client_queue, matches[map_name]);
 
-            // (4)
             protocol.send_confirmation(success);
             break;
         }
         case CMD_JOIN: {
-            // (2)
             std::list<std::string> available_matches = matches_monitor.get_available_match_names();
 
             protocol.send_match_list(available_matches);
-            // (3)
             this->protocol.recv_string(match_name);
 
-            // (4)
             success = matches_monitor.join_match(match_name, duck_info, &client_queue);
             protocol.send_confirmation(success);
             break;
         }
     }
     if (success) {
-        // El atributo color podria no estar, y que se le asocie
-        // un color del lado del cliente en base al id (que siempre
-        // va a ser unico).
-        // duck_info.color = static_cast<char>(duck_info.id);
-
-        // protocol.send_duck_unique_attributes(duck_info);
-
         identity.name = player_name;
         identity.joined_match_name = match_name;
         identity.id = duck_info.id;

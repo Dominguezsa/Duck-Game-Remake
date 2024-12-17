@@ -18,7 +18,7 @@
 #define MAX_FLUTTER_SPEED 3.0f
 #define DUCK_WIDTH 64.0f
 #define DUCK_HEIGHT 64.0f
-// #define MOVE_SPEED 5.0f
+
 
 #define FLUTTER_FORCE -0.3f
 #define MAX_FALL_SPEED 13.0f
@@ -116,7 +116,8 @@ void Game::updateBullets() {
         }
 
         if (bullet.x < 0 || bullet.x > 1200 || bullet.y < 0 || bullet.y > 1200 || errase) {
-            // it = bullets_by_id.erase(it);
+            // it = bullets_by_id.erase(it); genera problemas visuales si la elimino, entonces se
+            //                               borran todas las balas al pasar de ronda
             bullet.update(Bullet());
             it++;
             continue;
@@ -337,10 +338,7 @@ void Game::checkRoundEnd() {
         if (alive_players == 1) {
             victories[last_alive_id]++;
         }
-        updateGameState();  // si no pongo esto no le envia a
-                            // los clientes los patos que
-                            // tienen 0 de vida, muy raro,
-                            // pero bueno
+        updateGameState();
         sleep(1);
 
         startNewRound();
@@ -380,12 +378,6 @@ void Game::startNewRound() {
 }
 
 bool Game::checkGameEnd() {
-    // No se y no entiendo por que mi cppcheck local se pone
-    // como loca de que debería usar algoritmos de la
-    // librería estándar para esto aunque haga que el código
-    // sea horrible, estoy hace horas tratando de que no pase
-    // pero ni idea por que carajo sigue igual, otro dia se
-    // verá
     auto max_victory = std::max_element(
             victories.cbegin(), victories.cend(),
             [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
@@ -451,9 +443,7 @@ void Game::run() {
         }
         stop();
     } catch (ClosedQueue& e) {
-        stop();  // si se cierra la cola de mensajes se
-                 // termina el juego, la puede cerrar el
-                 // monitor_match legalmente
+        stop();
     } catch (const std::exception& e) {
         std::cerr << "Error occurred during game loop: " << e.what() << std::endl;
         stop();

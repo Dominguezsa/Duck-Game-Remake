@@ -20,24 +20,6 @@
 #include "server_receiver.h"
 #include "server_sender.h"
 
-/*
-    This thread listens for and processes messages from clients, which
-    are classified into two types: (1) lobby messages and (2) game messages.
-
-    (1) Lobby messages:
-
-        Upon receiving lobby-related messages, it handles the following tasks:
-
-        - Adds the client to an existing 'Match'.
-        - Allows the client to create a new 'Match'.
-        - Terminates communication with the client when required.
-
-    (2) Game messages:
-
-        When receiving game-related messages, it forwards them to the 'Match'
-        the client is currently connected to, ensuring proper communication
-        within the context of the game.
-    */
 
 #define CLIENT_QUEUE_SIZE 100
 
@@ -56,7 +38,6 @@ public:
 
     uint8_t get_id() const;
 
-    // Pos: Ends the communication between the server and the client.
     void end_communication();
 
     void get_available_maps(std::list<std::string>& map_list);
@@ -71,7 +52,6 @@ public:
 
     Queue<GameloopMessage>* get_match_queue();
 
-    // Pos: Returns true if the action was executed successfully.
     void exec_lobby_action(char action, bool& success);
 };
 

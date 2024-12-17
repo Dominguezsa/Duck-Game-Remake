@@ -4,4 +4,4 @@ El objetivo de este proyecto es hacer un remake del clásico juego de arcade "Du
 
 ## Documentación
 
-La documentación del proyecto se encuentra en la carpeta `documentacion/`. En ella se encuentra el manual de usuario, el manual técnico y el informe del proyecto.
+La documentación del proyecto se encuentra en la carpeta `documentacion/`. En ella se encuentra el manual de usuario, el manual técnico y el informe del proyecto. Por favor leer la documentación para una correcta instalación.

@@ -37,11 +37,9 @@ private:
 
 
     void copyBackground();
-    // void copy_lines();
     void copyPlatforms(std::vector<Platform> platforms);
     void copyDucks(const std::vector<DuckState>& ducks, const int it);
     void copyGun(const DuckState& duck);
-    // void copyDebugText(const std::vector<DuckState>& ducks);
     void copyWeapons(const std::vector<Weapon>& weapons);
     void copyBullets(const std::vector<Bullet>& bullets);
 

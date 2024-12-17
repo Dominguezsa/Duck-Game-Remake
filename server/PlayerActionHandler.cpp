@@ -1,9 +1,9 @@
 #include "PlayerActionHandler.h"
 
+#include <iostream>
 #include <unordered_map>
 #include <utility>
 
-// #include "../common/types/action_type.h"
 #include "server_gameloop_message.h"
 
 enum Directions : const uint8_t { LEFT, RIGHT, UP, DOWN };
@@ -25,7 +25,7 @@ void PlayerActionHandler::add_handler(std::uint8_t player_action,
                                       void (PlayerActionHandler::*handler)(Duck& duck)) {
     action_handlers.emplace(player_action, std::bind(handler, this, std::placeholders::_1));
 }
-#include <iostream>
+
 
 void PlayerActionHandler::process_player_action(const GameloopMessage& msg) {
 
@@ -38,8 +38,6 @@ void PlayerActionHandler::process_player_action(const GameloopMessage& msg) {
         return;
     }
 
-    // action_handlers.at(key)(*this);
-    // No se si hacerlo así para evitar las excepciones
     auto it_2 = action_handlers.find(msg.action);
     if (it_2 != action_handlers.end()) {
         auto handler = it_2->second;

@@ -8,7 +8,7 @@
 struct GameloopMessage {
     uint8_t player_id;
     uint8_t action;
-    uint8_t data;  // Additional data (e.g., weapon type, direction)
+    uint8_t data;
 
     GameloopMessage(): player_id(0), action(0), data(0) {}
 

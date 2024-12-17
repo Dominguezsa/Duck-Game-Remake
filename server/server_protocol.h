@@ -24,8 +24,8 @@ public:
     void recv_duck_action(uint8_t& command);
     void send_snapshot(std::shared_ptr<Snapshot> snapshot);
 
-    void read_msg(void* msg) override;  // No se usa
-    void send_msg(void* msg) override;  // No se usa
+    void read_msg(void* msg) override;
+    void send_msg(void* msg) override;
 
     void send_game_map_list(const std::list<std::string>& map_names);
 
