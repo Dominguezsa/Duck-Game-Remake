@@ -111,21 +111,16 @@ if(DUCK_GAME)
 endif()
 
 if (DUCK_GAME_SERVER OR DUCK_GAME)
-    include(FetchContent)
+    # Buscar yaml-cpp instalado en el sistema
+    find_package(yaml-cpp REQUIRED)
 
-    FetchContent_Declare(
-    yaml-cpp
-    GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
-    yaml-cpp-lib
-    )
-    FetchContent_GetProperties(yaml-cpp)
-
-    if(NOT yaml-cpp_POPULATED)
-        message(STATUS "Fetching yaml-cpp...")
-        FetchContent_Populate(yaml-cpp)
-        add_subdirectory(${yaml-cpp_SOURCE_DIR} ${yaml-cpp_BINARY_DIR})
+    if(yaml-cpp_FOUND)
+        message(STATUS "yaml-cpp found!")
+    else()
+        message(FATAL_ERROR "yaml-cpp not found. Please install yaml-cpp before building the project.")
     endif()
 endif()
+
 
 
 # Program section
@@ -218,7 +213,11 @@ if(TALLER_TESTS)
     add_dependencies(taller_tests common_libs)
     target_include_directories(taller_tests PUBLIC .)
     add_subdirectory(tests/)
-    set_project_warnings(taller_tests ${TALLER_MAKE_WARNINGS_AS_ERRORS} TRUE)
+    
+    target_compile_options(googletest PRIVATE
+        -Wno-maybe-uninitialized  # Desactivar solo en GoogleTest
+        -Wno-error=maybe-uninitialized
+    )
 
     target_include_directories(taller_tests
         PUBLIC
