@@ -205,6 +205,7 @@ if(TALLER_TESTS)
         URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
     )
 
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-maybe-uninitialized -Wno-error=maybe-uninitialized")
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(googletest)
     include(GoogleTest)
@@ -213,11 +214,6 @@ if(TALLER_TESTS)
     add_dependencies(taller_tests common_libs)
     target_include_directories(taller_tests PUBLIC .)
     add_subdirectory(tests/)
-    
-    target_compile_options(googletest PRIVATE
-        -Wno-maybe-uninitialized  # Desactivar solo en GoogleTest
-        -Wno-error=maybe-uninitialized
-    )
 
     target_include_directories(taller_tests
         PUBLIC

@@ -31,11 +31,11 @@ cd ..
 cd ..
 
 echo "Installing libyaml---"
-cd yaml-cpp
+cd yaml-lib
 mkdir build
 cd build
 cmake ..
-make
+sudo make -j4
 sudo make install
 cd ..
 cd ..
